@@ -342,7 +342,7 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.labelMaximumWidth = QLabel("Maximum Width:")
         self.spinMaximumWidth = QSpinBox()
         self.spinMaximumWidth.setRange(1,100)
-        self.spinMaximumWidth.setValue(10)
+        self.spinMaximumWidth.setValue(int(self.parameters["width"]))
 
 
         self.labelRemovalRatio= QLabel("Edge Weight Removal Ratio:")
@@ -350,32 +350,35 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.spinRemovalRatio = QDoubleSpinBox()
         self.spinRemovalRatio.setRange(0, 1)
         self.spinRemovalRatio.setSingleStep(0.01)
-        self.spinRemovalRatio.setValue(0.52)
+        self.spinRemovalRatio.setValue(float(self.parameters["removeRat"]))
 
         self.labelMinimumSeparationX = QLabel("X Separation:")
         self.spinMinimumSeparationX = QSpinBox()
         self.spinMinimumSeparationX.setRange(1,500)
-        self.spinMinimumSeparationX.setValue(150)
+        self.spinMinimumSeparationX.setValue(int(self.parameters["space"]))
 
         self.labelMinimumSeparationY = QLabel("Y Separation:")
         self.spinMinimumSeparationY = QSpinBox()
         self.spinMinimumSeparationY.setRange(1,500)
-        self.spinMinimumSeparationY.setValue(225)
+        self.spinMinimumSeparationY.setValue(int(self.parameters["increment"]))
 
         
         self.drawingLayout.addWidget(self.labelMaximumWidth, 0, 0)
         self.drawingLayout.addWidget(self.spinMaximumWidth, 0, 1)
+        self.parameterWidgets["width"] = (self.labelMaximumWidth, self.spinMaximumWidth)
         
         self.drawingLayout.addWidget(self.labelRemovalRatio, 2, 0)
         self.drawingLayout.addWidget(self.spinRemovalRatio, 2, 1)
+        self.parameterWidgets["removeRat"] = (self.labelRemovalRatio, self.spinRemovalRatio)
 
         self.drawingLayout.addWidget(self.labelMinimumSeparationX, 3, 0)
         self.drawingLayout.addWidget(self.spinMinimumSeparationX, 3, 1)
+        self.parameterWidgets["space"] = (self.labelMinimumSeparationX, self.spinMinimumSeparationX)
         
         self.drawingLayout.addWidget(self.labelMinimumSeparationY, 4, 0)
         self.drawingLayout.addWidget(self.spinMinimumSeparationY, 4, 1)
+        self.parameterWidgets["increment"] = (self.labelMinimumSeparationY, self.spinMinimumSeparationY)
 
-        
         
         self.tabWidget.addTab(self.drawingTab, "Drawing Settings")
         
@@ -393,7 +396,7 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
 
             for flagName, widget in groupBox.parameterDict.items():
                 self.parameterWidgets[flagName] = (None, widget)
-                print flagName, self.parameters[flagName], type(self.parameters[flagName])
+                #print flagName, self.parameters[flagName], type(self.parameters[flagName])
                 widget.setChecked(self.parameters[flagName] == 1)
     def setupBiologicalTab(self):
         pass
