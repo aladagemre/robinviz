@@ -1,0 +1,26 @@
+A0 POSTERS
+
+The file poster.tex contains an example poster. It is done in a three column
+format with header that contains the University of Oxford crest.
+
+Compile it using
+
+latex poster
+bibtex poster
+latex poster
+latex poster
+latex poster
+
+Print it to poster.ps using
+
+dvips -P a0 poster -o
+
+View it using 
+
+ghostview poster.ps
+
+Reduce to a4 size using
+
+./psa0toa4 poster.ps postera4.ps
+
+NB. you might need to change/delete the first line of the script psa0toa4 so that it works on your machine. The script has been written to work within the bash shell and calls the psresize command.

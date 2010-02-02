@@ -1,0 +1,10 @@
+          heatmap = new org.systemsbiology.visualization.BioHeatMap(document.getElementById('heatmapContainer'));
+          heatmap.draw(data, {});
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="heatmapContainer"></div>
+  </body>
+</html>

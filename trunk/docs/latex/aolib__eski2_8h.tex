@@ -1,0 +1,721 @@
+\hypertarget{aolib__eski2_8h}{
+\section{aolib\_\-eski2.h File Reference}
+\label{aolib__eski2_8h}\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}}
+}
+{\tt \#include $<$LEDA/graphics/graphwin.h$>$}\par
+{\tt \#include $<$LEDA/system/file.h$>$}\par
+{\tt \#include $<$LEDA/system/stream.h$>$}\par
+{\tt \#include $<$LEDA/graph/graph.h$>$}\par
+{\tt \#include $<$LEDA/graph/graph\_\-gen.h$>$}\par
+{\tt \#include $<$LEDA/graph/edge\_\-array.h$>$}\par
+{\tt \#include $<$LEDA/graph/graph\_\-alg.h$>$}\par
+{\tt \#include $<$LEDA/graph/graph\_\-misc.h$>$}\par
+{\tt \#include $<$LEDA/graph/graph\_\-draw.h$>$}\par
+{\tt \#include $<$LEDA/core/list.h$>$}\par
+{\tt \#include $<$LEDA/core/string.h$>$}\par
+{\tt \#include $<$LEDA/numbers/integer\_\-matrix.h$>$}\par
+{\tt \#include $<$LEDA/numbers/matrix.h$>$}\par
+{\tt \#include $<$stdlib.h$>$}\par
+{\tt \#include $<$stdio.h$>$}\par
+{\tt \#include $<$string.h$>$}\par
+{\tt \#include $<$stream.h$>$}\par
+\subsection*{Defines}
+\begin{CompactItemize}
+\item 
+\#define \hyperlink{aolib__eski2_8h_598a3330b3c21701223ee0ca14316eca}{PI}~3.14
+\item 
+\#define \hyperlink{aolib__eski2_8h_113de2ca40cbca6b88da9af6be44dc70}{arda}
+\item 
+\#define \hyperlink{aolib__eski2_8h_a5d91000eef7dfc9c4ed8677994fdf92}{melih}
+\item 
+\#define \hyperlink{aolib__eski2_8h_e2bc3f58a7b5ecbee1ff3546484406bd}{omer}
+\item 
+\#define \hyperlink{aolib__eski2_8h_d9a263ee8510889abdf768e7354afbd1}{IsArc\_\-}(x, \hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y})~(mCross\mbox{[}x\mbox{]}\mbox{[}\hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y}\mbox{]} $<$ mCross\mbox{[}\hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y}\mbox{]}\mbox{[}x\mbox{]})
+\item 
+\#define \hyperlink{aolib__eski2_8h_73caba128af7581204f9a29fcadc0050}{Weight\_\-}(x, \hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y})~(mCross\mbox{[}\hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y}\mbox{]}\mbox{[}x\mbox{]} - mCross\mbox{[}x\mbox{]}\mbox{[}\hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y}\mbox{]})
+\end{CompactItemize}
+\subsection*{Enumerations}
+\begin{CompactItemize}
+\item 
+enum \{ \hyperlink{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b7c157bdf0b85a40d2619cbc8bc1ae5fe2}{NONE}, 
+\hyperlink{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b7b118dac9cc2ccfb354db4ae325af3724}{DOING}, 
+\hyperlink{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b79c954bcf443428c80b0f107b3bc48749}{DONE}
+ \}
+\end{CompactItemize}
+\subsection*{Functions}
+\begin{CompactItemize}
+\item 
+void \hyperlink{aolib__eski2_8h_21164e27b2aff2574c2b6e2bbb120329}{readFromGraphBase} (string filename, GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B)
+\item 
+matrix \hyperlink{aolib__eski2_8h_9d4ae273e5f13ce5da44a45351c707ac}{g2m} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ A, list$<$ node $>$ B, bool)
+\item 
+void \hyperlink{aolib__eski2_8h_9bf28990ac58007d971c2255aa8e0861}{m2g} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B, matrix \&m, bool)
+\item 
+void \hyperlink{aolib__eski2_8h_6353a65bec4e0c5fa91a813df6022ad5}{drawBipartite} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ A, list$<$ node $>$ B)
+\item 
+void \hyperlink{aolib__eski2_8h_28e01d8ac9fedab1c09101a684f9efd2}{wolf} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B)
+\item 
+integer \hyperlink{aolib__eski2_8h_7f6b2402028187339df5310c771f1aef}{weight} (GRAPH$<$ int, int $>$ \&, node alt1, node alt2, node ust, list$<$ node $>$ alt)
+\item 
+void \hyperlink{aolib__eski2_8h_4e149b26cc59044c642e7e25eabd8eb7}{merge} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&ptRow, list$<$ node $>$ \&L, list$<$ node $>$ \&R, node owner, list$<$ node $>$ \&alt)
+\item 
+void \hyperlink{aolib__eski2_8h_f57368790b019defca6077c34b354339}{wolfPhase2} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&ptRow, node owner, list$<$ node $>$ alt)
+\item 
+void \hyperlink{aolib__eski2_8h_8410d42aef0eccf807a02dc0d17a610b}{writeRow} (ofstream \&report, int, int, int, int, int, array$<$ integer $>$, string extra, array$<$ int $>$)
+\item 
+integer \hyperlink{aolib__eski2_8h_56f47b4a5ea634d1f560378e61c70829}{crossingNumber} (matrix \&m)
+\item 
+integer \hyperlink{aolib__eski2_8h_6185cc9b6f81244abe432aac3b57d6d9}{crossingNumber} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B)
+\item 
+int \hyperlink{aolib__eski2_8h_b19596afb5679a762461e4d389fb9697}{calculateSumOfWeight} (int a, int b, int cn, int averageWeight)
+\item 
+void \hyperlink{aolib__eski2_8h_2c1f179881581879687bdf585f9ff4bb}{randomGraph2} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B, int aCount, int bCount, double edgeDensity, int sumOfWeight, int weightBalance)
+\item 
+void \hyperlink{aolib__eski2_8h_0fb267ea0075208d75d412db80175c36}{assignWeight} (matrix \&m, int sumOfWeight, int weightBalance)
+\item 
+void \hyperlink{aolib__eski2_8h_800b8ffcb6cf2e8261173e2e59fb411a}{buildCrossTable} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B, node\_\-matrix$<$ integer $>$ \&nmdCrossTable)
+\item 
+void \hyperlink{aolib__eski2_8h_dce85589fb522eaa7e64233a06f04b81}{barycenter} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B)
+\item 
+void \hyperlink{aolib__eski2_8h_19afdeb34bd2010e04c87f22e904762c}{median} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B)
+\item 
+void \hyperlink{aolib__eski2_8h_da7c124e7331459d1b8676d7694e5dec}{gre} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B)
+\item 
+void \hyperlink{aolib__eski2_8h_e42124fe152633d47e95a758e19a4472}{WDFS} (node inRoot, bool \&thruRemoved, node\_\-array$<$ int $>$ \&theVisited, node\_\-array$<$ int $>$ \&theParent, int \&thruPenaltyArcs)
+\item 
+void \hyperlink{aolib__eski2_8h_a00bdcf4e96130264ec80f80daf35fb0}{WDFSOrder} (node inRoot, node\_\-array$<$ int $>$ \&theVisited, int \&inPosition)
+\item 
+void \hyperlink{aolib__eski2_8h_4e9758f022cc4e57bcf55c41edbe4c02}{index} ()
+\item 
+integer \hyperlink{aolib__eski2_8h_caaa8be33ecd907abbd60ede63312d54}{crossCount} (node u, node v)
+\item 
+void \hyperlink{aolib__eski2_8h_3e21d4b31f3734a1a6c5aa656191c91b}{BuildCrossTable} ()
+\item 
+void \hyperlink{aolib__eski2_8h_f3e2e485f3ff008910d925cbb25f3a73}{initGlobals} ()
+\item 
+void \hyperlink{aolib__eski2_8h_b2bd6914d421a4162f12124bc72da01d}{RunPMAlgorithm} ()
+\item 
+void \hyperlink{aolib__eski2_8h_943fd4fbd9f7b6867693e35a22afa4b5}{Partition\_\-Preprocess} (matrix \&m, matrix \&median\_\-index, matrix \&partition)
+\item 
+node\_\-array$<$ int $>$ \hyperlink{aolib__eski2_8h_0c59066e44eee42caf1cb6f12eadcb05}{indexApm} (\hyperlink{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{Gpm})
+\item 
+node\_\-array$<$ int $>$ \hyperlink{aolib__eski2_8h_239d60041d737b4a6177a255fa781e53}{indexBpm} (\hyperlink{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{Gpm})
+\item 
+node\_\-array$<$ int $>$ \hyperlink{aolib__eski2_8h_2cced4f2b15c6b288a11186cfa793f74}{indexApm2} (\hyperlink{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{Gpm})
+\item 
+array$<$ node $>$ \hyperlink{aolib__eski2_8h_6cb9d50b8b1a42073d4a66b0f7b99cae}{arrayApm} (AG.size())
+\item 
+array$<$ node $>$ \hyperlink{aolib__eski2_8h_d95abe5494022bc457090d0fb9016032}{arrayApm2} (AG.size())
+\item 
+node\_\-matrix$<$ integer $>$ \hyperlink{aolib__eski2_8h_fc332429aa1b4d9d20cfc69e88648d2f}{mCross} (\hyperlink{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{Gpm})
+\item 
+integer \hyperlink{aolib__eski2_8h_020a3b224e6d5d5dcbf49f36ea87dce0}{minimum} (integer a, integer b)
+\item 
+void \hyperlink{aolib__eski2_8h_31f3283662f4b2c36973c456184e9778}{printOrder} (node\_\-array$<$ int $>$ index)
+\item 
+void \hyperlink{aolib__eski2_8h_90049e8ec0f782952e0a7a245e6fc1dc}{orderAG} (list$<$ node $>$ \&newA)
+\item 
+void \hyperlink{aolib__eski2_8h_90be651467903fb32078cc555b2b0299}{writeTolog} ()
+\item 
+void \hyperlink{aolib__eski2_8h_d6734f50a8599b2a306c3bec1e1af0e7}{index2} ()
+\item 
+void \hyperlink{aolib__eski2_8h_e6f11429346ec62fb898f0d0197cc560}{destroyCrossTable} ()
+\item 
+void \hyperlink{aolib__eski2_8h_a04157794d4fe9557c1fba4beeda07eb}{pm} ()
+\item 
+void \hyperlink{aolib__eski2_8h_7d87323d796ddaefa3c2ba858667798d}{gre} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B, node\_\-matrix$<$ integer $>$ \&nmdCrossTable)
+\item 
+void \hyperlink{aolib__eski2_8h_ea27257664269165307ef4ec45525a1f}{randomUnweightedGraph} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B, int aCount, int bCount, double ed, int seedValue)
+\item 
+void \hyperlink{aolib__eski2_8h_10ac3273e8a21a39ea83e0ea9a75b308}{writeCrossingTable} (node\_\-matrix$<$ integer $>$ \&nmdCrossingTable, list$<$ node $>$ \&A, char $\ast$eid)
+\item 
+void \hyperlink{aolib__eski2_8h_2e9885847a6e2d2db8c743de6f04f57d}{readFromFile} (list$<$ node $>$ \&A, list$<$ node $>$ \&B, char $\ast$filename)
+\item 
+void \hyperlink{aolib__eski2_8h_7b5941c21a222bbfe87229a9976c5eae}{writeToFileForPM} (list$<$ node $>$ \&A, list$<$ node $>$ \&B, char $\ast$filename)
+\item 
+double \hyperlink{aolib__eski2_8h_68414cc2b136ad19729098c2ee05ae5d}{divide} (integer c, integer lower)
+\item 
+void \hyperlink{aolib__eski2_8h_c321aff4a00c009b4fb572aa9112b3c1}{luBound} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B, node\_\-matrix$<$ integer $>$ \&nmdCrossTable, integer \&lower, integer \&upper)
+\item 
+void \hyperlink{aolib__eski2_8h_204e5b5f966f61bfd25bfbb1a19fbfd2}{printNodeMatrix} (node\_\-matrix$<$ double $>$ m, list$<$ node $>$ A)
+\item 
+void \hyperlink{aolib__eski2_8h_546f01a34c7e038ecc36950113f064d2}{printNodeArray} (node\_\-array$<$ int $>$ theVisited, string name)
+\item 
+double \hyperlink{aolib__eski2_8h_2a90e520eeaf73e4caa1e54a8f451e61}{expon} (double mean, random\_\-source \&rs)
+\item 
+double \hyperlink{aolib__eski2_8h_e535de4a50c45026a600abe2da703182}{poisson} (double lambda, random\_\-source \&rs)
+\item 
+double \hyperlink{aolib__eski2_8h_d7be4abaa24f97b537602e15698476f5}{geometric} (double p, random\_\-source \&rs)
+\item 
+list$<$ double $>$ \hyperlink{aolib__eski2_8h_1c1ef1791acba710838a9e0a2fc3833a}{randGaussian} (double mean, double variance, random\_\-source \&rs)
+\item 
+list$<$ double $>$ \hyperlink{aolib__eski2_8h_4df70b0e1dbd9e56105dd36ef5de890a}{randGaussian2} (double mean, double variance, random\_\-source \&rs)
+\item 
+int \hyperlink{aolib__eski2_8h_34f96cf58e889f7c7521ab2f23224482}{erlang} (double mean, int r, random\_\-source \&rs)
+\item 
+void \hyperlink{aolib__eski2_8h_e2d0d948e5e277556cc1a918c5fa9e48}{copyToArray} (array$<$ double $>$ \&rns\_\-, list$<$ double $>$ \&rns)
+\end{CompactItemize}
+\subsection*{Variables}
+\begin{CompactItemize}
+\item 
+int \hyperlink{aolib__eski2_8h_d3e76470679f86b988cae65755b565c9}{wolfDebug} = 0
+\item 
+int \hyperlink{aolib__eski2_8h_05eef49850bae44414d4be10b57ceadd}{partitionCount}
+\item 
+int \hyperlink{aolib__eski2_8h_eb76d796d9a5153d13110fe84ae704e5}{justRunPhase1} = false
+\item 
+ofstream \hyperlink{aolib__eski2_8h_d445eb84da11034a167a557434110ad1}{afile}
+\item 
+ofstream \hyperlink{aolib__eski2_8h_bb265f916ed2ca1d52238afdb30e036b}{pmfile}
+\item 
+ifstream \hyperlink{aolib__eski2_8h_055e662a5bccb40a6ae4508616a4f599}{pmin}
+\item 
+list$<$ node $>$ \hyperlink{aolib__eski2_8h_1c9089e5ae8c97255e0a031aee85fcbe}{AG}
+\item 
+list$<$ node $>$ \hyperlink{aolib__eski2_8h_4c81f9f4f59751ccd512642be3e2ccb1}{BG}
+\item 
+list$<$ node $>$ \hyperlink{aolib__eski2_8h_917c5d500ebadcd57803261bc94d17b8}{Apm}
+\item 
+GRAPH$<$ int, int $>$ \hyperlink{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{Gpm}
+\item 
+int \hyperlink{aolib__eski2_8h_cd7b38bdbcc0bc99848a6edee0a504f6}{theRuns}
+\end{CompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{aolib__eski2_8h_113de2ca40cbca6b88da9af6be44dc70}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!arda@{arda}}
+\index{arda@{arda}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{arda}]{\setlength{\rightskip}{0pt plus 5cm}\#define arda}}
+\label{aolib__eski2_8h_113de2ca40cbca6b88da9af6be44dc70}
+
+
+\hypertarget{aolib__eski2_8h_d9a263ee8510889abdf768e7354afbd1}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!IsArc\_\-@{IsArc\_\-}}
+\index{IsArc\_\-@{IsArc\_\-}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{IsArc\_\-}]{\setlength{\rightskip}{0pt plus 5cm}\#define IsArc\_\-(x, \/  {\bf y})~(mCross\mbox{[}x\mbox{]}\mbox{[}{\bf y}\mbox{]} $<$ mCross\mbox{[}{\bf y}\mbox{]}\mbox{[}x\mbox{]})}}
+\label{aolib__eski2_8h_d9a263ee8510889abdf768e7354afbd1}
+
+
+\hypertarget{aolib__eski2_8h_a5d91000eef7dfc9c4ed8677994fdf92}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!melih@{melih}}
+\index{melih@{melih}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{melih}]{\setlength{\rightskip}{0pt plus 5cm}\#define melih}}
+\label{aolib__eski2_8h_a5d91000eef7dfc9c4ed8677994fdf92}
+
+
+\hypertarget{aolib__eski2_8h_e2bc3f58a7b5ecbee1ff3546484406bd}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!omer@{omer}}
+\index{omer@{omer}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{omer}]{\setlength{\rightskip}{0pt plus 5cm}\#define omer}}
+\label{aolib__eski2_8h_e2bc3f58a7b5ecbee1ff3546484406bd}
+
+
+\hypertarget{aolib__eski2_8h_598a3330b3c21701223ee0ca14316eca}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!PI@{PI}}
+\index{PI@{PI}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{PI}]{\setlength{\rightskip}{0pt plus 5cm}\#define PI~3.14}}
+\label{aolib__eski2_8h_598a3330b3c21701223ee0ca14316eca}
+
+
+\hypertarget{aolib__eski2_8h_73caba128af7581204f9a29fcadc0050}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!Weight\_\-@{Weight\_\-}}
+\index{Weight\_\-@{Weight\_\-}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{Weight\_\-}]{\setlength{\rightskip}{0pt plus 5cm}\#define Weight\_\-(x, \/  {\bf y})~(mCross\mbox{[}{\bf y}\mbox{]}\mbox{[}x\mbox{]} - mCross\mbox{[}x\mbox{]}\mbox{[}{\bf y}\mbox{]})}}
+\label{aolib__eski2_8h_73caba128af7581204f9a29fcadc0050}
+
+
+
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b7}{
+\subsubsection[{"@1}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}}
+\label{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b7}
+
+
+\begin{Desc}
+\item[Enumerator: ]\par
+\begin{description}
+\index{NONE@{NONE}!aolib\_\-eski2.h@{aolib\_\-eski2.h}}\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!NONE@{NONE}}\item[{\em 
+\hypertarget{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b7c157bdf0b85a40d2619cbc8bc1ae5fe2}{
+NONE}
+\label{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b7c157bdf0b85a40d2619cbc8bc1ae5fe2}
+}]\index{DOING@{DOING}!aolib\_\-eski2.h@{aolib\_\-eski2.h}}\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!DOING@{DOING}}\item[{\em 
+\hypertarget{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b7b118dac9cc2ccfb354db4ae325af3724}{
+DOING}
+\label{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b7b118dac9cc2ccfb354db4ae325af3724}
+}]\index{DONE@{DONE}!aolib\_\-eski2.h@{aolib\_\-eski2.h}}\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!DONE@{DONE}}\item[{\em 
+\hypertarget{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b79c954bcf443428c80b0f107b3bc48749}{
+DONE}
+\label{aolib__eski2_8h_df764cbdea00d65edcd07bb9953ad2b79c954bcf443428c80b0f107b3bc48749}
+}]\end{description}
+\end{Desc}
+
+
+
+\subsection{Function Documentation}
+\hypertarget{aolib__eski2_8h_6cb9d50b8b1a42073d4a66b0f7b99cae}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!arrayApm@{arrayApm}}
+\index{arrayApm@{arrayApm}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{arrayApm}]{\setlength{\rightskip}{0pt plus 5cm}array$<$node$>$ arrayApm (AG. {\em size}())}}
+\label{aolib__eski2_8h_6cb9d50b8b1a42073d4a66b0f7b99cae}
+
+
+\hypertarget{aolib__eski2_8h_d95abe5494022bc457090d0fb9016032}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!arrayApm2@{arrayApm2}}
+\index{arrayApm2@{arrayApm2}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{arrayApm2}]{\setlength{\rightskip}{0pt plus 5cm}array$<$node$>$ arrayApm2 (AG. {\em size}())}}
+\label{aolib__eski2_8h_d95abe5494022bc457090d0fb9016032}
+
+
+\hypertarget{aolib__eski2_8h_0fb267ea0075208d75d412db80175c36}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!assignWeight@{assignWeight}}
+\index{assignWeight@{assignWeight}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{assignWeight}]{\setlength{\rightskip}{0pt plus 5cm}void assignWeight (matrix \& {\em m}, \/  int {\em sumOfWeight}, \/  int {\em weightBalance})}}
+\label{aolib__eski2_8h_0fb267ea0075208d75d412db80175c36}
+
+
+\hypertarget{aolib__eski2_8h_dce85589fb522eaa7e64233a06f04b81}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!barycenter@{barycenter}}
+\index{barycenter@{barycenter}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{barycenter}]{\setlength{\rightskip}{0pt plus 5cm}void barycenter (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B})}}
+\label{aolib__eski2_8h_dce85589fb522eaa7e64233a06f04b81}
+
+
+\hypertarget{aolib__eski2_8h_3e21d4b31f3734a1a6c5aa656191c91b}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!BuildCrossTable@{BuildCrossTable}}
+\index{BuildCrossTable@{BuildCrossTable}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{BuildCrossTable}]{\setlength{\rightskip}{0pt plus 5cm}void BuildCrossTable ()}}
+\label{aolib__eski2_8h_3e21d4b31f3734a1a6c5aa656191c91b}
+
+
+\hypertarget{aolib__eski2_8h_800b8ffcb6cf2e8261173e2e59fb411a}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!buildCrossTable@{buildCrossTable}}
+\index{buildCrossTable@{buildCrossTable}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{buildCrossTable}]{\setlength{\rightskip}{0pt plus 5cm}void buildCrossTable (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  node\_\-matrix$<$ integer $>$ \& {\em nmdCrossTable})}}
+\label{aolib__eski2_8h_800b8ffcb6cf2e8261173e2e59fb411a}
+
+
+\hypertarget{aolib__eski2_8h_b19596afb5679a762461e4d389fb9697}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!calculateSumOfWeight@{calculateSumOfWeight}}
+\index{calculateSumOfWeight@{calculateSumOfWeight}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{calculateSumOfWeight}]{\setlength{\rightskip}{0pt plus 5cm}int calculateSumOfWeight (int {\em a}, \/  int {\em b}, \/  int {\em cn}, \/  int {\em averageWeight})}}
+\label{aolib__eski2_8h_b19596afb5679a762461e4d389fb9697}
+
+
+\hypertarget{aolib__eski2_8h_e2d0d948e5e277556cc1a918c5fa9e48}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!copyToArray@{copyToArray}}
+\index{copyToArray@{copyToArray}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{copyToArray}]{\setlength{\rightskip}{0pt plus 5cm}void copyToArray (array$<$ double $>$ \& {\em rns\_\-}, \/  list$<$ double $>$ \& {\em rns})}}
+\label{aolib__eski2_8h_e2d0d948e5e277556cc1a918c5fa9e48}
+
+
+\hypertarget{aolib__eski2_8h_caaa8be33ecd907abbd60ede63312d54}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!crossCount@{crossCount}}
+\index{crossCount@{crossCount}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{crossCount}]{\setlength{\rightskip}{0pt plus 5cm}integer crossCount (node {\em u}, \/  node {\em v})}}
+\label{aolib__eski2_8h_caaa8be33ecd907abbd60ede63312d54}
+
+
+\hypertarget{aolib__eski2_8h_6185cc9b6f81244abe432aac3b57d6d9}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!crossingNumber@{crossingNumber}}
+\index{crossingNumber@{crossingNumber}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{crossingNumber}]{\setlength{\rightskip}{0pt plus 5cm}integer crossingNumber (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B})}}
+\label{aolib__eski2_8h_6185cc9b6f81244abe432aac3b57d6d9}
+
+
+\hypertarget{aolib__eski2_8h_56f47b4a5ea634d1f560378e61c70829}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!crossingNumber@{crossingNumber}}
+\index{crossingNumber@{crossingNumber}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{crossingNumber}]{\setlength{\rightskip}{0pt plus 5cm}integer crossingNumber (matrix \& {\em m})}}
+\label{aolib__eski2_8h_56f47b4a5ea634d1f560378e61c70829}
+
+
+\hypertarget{aolib__eski2_8h_e6f11429346ec62fb898f0d0197cc560}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!destroyCrossTable@{destroyCrossTable}}
+\index{destroyCrossTable@{destroyCrossTable}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{destroyCrossTable}]{\setlength{\rightskip}{0pt plus 5cm}void destroyCrossTable ()}}
+\label{aolib__eski2_8h_e6f11429346ec62fb898f0d0197cc560}
+
+
+\hypertarget{aolib__eski2_8h_68414cc2b136ad19729098c2ee05ae5d}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!divide@{divide}}
+\index{divide@{divide}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{divide}]{\setlength{\rightskip}{0pt plus 5cm}double divide (integer {\em c}, \/  integer {\em lower})}}
+\label{aolib__eski2_8h_68414cc2b136ad19729098c2ee05ae5d}
+
+
+\hypertarget{aolib__eski2_8h_6353a65bec4e0c5fa91a813df6022ad5}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!drawBipartite@{drawBipartite}}
+\index{drawBipartite@{drawBipartite}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{drawBipartite}]{\setlength{\rightskip}{0pt plus 5cm}void drawBipartite (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{aolib__eski2_8h_6353a65bec4e0c5fa91a813df6022ad5}
+
+
+\hypertarget{aolib__eski2_8h_34f96cf58e889f7c7521ab2f23224482}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!erlang@{erlang}}
+\index{erlang@{erlang}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{erlang}]{\setlength{\rightskip}{0pt plus 5cm}int erlang (double {\em mean}, \/  int {\em r}, \/  random\_\-source \& {\em rs})}}
+\label{aolib__eski2_8h_34f96cf58e889f7c7521ab2f23224482}
+
+
+\hypertarget{aolib__eski2_8h_2a90e520eeaf73e4caa1e54a8f451e61}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!expon@{expon}}
+\index{expon@{expon}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{expon}]{\setlength{\rightskip}{0pt plus 5cm}double expon (double {\em mean}, \/  random\_\-source \& {\em rs})}}
+\label{aolib__eski2_8h_2a90e520eeaf73e4caa1e54a8f451e61}
+
+
+\hypertarget{aolib__eski2_8h_9d4ae273e5f13ce5da44a45351c707ac}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!g2m@{g2m}}
+\index{g2m@{g2m}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{g2m}]{\setlength{\rightskip}{0pt plus 5cm}matrix g2m (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ {\em A}, \/  list$<$ node $>$ {\em B}, \/  bool {\em weighted} = {\tt true})}}
+\label{aolib__eski2_8h_9d4ae273e5f13ce5da44a45351c707ac}
+
+
+\hypertarget{aolib__eski2_8h_d7be4abaa24f97b537602e15698476f5}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!geometric@{geometric}}
+\index{geometric@{geometric}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{geometric}]{\setlength{\rightskip}{0pt plus 5cm}double geometric (double {\em p}, \/  random\_\-source \& {\em rs})}}
+\label{aolib__eski2_8h_d7be4abaa24f97b537602e15698476f5}
+
+
+\hypertarget{aolib__eski2_8h_7d87323d796ddaefa3c2ba858667798d}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!gre@{gre}}
+\index{gre@{gre}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{gre}]{\setlength{\rightskip}{0pt plus 5cm}void gre (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B}, \/  node\_\-matrix$<$ integer $>$ \& {\em nmdCrossTable})}}
+\label{aolib__eski2_8h_7d87323d796ddaefa3c2ba858667798d}
+
+
+\hypertarget{aolib__eski2_8h_da7c124e7331459d1b8676d7694e5dec}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!gre@{gre}}
+\index{gre@{gre}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{gre}]{\setlength{\rightskip}{0pt plus 5cm}void gre (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{aolib__eski2_8h_da7c124e7331459d1b8676d7694e5dec}
+
+
+\hypertarget{aolib__eski2_8h_4e9758f022cc4e57bcf55c41edbe4c02}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!index@{index}}
+\index{index@{index}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{index}]{\setlength{\rightskip}{0pt plus 5cm}void index ()}}
+\label{aolib__eski2_8h_4e9758f022cc4e57bcf55c41edbe4c02}
+
+
+\hypertarget{aolib__eski2_8h_d6734f50a8599b2a306c3bec1e1af0e7}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!index2@{index2}}
+\index{index2@{index2}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{index2}]{\setlength{\rightskip}{0pt plus 5cm}void index2 ()}}
+\label{aolib__eski2_8h_d6734f50a8599b2a306c3bec1e1af0e7}
+
+
+\hypertarget{aolib__eski2_8h_0c59066e44eee42caf1cb6f12eadcb05}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!indexApm@{indexApm}}
+\index{indexApm@{indexApm}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{indexApm}]{\setlength{\rightskip}{0pt plus 5cm}node\_\-array$<$int$>$ indexApm ({\bf Gpm})}}
+\label{aolib__eski2_8h_0c59066e44eee42caf1cb6f12eadcb05}
+
+
+\hypertarget{aolib__eski2_8h_2cced4f2b15c6b288a11186cfa793f74}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!indexApm2@{indexApm2}}
+\index{indexApm2@{indexApm2}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{indexApm2}]{\setlength{\rightskip}{0pt plus 5cm}node\_\-array$<$int$>$ indexApm2 ({\bf Gpm})}}
+\label{aolib__eski2_8h_2cced4f2b15c6b288a11186cfa793f74}
+
+
+\hypertarget{aolib__eski2_8h_239d60041d737b4a6177a255fa781e53}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!indexBpm@{indexBpm}}
+\index{indexBpm@{indexBpm}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{indexBpm}]{\setlength{\rightskip}{0pt plus 5cm}node\_\-array$<$int$>$ indexBpm ({\bf Gpm})}}
+\label{aolib__eski2_8h_239d60041d737b4a6177a255fa781e53}
+
+
+\hypertarget{aolib__eski2_8h_f3e2e485f3ff008910d925cbb25f3a73}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!initGlobals@{initGlobals}}
+\index{initGlobals@{initGlobals}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{initGlobals}]{\setlength{\rightskip}{0pt plus 5cm}void initGlobals ()}}
+\label{aolib__eski2_8h_f3e2e485f3ff008910d925cbb25f3a73}
+
+
+\hypertarget{aolib__eski2_8h_c321aff4a00c009b4fb572aa9112b3c1}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!luBound@{luBound}}
+\index{luBound@{luBound}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{luBound}]{\setlength{\rightskip}{0pt plus 5cm}void luBound (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  node\_\-matrix$<$ integer $>$ \& {\em nmdCrossTable}, \/  integer \& {\em lower}, \/  integer \& {\em upper})}}
+\label{aolib__eski2_8h_c321aff4a00c009b4fb572aa9112b3c1}
+
+
+\hypertarget{aolib__eski2_8h_9bf28990ac58007d971c2255aa8e0861}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!m2g@{m2g}}
+\index{m2g@{m2g}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{m2g}]{\setlength{\rightskip}{0pt plus 5cm}void m2g (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  matrix \& {\em m}, \/  bool {\em weighted} = {\tt true})}}
+\label{aolib__eski2_8h_9bf28990ac58007d971c2255aa8e0861}
+
+
+\hypertarget{aolib__eski2_8h_fc332429aa1b4d9d20cfc69e88648d2f}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!mCross@{mCross}}
+\index{mCross@{mCross}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{mCross}]{\setlength{\rightskip}{0pt plus 5cm}node\_\-matrix$<$integer$>$ mCross ({\bf Gpm})}}
+\label{aolib__eski2_8h_fc332429aa1b4d9d20cfc69e88648d2f}
+
+
+\hypertarget{aolib__eski2_8h_19afdeb34bd2010e04c87f22e904762c}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!median@{median}}
+\index{median@{median}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{median}]{\setlength{\rightskip}{0pt plus 5cm}void median (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{aolib__eski2_8h_19afdeb34bd2010e04c87f22e904762c}
+
+
+\hypertarget{aolib__eski2_8h_4e149b26cc59044c642e7e25eabd8eb7}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!merge@{merge}}
+\index{merge@{merge}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{merge}]{\setlength{\rightskip}{0pt plus 5cm}void merge (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em ptRow}, \/  list$<$ node $>$ \& {\em L}, \/  list$<$ node $>$ \& {\em R}, \/  node {\em owner}, \/  list$<$ node $>$ \& {\em alt})}}
+\label{aolib__eski2_8h_4e149b26cc59044c642e7e25eabd8eb7}
+
+
+\hypertarget{aolib__eski2_8h_020a3b224e6d5d5dcbf49f36ea87dce0}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!minimum@{minimum}}
+\index{minimum@{minimum}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{minimum}]{\setlength{\rightskip}{0pt plus 5cm}integer minimum (integer {\em a}, \/  integer {\em b})}}
+\label{aolib__eski2_8h_020a3b224e6d5d5dcbf49f36ea87dce0}
+
+
+\hypertarget{aolib__eski2_8h_90049e8ec0f782952e0a7a245e6fc1dc}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!orderAG@{orderAG}}
+\index{orderAG@{orderAG}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{orderAG}]{\setlength{\rightskip}{0pt plus 5cm}void orderAG (list$<$ node $>$ \& {\em newA})}}
+\label{aolib__eski2_8h_90049e8ec0f782952e0a7a245e6fc1dc}
+
+
+\hypertarget{aolib__eski2_8h_943fd4fbd9f7b6867693e35a22afa4b5}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!Partition\_\-Preprocess@{Partition\_\-Preprocess}}
+\index{Partition\_\-Preprocess@{Partition\_\-Preprocess}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{Partition\_\-Preprocess}]{\setlength{\rightskip}{0pt plus 5cm}void Partition\_\-Preprocess (matrix \& {\em m}, \/  matrix \& {\em median\_\-index}, \/  matrix \& {\em partition})}}
+\label{aolib__eski2_8h_943fd4fbd9f7b6867693e35a22afa4b5}
+
+
+\hypertarget{aolib__eski2_8h_a04157794d4fe9557c1fba4beeda07eb}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!pm@{pm}}
+\index{pm@{pm}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{pm}]{\setlength{\rightskip}{0pt plus 5cm}void pm ()}}
+\label{aolib__eski2_8h_a04157794d4fe9557c1fba4beeda07eb}
+
+
+\hypertarget{aolib__eski2_8h_e535de4a50c45026a600abe2da703182}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!poisson@{poisson}}
+\index{poisson@{poisson}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{poisson}]{\setlength{\rightskip}{0pt plus 5cm}double poisson (double {\em lambda}, \/  random\_\-source \& {\em rs})}}
+\label{aolib__eski2_8h_e535de4a50c45026a600abe2da703182}
+
+
+\hypertarget{aolib__eski2_8h_546f01a34c7e038ecc36950113f064d2}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!printNodeArray@{printNodeArray}}
+\index{printNodeArray@{printNodeArray}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{printNodeArray}]{\setlength{\rightskip}{0pt plus 5cm}void printNodeArray (node\_\-array$<$ int $>$ {\em theVisited}, \/  string {\em name})}}
+\label{aolib__eski2_8h_546f01a34c7e038ecc36950113f064d2}
+
+
+\hypertarget{aolib__eski2_8h_204e5b5f966f61bfd25bfbb1a19fbfd2}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!printNodeMatrix@{printNodeMatrix}}
+\index{printNodeMatrix@{printNodeMatrix}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{printNodeMatrix}]{\setlength{\rightskip}{0pt plus 5cm}void printNodeMatrix (node\_\-matrix$<$ double $>$ {\em m}, \/  list$<$ node $>$ {\em A})}}
+\label{aolib__eski2_8h_204e5b5f966f61bfd25bfbb1a19fbfd2}
+
+
+\hypertarget{aolib__eski2_8h_31f3283662f4b2c36973c456184e9778}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!printOrder@{printOrder}}
+\index{printOrder@{printOrder}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{printOrder}]{\setlength{\rightskip}{0pt plus 5cm}void printOrder (node\_\-array$<$ int $>$ {\em index})}}
+\label{aolib__eski2_8h_31f3283662f4b2c36973c456184e9778}
+
+
+\hypertarget{aolib__eski2_8h_1c1ef1791acba710838a9e0a2fc3833a}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!randGaussian@{randGaussian}}
+\index{randGaussian@{randGaussian}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{randGaussian}]{\setlength{\rightskip}{0pt plus 5cm}list$<$double$>$ randGaussian (double {\em mean}, \/  double {\em variance}, \/  random\_\-source \& {\em rs})}}
+\label{aolib__eski2_8h_1c1ef1791acba710838a9e0a2fc3833a}
+
+
+\hypertarget{aolib__eski2_8h_4df70b0e1dbd9e56105dd36ef5de890a}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!randGaussian2@{randGaussian2}}
+\index{randGaussian2@{randGaussian2}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{randGaussian2}]{\setlength{\rightskip}{0pt plus 5cm}list$<$double$>$ randGaussian2 (double {\em mean}, \/  double {\em variance}, \/  random\_\-source \& {\em rs})}}
+\label{aolib__eski2_8h_4df70b0e1dbd9e56105dd36ef5de890a}
+
+
+\hypertarget{aolib__eski2_8h_2c1f179881581879687bdf585f9ff4bb}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!randomGraph2@{randomGraph2}}
+\index{randomGraph2@{randomGraph2}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{randomGraph2}]{\setlength{\rightskip}{0pt plus 5cm}void randomGraph2 (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  int {\em aCount}, \/  int {\em bCount}, \/  double {\em edgeDensity}, \/  int {\em sumOfWeight}, \/  int {\em weightBalance})}}
+\label{aolib__eski2_8h_2c1f179881581879687bdf585f9ff4bb}
+
+
+\hypertarget{aolib__eski2_8h_ea27257664269165307ef4ec45525a1f}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!randomUnweightedGraph@{randomUnweightedGraph}}
+\index{randomUnweightedGraph@{randomUnweightedGraph}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{randomUnweightedGraph}]{\setlength{\rightskip}{0pt plus 5cm}void randomUnweightedGraph (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  int {\em aCount}, \/  int {\em bCount}, \/  double {\em ed}, \/  int {\em seedValue})}}
+\label{aolib__eski2_8h_ea27257664269165307ef4ec45525a1f}
+
+
+\hypertarget{aolib__eski2_8h_2e9885847a6e2d2db8c743de6f04f57d}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!readFromFile@{readFromFile}}
+\index{readFromFile@{readFromFile}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{readFromFile}]{\setlength{\rightskip}{0pt plus 5cm}void readFromFile (list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  char $\ast$ {\em filename})}}
+\label{aolib__eski2_8h_2e9885847a6e2d2db8c743de6f04f57d}
+
+
+\hypertarget{aolib__eski2_8h_21164e27b2aff2574c2b6e2bbb120329}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!readFromGraphBase@{readFromGraphBase}}
+\index{readFromGraphBase@{readFromGraphBase}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{readFromGraphBase}]{\setlength{\rightskip}{0pt plus 5cm}void readFromGraphBase (string {\em filename}, \/  GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B})}}
+\label{aolib__eski2_8h_21164e27b2aff2574c2b6e2bbb120329}
+
+
+\hypertarget{aolib__eski2_8h_b2bd6914d421a4162f12124bc72da01d}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!RunPMAlgorithm@{RunPMAlgorithm}}
+\index{RunPMAlgorithm@{RunPMAlgorithm}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{RunPMAlgorithm}]{\setlength{\rightskip}{0pt plus 5cm}void RunPMAlgorithm ()}}
+\label{aolib__eski2_8h_b2bd6914d421a4162f12124bc72da01d}
+
+
+\hypertarget{aolib__eski2_8h_e42124fe152633d47e95a758e19a4472}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!WDFS@{WDFS}}
+\index{WDFS@{WDFS}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{WDFS}]{\setlength{\rightskip}{0pt plus 5cm}void WDFS (node {\em inRoot}, \/  bool \& {\em thruRemoved}, \/  node\_\-array$<$ int $>$ \& {\em theVisited}, \/  node\_\-array$<$ int $>$ \& {\em theParent}, \/  int \& {\em thruPenaltyArcs})}}
+\label{aolib__eski2_8h_e42124fe152633d47e95a758e19a4472}
+
+
+\hypertarget{aolib__eski2_8h_a00bdcf4e96130264ec80f80daf35fb0}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!WDFSOrder@{WDFSOrder}}
+\index{WDFSOrder@{WDFSOrder}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{WDFSOrder}]{\setlength{\rightskip}{0pt plus 5cm}void WDFSOrder (node {\em inRoot}, \/  node\_\-array$<$ int $>$ \& {\em theVisited}, \/  int \& {\em inPosition})}}
+\label{aolib__eski2_8h_a00bdcf4e96130264ec80f80daf35fb0}
+
+
+\hypertarget{aolib__eski2_8h_7f6b2402028187339df5310c771f1aef}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!weight@{weight}}
+\index{weight@{weight}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{weight}]{\setlength{\rightskip}{0pt plus 5cm}integer weight (GRAPH$<$ int, int $>$ \& {\em G}, \/  node {\em alt1}, \/  node {\em alt2}, \/  node {\em ust}, \/  list$<$ node $>$ {\em alt})}}
+\label{aolib__eski2_8h_7f6b2402028187339df5310c771f1aef}
+
+
+\hypertarget{aolib__eski2_8h_28e01d8ac9fedab1c09101a684f9efd2}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!wolf@{wolf}}
+\index{wolf@{wolf}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{wolf}]{\setlength{\rightskip}{0pt plus 5cm}void wolf (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{aolib__eski2_8h_28e01d8ac9fedab1c09101a684f9efd2}
+
+
+\hypertarget{aolib__eski2_8h_f57368790b019defca6077c34b354339}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!wolfPhase2@{wolfPhase2}}
+\index{wolfPhase2@{wolfPhase2}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{wolfPhase2}]{\setlength{\rightskip}{0pt plus 5cm}void wolfPhase2 (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em ptRow}, \/  node {\em owner}, \/  list$<$ node $>$ {\em alt})}}
+\label{aolib__eski2_8h_f57368790b019defca6077c34b354339}
+
+
+\hypertarget{aolib__eski2_8h_10ac3273e8a21a39ea83e0ea9a75b308}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!writeCrossingTable@{writeCrossingTable}}
+\index{writeCrossingTable@{writeCrossingTable}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{writeCrossingTable}]{\setlength{\rightskip}{0pt plus 5cm}void writeCrossingTable (node\_\-matrix$<$ integer $>$ \& {\em nmdCrossingTable}, \/  list$<$ node $>$ \& {\em A}, \/  char $\ast$ {\em eid})}}
+\label{aolib__eski2_8h_10ac3273e8a21a39ea83e0ea9a75b308}
+
+
+\hypertarget{aolib__eski2_8h_8410d42aef0eccf807a02dc0d17a610b}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!writeRow@{writeRow}}
+\index{writeRow@{writeRow}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{writeRow}]{\setlength{\rightskip}{0pt plus 5cm}void writeRow (ofstream \& {\em report}, \/  int, \/  int, \/  int, \/  int, \/  int, \/  array$<$ integer $>$, \/  string {\em extra}, \/  array$<$ int $>$)}}
+\label{aolib__eski2_8h_8410d42aef0eccf807a02dc0d17a610b}
+
+
+\hypertarget{aolib__eski2_8h_7b5941c21a222bbfe87229a9976c5eae}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!writeToFileForPM@{writeToFileForPM}}
+\index{writeToFileForPM@{writeToFileForPM}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{writeToFileForPM}]{\setlength{\rightskip}{0pt plus 5cm}void writeToFileForPM (list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  char $\ast$ {\em filename})}}
+\label{aolib__eski2_8h_7b5941c21a222bbfe87229a9976c5eae}
+
+
+\hypertarget{aolib__eski2_8h_90be651467903fb32078cc555b2b0299}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!writeTolog@{writeTolog}}
+\index{writeTolog@{writeTolog}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{writeTolog}]{\setlength{\rightskip}{0pt plus 5cm}void writeTolog ()}}
+\label{aolib__eski2_8h_90be651467903fb32078cc555b2b0299}
+
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{aolib__eski2_8h_d445eb84da11034a167a557434110ad1}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!afile@{afile}}
+\index{afile@{afile}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{afile}]{\setlength{\rightskip}{0pt plus 5cm}ofstream {\bf afile}}}
+\label{aolib__eski2_8h_d445eb84da11034a167a557434110ad1}
+
+
+\hypertarget{aolib__eski2_8h_1c9089e5ae8c97255e0a031aee85fcbe}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!AG@{AG}}
+\index{AG@{AG}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{AG}]{\setlength{\rightskip}{0pt plus 5cm}list$<$node$>$ {\bf AG}}}
+\label{aolib__eski2_8h_1c9089e5ae8c97255e0a031aee85fcbe}
+
+
+\hypertarget{aolib__eski2_8h_917c5d500ebadcd57803261bc94d17b8}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!Apm@{Apm}}
+\index{Apm@{Apm}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{Apm}]{\setlength{\rightskip}{0pt plus 5cm}list$<$node$>$ {\bf Apm}}}
+\label{aolib__eski2_8h_917c5d500ebadcd57803261bc94d17b8}
+
+
+\hypertarget{aolib__eski2_8h_4c81f9f4f59751ccd512642be3e2ccb1}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!BG@{BG}}
+\index{BG@{BG}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{BG}]{\setlength{\rightskip}{0pt plus 5cm}list$<$node$>$ {\bf BG}}}
+\label{aolib__eski2_8h_4c81f9f4f59751ccd512642be3e2ccb1}
+
+
+\hypertarget{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!Gpm@{Gpm}}
+\index{Gpm@{Gpm}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{Gpm}]{\setlength{\rightskip}{0pt plus 5cm}GRAPH$<$int,int$>$ {\bf Gpm}}}
+\label{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}
+
+
+\hypertarget{aolib__eski2_8h_eb76d796d9a5153d13110fe84ae704e5}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!justRunPhase1@{justRunPhase1}}
+\index{justRunPhase1@{justRunPhase1}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{justRunPhase1}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf justRunPhase1} = false}}
+\label{aolib__eski2_8h_eb76d796d9a5153d13110fe84ae704e5}
+
+
+\hypertarget{aolib__eski2_8h_05eef49850bae44414d4be10b57ceadd}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!partitionCount@{partitionCount}}
+\index{partitionCount@{partitionCount}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{partitionCount}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf partitionCount}}}
+\label{aolib__eski2_8h_05eef49850bae44414d4be10b57ceadd}
+
+
+\hypertarget{aolib__eski2_8h_bb265f916ed2ca1d52238afdb30e036b}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!pmfile@{pmfile}}
+\index{pmfile@{pmfile}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{pmfile}]{\setlength{\rightskip}{0pt plus 5cm}ofstream {\bf pmfile}}}
+\label{aolib__eski2_8h_bb265f916ed2ca1d52238afdb30e036b}
+
+
+\hypertarget{aolib__eski2_8h_055e662a5bccb40a6ae4508616a4f599}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!pmin@{pmin}}
+\index{pmin@{pmin}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{pmin}]{\setlength{\rightskip}{0pt plus 5cm}ifstream {\bf pmin}}}
+\label{aolib__eski2_8h_055e662a5bccb40a6ae4508616a4f599}
+
+
+\hypertarget{aolib__eski2_8h_cd7b38bdbcc0bc99848a6edee0a504f6}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!theRuns@{theRuns}}
+\index{theRuns@{theRuns}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{theRuns}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf theRuns}}}
+\label{aolib__eski2_8h_cd7b38bdbcc0bc99848a6edee0a504f6}
+
+
+\hypertarget{aolib__eski2_8h_d3e76470679f86b988cae65755b565c9}{
+\index{aolib\_\-eski2.h@{aolib\_\-eski2.h}!wolfDebug@{wolfDebug}}
+\index{wolfDebug@{wolfDebug}!aolib_eski2.h@{aolib\_\-eski2.h}}
+\subsubsection[{wolfDebug}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf wolfDebug} = 0}}
+\label{aolib__eski2_8h_d3e76470679f86b988cae65755b565c9}
+
+

@@ -1,0 +1,6 @@
+CC
+ccFlag 0
+bic_num_cc 100 int 10,1000,1 Number of Bics
+maxScore_ 10 int 0,10000,10 Max H-value
+minHeight_ 5 int 2,1000,1 Min Size dim1
+minWidth_ 10 int 2,1000,1 Min Size dim2
