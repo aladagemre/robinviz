@@ -1,0 +1,56 @@
+cond165	cond123	cond50	cond83	cond33	cond109	cond53	cond155	cond46	cond49	cond57	cond51	cond93	cond113	cond108	cond171	cond58	cond43	cond47	cond52	cond124	cond121	cond172	cond44	cond164	cond38	cond120	cond144	cond48	cond42	cond32	cond103	cond147	cond131	cond59	cond130	cond104	cond132	cond102	cond133	cond101	cond94	cond35	cond69	cond129	cond119	cond41	cond60	cond36	cond118	cond115	cond117	cond61	cond114	cond142	cond116	cond75	cond25	cond111	cond70	cond100	cond125	cond139	cond37	cond40	cond110	cond140	cond91	cond99	cond128	cond95	cond39	cond80	cond141	cond136	cond76	cond126	cond127	cond153	cond24	cond66	cond96	cond29	cond145	cond138	cond90	cond30	cond67	cond74	cond143	cond13	cond1	cond20	cond79	cond22	cond71	cond0	cond77	cond78	cond21	cond7	cond2	cond72	cond73	cond135	cond23	cond134	cond3	cond4	cond6	cond26	cond5	cond12	cond137
+cond105	cond87	cond168	cond169	cond86	cond85	cond167	cond88	cond122	cond163	cond162	cond19	cond152	cond160	cond154	cond159	cond64	cond62	cond17	cond10	cond54	cond15	cond16	cond63	cond150	cond149	cond8	cond161	cond156	cond18	cond55	cond9	cond166	cond45
+cond146	cond27	cond82	cond92	cond121	cond31	cond120	cond144	cond32	cond103	cond147	cond131	cond130	cond104	cond132	cond102	cond133	cond97	cond101	cond129	cond119	cond41	cond36	cond118	cond115	cond117	cond61	cond114	cond142	cond116	cond75	cond25	cond111	cond70	cond100	cond125	cond139	cond37	cond40	cond110	cond91	cond99	cond128	cond95	cond39	cond80	cond141	cond76	cond126	cond127	cond153	cond24	cond96	cond29	cond145	cond138	cond90	cond30	cond67	cond74	cond143	cond13	cond1	cond20	cond79	cond22	cond71	cond0	cond78	cond21	cond7	cond2	cond72	cond73	cond135	cond23	cond134	cond3	cond4	cond6	cond26	cond5	cond12	cond137
+cond105	cond122	cond106	cond84	cond28	cond158	cond148	cond89	cond112	cond56	cond166	cond45	cond123	cond107	cond81	cond27	cond50	cond65	cond83	cond33	cond109	cond53	cond46	cond49	cond57	cond51	cond113	cond108	cond171	cond58	cond43	cond47	cond52	cond124	cond172	cond44	cond31	cond164	cond38	cond144	cond48	cond42	cond32	cond59	cond94	cond35	cond69	cond41	cond60	cond36	cond61	cond142	cond75	cond70	cond139	cond37	cond40	cond140	cond39	cond80	cond141	cond136	cond76	cond24	cond66	cond29	cond138	cond30	cond74	cond143	cond1	cond20	cond79	cond22	cond71	cond0	cond77	cond21	cond7	cond2	cond72	cond73	cond135	cond23	cond134	cond3	cond4	cond6	cond26	cond5	cond137
+cond84	cond98	cond92	cond93	cond97	cond94	cond91	cond95	cond96	cond90
+cond68	cond82	cond121	cond120	cond103	cond131	cond130	cond104	cond132	cond102	cond133	cond101	cond129	cond119	cond118	cond115	cond117	cond114	cond116	cond111	cond100	cond125	cond99	cond128	cond126	cond127	cond153
+cond87	cond86	cond85	cond88	cond152	cond84	cond150	cond149	cond157	cond148	cond89	cond34	cond151	cond170	cond27	cond31	cond32	cond147	cond25	cond30	cond26
+cond56	cond45	cond50	cond65	cond53	cond46	cond49	cond57	cond51	cond58	cond47	cond52	cond38	cond48	cond59	cond35	cond69	cond60	cond36	cond142	cond75	cond70	cond139	cond37	cond40	cond140	cond39	cond141	cond76	cond66	cond74	cond71	cond72	cond73
+cond105	cond122	cond106	cond28	cond14	cond158	cond68	cond148	cond165	cond123	cond107	cond151	cond109	cond108	cond124
+cond28	cond27	cond33	cond171	cond172	cond31	cond32	cond69	cond75	cond25	cond70	cond24	cond29	cond138	cond30	cond74	cond1	cond20	cond22	cond71	cond0	cond21	cond7	cond2	cond72	cond73	cond23	cond134	cond3	cond4	cond6	cond26	cond5	cond12	cond137
+cond168	cond169	cond167	cond163	cond19	cond154	cond159	cond64	cond62	cond10	cond54	cond84	cond28	cond16	cond63	cond8	cond157	cond18	cond68	cond9	cond56	cond166	cond123	cond81	cond11	cond65	cond57	cond58	cond144	cond69	cond70
+cond45	cond81	cond50	cond82	cond83	cond53	cond46	cond49	cond51	cond47	cond52	cond48	cond80
+cond167	cond163	cond162	cond160	cond54	cond161	cond55	cond112	cond56	cond166	cond11	cond98	cond92	cond57	cond93	cond113	cond58	cond164	cond103	cond59	cond104	cond102	cond97	cond101	cond94	cond60	cond61	cond100	cond110	cond99	cond95	cond136	cond96	cond7	cond135
+cond165	cond56	cond65	cond57	cond58	cond59	cond94	cond60	cond61	cond75	cond76	cond66	cond67	cond74
+cond43	cond44	cond42	cond41	cond40	cond39
+cond87	cond86	cond85	cond162	cond19	cond160	cond15	cond84	cond28	cond161	cond68	cond165	cond166	cond34	cond33
+cond152	cond150	cond149	cond148	cond151	cond170	cond147
+cond148	cond89	cond82	cond83	cond109	cond155	cond113	cond108	cond43	cond124	cond44	cond164	cond144	cond42	cond69	cond117	cond114	cond25	cond111	cond125	cond110	cond128	cond80	cond126	cond127	cond145	cond90	cond67	cond143	cond79	cond0	cond77	cond78	cond26
+cond87	cond86	cond85	cond88	cond17	cond84	cond156	cond157	cond27	cond11	cond121	cond31	cond120	cond32	cond131	cond130	cond132	cond133	cond129	cond141	cond29	cond145	cond30	cond143	cond26	cond12
+cond163	cond162	cond160	cond161	cond68	cond46	cond49	cond47	cond48	cond35	cond41	cond36	cond139	cond37	cond140	cond141	cond153
+cond98	cond103	cond104	cond102	cond97	cond101	cond100	cond99
+cond144
+cond122	cond19	cond160	cond84	cond158	cond68	cond148	cond112	cond166	cond151	cond109	cond113	cond108	cond43	cond124	cond44	cond164	cond147	cond69	cond115	cond117	cond114	cond116	cond111	cond70	cond125	cond110	cond126	cond127	cond153	cond67
+cond84	cond11	cond32	cond29
+cond81
+cond77	cond78
+cond148	cond155
+cond168	cond86	cond85	cond15
+cond109	cond51	cond108	cond58	cond47	cond52	cond124	cond121	cond38	cond120	cond48	cond32	cond103	cond147	cond131	cond59	cond130	cond104	cond132	cond102	cond133	cond97	cond101	cond94	cond35	cond129	cond119	cond41	cond60	cond36	cond118	cond115	cond117	cond61	cond114	cond142	cond116	cond75	cond25	cond111	cond70	cond100	cond125	cond139	cond37	cond40	cond110	cond140	cond91	cond99	cond128	cond95	cond39	cond80	cond141	cond136	cond76	cond126	cond127	cond153	cond24	cond66	cond96	cond29	cond145	cond138	cond90	cond30	cond67	cond74	cond143	cond13	cond1	cond20	cond79	cond22	cond71	cond0	cond77	cond78	cond21	cond7	cond2	cond72	cond73	cond135	cond23	cond134	cond3	cond4	cond6	cond26	cond5	cond12	cond137
+cond105	cond87	cond168	cond169	cond86	cond85	cond167	cond88	cond163	cond162	cond19	cond152	cond160	cond154	cond159	cond64	cond62	cond17	cond10	cond54	cond15	cond16	cond63	cond150	cond149	cond8	cond161	cond14	cond156	cond157	cond18	cond55	cond9	cond34
+cond146	cond27	cond50	cond83	cond33	cond53	cond92	cond155	cond46	cond49	cond57	cond93	cond113	cond171	cond43	cond121	cond172	cond44	cond31	cond164	cond120	cond144	cond42	cond103	cond131	cond130	cond104	cond132	cond102	cond133	cond101	cond69	cond129	cond119	cond60	cond36	cond118	cond115	cond117	cond61	cond114	cond142	cond116	cond75	cond111	cond70	cond100	cond125	cond139	cond37	cond40	cond110	cond140	cond91	cond99	cond128	cond95	cond39	cond141	cond136	cond76	cond126	cond127	cond153	cond24	cond66	cond96	cond29	cond145	cond138	cond90	cond30	cond67	cond74	cond143	cond13	cond1	cond20	cond79	cond22	cond71	cond0	cond78	cond21	cond7	cond2	cond72	cond73	cond135	cond23	cond134	cond3	cond4	cond6	cond26	cond5	cond12	cond137
+cond105	cond168	cond169	cond167	cond122	cond163	cond106	cond160	cond64	cond62	cond28	cond63	cond158	cond148	cond112	cond165	cond56	cond166	cond45	cond123	cond107	cond146	cond50	cond82	cond65	cond83	cond33	cond109	cond53	cond46	cond49	cond57	cond51	cond93	cond113	cond108	cond58	cond47	cond52	cond124	cond164	cond48	cond59	cond94	cond35	cond69	cond142	cond75	cond70	cond80	cond76	cond24	cond66	cond74
+cond45	cond50	cond83	cond53	cond46	cond49	cond51	cond47	cond52	cond48	cond39
+cond121	cond120	cond103	cond147	cond131	cond130	cond104	cond132	cond102	cond133	cond101	cond129	cond119	cond118	cond115	cond117	cond114	cond116	cond111	cond100	cond125	cond99	cond128	cond126	cond127	cond153	cond145
+cond105	cond87	cond86	cond85	cond88	cond122	cond106	cond19	cond152	cond17	cond15	cond84	cond28	cond150	cond149	cond158	cond148	cond89	cond165	cond34	cond123	cond151	cond170	cond27	cond65	cond33	cond124	cond31	cond144	cond32	cond25	cond29	cond30	cond26
+cond152	cond154	cond159	cond10	cond150	cond149	cond8	cond156	cond157	cond9
+cond148	cond89	cond56	cond123	cond151	cond170	cond11	cond65	cond57	cond108	cond171	cond172	cond44	cond69	cond36	cond114	cond25	cond70	cond37	cond140	cond95	cond141	cond24	cond66	cond96	cond29	cond90	cond143	cond13	cond1	cond20	cond22	cond71	cond0	cond77	cond78	cond21	cond2	cond72	cond73	cond23	cond3	cond4	cond26	cond5	cond12
+cond87	cond168	cond86	cond85	cond167	cond88	cond163	cond162	cond19	cond64	cond62	cond17	cond10	cond15	cond16	cond63	cond8	cond161	cond14	cond18	cond9	cond166	cond11	cond98	cond92	cond97
+cond98	cond92	cond93	cond103	cond104	cond102	cond97	cond101	cond94	cond100	cond91	cond99	cond95	cond96
+cond154	cond159	cond150	cond156	cond157	cond158	cond151	cond147	cond153
+cond169	cond167	cond122	cond163	cond162	cond152	cond160	cond62	cond10	cond16	cond149	cond161	cond18	cond9	cond148	cond165	cond81	cond98	cond58	cond43	cond44	cond164	cond97	cond41	cond142	cond139	cond76
+cond87	cond86	cond85	cond88	cond84	cond112	cond34	cond27	cond33	cond98	cond31	cond32	cond97	cond30
+cond142	cond139
+cond158	cond148	cond151	cond155
+cond89
+cond162	cond19	cond160	cond17	cond16	cond161	cond18	cond166	cond81	cond11	cond103	cond104	cond102	cond101	cond41	cond40	cond80	cond77
+cond107	cond170	cond109	cond108	cond144	cond32	cond25	cond110	cond136	cond24	cond29	cond145	cond138	cond30	cond1	cond20	cond22	cond71	cond0	cond21	cond2	cond72	cond73	cond135	cond23	cond134	cond3	cond4	cond26	cond137
+cond168	cond169	cond14	cond170	cond113	cond171	cond43	cond44	cond42
+cond19	cond68	cond81	cond82	cond43	cond44	cond42	cond41
+cond14	cond165	cond34	cond151	cond170	cond27	cond92	cond121	cond172	cond31	cond42	cond147	cond97	cond119	cond118	cond115	cond117	cond61	cond114	cond116	cond100	cond125	cond91	cond99	cond128	cond95	cond126	cond127	cond66	cond96	cond138	cond90	cond67	cond13	cond20	cond22	cond21	cond135	cond23	cond134	cond3	cond6	cond5	cond137
+cond28	cond63	cond14	cond165	cond65	cond33	cond171	cond147	cond94	cond40	cond29
+cond163	cond162	cond160	cond161	cond56	cond166	cond34	cond33	cond57	cond58	cond31	cond164	cond144
+cond167	cond152	cond64	cond148	cond66
+cond169	cond162	cond17	cond33	cond172
+cond112	cond81	cond65	cond98	cond109	cond92	cond93	cond113	cond58	cond124	cond94	cond60	cond66
+cond28

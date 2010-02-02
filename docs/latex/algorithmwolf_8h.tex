@@ -1,0 +1,140 @@
+\hypertarget{algorithmwolf_8h}{
+\section{algorithmwolf.h File Reference}
+\label{algorithmwolf_8h}\index{algorithmwolf.h@{algorithmwolf.h}}
+}
+{\tt \#include \char`\"{}ifdefs.h\char`\"{}}\par
+\subsection*{Defines}
+\begin{CompactItemize}
+\item 
+\#define \hyperlink{algorithmwolf_8h_768edbfc294c86ffc07aef6e39a5c2a1}{halgorithmwolf}
+\end{CompactItemize}
+\subsection*{Functions}
+\begin{CompactItemize}
+\item 
+void \hyperlink{algorithmwolf_8h_28e01d8ac9fedab1c09101a684f9efd2}{wolf} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B)
+\item 
+integer \hyperlink{algorithmwolf_8h_0066fff12c300e02dd5dcf5f975fa8cf}{weight} (GRAPH$<$ int, int $>$ \&G, node alt1, node alt2, node ust, list$<$ node $>$ alt)
+\item 
+int \hyperlink{algorithmwolf_8h_78259d9b12fd51203f13d98185e8db45}{getCrossings} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B)
+\item 
+void \hyperlink{algorithmwolf_8h_4e149b26cc59044c642e7e25eabd8eb7}{merge} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&ptRow, list$<$ node $>$ \&L, list$<$ node $>$ \&R, node owner, list$<$ node $>$ \&alt)
+\item 
+void \hyperlink{algorithmwolf_8h_f57368790b019defca6077c34b354339}{wolfPhase2} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&ptRow, node owner, list$<$ node $>$ alt)
+\item 
+integer \hyperlink{algorithmwolf_8h_56f47b4a5ea634d1f560378e61c70829}{crossingNumber} (matrix \&m)
+\item 
+integer \hyperlink{algorithmwolf_8h_6185cc9b6f81244abe432aac3b57d6d9}{crossingNumber} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B)
+\item 
+void \hyperlink{algorithmwolf_8h_3865b16932577cee19a1e59e6bb009c3}{m2g} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B, matrix \&m, bool weighted=true)
+\item 
+matrix \hyperlink{algorithmwolf_8h_71f7dcae067f7c2ce52fc4fbe994d38b}{g2m} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ A, list$<$ node $>$ B, bool weighted=true)
+\end{CompactItemize}
+\subsection*{Variables}
+\begin{CompactItemize}
+\item 
+int \hyperlink{algorithmwolf_8h_d3e76470679f86b988cae65755b565c9}{wolfDebug} = 0
+\item 
+int \hyperlink{algorithmwolf_8h_05eef49850bae44414d4be10b57ceadd}{partitionCount}
+\item 
+int \hyperlink{algorithmwolf_8h_eb76d796d9a5153d13110fe84ae704e5}{justRunPhase1} = false
+\end{CompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{algorithmwolf_8h_768edbfc294c86ffc07aef6e39a5c2a1}{
+\index{algorithmwolf.h@{algorithmwolf.h}!halgorithmwolf@{halgorithmwolf}}
+\index{halgorithmwolf@{halgorithmwolf}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{halgorithmwolf}]{\setlength{\rightskip}{0pt plus 5cm}\#define halgorithmwolf}}
+\label{algorithmwolf_8h_768edbfc294c86ffc07aef6e39a5c2a1}
+
+
+
+
+\subsection{Function Documentation}
+\hypertarget{algorithmwolf_8h_6185cc9b6f81244abe432aac3b57d6d9}{
+\index{algorithmwolf.h@{algorithmwolf.h}!crossingNumber@{crossingNumber}}
+\index{crossingNumber@{crossingNumber}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{crossingNumber}]{\setlength{\rightskip}{0pt plus 5cm}integer crossingNumber (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B})}}
+\label{algorithmwolf_8h_6185cc9b6f81244abe432aac3b57d6d9}
+
+
+\hypertarget{algorithmwolf_8h_56f47b4a5ea634d1f560378e61c70829}{
+\index{algorithmwolf.h@{algorithmwolf.h}!crossingNumber@{crossingNumber}}
+\index{crossingNumber@{crossingNumber}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{crossingNumber}]{\setlength{\rightskip}{0pt plus 5cm}integer crossingNumber (matrix \& {\em m})}}
+\label{algorithmwolf_8h_56f47b4a5ea634d1f560378e61c70829}
+
+
+\hypertarget{algorithmwolf_8h_71f7dcae067f7c2ce52fc4fbe994d38b}{
+\index{algorithmwolf.h@{algorithmwolf.h}!g2m@{g2m}}
+\index{g2m@{g2m}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{g2m}]{\setlength{\rightskip}{0pt plus 5cm}matrix g2m (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ {\em A}, \/  list$<$ node $>$ {\em B}, \/  bool {\em weighted} = {\tt true})}}
+\label{algorithmwolf_8h_71f7dcae067f7c2ce52fc4fbe994d38b}
+
+
+\hypertarget{algorithmwolf_8h_78259d9b12fd51203f13d98185e8db45}{
+\index{algorithmwolf.h@{algorithmwolf.h}!getCrossings@{getCrossings}}
+\index{getCrossings@{getCrossings}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{getCrossings}]{\setlength{\rightskip}{0pt plus 5cm}int getCrossings (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B})}}
+\label{algorithmwolf_8h_78259d9b12fd51203f13d98185e8db45}
+
+
+\hypertarget{algorithmwolf_8h_3865b16932577cee19a1e59e6bb009c3}{
+\index{algorithmwolf.h@{algorithmwolf.h}!m2g@{m2g}}
+\index{m2g@{m2g}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{m2g}]{\setlength{\rightskip}{0pt plus 5cm}void m2g (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  matrix \& {\em m}, \/  bool {\em weighted} = {\tt true})}}
+\label{algorithmwolf_8h_3865b16932577cee19a1e59e6bb009c3}
+
+
+\hypertarget{algorithmwolf_8h_4e149b26cc59044c642e7e25eabd8eb7}{
+\index{algorithmwolf.h@{algorithmwolf.h}!merge@{merge}}
+\index{merge@{merge}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{merge}]{\setlength{\rightskip}{0pt plus 5cm}void merge (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em ptRow}, \/  list$<$ node $>$ \& {\em L}, \/  list$<$ node $>$ \& {\em R}, \/  node {\em owner}, \/  list$<$ node $>$ \& {\em alt})}}
+\label{algorithmwolf_8h_4e149b26cc59044c642e7e25eabd8eb7}
+
+
+\hypertarget{algorithmwolf_8h_0066fff12c300e02dd5dcf5f975fa8cf}{
+\index{algorithmwolf.h@{algorithmwolf.h}!weight@{weight}}
+\index{weight@{weight}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{weight}]{\setlength{\rightskip}{0pt plus 5cm}integer weight (GRAPH$<$ int, int $>$ \& {\em G}, \/  node {\em alt1}, \/  node {\em alt2}, \/  node {\em ust}, \/  list$<$ node $>$ {\em alt})}}
+\label{algorithmwolf_8h_0066fff12c300e02dd5dcf5f975fa8cf}
+
+
+\hypertarget{algorithmwolf_8h_28e01d8ac9fedab1c09101a684f9efd2}{
+\index{algorithmwolf.h@{algorithmwolf.h}!wolf@{wolf}}
+\index{wolf@{wolf}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{wolf}]{\setlength{\rightskip}{0pt plus 5cm}void wolf (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{algorithmwolf_8h_28e01d8ac9fedab1c09101a684f9efd2}
+
+
+\hypertarget{algorithmwolf_8h_f57368790b019defca6077c34b354339}{
+\index{algorithmwolf.h@{algorithmwolf.h}!wolfPhase2@{wolfPhase2}}
+\index{wolfPhase2@{wolfPhase2}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{wolfPhase2}]{\setlength{\rightskip}{0pt plus 5cm}void wolfPhase2 (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em ptRow}, \/  node {\em owner}, \/  list$<$ node $>$ {\em alt})}}
+\label{algorithmwolf_8h_f57368790b019defca6077c34b354339}
+
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{algorithmwolf_8h_eb76d796d9a5153d13110fe84ae704e5}{
+\index{algorithmwolf.h@{algorithmwolf.h}!justRunPhase1@{justRunPhase1}}
+\index{justRunPhase1@{justRunPhase1}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{justRunPhase1}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf justRunPhase1} = false}}
+\label{algorithmwolf_8h_eb76d796d9a5153d13110fe84ae704e5}
+
+
+\hypertarget{algorithmwolf_8h_05eef49850bae44414d4be10b57ceadd}{
+\index{algorithmwolf.h@{algorithmwolf.h}!partitionCount@{partitionCount}}
+\index{partitionCount@{partitionCount}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{partitionCount}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf partitionCount}}}
+\label{algorithmwolf_8h_05eef49850bae44414d4be10b57ceadd}
+
+
+\hypertarget{algorithmwolf_8h_d3e76470679f86b988cae65755b565c9}{
+\index{algorithmwolf.h@{algorithmwolf.h}!wolfDebug@{wolfDebug}}
+\index{wolfDebug@{wolfDebug}!algorithmwolf.h@{algorithmwolf.h}}
+\subsubsection[{wolfDebug}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf wolfDebug} = 0}}
+\label{algorithmwolf_8h_d3e76470679f86b988cae65755b565c9}
+
+

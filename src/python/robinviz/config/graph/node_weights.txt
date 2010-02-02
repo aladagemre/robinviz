@@ -1,0 +1,6 @@
+Main Graph Node Weights
+Based on
+hvalueWeighting 1 radio Calculated H-values
+enrichmentWeighting_o 0 radio Functional Enrichment Ratios specified by user
+enrichmentWeighting_f 0 radio Functional Enrichment Ratios extracted from FuncAssociate
+ppihitratioWeighting 0 radio The number of interactions inherited from PPI network

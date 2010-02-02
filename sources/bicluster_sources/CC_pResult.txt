@@ -1,0 +1,301 @@
+45 7
+gene23 gene124 gene225 gene333 gene513 gene528 gene586 gene723 gene736 gene847 gene916 gene943 gene950 gene953 gene961 gene986 gene1028 gene1184 gene1305 gene1320 gene1433 gene1446 gene1452 gene1488 gene1489 gene1508 gene1552 gene1678 gene1708 gene1780 gene1781 gene1864 gene1956 gene2009 gene2094 gene2100 gene2172 gene2199 gene2250 gene2346 gene2392 gene2445 gene2577 gene2599 gene2779
+cond69 cond70 cond71 cond72 cond73 cond74 cond75
+30 6
+gene163 gene199 gene475 gene553 gene575 gene764 gene774 gene817 gene865 gene1164 gene1193 gene1308 gene1336 gene1426 gene1640 gene1720 gene1748 gene2182 gene2220 gene2247 gene2310 gene2422 gene2444 gene2595 gene2644 gene2645 gene2661 gene2757 gene2863 gene2880
+cond26 cond41 cond43 cond73 cond74 cond168
+29 6
+gene47 gene114 gene204 gene413 gene668 gene702 gene739 gene807 gene922 gene951 gene983 gene1077 gene1402 gene1410 gene1412 gene1433 gene1454 gene1489 gene1607 gene1657 gene1691 gene1741 gene1919 gene2115 gene2121 gene2566 gene2820 gene2876 gene2893
+cond41 cond43 cond44 cond167 cond170 cond172
+21 8
+gene268 gene318 gene716 gene768 gene843 gene870 gene942 gene1081 gene1138 gene1287 gene1353 gene1509 gene1537 gene1729 gene1853 gene1864 gene1870 gene2432 gene2694 gene2939 gene2969
+cond14 cond77 cond80 cond84 cond85 cond86 cond88 cond105
+21 8
+gene16 gene43 gene311 gene321 gene490 gene671 gene690 gene722 gene819 gene1019 gene1064 gene1092 gene1293 gene1465 gene1512 gene1672 gene1768 gene1787 gene2166 gene2193 gene2263
+cond73 cond74 cond75 cond76 cond80 cond82 cond83 cond144
+27 6
+gene336 gene476 gene556 gene664 gene691 gene764 gene940 gene981 gene1050 gene1255 gene1370 gene1478 gene1713 gene2006 gene2026 gene2065 gene2066 gene2188 gene2322 gene2405 gene2414 gene2419 gene2424 gene2611 gene2686 gene2701 gene2847
+cond106 cond107 cond160 cond162 cond163 cond169
+23 7
+gene32 gene118 gene141 gene566 gene699 gene841 gene875 gene1176 gene1329 gene1339 gene1431 gene1554 gene1568 gene1662 gene1695 gene1978 gene2126 gene2227 gene2441 gene2458 gene2613 gene2715 gene2822
+cond41 cond43 cond69 cond76 cond144 cond162 cond163
+26 6
+gene23 gene63 gene230 gene240 gene337 gene431 gene515 gene541 gene650 gene910 gene1052 gene1471 gene1472 gene1746 gene1796 gene1919 gene2065 gene2098 gene2109 gene2159 gene2213 gene2232 gene2352 gene2358 gene2910 gene2931
+cond39 cond47 cond48 cond50 cond79 cond134
+10 15
+gene194 gene399 gene706 gene1385 gene1700 gene1904 gene2105 gene2400 gene2875 gene2965
+cond29 cond41 cond43 cond69 cond71 cond72 cond73 cond74 cond76 cond86 cond87 cond122 cond144 cond161 cond162
+30 5
+gene22 gene83 gene90 gene248 gene283 gene519 gene565 gene761 gene992 gene1074 gene1199 gene1415 gene1463 gene1478 gene1580 gene1668 gene1881 gene2179 gene2278 gene2382 gene2451 gene2475 gene2478 gene2615 gene2648 gene2694 gene2721 gene2886 gene2896 gene2929
+cond41 cond45 cond48 cond165 cond171
+21 7
+gene9 gene197 gene429 gene468 gene560 gene572 gene814 gene885 gene1045 gene1097 gene1534 gene1718 gene1750 gene1836 gene1881 gene1902 gene2119 gene2134 gene2201 gene2318 gene2437
+cond66 cond75 cond80 cond81 cond82 cond144 cond169
+14 10
+gene421 gene570 gene1059 gene1200 gene1690 gene2061 gene2085 gene2429 gene2492 gene2640 gene2700 gene2927 gene2952 gene2982
+cond84 cond85 cond87 cond88 cond108 cond109 cond144 cond162 cond167 cond168
+35 4
+gene216 gene227 gene239 gene372 gene723 gene770 gene892 gene1047 gene1072 gene1184 gene1245 gene1265 gene1321 gene1345 gene1352 gene1375 gene1455 gene1470 gene1554 gene1737 gene1794 gene1797 gene1963 gene2037 gene2049 gene2114 gene2304 gene2335 gene2441 gene2789 gene2798 gene2836 gene2926 gene2943 gene2951
+cond7 cond49 cond77 cond170
+17 8
+gene182 gene1216 gene1306 gene1448 gene1736 gene1924 gene1938 gene2019 gene2113 gene2246 gene2270 gene2292 gene2317 gene2337 gene2448 gene2828 gene2902
+cond26 cond30 cond31 cond73 cond74 cond84 cond87 cond88
+17 8
+gene68 gene223 gene641 gene656 gene660 gene1068 gene1144 gene1145 gene1437 gene1758 gene1788 gene1921 gene2028 gene2047 gene2213 gene2232 gene2913
+cond84 cond85 cond87 cond88 cond144 cond162 cond167 cond169
+15 9
+gene285 gene312 gene315 gene573 gene828 gene902 gene985 gene1008 gene1349 gene1644 gene1956 gene2278 gene2676 gene2755 gene2943
+cond33 cond81 cond85 cond86 cond87 cond88 cond105 cond162 cond169
+19 7
+gene96 gene136 gene332 gene432 gene497 gene718 gene781 gene868 gene903 gene1655 gene2287 gene2378 gene2433 gene2495 gene2586 gene2665 gene2715 gene2854 gene2906
+cond71 cond72 cond73 cond74 cond81 cond159 cond168
+13 10
+gene528 gene1035 gene1507 gene1680 gene1859 gene1867 gene1878 gene2327 gene2392 gene2625 gene2636 gene2708 gene2916
+cond7 cond26 cond41 cond80 cond81 cond88 cond122 cond134 cond161 cond162
+26 5
+gene6 gene11 gene275 gene334 gene572 gene692 gene1038 gene1085 gene1225 gene1239 gene1397 gene1531 gene1629 gene1688 gene2044 gene2173 gene2185 gene2242 gene2268 gene2549 gene2645 gene2698 gene2758 gene2833 gene2850 gene2955
+cond13 cond29 cond105 cond107 cond123
+16 8
+gene174 gene400 gene600 gene692 gene702 gene1007 gene1214 gene1558 gene1565 gene1607 gene2181 gene2216 gene2234 gene2684 gene2699 gene2788
+cond76 cond77 cond80 cond83 cond84 cond87 cond88 cond169
+14 9
+gene15 gene30 gene255 gene611 gene705 gene746 gene798 gene1096 gene1196 gene2012 gene2209 gene2358 gene2426 gene2746
+cond73 cond74 cond75 cond76 cond77 cond144 cond160 cond161 cond162
+18 7
+gene19 gene339 gene372 gene453 gene505 gene524 gene860 gene955 gene999 gene1157 gene1212 gene1473 gene1638 gene1868 gene1918 gene2126 gene2127 gene2248
+cond12 cond64 cond81 cond105 cond122 cond144 cond168
+10 12
+gene213 gene316 gene829 gene858 gene1048 gene1301 gene1303 gene1380 gene1425 gene1463
+cond28 cond31 cond33 cond72 cond73 cond74 cond85 cond86 cond122 cond137 cond144 cond169
+12 10
+gene639 gene847 gene996 gene1032 gene1124 gene1342 gene1477 gene1548 gene1646 gene1925 gene2335 gene2396
+cond29 cond31 cond33 cond43 cond87 cond88 cond122 cond137 cond144 cond162
+13 9
+gene0 gene148 gene574 gene615 gene650 gene986 gene1366 gene1409 gene1562 gene1935 gene2121 gene2273 gene2940
+cond40 cond45 cond80 cond81 cond82 cond83 cond122 cond161 cond163
+13 9
+gene290 gene517 gene586 gene587 gene977 gene988 gene995 gene1173 gene1732 gene1776 gene2018 gene2135 gene2591
+cond29 cond84 cond85 cond86 cond87 cond88 cond92 cond137 cond144
+19 6
+gene72 gene158 gene877 gene1307 gene1414 gene1416 gene1426 gene1479 gene1620 gene1651 gene1818 gene2050 gene2240 gene2251 gene2374 gene2386 gene2411 gene2477 gene2977
+cond45 cond48 cond49 cond51 cond53 cond83
+16 7
+gene442 gene631 gene767 gene851 gene1110 gene1213 gene1302 gene1308 gene1582 gene1782 gene1893 gene1913 gene2050 gene2204 gene2368 gene2687
+cond31 cond40 cond82 cond88 cond105 cond161 cond162
+10 11
+gene210 gene1049 gene1065 gene1146 gene1148 gene1698 gene1843 gene2071 gene2966 gene2976
+cond26 cond28 cond41 cond44 cond64 cond69 cond73 cond76 cond86 cond122 cond165
+22 5
+gene159 gene224 gene234 gene524 gene527 gene546 gene638 gene1173 gene1212 gene1240 gene1300 gene1308 gene1412 gene1434 gene1539 gene1631 gene2081 gene2110 gene2344 gene2407 gene2433 gene2688
+cond14 cond30 cond123 cond148 cond165
+12 9
+gene1040 gene1153 gene1167 gene1411 gene1430 gene1574 gene1708 gene1873 gene1930 gene2175 gene2312 gene2900
+cond14 cond66 cond80 cond81 cond82 cond87 cond88 cond108 cond109
+18 6
+gene160 gene200 gene272 gene310 gene477 gene489 gene845 gene1577 gene1642 gene1854 gene1903 gene2188 gene2390 gene2600 gene2761 gene2783 gene2840 gene2977
+cond26 cond43 cond76 cond122 cond123 cond167
+18 6
+gene383 gene423 gene426 gene507 gene605 gene607 gene641 gene660 gene665 gene896 gene1680 gene1871 gene2017 gene2120 gene2265 gene2399 gene2470 gene2595
+cond66 cond71 cond72 cond76 cond164 cond172
+13 8
+gene31 gene124 gene586 gene606 gene856 gene899 gene904 gene1053 gene1107 gene1364 gene2207 gene2377 gene2880
+cond41 cond83 cond108 cond122 cond123 cond154 cond163 cond169
+13 8
+gene171 gene207 gene249 gene307 gene551 gene585 gene628 gene694 gene1461 gene1869 gene2361 gene2531 gene2844
+cond41 cond43 cond77 cond80 cond81 cond82 cond107 cond169
+13 8
+gene413 gene614 gene623 gene665 gene931 gene1069 gene1070 gene1078 gene1388 gene1596 gene1602 gene2139 gene2387
+cond84 cond85 cond88 cond105 cond144 cond161 cond168 cond169
+10 10
+gene480 gene1234 gene1381 gene1643 gene1688 gene1823 gene2034 gene2094 gene2136 gene2320
+cond76 cond77 cond82 cond83 cond106 cond122 cond144 cond160 cond162 cond163
+11 9
+gene689 gene823 gene1103 gene1147 gene1362 gene1781 gene1857 gene2130 gene2245 gene2346 gene2920
+cond68 cond80 cond81 cond82 cond108 cond109 cond137 cond144 cond169
+11 9
+gene57 gene319 gene541 gene1769 gene1814 gene2157 gene2269 gene2632 gene2829 gene2867 gene2919
+cond26 cond28 cond29 cond69 cond87 cond88 cond122 cond144 cond163
+11 9
+gene454 gene544 gene842 gene938 gene1072 gene1090 gene1637 gene1658 gene1977 gene2433 gene2934
+cond33 cond84 cond85 cond88 cond154 cond160 cond162 cond163 cond169
+14 7
+gene121 gene126 gene218 gene361 gene462 gene964 gene967 gene1163 gene1354 gene1468 gene2128 gene2289 gene2816 gene2864
+cond68 cond76 cond81 cond123 cond161 cond169 cond171
+14 7
+gene293 gene878 gene1022 gene1198 gene1377 gene1566 gene1751 gene1894 gene2056 gene2058 gene2279 gene2373 gene2516 gene2760
+cond43 cond69 cond73 cond74 cond76 cond81 cond109
+14 7
+gene36 gene226 gene234 gene535 gene617 gene636 gene657 gene695 gene844 gene917 gene1294 gene1456 gene2408 gene2932
+cond29 cond69 cond80 cond83 cond137 cond167 cond168
+14 7
+gene65 gene157 gene549 gene822 gene965 gene1175 gene1273 gene1276 gene1578 gene1645 gene1921 gene1947 gene2680 gene2884
+cond40 cond48 cond49 cond69 cond71 cond73 cond154
+14 7
+gene37 gene305 gene428 gene1056 gene1073 gene1133 gene1306 gene1765 gene1923 gene2328 gene2658 gene2683 gene2858 gene2948
+cond41 cond43 cond58 cond82 cond105 cond108 cond138
+12 8
+gene103 gene237 gene622 gene941 gene1252 gene1451 gene1835 gene1939 gene2022 gene2440 gene2704 gene2895
+cond41 cond69 cond76 cond80 cond83 cond108 cond109 cond162
+12 8
+gene123 gene277 gene390 gene578 gene857 gene964 gene974 gene1067 gene1086 gene1408 gene2393 gene2573
+cond50 cond73 cond74 cond75 cond77 cond80 cond82 cond83
+16 6
+gene176 gene191 gene403 gene734 gene1015 gene1140 gene1504 gene1592 gene1704 gene1879 gene1918 gene2031 gene2179 gene2493 gene2515 gene2755
+cond49 cond50 cond69 cond108 cond160 cond161
+16 6
+gene135 gene136 gene141 gene160 gene393 gene453 gene972 gene1642 gene1785 gene1830 gene1903 gene1950 gene2209 gene2317 gene2437 gene2451
+cond6 cond33 cond42 cond91 cond96 cond108
+13 7
+gene245 gene502 gene521 gene552 gene662 gene687 gene1233 gene1545 gene1753 gene1848 gene1877 gene2021 gene2095
+cond84 cond87 cond144 cond159 cond163 cond168 cond172
+10 9
+gene73 gene151 gene282 gene448 gene530 gene818 gene1642 gene2285 gene2714 gene2846
+cond77 cond80 cond84 cond86 cond87 cond88 cond162 cond169 cond171
+9 10
+gene45 gene404 gene507 gene696 gene1002 gene1514 gene1980 gene2007 gene2116
+cond13 cond29 cond77 cond84 cond122 cond123 cond134 cond137 cond154 cond162
+10 9
+gene88 gene204 gene824 gene962 gene1260 gene1589 gene1701 gene2203 gene2649 gene2975
+cond64 cond69 cond82 cond84 cond88 cond108 cond144 cond162 cond163
+10 9
+gene392 gene431 gene464 gene554 gene1594 gene1818 gene2005 gene2349 gene2379 gene2842
+cond14 cond64 cond66 cond69 cond76 cond77 cond80 cond105 cond168
+10 9
+gene222 gene712 gene1052 gene1061 gene1532 gene1711 gene1981 gene2281 gene2806 gene2877
+cond6 cond7 cond80 cond82 cond122 cond123 cond144 cond160 cond163
+15 6
+gene158 gene374 gene615 gene620 gene721 gene770 gene867 gene1097 gene1470 gene1806 gene2208 gene2302 gene2403 gene2859 gene2978
+cond14 cond28 cond31 cond68 cond154 cond165
+15 6
+gene168 gene363 gene914 gene1055 gene1135 gene1172 gene1673 gene1842 gene2012 gene2078 gene2443 gene2451 gene2614 gene2670 gene2873
+cond46 cond50 cond82 cond83 cond109 cond164
+11 8
+gene71 gene89 gene167 gene423 gene425 gene720 gene1108 gene1114 gene1601 gene1975 gene2450
+cond13 cond26 cond31 cond32 cond41 cond43 cond106 cond169
+11 8
+gene14 gene168 gene353 gene810 gene853 gene953 gene1005 gene1506 gene1841 gene2366 gene2644
+cond7 cond77 cond80 cond105 cond107 cond108 cond123 cond137
+11 8
+gene21 gene1075 gene1116 gene1570 gene2040 gene2155 gene2243 gene2354 gene2682 gene2696 gene2827
+cond40 cond48 cond49 cond76 cond79 cond80 cond109 cond123
+12 7
+gene183 gene227 gene230 gene593 gene795 gene1001 gene1238 gene1491 gene1647 gene2381 gene2502 gene2685
+cond26 cond69 cond77 cond80 cond122 cond162 cond163
+12 7
+gene302 gene537 gene598 gene835 gene971 gene1071 gene1170 gene1749 gene2249 gene2338 gene2635 gene2991
+cond26 cond30 cond31 cond32 cond84 cond85 cond134
+14 6
+gene74 gene157 gene576 gene881 gene1163 gene1356 gene1482 gene1492 gene1789 gene1949 gene2102 gene2291 gene2377 gene2414
+cond30 cond43 cond134 cond137 cond145 cond172
+14 6
+gene167 gene322 gene981 gene1027 gene1082 gene1349 gene1657 gene2007 gene2084 gene2449 gene2690 gene2714 gene2852 gene2974
+cond7 cond45 cond50 cond69 cond70 cond71
+14 6
+gene503 gene632 gene899 gene1018 gene1030 gene1220 gene1659 gene1742 gene1851 gene1953 gene2083 gene2092 gene2782 gene2972
+cond34 cond77 cond81 cond107 cond160 cond167
+12 7
+gene12 gene233 gene846 gene1408 gene1412 gene1430 gene2241 gene2345 gene2395 gene2505 gene2594 gene2742
+cond47 cond48 cond49 cond51 cond71 cond72 cond134
+14 6
+gene15 gene184 gene204 gene775 gene832 gene1144 gene1447 gene1836 gene2003 gene2128 gene2399 gene2657 gene2671 gene2879
+cond7 cond13 cond31 cond34 cond39 cond92
+12 7
+gene51 gene162 gene557 gene637 gene782 gene1410 gene1504 gene1669 gene1822 gene2190 gene2279 gene2668
+cond29 cond30 cond32 cond42 cond64 cond65 cond154
+14 6
+gene187 gene223 gene400 gene700 gene725 gene934 gene1013 gene1376 gene1436 gene1947 gene2156 gene2397 gene2830 gene2908
+cond26 cond31 cond33 cond34 cond109 cond134
+14 6
+gene152 gene182 gene210 gene335 gene435 gene600 gene659 gene1357 gene1429 gene2292 gene2345 gene2473 gene2684 gene2828
+cond0 cond13 cond14 cond68 cond98 cond124
+10 8
+gene178 gene675 gene1025 gene1179 gene1535 gene1546 gene2052 gene2084 gene2087 gene2918
+cond64 cond76 cond79 cond81 cond82 cond85 cond87 cond105
+10 8
+gene269 gene433 gene677 gene1047 gene1245 gene1397 gene1575 gene1586 gene1590 gene1762
+cond26 cond83 cond84 cond85 cond86 cond88 cond154 cond169
+8 10
+gene260 gene273 gene1360 gene1752 gene1830 gene2210 gene2823 gene2928
+cond29 cond30 cond69 cond77 cond80 cond81 cond84 cond88 cond105 cond122
+10 8
+gene13 gene164 gene664 gene892 gene1058 gene1649 gene1799 gene1999 gene2442 gene2958
+cond29 cond41 cond81 cond105 cond137 cond144 cond167 cond168
+13 6
+gene378 gene379 gene936 gene1115 gene1272 gene1394 gene1721 gene2203 gene2336 gene2360 gene2545 gene2732 gene2837
+cond28 cond41 cond57 cond65 cond94 cond134
+11 7
+gene822 gene1395 gene1535 gene1583 gene1756 gene1761 gene1812 gene2400 gene2641 gene2660 gene2939
+cond6 cond30 cond32 cond66 cond134 cond137 cond171
+15 5
+gene150 gene422 gene486 gene523 gene781 gene1063 gene1099 gene1381 gene1958 gene2104 gene2551 gene2553 gene2674 gene2877 gene2922
+cond26 cond32 cond88 cond170 cond171
+8 9
+gene198 gene633 gene674 gene854 gene1123 gene1761 gene2876 gene2904
+cond28 cond33 cond64 cond76 cond85 cond86 cond87 cond144 cond169
+12 6
+gene808 gene827 gene889 gene925 gene1802 gene1852 gene2172 gene2202 gene2525 gene2576 gene2841 gene2933
+cond29 cond31 cond32 cond84 cond86 cond106
+12 6
+gene181 gene502 gene538 gene590 gene654 gene1086 gene1221 gene1314 gene1407 gene1467 gene1549 gene2309
+cond31 cond40 cond42 cond76 cond86 cond122
+12 6
+gene92 gene95 gene385 gene528 gene623 gene787 gene798 gene875 gene1098 gene1145 gene2247 gene2857
+cond12 cond28 cond62 cond91 cond165 cond171
+10 7
+gene172 gene211 gene216 gene364 gene484 gene608 gene1006 gene1161 gene1593 gene2425
+cond45 cond69 cond74 cond80 cond83 cond165 cond167
+10 7
+gene1209 gene1616 gene1829 gene1966 gene2162 gene2371 gene2722 gene2744 gene2770 gene2795
+cond6 cond40 cond41 cond74 cond105 cond106 cond172
+10 7
+gene201 gene619 gene908 gene1639 gene1735 gene1837 gene2048 gene2337 gene2814 gene2860
+cond6 cond64 cond82 cond105 cond170 cond171 cond172
+11 6
+gene65 gene269 gene535 gene553 gene1339 gene1920 gene2157 gene2216 gene2285 gene2524 gene2757
+cond44 cond68 cond72 cond109 cond135 cond172
+8 8
+gene231 gene565 gene784 gene849 gene926 gene1427 gene1961 gene2176
+cond26 cond64 cond74 cond79 cond83 cond108 cond144 cond154
+8 8
+gene758 gene973 gene976 gene1341 gene1404 gene1476 gene1931 gene1954
+cond29 cond34 cond47 cond48 cond68 cond84 cond134 cond136
+9 7
+gene501 gene773 gene779 gene927 gene997 gene1177 gene1944 gene2310 gene2430
+cond7 cond29 cond31 cond144 cond145 cond161 cond165
+9 7
+gene52 gene472 gene817 gene1739 gene1784 gene1860 gene2164 gene2636 gene2710
+cond14 cond40 cond49 cond50 cond83 cond106 cond167
+9 7
+gene479 gene598 gene843 gene1054 gene1596 gene1977 gene1995 gene2238 gene2413
+cond13 cond41 cond43 cond66 cond69 cond108 cond109
+12 5
+gene59 gene191 gene212 gene327 gene350 gene415 gene578 gene624 gene695 gene1556 gene1568 gene1741
+cond7 cond14 cond34 cond84 cond123
+7 8
+gene270 gene538 gene648 gene1357 gene1906 gene2485 gene2794
+cond29 cond31 cond33 cond39 cond45 cond64 cond123 cond137
+8 7
+gene169 gene604 gene1361 gene1402 gene2153 gene2205 gene2639 gene2981
+cond12 cond40 cond76 cond122 cond123 cond137 cond165
+8 7
+gene47 gene170 gene585 gene911 gene1197 gene1757 gene1834 gene2812
+cond46 cond49 cond53 cond64 cond105 cond106 cond160
+9 6
+gene347 gene793 gene963 gene1379 gene1613 gene1698 gene1916 gene2280 gene2297
+cond40 cond49 cond50 cond51 cond85 cond167
+6 9
+gene32 gene85 gene174 gene865 gene1214 gene1965
+cond48 cond63 cond66 cond67 cond79 cond134 cond170 cond171 cond172
+9 6
+gene1069 gene1562 gene2023 gene2036 gene2117 gene2227 gene2351 gene2736 gene2778
+cond7 cond49 cond50 cond59 cond64 cond92
+6 8
+gene596 gene795 gene909 gene937 gene1487 gene1647
+cond12 cond66 cond76 cond134 cond137 cond159 cond165 cond171
+6 8
+gene123 gene179 gene352 gene703 gene2091 gene2771
+cond14 cond56 cond66 cond68 cond93 cond108 cond164 cond165
+6 6
+gene310 gene489 gene575 gene788 gene2138 gene2936
+cond7 cond82 cond94 cond134 cond145 cond159
+

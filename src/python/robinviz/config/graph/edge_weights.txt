@@ -1,0 +1,4 @@
+Main Graph Edge Weights
+Based on
+edgesBetween 1 radio Interactions between biclusters
+sharedGenes 0 radio Shared genes between biclusters
