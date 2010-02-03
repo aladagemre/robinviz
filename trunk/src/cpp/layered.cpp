@@ -392,7 +392,7 @@ int main(){
                         FILE *defaultRunTo;
                         char chr;
 			INPUT = dataRead( dataName2, geneArray, condArray );
-                         //cout << "\nDONE";
+                         cout << "\nDONE";
 #ifdef LINUX
                          defaultRunTo = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
 #else
@@ -412,7 +412,7 @@ int main(){
                              fprintf( defaultRunTo, "%s%d\t%s\n", "gene", i, geneArray[ i ].GENE );
                          }
                          fclose( defaultRunTo );
-                         //cout << "\nDONE\n";
+                         cout << "\nDONE\n";
 	// 		drawHeatmap( INPUT, geneArray, condArray, "outputs/heatmap/out.html" );
 		}
 		if( bimaxFlag == true ){
@@ -438,38 +438,39 @@ int main(){
                                         rlebmain_m( INPUT, maxSizeSubMatrix_exp1_g, maxSizeSubMatrix_exp1_c, minSizeSubMatrix_exp1_g, minSizeSubMatrix_exp1_c, repeat, hvaluemin, increment_exp1_g, increment_exp1_c );
 				}
                                 else{
+                                        cout << "\nDONE\n";
                                          FILE *defaultRunFrom,*defaultRunTo;                                         
                                          char chr;
-                                     if( readOption == false ){
+                                         if( readOption == false ){
 #ifdef LINUX
-                                         defaultRunFrom = fopen( "sources/ppi_sources/genenames.txt", "r" );
-                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
+                                             defaultRunFrom = fopen( "sources/ppi_sources/genenames.txt", "r" );
+                                             defaultRunTo = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
 #else
-                                         defaultRunFrom = fopen( "sources//ppi_sources//genenames.txt", "r" );
-                                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//genenames.txt", "w" );
+                                             defaultRunFrom = fopen( "sources//ppi_sources//genenames.txt", "r" );
+                                             defaultRunTo = fopen( "sources//usr_sources//visualization_data//genenames.txt", "w" );
 #endif
-                                         while( !feof( defaultRunFrom )){
-                                             fscanf( defaultRunFrom, "%c", &chr );
-                                             fprintf( defaultRunTo, "%c", chr );
+                                             while( !feof( defaultRunFrom )){
+                                                 fscanf( defaultRunFrom, "%c", &chr );
+                                                 fprintf( defaultRunTo, "%c", chr );
+                                             }
+                                             fclose( defaultRunFrom );
+                                             fclose( defaultRunTo );
                                          }
-                                         fclose( defaultRunFrom );
-                                         fclose( defaultRunTo );
-                                     }
-                                     if( readOption == false ){
+                                         if( readOption == false ){
 #ifdef LINUX
-                                         defaultRunFrom = fopen( "sources/ppi_sources/geneNameConversion.txt", "r" );
-                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "w" );
+                                             defaultRunFrom = fopen( "sources/ppi_sources/geneNameConversion.txt", "r" );
+                                             defaultRunTo = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "w" );
 #else
-                                         defaultRunFrom = fopen( "sources//ppi_sources//geneNameConversion.txt", "r" );
-                                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "w" );
-#endif                                     
-                                         while( !feof( defaultRunFrom )){
-                                             fscanf( defaultRunFrom, "%c", &chr );
-                                             fprintf( defaultRunTo, "%c", chr );
+                                             defaultRunFrom = fopen( "sources//ppi_sources//geneNameConversion.txt", "r" );
+                                             defaultRunTo = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "w" );
+#endif
+                                             while( !feof( defaultRunFrom )){
+                                                 fscanf( defaultRunFrom, "%c", &chr );
+                                                 fprintf( defaultRunTo, "%c", chr );
+                                             }
+                                             fclose( defaultRunFrom );
+                                             fclose( defaultRunTo );
                                          }
-                                         fclose( defaultRunFrom );
-                                         fclose( defaultRunTo );
-                                     }
 #ifdef LINUX
                                          defaultRunFrom = fopen( "sources/ppi_sources/genefunctions.txt", "r" );
                                          defaultRunTo = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "w" );
@@ -496,6 +497,7 @@ int main(){
                                          }
                                          fclose( defaultRunFrom );
                                          fclose( defaultRunTo );
+                                         cout << "\nDONE\n";
                                 }
 			}
 		}
