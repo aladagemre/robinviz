@@ -284,7 +284,8 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 //  				cout << i << "\t" << j << endl;
 			}
 		}
-		
+
+// 	cout << "\n***************************************\n";
 		list<matrix> submatricesForProcessing_Modifed, submatricesForProcessing_Pure;
 		matrix temp_m;
 		forall_items( it, randomSubmatrixIndexs ){
@@ -300,6 +301,7 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 				C >> t_c;
 				temp_m = getSubmatrixAtIndexs( AFTER, t_g, t_g + randomSubmatrixIndexs[ it ].first(),
 				t_c, t_c +  randomSubmatrixIndexs[ it ].second() );
+// 			    	temp_m.print();
 				four_tuple<int,int,double,matrix> tuples( t_g, t_c, 0, temp_m ); 
 				results.append( tuples );
 				//cout << "\n2.1\n";
@@ -321,7 +323,6 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 #else
 			fptr = fopen( "outputs//biclusters//RLEBResult.txt" , "a" );
 #endif
-			
 			forall_items( it2, output ){
 // 				cout << output[ it2 ].fourth().dim1() << "\t" << output[ it2 ].fourth().dim2() << endl;
 				fprintf( fptr, "%d\t%d\n", output[ it2 ].fourth().dim1(), output[ it2 ].fourth().dim2() );
@@ -343,5 +344,6 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 			output.clear();
 		}
 	#pragma endregion EXTRACTION
+// 	cout << "\n***************************************\n";
 }
 #pragma endregion MAIN
