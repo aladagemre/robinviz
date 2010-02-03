@@ -144,7 +144,7 @@ matrix getMatrixFromFile( char filename[ 128 ] , double multiplyParameter, int &
 
 
 matrix getMatrixFromFile( char filename[ 128 ], int forOtherAlgorithms, int &dimension1, int &dimension2  ){
-	cout << " MATRIX \n" << filename << endl;
+// 	cout << " MATRIX \n" << filename << endl;
 	FILE *fcptr;
 	fcptr = fopen( filename, "r" );
 	int dim1,dim2,count = 0,count2 = 0;
