@@ -111,7 +111,11 @@ class MainView(View):
 class PeripheralView(View):
     def __init__(self, parent=None):
         View.__init__(self, parent)
-
+        self.preview = False
+        
+    def setPreview(self, value):
+        self.preview = True
+        
     def mousePressEvent(self, event):
         QGraphicsView.mousePressEvent(self, event)
         if hasattr(self.scene(), "id"):
@@ -122,6 +126,20 @@ class PeripheralView(View):
             self.specialWindow = SinglePeripheralViewWindow()
             self.specialWindow.loadGraph(self.scene().filename)
         self.specialWindow.showMaximized()
+    
+    def focusInEvent(self, event):
+        """Highlights the view with color yellow when focused."""
+        View.focusInEvent(self, event)
+        if self.preview:
+            if not hasattr(self, 'normalBackground'):
+                self.normalBackground = self.backgroundBrush()
+            self.setBackgroundBrush(QBrush(QColor(Qt.yellow)))
+    def focusOutEvent(self, event):
+        """Removes yellow highlight when focused out."""
+        View.focusOutEvent(self, event)
+        if self.preview:
+            self.setBackgroundBrush(self.normalBackground)
+        
 
             
 class MainScene(Scene):
@@ -185,12 +203,15 @@ class CircleNode(QGraphicsEllipseItem):
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.arrows = []
-        self.setBrush(QColor("#52C6FF"))
+        self.color = QColor("#52C6FF")
+        self.selectedColor = QColor("#E6FF23")
+        self.setBrush(self.color)
         self.associateWithNode(node)
 
         
     def addEdge(self, e):
         self.arrows.append(e)
+
     def contextMenuEvent(self, event):
         menu = QMenu()
         propertiesAction = menu.addAction("Properties")
@@ -270,7 +291,12 @@ class CircleNode(QGraphicsEllipseItem):
                 arrow.updatePosition()
 
             self.setToolTip("(%.2f,%.2f)" % (self.centerPos().x(), self.centerPos().y()) )
-
+        elif change == QGraphicsItem.ItemSelectedChange:
+            if self.isSelected():
+                self.setBrush(self.color)
+            else:
+                self.setBrush(self.selectedColor)
+                
         return QVariant(value)
 
 class SquareNode(QGraphicsPolygonItem):

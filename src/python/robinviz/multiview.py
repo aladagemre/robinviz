@@ -11,7 +11,6 @@ class MultiViewWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupGUI()
-
         
     def setupGUI(self):
         desktop = QDesktopWidget().availableGeometry()
@@ -150,6 +149,7 @@ class MultiViewWindow(QMainWindow):
         l = QHBoxLayout(widget)
 
         view = PeripheralView()
+        view.setPreview(True)
         #scene = Scene('graph_gml%d.gml' % id)
         #view.setScene(scene)
         view.setRenderHints(QPainter.Antialiasing)
@@ -171,12 +171,9 @@ class MultiViewWindow(QMainWindow):
         l = QHBoxLayout(widget)
 
         view = PeripheralView()
-        #scene = Scene('graph_gml%d.gml' % id)
-        #view.setScene(scene)
+        view.setPreview(True)
         view.setRenderHints(QPainter.Antialiasing)
 
-        #view.setSceneRect(scene.sceneRect())
-        #view.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
         l.addWidget(view)
 
         return view, widget
@@ -223,14 +220,25 @@ class MultiViewWindow(QMainWindow):
     def displayLast(self):
         self.loadMainScene()
         self.connectSlots()
+        
     def displayAboutDialog(self):
         from misc.about import Ui_AboutDialog
         self.AboutDialog = QDialog()
         ui = Ui_AboutDialog()
         ui.setupUi(self.AboutDialog)
         self.AboutDialog.show()
-        
-        
+
+    def setFullScreen(self, value):
+        if value:
+            self.showFullScreen()
+        else:
+            self.showMaximized()
+            
+    def keyPressEvent(self, event):
+        key = event.key()
+        """if key == Qt.Key_F11:
+            self.toggleFullScreen()"""
+            
     def createActions(self):
 
         # FILE MENU
@@ -278,11 +286,16 @@ class MultiViewWindow(QMainWindow):
         clearViews.setStatusTip('Clear the views in the window.')
         self.connect(clearViews, SIGNAL('triggered()'), self.clearViews)
 
+        showFullscreen = QAction("Fullscreen", self)
+        showFullscreen.setCheckable(True)
+        showFullscreen.setShortcut("F11")
+        showFullscreen.setStatusTip('Display the window in fullscreen')
+        self.connect(showFullscreen, SIGNAL('toggled(bool)'), self.setFullScreen)
 
         viewMenu = menubar.addMenu('&View')
         viewMenu.addAction(clearViews)
         viewMenu.addAction(displayGrid)
-        
+        viewMenu.addAction(showFullscreen)
 
 
         # HELP MENU
@@ -294,14 +307,6 @@ class MultiViewWindow(QMainWindow):
         helpMenu = menubar.addMenu('&Help')
         #helpMenu.addAction(Manual)
         helpMenu.addAction(aboutDialog)
-
-    def resizeEvent(self, event):
-        #self.view.setSceneRect(self.mainScene.sceneRect())
-        #self.mainView.fitInView(self.mainScene.sceneRect(),Qt.KeepAspectRatio)
-        pass
-
-
-
 
 if __name__ == "__main__":
 
