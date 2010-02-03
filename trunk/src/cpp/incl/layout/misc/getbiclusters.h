@@ -977,14 +977,6 @@ void analyseGenes2( char fileName[], int biNumber, char algName[], int dimension
 			listOfFile.clear();
 			list<leda::vector> V;
 
-			//M.print();
-			// For real data comment belov line
-			//M = M.trans();
-			forall_items( it , indexGenes ){
-				int col = indexGenes[ it ];
-				V.append( M.col( col )); 
-				//cout << col << " ";
-			}
 			
 			FILE *yFptr, *saveGene;
 			if( indexGenes.size() >= fraction && indexGenes.size() <= high ){
@@ -1000,7 +992,7 @@ void analyseGenes2( char fileName[], int biNumber, char algName[], int dimension
 			}            
 // 			cout << indexGenes.size() << "\t" << indexCond.size() << endl;
 			matrix TEMP( indexGenes.size(), indexCond.size() );
-
+// 			cout << endl << M.dim1() << "\t" << M.dim2() << endl;
 			int count = 0,count2 = 0;
 			forall_items( it, indexGenes ){ 
 				forall_items( it2, indexCond ){
@@ -1008,7 +1000,7 @@ void analyseGenes2( char fileName[], int biNumber, char algName[], int dimension
 					    break;
 					if( indexGenes[ it ] >= dimension2 )
 					    break;*/
-					//cout << indexGenes[ it ] << "   " << indexCond[ it2 ] << "   " << M( indexCond[ it2 ],indexGenes[ it ] ) << endl;
+// 					cout << indexGenes[ it ] << "   " << indexCond[ it2 ] << "   " /*<< M( indexCond[ it2 ],indexGenes[ it ] ) */<< endl;
 					TEMP( count, count2 ) = M( indexCond[ it2 ],indexGenes[ it ] );
 					count2++;
 				}
@@ -1216,7 +1208,7 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
 				    break;
 				if( indexGenes[ it ] >= dimension2 )
 				    break;*/
-				//cout << indexGenes[ it ] << " - " << indexCond[ it2 ] << "   " << count << " - " << count2 << endl;
+// 				cout << indexGenes[ it ] << " - " << indexCond[ it2 ] << "   " << count << " - " << count2 << endl;
 // 				cout << endl <<count <<"-" << count2 << " - " << indexCond[ it2 ] << " - " << indexGenes[ it ]  <<endl;
 				TEMP( count, count2 ) = M( indexGenes[ it ] , indexCond[ it2 ]);
 				count2++;
