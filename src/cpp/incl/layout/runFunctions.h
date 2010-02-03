@@ -38,6 +38,7 @@ Created
 
 #include "springLayout.h"
 #include "algorithmwolf.h"
+#include "algorithmwolf_m.h"
 
 struct Strings{
 	char name[ 16 ];
