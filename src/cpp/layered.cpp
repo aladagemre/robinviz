@@ -438,7 +438,7 @@ int main(){
                                         rlebmain_m( INPUT, maxSizeSubMatrix_exp1_g, maxSizeSubMatrix_exp1_c, minSizeSubMatrix_exp1_g, minSizeSubMatrix_exp1_c, repeat, hvaluemin, increment_exp1_g, increment_exp1_c );
 				}
                                 else{
-                                        cout << "\nDONE\n";
+                                        cout << "\nDONE2\n";
                                          FILE *defaultRunFrom,*defaultRunTo;                                         
                                          char chr;
                                          if( readOption == false ){
@@ -456,6 +456,7 @@ int main(){
                                              fclose( defaultRunFrom );
                                              fclose( defaultRunTo );
                                          }
+                                         cout << "\nDONE2\n";
                                          if( readOption == false ){
 #ifdef LINUX
                                              defaultRunFrom = fopen( "sources/ppi_sources/geneNameConversion.txt", "r" );
@@ -471,6 +472,7 @@ int main(){
                                              fclose( defaultRunFrom );
                                              fclose( defaultRunTo );
                                          }
+                                         cout << "\nDONE2\n";
 #ifdef LINUX
                                          defaultRunFrom = fopen( "sources/ppi_sources/genefunctions.txt", "r" );
                                          defaultRunTo = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "w" );
