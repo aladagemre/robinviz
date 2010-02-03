@@ -10,7 +10,7 @@
 </style>
 </head>
 <body>
-
+<center>
 <table id="box-table-a" summary="Results">
     <thead>
     	<tr> 

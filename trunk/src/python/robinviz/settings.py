@@ -1,3 +1,4 @@
+import os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import sys
@@ -27,6 +28,9 @@ class SettingsDialog(QDialog):
         self.setupGraphTab()
         self.setupDrawingTab()
         self.setupBiologicalTab()
+
+
+        self.setValues()
         
         self.connect(self.buttonBox, SIGNAL("rejected()"), self.close)
         self.connect(self.buttonBox, SIGNAL("accepted()"), self.save)
@@ -52,7 +56,19 @@ class SettingsDialog(QDialog):
                     pass
             self.parameters[parameterName] = parameterValue
             #print parameterName, parameterValue
-       
+
+    def setValues(self):
+        typeConversion = {QSpinBox       : int,
+                          CustomRadio    : int,
+                          CustomCheckBox : int,
+                          QDoubleSpinBox : float,
+                          QLineEdit      : str,
+                          FileBrowser    : abspath,}
+                          
+        for parameter, widget in self.parameterWidgets.items():
+            convert = typeConversion[type(widget)]
+            widget.setValue( convert( self.parameters[parameter]  ) )
+            
         
     def save(self):
         # Update parameter dictionary from the widgets.
@@ -138,17 +154,14 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         if parameter.type == "int":
             valueWidget = QSpinBox()
             valueWidget.setRange(parameter.min, parameter.max)
-            valueWidget.setValue(int(self.parameters[parameter.name]))            
             valueWidget.setSingleStep(parameter.step)
         elif parameter.type == "float":
             valueWidget = QDoubleSpinBox()
             valueWidget.setRange(parameter.min, parameter.max)
-            valueWidget.setValue(float(self.parameters[parameter.name]))
             valueWidget.setSingleStep(parameter.step)
         elif parameter.type == "file":
             valueWidget = QHBoxLayout()
             lineEdit = QLineEdit()
-            lineEdit.setValue(str(self.parameters[parameter.name]))
             lineEdit.value = lineEdit.text # to be able to use value method.
             browseButton = QToolBoxButton()
             browseButton.setText("..")
@@ -156,7 +169,6 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
             valueWidget.addWidget(browseButton)
         elif parameter.type == "str":
             valueWidget = QLineEdit()
-            valueWidget.setValue(str(self.parameters[parameter.name]))
             valueWidget.value = valueWidget.text
         
         else:
@@ -241,26 +253,20 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.labelMaximumWidth = QLabel("Maximum Width:")
         self.spinMaximumWidth = QSpinBox()
         self.spinMaximumWidth.setRange(1,100)
-        self.spinMaximumWidth.setValue(int(self.parameters["width"]))
-
-
+        
         self.labelRemovalRatio= QLabel("Edge Weight Removal Ratio:")
         self.labelRemovalRatio.setWordWrap(True)
         self.spinRemovalRatio = QDoubleSpinBox()
         self.spinRemovalRatio.setRange(0, 1)
         self.spinRemovalRatio.setSingleStep(0.01)
-        self.spinRemovalRatio.setValue(float(self.parameters["removeRat"]))
-
+        
         self.labelMinimumSeparationX = QLabel("X Separation:")
         self.spinMinimumSeparationX = QSpinBox()
         self.spinMinimumSeparationX.setRange(1,500)
-        self.spinMinimumSeparationX.setValue(int(self.parameters["space"]))
-
+        
         self.labelMinimumSeparationY = QLabel("Y Separation:")
         self.spinMinimumSeparationY = QSpinBox()
         self.spinMinimumSeparationY.setRange(1,500)
-        self.spinMinimumSeparationY.setValue(int(self.parameters["increment"]))
-
         
         self.drawingLayout.addWidget(self.labelMaximumWidth, 0, 0)
         self.drawingLayout.addWidget(self.spinMaximumWidth, 0, 1)
@@ -295,7 +301,6 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
 
             for flagName, widget in groupBox.parameterDict.items():
                 self.parameterWidgets[flagName] = widget
-                #print flagName, self.parameters[flagName], type(self.parameters[flagName])
                 widget.setChecked(self.parameters[flagName] == 1)
     def setupBiologicalTab(self):
         self.bioTab = QWidget()
@@ -307,11 +312,9 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
 
         self.radioMicroArrayInput = CustomRadio("Microarray Data w/o Labels:")
         self.browseMicroArrayInput = FileBrowser(abspath(dirname(self.parameters["dataName"])))
-        self.browseMicroArrayInput.setValue(abspath(self.parameters["dataName"]))
 
         self.radioMicroArrayInputLabel = CustomRadio("Microarray Data w/ Labels:")
         self.browseMicroArrayInputLabel = FileBrowser(abspath(dirname(self.parameters["dataName2"])))
-        self.browseMicroArrayInputLabel.setValue(abspath(abspath(self.parameters["dataName2"])))
 
         # Select the radio button
         if self.parameters["readOption"]:
@@ -323,12 +326,10 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.checkGo = CustomCheckBox("Gene Ontology File:")
         self.checkGo.setChecked(self.parameters["go_info"])
         self.browseGoInput = FileBrowser(abspath(dirname(self.parameters["gofile"])))
-        self.browseGoInput.setValue(abspath(self.parameters["gofile"]))
 
         ####### PPI FILE PART ######################
         self.labelPPIFile = QLabel("PPI Network File:")
         self.browsePPIInput = FileBrowser(abspath(dirname(self.parameters["ppifilename"])))
-        self.browsePPIInput.setValue(abspath(self.parameters["ppifilename"]))
         
         # Match parameters with widgets
         self.parameterWidgets["dataName"] = self.browseMicroArrayInput

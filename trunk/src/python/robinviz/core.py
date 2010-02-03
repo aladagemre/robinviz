@@ -1,14 +1,18 @@
-import sys
-import math
-from pygml import Graph
 #from parser import GMLParser
-from styles import *
+#from styles import *
+#import sys
+from pygml import Graph
+from bicluster import *
+
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4 import QtWebKit
+
 from os.path import split
-import os
 from os.path import normcase
+import os
+import math
+
 
 GRAPH_LAYOUTS = {'Layered' : 'dir',
                  'Circular': 'circular.exe',
@@ -37,19 +41,6 @@ class View(QGraphicsView):
         factor = 1.05 ** (event.delta() / 240.0)
         self.scale(factor, factor)
 
-    """def mouseDoubleClickEvent(self, event):
-        QGraphicsView.mouseDoubleClickEvent(self, event)
-        scPos = self.mapToScene(event.pos())   
-        print scPos
-        self.clickedPos.append(scPos)
-
-        if len(self.clickedPos) == 2:
-            self.fitInView(QRectF(self.clickedPos[0], self.clickedPos[1]), Qt.KeepAspectRatio)
-            self.clickedPos = []
-
-        
-        #self.centerOn(scenePos)"""
-
     def contextMenuEvent(self, event):
         # If clicked on an item, skip this menu, let it handle the signal
         if not self.scene():
@@ -74,8 +65,17 @@ class View(QGraphicsView):
 
         if hasattr(self, 'main'):
             enrichmentTable = menu.addAction("Enrichment Table")
-            actionToFunction[enrichmentTable] = self.enrichmentTable
+            actionToFunction[enrichmentTable] = self.showEnrichmentTable
+        else:
+            clearAction = menu.addAction("Clear")
+            actionToFunction[clearAction] = self.clearView
             
+            goTable = menu.addAction("GO Table")
+            actionToFunction[goTable] = self.showGOTable
+
+            propertiesAction = menu.addAction("Properties")
+            actionToFunction[propertiesAction] = self.peripheralProperties
+
         # Now switch to layout menu
         switchToLayoutMenu = menu.addMenu("Switch To &Layout")
         for graphLayout in sorted(GRAPH_LAYOUTS.keys()):
@@ -95,10 +95,30 @@ class View(QGraphicsView):
         else:
             actionToFunction[action]()
 
-    def enrichmentTable(self):
+    def peripheralProperties(self):
+        if not hasattr(self, 'biclusterWindow'):
+            self.biclusterWindow = BiclusterWindow(self.scene().id)
+
+        self.biclusterWindow.showMaximized()
+            
+    def clearView(self):
+        self.setScene(None)
+        
+    def showGOTable(self):
+        path = normcase("outputs/go/gobicluster%d.html" % self.scene().id)
+        if os.path.exists(path):
+            self.GOTable= QtWebKit.QWebView()
+            self.GOTable.setUrl(QUrl(path))
+            self.GOTable.show()
+        else:
+            QMessageBox.information(self, 'GO Table not found.',
+     "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
+        
+    def showEnrichmentTable(self):
         self.enrichmentTable= QtWebKit.QWebView()
         self.enrichmentTable.setUrl(QUrl(normcase("outputs/enrich/result.html")))
         self.enrichmentTable.showMaximized()
+        
     def fitNewLayout(self):
         newGraph = self.newGraph
         # Add the edges

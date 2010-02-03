@@ -214,6 +214,7 @@ class CircleNode(QGraphicsEllipseItem):
 
     def contextMenuEvent(self, event):
         menu = QMenu()
+        goTable = menu.addAction("GO Table")
         propertiesAction = menu.addAction("Properties")
         action = menu.exec_(event.screenPos())
         if action == propertiesAction:
@@ -221,7 +222,19 @@ class CircleNode(QGraphicsEllipseItem):
                 self.biclusterWindow = BiclusterWindow(self.node.id)
                 
             self.biclusterWindow.showMaximized()
+        elif action == goTable:
+            self.showGOTable()
 
+    def showGOTable(self):
+        path = normcase("outputs/go/gobicluster%d.html" % self.node.id)
+        if os.path.exists(path):
+            self.GOTable= QtWebKit.QWebView()
+            self.GOTable.setUrl(QUrl(path))
+            self.GOTable.show()
+        else:
+            QMessageBox.information(None, 'GO Table not found.',
+     "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
+     
     def intersectionPoint(self, startPoint):
         """Gives the intersection point when a line is drawn into the center
         of the circle node from the given startPoint."""
@@ -295,7 +308,7 @@ class CircleNode(QGraphicsEllipseItem):
             if self.isSelected():
                 self.setBrush(self.color)
             else:
-                self.setBrush(self.selectedColor)
+                self.setBrush(self.selectedColor)               
                 
         return QVariant(value)
 
