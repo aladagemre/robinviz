@@ -69,7 +69,12 @@ class CustomRadio(QRadioButton):
             return 1
         else:
             return 0
-
+    def setValue(self, value):
+        if value == 1:
+            self.setChecked(True)
+        else:
+            self.setChecked(False)
+            
 class CustomCheckBox(QCheckBox):
     def __init__(self, text=None, parent=None):
         QCheckBox.__init__(self, text, parent)
@@ -78,7 +83,13 @@ class CustomCheckBox(QCheckBox):
             return 1
         else:
             return 0
-        
+
+    def setValue(self, value):
+        if value == 1:
+            self.setChecked(True)
+        else:
+            self.setChecked(False)
+            
 class RadioGroup:
     def __init__(self, filename):
         self.filename = filename

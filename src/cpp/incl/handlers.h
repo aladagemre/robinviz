@@ -250,7 +250,7 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 				}
 			}
 		}
-		fprintf( fptr, "\t</tbody>\n</table>\n</body>\n</html>" );
+		fprintf( fptr, "\t</tbody>\n</table>\n</center>\n</body>\n</html>" );
 		fclose( fptr );
 		count++;
 		//cout << " Bic ends\n";

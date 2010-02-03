@@ -11,7 +11,7 @@ class MultiViewWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupGUI()
-        
+
     def setupGUI(self):
         desktop = QDesktopWidget().availableGeometry()
         brPoint = desktop.bottomRight()
@@ -199,12 +199,12 @@ class MultiViewWindow(QMainWindow):
 
     def run(self):
         print "Starting operation"
-
+        self.setCursor(Qt.WaitCursor)
         errorFile = "outputs/error.txt"
         if os.path.exists(errorFile):
             os.remove(errorFile)
-        self.setCursor(Qt.WaitCursor)
-
+        import clean
+        clean.clean()
         failed = os.system(normcase("./layered.exe")) # returns 0 for success
         if not failed:
             self.loadMainScene()
