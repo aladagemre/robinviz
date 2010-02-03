@@ -273,7 +273,7 @@ class CircleNode(QGraphicsEllipseItem):
         
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
-        self.setToolTip("X: %.2f\nY: %.2f" % (self.centerPos().x(), self.centerPos().y()) )
+        self.setToolTip("Weight :" + str(node.graphics.w))
         self.setRect(0, 0, self.w, self.w)
         
         # Construct the text.
@@ -393,7 +393,7 @@ class SquareNode(QGraphicsPolygonItem):
         self.node = node
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.h/2))
-        self.setToolTip("X: %.2f\nY: %.2f" % (self.centerPos().x(), self.centerPos().y()) )
+        self.setToolTip("Weight: " + str(node.graphics.w))
 
         # Leave some margin for the text.
         self.text.setPos(1,1)
