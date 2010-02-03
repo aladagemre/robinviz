@@ -2,7 +2,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import sys
 from config.biclustering import *
-from os.path import normcase
+from os.path import normcase, abspath, dirname
 
 class AlgorithmParameter:
     def __init__(self, line):
@@ -40,6 +40,28 @@ class BiclusteringAlgorithm:
 class Parameter:
     def __init__(self):
         pass
+
+class FileBrowser(QHBoxLayout):
+    def __init__(self, defaultDirectory, parent=None):
+        QHBoxLayout.__init__(self, parent)
+        self.defaultDirectory = defaultDirectory or ""
+
+        self.inputBox = QLineEdit()
+        self.browseButton = QPushButton("..")
+        self.addWidget(self.inputBox)
+        self.addWidget(self.browseButton)
+        self.browseButton.clicked.connect(self.browse)
+    def value(self):
+        return normcase(str(self.inputBox.text()))
+    
+    def setValue(self, value):
+        self.inputBox.setText(value)
+        
+    def browse(self):
+        s = QFileDialog.getOpenFileName(None, "Select your microarray data", self.defaultDirectory, "Microarray Data (*.txt)")
+        if s:
+            self.inputBox.setText(s)
+                    
 
 class CustomRadio(QRadioButton):
     def __init__(self, text=None, parent=None):
@@ -155,11 +177,11 @@ class SettingsDialog(QDialog):
         
     def save(self):
         # Update parameter dictionary from the widgets.
-        for parameter in sorted(self.parameterWidgets.keys()):
-            self.parameters[parameter] = self.parameterWidgets[parameter][1].value()
-            if type(self.parameters[parameter]) == bool:
-                self.parameters[parameter] = int(self.parameters[parameter])
-            
+        for parameter in self.parameterWidgets.keys():
+            value = self.parameterWidgets[parameter].value()
+            if type(value) == bool:
+                value = int(value)
+            self.parameters[parameter] = value
         # Add algorithm flags to the parameter dict.
         for algorithm in self.algorithms:
             if algorithm.name == self.comboAlgorithm.currentText():
@@ -182,7 +204,7 @@ nodeSize 50.0
 edgeBendImp 35.0
 colorScale 130.0
 edgThicknessTher 4.0
-dataName sources/usr_sources/microarray_data/input.txt
+dataName %(dataName)s
 dataName2 %(dataName2)s
 biclustering 1
 bimax_low_dim1 %(bimax_low_dim1)d
@@ -211,7 +233,7 @@ brandFlag 1
 brandFlag2 0
 ourMethodFlag 0
 ledaPostFlag 0
-readOption 1
+readOption %(readOption)d
 ffd_layout 0
 layered_layout 1
 go_info 0
@@ -266,6 +288,8 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.biclusteringTab = QWidget()
         self.bicLayout = QGridLayout(self.biclusteringTab)
 
+        self.parameterWidgets = {}
+
         algorithmSelectionLayout = QHBoxLayout()
         self.labelUseAlgorithm = QLabel("    Use:")
         self.comboAlgorithm = QComboBox(self.biclusteringTab)                
@@ -273,17 +297,47 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         algorithmSelectionLayout.addWidget(self.labelUseAlgorithm)
         algorithmSelectionLayout.addWidget(self.comboAlgorithm)
         self.toolboxAP = QToolBox(self.biclusteringTab)
-        #self.toolboxAPLayout = QGridLayout(self.toolboxAP)
 
-        self.bicLayout.addLayout(algorithmSelectionLayout, 0, 0)
-        self.bicLayout.addWidget(self.toolboxAP, 1, 0)
+        ######## INPUT FILE PART ###############
+
+        row = self.bicLayout.rowCount()
+        self.radioMicroArrayInput = CustomRadio("Microarray Data w/o Labels:")
+        self.browseMicroArrayInput = FileBrowser(abspath(dirname(self.parameters["dataName"])))
+        self.browseMicroArrayInput.setValue(abspath(self.parameters["dataName"]))
+        self.bicLayout.addWidget(self.radioMicroArrayInput, row, 0)
+        self.bicLayout.addLayout(self.browseMicroArrayInput, row, 1)
+
+        self.radioMicroArrayInputLabel = CustomRadio("Microarray Data w/ Labels:")
+        self.browseMicroArrayInputLabel = FileBrowser(abspath(dirname(self.parameters["dataName2"])))
+        self.browseMicroArrayInputLabel.setValue(abspath(abspath(self.parameters["dataName2"])))
+        self.bicLayout.addWidget(self.radioMicroArrayInputLabel, row + 1, 0)
+        self.bicLayout.addLayout(self.browseMicroArrayInputLabel, row + 1, 1)
+
+        # Select the radio button
+        if self.parameters["readOption"]:
+            self.radioMicroArrayInputLabel.setChecked(True)
+        else:
+            self.radioMicroArrayInput.setChecked(True)
+            
+        # Match parameters with widgets
+        self.parameterWidgets["dataName"] = self.browseMicroArrayInput
+        self.parameterWidgets["dataName2"] = self.browseMicroArrayInputLabel
+        self.parameterWidgets["readOption"] = self.radioMicroArrayInputLabel
+        
+        ####### ALGORITHM SELECTION AND OPTIONS ########
+        row = self.bicLayout.rowCount()
+        self.bicLayout.addLayout(algorithmSelectionLayout, row, 0, 1, 2)
+        self.bicLayout.addWidget(self.toolboxAP, row+1, 0, 1, 2)
         
         self.algorithms = []
-        self.parameterWidgets = {}
         
+      
+        ######## ALGORITHM TOOLBOX PART ############
+        # Create algorithm objects.
         for filename in biclusteringAlgorithms:
             self.algorithms.append(BiclusteringAlgorithm(normcase("src/python/robinviz/config/biclustering/"+filename)))
 
+        # Add Algorithm Widgets
         useCachedResults = True
         for algorithm in self.algorithms:
             # Create a page for this algorithm
@@ -300,7 +354,7 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
                 (labelWidget, valueWidget) = self.__getParameterWidget(parameter)
 
                 # Save for further reference
-                self.parameterWidgets[parameter.name] = (labelWidget, valueWidget)
+                self.parameterWidgets[parameter.name] = valueWidget
 
                 # Add the widgets to the layout
                 pageLayout.addWidget(labelWidget, row, 0)
@@ -310,25 +364,15 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
                     pageLayout.addLayout(valueWidget, row, 1)
                 row += 1
 
-
-            
-
             self.comboAlgorithm.addItem(algorithm.name)
             if self.parameters[algorithm.flagName]:
                 self.comboAlgorithm.setCurrentIndex(self.comboAlgorithm.count() - 1)
                 useCachedResults = False                    
 
-
-        self.comboAlgorithm.addItem("Cached Results")
-
-
+        self.comboAlgorithm.addItem("Cached Results") # As the last option.
         if useCachedResults:
-            #print "using cached"
             self.comboAlgorithm.setCurrentIndex(self.comboAlgorithm.count() - 1)
-        
-
-
-            
+              
         self.tabWidget.addTab(self.biclusteringTab, "Biclustering")
 
     def browseInputFile(self):
@@ -365,19 +409,19 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         
         self.drawingLayout.addWidget(self.labelMaximumWidth, 0, 0)
         self.drawingLayout.addWidget(self.spinMaximumWidth, 0, 1)
-        self.parameterWidgets["width"] = (self.labelMaximumWidth, self.spinMaximumWidth)
+        self.parameterWidgets["width"] = self.spinMaximumWidth
         
         self.drawingLayout.addWidget(self.labelRemovalRatio, 2, 0)
         self.drawingLayout.addWidget(self.spinRemovalRatio, 2, 1)
-        self.parameterWidgets["removeRat"] = (self.labelRemovalRatio, self.spinRemovalRatio)
+        self.parameterWidgets["removeRat"] = self.spinRemovalRatio
 
         self.drawingLayout.addWidget(self.labelMinimumSeparationX, 3, 0)
         self.drawingLayout.addWidget(self.spinMinimumSeparationX, 3, 1)
-        self.parameterWidgets["space"] = (self.labelMinimumSeparationX, self.spinMinimumSeparationX)
+        self.parameterWidgets["space"] = self.spinMinimumSeparationX
         
         self.drawingLayout.addWidget(self.labelMinimumSeparationY, 4, 0)
         self.drawingLayout.addWidget(self.spinMinimumSeparationY, 4, 1)
-        self.parameterWidgets["increment"] = (self.labelMinimumSeparationY, self.spinMinimumSeparationY)
+        self.parameterWidgets["increment"] = self.spinMinimumSeparationY
 
         
         self.tabWidget.addTab(self.drawingTab, "Drawing Settings")
@@ -395,7 +439,7 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
             self.graphLayout.addWidget(groupBox.widget)
 
             for flagName, widget in groupBox.parameterDict.items():
-                self.parameterWidgets[flagName] = (None, widget)
+                self.parameterWidgets[flagName] = widget
                 #print flagName, self.parameters[flagName], type(self.parameters[flagName])
                 widget.setChecked(self.parameters[flagName] == 1)
     def setupBiologicalTab(self):

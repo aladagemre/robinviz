@@ -2,5 +2,5 @@ Bimax
 bimaxFlag 0
 bimax_low_dim1 10 int 2,1000,1 Min Size dim1
 bimax_low_dim2 10 int 2,1000,1 Min Size dim2
-ther_disc 0.5 float 0,1.0,0.001 Disc percent
+ther_disc 0.5 float 0,1.0,0.01 Disc percent
 bic_num_bimax 50 int 10,1000,1 Number of Bics
