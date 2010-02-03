@@ -157,6 +157,11 @@
 	*	GO file read or not, please specify if it is true at sources/usr_sources/vis...
 	**/
 		bool go_info = false;
+#ifdef LINUX
+                char gofile[256] = "sources/usr_sources/visualization_data/funcassociate_go_associations.txt";
+#else
+                char gofile[256] = "sources//usr_sources//visualization_data//funcassociate_go_associations.txt";
+#endif
 	/* This flag for changing the layout using x-coordinate assignment  */
 	/* 1 for python and 0 for old non including x-coordinate assignment */
 	int algorithmFlag = 1;
@@ -174,9 +179,9 @@
 	* PPI Graph source file, it should be in sources/usr_sources/visualization_data/ppi
 	**/
 #ifdef LINUX
-	leda::string ppiName = "NewPPIs2.txt";
+        char ppifilename[256] = "sources/usr_sources/visualization_data/ppi/NewPPIs2.txt";
 #else
-	leda::string ppiName = "NewPPIs2.txt";
+        char ppifilename[256] = "sources//usr_sources//visualization_data//ppi//NewPPIs2.txt";
 #endif
 	list<list<GENES> > biclusters; 
 	list<leda::matrix> matrixBiclusters;	      
@@ -252,7 +257,9 @@ int main(){
 		//cout << empty << " " << dataName << endl;
 		// 	dataName2 = "sources/usr_sources/microarray_data/inputLabel.txt"
 		fscanf( fptr, "%s%s", empty, dataName2 );
-		//cout << empty << " " << dataName2 << endl;
+                //cout << empty << " " << dataName2 << endl;
+                fscanf( fptr, "%s%s", empty, ppifilename );
+                //cout << empty << " " << ppifilename << endl;
 		// 	biclustering = 1
 		fscanf( fptr, "%s%d", empty, &biclustering );
 		//cout << empty << " " << biclustering << endl;
@@ -354,6 +361,8 @@ int main(){
 		fscanf( fptr, "%s%d", empty, &bool_i );
 		go_info = ( bool_i == 0 ? 0 : 1 );
 		//cout << empty << " " << go_info << endl;
+                fscanf( fptr, "%s%s", empty, gofile );
+                //cout << empty << " " << ppifilename << endl;
 		// 	edgesBetween = 1
 		fscanf( fptr, "%s%d", empty, &bool_i );
 		edgesBetween = ( bool_i == 0 ? 0 : 1 );
@@ -380,7 +389,30 @@ int main(){
 			INPUT = dataRead( dataName );
 		}
 		else{
+                        FILE *defaultRunTo;
+                        char chr;
 			INPUT = dataRead( dataName2, geneArray, condArray );
+                         //cout << "\nDONE";
+#ifdef LINUX
+                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
+#else
+                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//genenames.txt", "w" );
+#endif
+                         for( int i = 0; i < INPUT.dim1(); i++ ){
+                             //cout << geneArray[ i ].GENE << "\t" << i << endl;
+                             fprintf( defaultRunTo, "%s\n", geneArray[ i ].GENE );
+                         }
+                         fclose( defaultRunTo );
+#ifdef LINUX
+                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "w" );
+#else
+                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "w" );
+#endif
+                         for( int i = 0; i < INPUT.dim1(); i++ ){
+                             fprintf( defaultRunTo, "%s%d\t%s\n", "gene", i, geneArray[ i ].GENE );
+                         }
+                         fclose( defaultRunTo );
+                         //cout << "\nDONE\n";
 	// 		drawHeatmap( INPUT, geneArray, condArray, "outputs/heatmap/out.html" );
 		}
 		if( bimaxFlag == true ){
@@ -405,16 +437,76 @@ int main(){
 					biclustering = 4;
                                         rlebmain_m( INPUT, maxSizeSubMatrix_exp1_g, maxSizeSubMatrix_exp1_c, minSizeSubMatrix_exp1_g, minSizeSubMatrix_exp1_c, repeat, hvaluemin, increment_exp1_g, increment_exp1_c );
 				}
+                                else{
+                                         FILE *defaultRunFrom,*defaultRunTo;                                         
+                                         char chr;
+                                     if( readOption == false ){
+#ifdef LINUX
+                                         defaultRunFrom = fopen( "sources/ppi_sources/genenames.txt", "r" );
+                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
+#else
+                                         defaultRunFrom = fopen( "sources//ppi_sources//genenames.txt", "r" );
+                                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//genenames.txt", "w" );
+#endif
+                                         while( !feof( defaultRunFrom )){
+                                             fscanf( defaultRunFrom, "%c", &chr );
+                                             fprintf( defaultRunTo, "%c", chr );
+                                         }
+                                         fclose( defaultRunFrom );
+                                         fclose( defaultRunTo );
+                                     }
+                                     if( readOption == false ){
+#ifdef LINUX
+                                         defaultRunFrom = fopen( "sources/ppi_sources/geneNameConversion.txt", "r" );
+                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "w" );
+#else
+                                         defaultRunFrom = fopen( "sources//ppi_sources//geneNameConversion.txt", "r" );
+                                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "w" );
+#endif                                     
+                                         while( !feof( defaultRunFrom )){
+                                             fscanf( defaultRunFrom, "%c", &chr );
+                                             fprintf( defaultRunTo, "%c", chr );
+                                         }
+                                         fclose( defaultRunFrom );
+                                         fclose( defaultRunTo );
+                                     }
+#ifdef LINUX
+                                         defaultRunFrom = fopen( "sources/ppi_sources/genefunctions.txt", "r" );
+                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "w" );
+#else
+                                         defaultRunFrom = fopen( "sources//ppi_sources//genefunctions.txt", "r" );
+                                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "w" );
+#endif
+                                         while( !feof( defaultRunFrom )){
+                                             fscanf( defaultRunFrom, "%c", &chr );
+                                             fprintf( defaultRunTo, "%c", chr );
+                                         }
+                                         fclose( defaultRunFrom );
+                                         fclose( defaultRunTo );
+#ifdef LINUX
+                                         defaultRunFrom = fopen( "sources/ppi_sources/functions.txt", "r" );
+                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/functions.txt", "w" );
+#else
+                                         defaultRunFrom = fopen( "sources//ppi_sources//functions.txt", "r" );
+                                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//functions.txt", "w" );
+#endif
+                                         while( !feof( defaultRunFrom )){
+                                             fscanf( defaultRunFrom, "%c", &chr );
+                                             fprintf( defaultRunTo, "%c", chr );
+                                         }
+                                         fclose( defaultRunFrom );
+                                         fclose( defaultRunTo );
+                                }
 			}
 		}
 		
 		bicRead( INPUT, biclusters, matrixBiclusters, H_values, Hmax, minBicSize, maxBicSize, biclustering, INPUT.dim1(), INPUT.dim2() );
 		cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
 		if( go_info == 1 ){
-			array<GENEONTO> geneOntoForData = geneOntologyHandling();
+                        array<GENEONTO> geneOntoForData = geneOntologyHandling(gofile);
 			geneOntologyToBiclusterHandling( biclusters, geneOntoForData );
 		}
-		interactionRead( temp, GenesNode, INTERACTIONS, TEMPINT, ppiName );
+                interactionRead( temp, GenesNode, INTERACTIONS, TEMPINT, ppifilename );
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " Produce Bicluster Graphs" << endl;
 		cout << "/**************************************************/" << endl;

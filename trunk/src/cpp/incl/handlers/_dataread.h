@@ -1,18 +1,18 @@
 // #include "declerations.h"
 
-matrix dataRead( char filename[128] ){
+matrix dataRead( char filename[256] ){
 	leda::matrix INPUT;
 	int dimension1, dimension2;
-	char filename2[128];
+	char filename2[256];
 	sprintf( filename2, "%s%s","", filename );
 	INPUT = getMatrixFromFile( filename2, 1, dimension1, dimension2 ); 
 	return INPUT;
 }
 
-matrix dataRead( char filename[128], array<GENES> &geneArray,  array<CONDS> &condArray  ){
+matrix dataRead( char filename[256], array<GENES> &geneArray,  array<CONDS> &condArray  ){
 	leda::matrix INPUT;
 	int dimension1, dimension2;
-	char filename2[128];
+	char filename2[256];
 	sprintf( filename2, "%s%s","", filename );
 	INPUT = getMatrixFromFile( filename2, dimension1, dimension2, geneArray, condArray ); 
 	return INPUT;
