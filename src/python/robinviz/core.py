@@ -12,6 +12,7 @@ from os.path import normcase
 
 GRAPH_LAYOUTS = {'Layered' : 'dir',
                  'Circular': 'circular.exe',
+                 'T-Circular': 'tcircular.exe',
                  'Force Directed' : 'force.exe',
                  'Star' : 'star.exe'}
 

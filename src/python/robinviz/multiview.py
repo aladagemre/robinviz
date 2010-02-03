@@ -186,10 +186,11 @@ class MultiViewWindow(QMainWindow):
         for view in self.pViews:
             view.setScene(None)
         self.mainView.setScene(None)
-
-        for scene in self.pScenes:
-            del scene
-        del self.mainScene
+        if hasattr(self, 'pScenes'):
+            for scene in self.pScenes:
+                del scene
+        if hasattr(self, 'mainScene'):
+            del self.mainScene
         
     def setDisplayGrid(self, value):
         self.mainScene.gridActive = value
