@@ -418,6 +418,18 @@ int main(){
 		if( bimaxFlag == true ){
 			dataWriteBimax( INPUT, bimax_low_dim1, bimax_low_dim2, ther_disc );
 			biclustering = 2;
+                        if( bimax_low_dim1 > INPUT.dim1() || bimax_low_dim2 > INPUT.dim2() ){
+                            FILE *erptr;
+#ifdef LINUX
+                            erptr = fopen( "outputs/error.txt", "w" );
+#else
+                            erptr = fopen( "outputs//error.txt", "w" );
+#endif
+                            fprintf( erptr, "Check the desired dimensions of BIMAX algorithm\n" );
+                            fclose( erptr );
+                            cout << "\nCheck the desired dimensions of BIMAX algorithm\n";
+                            exit(1);
+                        }
 			#ifdef LINUX
                                 bimaxMain( "src/cpp/incl/bicalg/bimax/matrix_robin.txt", bic_num_bimax );
 			#else
@@ -426,6 +438,18 @@ int main(){
 		}else{
 			if( ccFlag == true ){
 				dataWriteCC( INPUT ); 
+                                if( minHeight_ > INPUT.dim1() || minWidth_ > INPUT.dim2() ){
+                                    FILE *erptr;
+#ifdef LINUX
+                                    erptr = fopen( "outputs/error.txt", "w" );
+#else
+                                    erptr = fopen( "outputs//error.txt", "w" );
+#endif
+                                    fprintf( erptr, "Check the desired dimensions of CC algorithm\n" );
+                                    fclose( erptr );
+                                    cout << "\nCheck the desired dimensions of CC algorithm\n";
+                                    exit(1);
+                                }
 				biclustering = 3;
 				#ifdef LINUX
                                         ccMain( "src/cpp/incl/bicalg/cc/matrix_robin.txt", INPUT.dim1(), INPUT.dim2(), 10, maxScore_, minHeight_, minWidth_ );
@@ -434,6 +458,18 @@ int main(){
 				#endif
 			}else{
 				if( rlebFlag == true ){
+                                        if( maxSizeSubMatrix_exp1_g > INPUT.dim1() || minSizeSubMatrix_exp1_g > INPUT.dim1()  || minSizeSubMatrix_exp1_c > INPUT.dim2() || maxSizeSubMatrix_exp1_c > INPUT.dim2() || maxSizeSubMatrix_exp1_g < minSizeSubMatrix_exp1_g || maxSizeSubMatrix_exp1_c < minSizeSubMatrix_exp1_c ){
+                                            FILE *erptr;
+#ifdef LINUX
+                                            erptr = fopen( "outputs/error.txt", "w" );
+#else
+                                            erptr = fopen( "outputs//error.txt", "w" );
+#endif
+                                            fprintf( erptr, "Check the desired dimensions of RLEB algorithm\n" );
+                                            fclose( erptr );
+                                            cout << "\nCheck the desired dimensions of RLEB algorithm\n";
+                                            exit(1);
+                                        }
 					biclustering = 4;
                                         rlebmain_m( INPUT, maxSizeSubMatrix_exp1_g, maxSizeSubMatrix_exp1_c, minSizeSubMatrix_exp1_g, minSizeSubMatrix_exp1_c, repeat, hvaluemin, increment_exp1_g, increment_exp1_c );
 				}
