@@ -403,7 +403,7 @@ int main(){
 			}else{
 				if( rlebFlag == true ){
 					biclustering = 4;
-					rlebmain( INPUT, maxSizeSubMatrix_exp1_g, maxSizeSubMatrix_exp1_c, minSizeSubMatrix_exp1_g, minSizeSubMatrix_exp1_c, repeat, hvaluemin, increment_exp1_g, increment_exp1_c );
+                                        rlebmain_m( INPUT, maxSizeSubMatrix_exp1_g, maxSizeSubMatrix_exp1_c, minSizeSubMatrix_exp1_g, minSizeSubMatrix_exp1_c, repeat, hvaluemin, increment_exp1_g, increment_exp1_c );
 				}
 			}
 		}

@@ -34,7 +34,7 @@ struct condss{
 typedef struct geness GENESS;
 typedef struct condss CONDSS;
 
-matrix getMatrixFromFile( char filename[ 10 ], int forOtherAlgorithms, array<GENESS> &geneArray_Yeast,  array<CONDSS> &condArray_Yeast ){
+matrix getMatrixFromFile( char filename[ 256 ], int forOtherAlgorithms, array<GENESS> &geneArray_Yeast,  array<CONDSS> &condArray_Yeast ){
 // 	cout << " MATRIX " << endl;
 	FILE *fcptr;
 	fcptr = fopen( filename, "r" );
@@ -51,6 +51,7 @@ matrix getMatrixFromFile( char filename[ 10 ], int forOtherAlgorithms, array<GEN
 	fscanf( fcptr, "%s", geneArray_Yeast[ count2 ].GENE );
 	geneArray_Yeast[ count2 ].index = count2+1;
 	matrix TEMP( dim1, dim2 );
+// 	cout << "\n\n";
 	while( feof( fcptr ) != true ){
 		fscanf( fcptr, "%lf" , &value );
 		TEMP( count2, count ) = value;
@@ -247,7 +248,7 @@ void hvvalueCalculator( list<four_tuple<int,int,double,matrix> > &matrices, char
 
 #pragma region MAIN
 
-void runExtraction( int repeat, int data_dim1, int data_dim2, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatrix_exp1_c, int minSizeSubMatrix_exp1_g, int minSizeSubMatrix_exp1_c, int increment_exp1_g, int increment_exp1_c, double hvaluemin  ){
+void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatrix_exp1_c, int minSizeSubMatrix_exp1_g, int minSizeSubMatrix_exp1_c, int increment_exp1_g, int increment_exp1_c, double hvaluemin  ){
 	list_item it,it2;
 	FILE *fptr2;
 #ifdef LINUX
@@ -280,7 +281,7 @@ void runExtraction( int repeat, int data_dim1, int data_dim2, int maxSizeSubMatr
 			for( int j = minSizeSubMatrix_exp1_c; j <= maxSizeSubMatrix_exp1_c; j+= increment_exp1_c ){
 				two_tuple<int,int> tuples( i,j );
 				randomSubmatrixIndexs.append( tuples );
- 				cout << i << "\t" << j << endl;
+//  				cout << i << "\t" << j << endl;
 			}
 		}
 		
@@ -288,7 +289,10 @@ void runExtraction( int repeat, int data_dim1, int data_dim2, int maxSizeSubMatr
 		matrix temp_m;
 		forall_items( it, randomSubmatrixIndexs ){
 			//cout << "\n2\n";
+			int count_bic = 0;
 			for( int count = 0; count < repeat; count++ ){
+				if( count_bic > 5 )
+					break;
 				random_source G( 0, data_dim1 - randomSubmatrixIndexs[ it ].first() - 1 );
 				random_source C( 0, data_dim2 - randomSubmatrixIndexs[ it ].second() - 1 );
 				int t_g, t_c;
@@ -308,6 +312,7 @@ void runExtraction( int repeat, int data_dim1, int data_dim2, int maxSizeSubMatr
 				if( results[ results.first_item() ].third() < hvaluemin )
 					output.append( results[ results.first_item() ]);
 				results.clear();
+				count_bic++;
 			}
 			//hvvalueCalculator( results, "Modified" );
 			FILE *fptr;

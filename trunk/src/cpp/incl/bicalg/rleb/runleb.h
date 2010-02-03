@@ -181,6 +181,29 @@ void saveToFile( matrix M, GRAPH<int,int> &G, list<node> &A, list<node> &B, node
 	}
 	fclose( fptr );
 }
+
+void saveToFile( matrix M, array<int> &genes_i, array<int> &conditions_i, char filename[] ){
+
+	FILE *fptr;
+	fptr = fopen( filename, "w" );
+	node n;
+
+	fprintf( fptr, "%d\t%d\n%s\t", M.dim2(), M.dim1(), "probeset" );
+	for( int i = 0; i < M.dim2(); i++ ){
+		if( i != M.dim2() - 1 )
+			fprintf( fptr, "%s%d\t", "cond", conditions_i[ i ] );
+		else
+			fprintf( fptr, "%s%d", "cond", conditions_i[ i ] );
+	}
+	for( int i = 0; i < M.dim1(); i++ ){ 
+		fprintf( fptr, "\n%s%d\t", "gene", genes_i[ i ] );
+		for( int j = 0; j < M.dim2(); j++ ){
+			fprintf( fptr, "%lf\t", M( genes_i[ i ], conditions_i[ j ] ) );
+		}
+	}
+	fclose( fptr );
+}
+
 void saveToFile( matrix M, GRAPH<int,int> &G, list<node> &A, list<node> &B, node_array<int> &genesConds, edge_array<double> &Doubles, char filename[] ){
 
 	FILE *fptr;
@@ -341,6 +364,74 @@ void rlebmain( matrix &INPUT, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatrix_
 	saveToFile( M, G, A, B, genesConds, realValues ,"outputs/localization/localized_input.txt" );
 #else
 	saveToFile( M, G, A, B, genesConds, realValues ,"outputs//localization//localized_input.txt" );
+#endif
+
+	int data_dim1 = M.dim2(), data_dim2 = M.dim1();
+	runExtraction( repeat, data_dim1, data_dim2, maxSizeSubMatrix_exp1_g, maxSizeSubMatrix_exp1_c, minSizeSubMatrix_exp1_g, minSizeSubMatrix_exp1_c, increment_exp1_g, increment_exp1_c, hvaluemin );
+}
+
+void rlebmain_m( matrix &INPUT, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatrix_exp1_c, int minSizeSubMatrix_exp1_g, int minSizeSubMatrix_exp1_c, int repeat, double hvaluemin, int increment_exp1_g, int increment_exp1_c   ){
+
+	int DEBUG = 1;
+	matrix M = INPUT;
+	for( int i = 0; i < M.dim1(); i++ ){
+		for( int j = 0; j < M.dim2(); j++ ){
+#ifdef LINUX
+			if( M(i,j) < 0 )
+				M(i,j) = log(abs( M(i,j) * 10000 ));
+#else
+			if( M(i,j) < 0 )
+				M(i,j) = leda::log(abs( M(i,j) * 10000 ));
+#endif
+		}
+	}
+	
+	cout << "/**************************************************/" << endl;
+	cout << "         RLEB Algorithm Begins" << endl;
+	cout << "/**************************************************/" << endl;
+		
+	
+	array<int> genes_i( M.dim1() + 1 );
+	array<int> conditions_i( M.dim2() + 1 );
+
+	/***************************************/
+	/*    Inserting Artificial Gene data   */
+	/***************************************/
+
+	for( int i = 0; i < M.dim1(); i++ ){
+		genes_i[ i ] = i;
+	}
+	
+	/***************************************/
+	/* Inserting Artificia Conditions data */
+	/***************************************/
+
+	for( int j = 0; j < M.dim2(); j++ ){
+		conditions_i[ j ] = j;
+	}
+
+	for( int a = 0; a != 5 ; a++ ){
+		cout << endl << " Turn " << a + 1 << endl;
+		if( debugANH )
+			cout << "        * NOW CM begins  *\n";
+		
+		M = wolf_m( M, genes_i );
+
+		if( debugANH )
+			cout << "****   CM is done over A, B      *****\n";
+		M = M.trans();
+		M = wolf_m( M, conditions_i );
+
+		if( debugANH ){
+			cout << "****   CM is done over B, A      *****\n";
+			cout << "        * NOW CM ends    *\n";
+		}
+		M = M.trans();
+	}	
+#ifdef LINUX
+	saveToFile( INPUT, genes_i, conditions_i, "outputs/localization/localized_input.txt" );
+#else
+	saveToFile( INPUT, genes_i, conditions_i, "outputs//localization//localized_input.txt" );
 #endif
 
 	int data_dim1 = M.dim2(), data_dim2 = M.dim1();
