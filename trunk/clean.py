@@ -25,7 +25,6 @@ for directory in directories:
 	    os.remove(directory+'/'+filename)
 	except:
 	    print "Could not remove", filename
-	
 
 # Remove individual files.
 files = ("src/python/xcoord/gmls/pyt_inp.gml", 
@@ -38,7 +37,10 @@ files = ("src/python/xcoord/gmls/pyt_inp.gml",
 "outputs/graphs/graph6circular.gml",
 "outputs/psfiles/main.ps",
 "outputs/enrich/result.html",
-"outputs/enrich/result.txt",)
+"outputs/enrich/result.txt",
+"outputs/biclusters/CCResult.txt",
+"src/cpp/incl/bicalg/cc/matrix_robin.txt",
+)
 for filename in files:
     try:
 	print "Removing:", filename
