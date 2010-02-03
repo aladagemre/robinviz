@@ -16,6 +16,16 @@ for directory in ("sources/graph_sources", "outputs/heatmap", "outputs/bicgenes"
 	    except:
 		pass
 	
+# Remove completely
+directories = ("outputs/graphs",)
+for directory in directories:
+    for filename in os.listdir(directory):
+	try:
+	    print "Removing", filename
+	    os.remove(directory+'/'+filename)
+	except:
+	    print "Could not remove", filename
+	
 
 # Remove individual files.
 files = ("src/python/xcoord/gmls/pyt_inp.gml", 

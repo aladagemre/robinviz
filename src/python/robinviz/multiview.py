@@ -1,3 +1,4 @@
+import os.path
 #! /usr/bin/python
 
 from extensions import *
@@ -200,18 +201,24 @@ class MultiViewWindow(QMainWindow):
 
     def run(self):
         print "Starting operation"
+
+        errorFile = "outputs/error.txt"
+        if os.path.exists(errorFile):
+            os.remove(errorFile)
+        self.setCursor(Qt.WaitCursor)
+
         failed = os.system(normcase("./layered.exe")) # returns 0 for success
         if not failed:
             self.loadMainScene()
             self.connectSlots()
         else:
-            if os.path.exists(normcase("outputs/error.txt")):
-                message = open(normcase("outputs/error.txt")).read()
+            if os.path.exists(normcase(errorFile)):
+                message = open(normcase(errorFile)).read()
             else:
                 message = "Some error occured"
 
             QMessageBox.information(self, 'Failed', message)
-            
+        self.unsetCursor()
     def displayLast(self):
         self.loadMainScene()
         self.connectSlots()
