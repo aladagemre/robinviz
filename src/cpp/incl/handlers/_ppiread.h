@@ -1,7 +1,7 @@
 // #include "declerations.h"
 
 
-void interactionRead( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, GRAPH<int,int> &TEMPINT, leda::string &ppiFile ){
+void interactionRead( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, GRAPH<int,int> &TEMPINT, char ppiFile[256] ){
 
 	cout << "/**************************************************/" << endl;
 	cout << "\t" << " Create Protein-protein Interaction Graph" << endl;

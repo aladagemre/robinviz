@@ -43,7 +43,7 @@ struct genesx{
     char geneType[ 1 ];
 };
 typedef struct genesx GNDATAx;
-GNDATAx gx[6241];
+GNDATAx gx[10000];
 
 struct genes3{
     leda::string gene;
@@ -266,11 +266,11 @@ void analyseGenes( char fileName[], int biNumber, int dimension1, int dimension2
 #ifdef LINUX
     FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "r" );
 #else
-	FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "r" );
+    FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "r" );
 #endif
     while( !feof( yFptr ) ){
         fscanf( yFptr, "%s", allGenes[ fileCount ].GENE );
-        for( int j = 0; j < 6241; j++ ){
+        for( int j = 0; j < 10000; j++ ){
             if( strcmp( allGenes[ fileCount ].GENE, gx[ j ].gene ) == 0 ){
                 for( int k = 0; k < cat_num; k++ ){
                     if( gx[ j ].geneType[ 0 ] == abbv[ k ] )
@@ -322,7 +322,7 @@ void analyseGenes( char fileName[], int biNumber, int dimension1, int dimension2
 				countAbbv[ i ] = 0;
 			while( !feof( fptr ) ){
 				fscanf( fptr, "%s", geneTemp );
-				for( int j = 0; j < 6241; j++ ){
+				for( int j = 0; j < 10000; j++ ){
 					if( strcmp( geneTemp, gx[ j ].gene ) == 0 ){
 						for( int k = 0; k < cat_num; k++ ){
 							if( gx[ j ].geneType[ 0 ] == abbv[ k ] )
@@ -571,7 +571,7 @@ void analyseGenes2( char fileName[], int biNumber, char algName[], int dimension
 
     while( !feof( yFptr ) ){
         fscanf( yFptr, "%s", allGenes[ fileCount ].GENE );
-        for( int j = 0; j < 6241; j++ ){
+        for( int j = 0; j < 10000; j++ ){
             if( strcmp( allGenes[ fileCount ].GENE, gx[ j ].gene ) == 0 ){
                 for( int k = 0; k < cat_num; k++ ){
                     if( gx[ j ].geneType[ 0 ] == abbv[ k ] )
@@ -624,7 +624,7 @@ void analyseGenes2( char fileName[], int biNumber, char algName[], int dimension
 				countAbbv[ j ] = 0;
 			while( !feof( fptr ) ){
 				fscanf( fptr, "%s", geneTemp );
-				for( int j = 0; j < 6241; j++ ){
+				for( int j = 0; j < 10000; j++ ){
 					if( strcmp( geneTemp, gx[ j ].gene ) == 0 ){
 						for( int k = 0; k < cat_num; k++ ){
 							if( gx[ j ].geneType[ 0 ] == abbv[ k ] )
@@ -851,15 +851,15 @@ void analyseGenes2( char fileName[], int biNumber, char algName[], int dimension
 	int numberOfConditions = 0;
 	list<leda::string> listOfFile;
 	leda::string temp,number;
-	char getGenes[ 10 ];
-	char getConds[ 10 ];
+	char getGenes[ 20 ];
+	char getConds[ 20 ];
 	list_item it,it2,it3;
 	list<int> indexCond;
 	list<int> indexGenes;
 	int numberOfBiclusters;
 	FILE *fptr;
 
-    if( (fptr = fopen( "sources/bicluster_sources/biclusteringresult.txt", "r")) == NULL && (fptr = fopen( "sources//bicluster_sources//biclusteringresult.txt", "r")) == NULL )
+	if( (fptr = fopen( "sources/bicluster_sources/biclusteringresult.txt", "r")) == NULL && (fptr = fopen( "sources//bicluster_sources//biclusteringresult.txt", "r")) == NULL )
 		cout << "\n Could not open specified file \n";
 	else{
 		fscanf( fptr, "%d", &numberOfBiclusters );
@@ -1072,23 +1072,23 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
 
         int geneCount = 1;
 
-                array<GENES> allGenes( dimension1 + 1 );
+	array<GENES> allGenes( dimension1 + 1 );
 #ifdef LINUX
-                FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "r" );
+	FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "r" );
 #else
-				FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "r" );
+	FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "r" );
 #endif
-                               int fileCount = 0;
-                leda::string genes_s;
-                while( !feof( yFptr ) ){
-                    fscanf( yFptr, "%s", allGenes[ fileCount ].GENE );
-                    allGenes[ fileCount ].index = fileCount;
-                    fileCount++;
-                }
-                fclose( yFptr );
+			int fileCount = 0;
+	leda::string genes_s;
+	while( !feof( yFptr ) ){
+	    fscanf( yFptr, "%s", allGenes[ fileCount ].GENE );
+	    allGenes[ fileCount ].index = fileCount;
+	    fileCount++;
+	}
+	fclose( yFptr );
 
-                char gene[1024];
-                char realGeneName[1024];
+	char gene[1024];
+	char realGeneName[1024];
         while( !feof( fptr ) ){
            
            

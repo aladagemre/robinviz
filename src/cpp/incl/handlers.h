@@ -94,7 +94,7 @@ typedef struct geneonto GENEONTO;
 * These resulting array of substructure will
 * be processed by main program using leda::array<GENEONTO> variable
 **/
-array<GENEONTO> geneOntologyHandling( void ){
+array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " Parsing GO File as you wish" << endl;
 		cout << "/**************************************************/" << endl;
@@ -110,6 +110,7 @@ array<GENEONTO> geneOntologyHandling( void ){
 		char filePath[256] = "sources//usr_sources//visualization_data//funcassociate_go_associations.txt";
 		char filePath2[256] = "sources//usr_sources//visualization_data//genenames.txt";
 #endif
+		sprintf( filePath, "%s", gofile );
 		if( (f = fopen( filePath2, "r" )) == NULL){
 			FILE *erptr;
 #ifdef LINUX
@@ -412,22 +413,14 @@ void biclusterHandling( matrix &INPUT, list<list<GENES> > &biclusters, list<leda
 * @param TEMPINT (leda::GRAPH<int,int>) is andother copy PPI graph used for processing
 * @param ppiFile (leda::string) is obtained from main menu
 */
-void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, GRAPH<int,int> &TEMPINT, leda::string &ppiFile ){
+void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, GRAPH<int,int> &TEMPINT, char ppiFile[256] ){
 
 	list_item it;
 	FILE *interactionsPtr;
-	char ppiFileToOpen[96];
+	char ppiFileToOpen[256];
 
-// 	cout << ppiFile << endl;
-#ifdef LINUX
-    sprintf( ppiFileToOpen, "%s","sources/usr_sources/visualization_data/ppi/");
-#else
-	sprintf( ppiFileToOpen, "%s","sources//usr_sources//visualization_data//ppi//");
-#endif
-	for( int s_i = 0; s_i != ppiFile.length(); s_i++ ){
-// 		cout << ppiFileToOpen << endl;
-		sprintf( ppiFileToOpen, "%s%c", ppiFileToOpen, ppiFile[ s_i ] );
-	}
+
+	sprintf( ppiFileToOpen, "%s", ppiFile );
 
 // 	cout <<  "Bitti " << endl << ppiFileToOpen << endl;
 	//For Sample Data
