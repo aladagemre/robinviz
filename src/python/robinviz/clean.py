@@ -17,7 +17,7 @@ def clean():
 		    os.remove(directory+"/"+filename)		
 		except:
 		    pass
-	    
+
     # Remove completely
     directories = ("outputs/graphs",)
     for directory in directories:
@@ -42,6 +42,9 @@ def clean():
     "outputs/enrich/result.txt",
     "outputs/biclusters/CCResult.txt",
     "src/cpp/incl/bicalg/cc/matrix_robin.txt",
+    "outputs/biclusters/RLEBResult.txt",
+    "outputs/biclusters/BIMAXResult.txt",
+    "outputs/localization/localized_input.txt",
     )
     for filename in files:
 	try:
