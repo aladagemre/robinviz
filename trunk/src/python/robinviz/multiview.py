@@ -11,6 +11,7 @@ class MultiViewWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupGUI()
+        self.setWindowFlags(Qt.Window|Qt.FramelessWindowHint)
 
     def setupGUI(self):
         desktop = QDesktopWidget().availableGeometry()
@@ -203,6 +204,7 @@ class MultiViewWindow(QMainWindow):
 
     def run(self):
         print "Starting operation"
+        self.setWindowTitle("RobinViz - Please wait, window might not response for a while...")
         self.setCursor(Qt.WaitCursor)
         errorFile = "outputs/error.txt"
         if os.path.exists(errorFile):
@@ -217,10 +219,11 @@ class MultiViewWindow(QMainWindow):
             if os.path.exists(normcase(errorFile)):
                 message = open(normcase(errorFile)).read()
             else:
-                message = "Some error occured"
+                message = "Unknown error occured. Please report the debug messages on the console"
 
             QMessageBox.information(self, 'Failed', message)
         self.unsetCursor()
+        self.setWindowTitle("RobinViz")
     def displayLast(self):
         self.loadMainScene()
         self.connectSlots()
@@ -317,7 +320,6 @@ class MultiViewWindow(QMainWindow):
 if __name__ == "__main__":
 
     app = QApplication(sys.argv)
-
     mainWindow = MultiViewWindow()
     #mainWindow.setGeometry(100, 100, 800, 500)
     mainWindow.showMaximized()

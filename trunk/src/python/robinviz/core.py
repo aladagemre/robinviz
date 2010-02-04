@@ -32,7 +32,8 @@ class View(QGraphicsView):
         QGraphicsView.__init__(self, parent)
         self.printer = QPrinter(QPrinter.HighResolution)
         self.printer.setPageSize(QPrinter.A4)
-        self.clickedPos = []
+        self.useAnimation = True # TODO: Add this as an option
+        
     def wheelEvent(self, event):
         coords = self.mapToScene(event.pos())
 
@@ -88,7 +89,7 @@ class View(QGraphicsView):
             newLayoutAction = switchToLayoutMenu.addAction(graphLayout)
             newLayoutAction.isLayoutAction = True
             # Link action to the method.
-            actionToFunction[newLayoutAction] = self.animateToLayout
+            actionToFunction[newLayoutAction] = self.switchToLayout
 
 
 
@@ -124,7 +125,7 @@ class View(QGraphicsView):
         self.enrichmentTable.setUrl(QUrl(normcase("outputs/enrich/result.html")))
         self.enrichmentTable.showMaximized()
         
-    def fitNewLayout(self):
+    def restoreEdges(self):
         newGraph = self.newGraph
         # Add the edges
         edgeWidthMin = newGraph.edges[0].graphics.width
@@ -144,16 +145,16 @@ class View(QGraphicsView):
                 item.onlyUpMiddle = False
                 
         self.scene().update()
-        #print "itemsbound:", self.scene().itemsBoundingRect()
-        #print "scenerect:", self.scene().sceneRect()
-        #self.scene().setSceneRect(self.scene().itemsBoundingRect())
-        #print "scenerect:", self.scene().sceneRect()
         self.fitInView(self.scene().sceneRect(), Qt.KeepAspectRatio)
-        #self.ensureVisible(QRectF(-1246.5018104999997, -1268.47799725, 2636.0544505000003, 2579.4352359999998))
-        """myrect = self.scene().sceneRect()
-        r = QGraphicsRectItem(myrect)
-        self.scene().addItem(r)"""
-    def animateToLayout(self, layoutName):
+
+    def startLayoutAnimation(self):
+        self.timer.start()
+
+    def switchToLayout(self, layoutName):
+        if self.setupLayoutAnimation(layoutName):
+            self.startLayoutAnimation()
+        
+    def setupLayoutAnimation(self, layoutName):
         filename = self.scene().filename
         if not hasattr(self, 'originalFileName'):
                 self.originalFileName = filename
@@ -161,6 +162,7 @@ class View(QGraphicsView):
         if layoutName == "Layered":
             # Switch back to original.
             self.scene().reloadGraph(self.originalFileName)
+            return False
         else:
             # Find the exe
             exename = GRAPH_LAYOUTS[str(layoutName)]
@@ -168,22 +170,27 @@ class View(QGraphicsView):
             command = "%s %s" % (exename, filename)
             if os.name == "posix":
                 command = "./" + command
-            os.system(command)
-            newGraph = Graph()
-            self.newGraph = newGraph
-            #gp = GMLParser("%s%s.gml" % (filename.split(".")[0], exename.split(".")[0]) , newGraph)
+            os.system(normcase(command))
+
+            if not self.useAnimation:
+                self.scene().reloadGraph("%s%s.gml" % (filename.split(".")[0], exename.split(".")[0]) )
+                return False
+            
+            # Load the graph
+            self.newGraph = newGraph = Graph()
             self.newGraph.read_gml("%s%s.gml" % (filename.split(".")[0], exename.split(".")[0]))
             newGraph.prepare()
-            
+
+            # Clear the scene
             for item in self.scene().items():
                 if isinstance(item, EdgeItem):
                     self.scene().removeItem(item)
                     del item
 
-            # Add the nodes
-            animations = []
-            timer = QTimeLine(5000)
-            timer.setFrameRange(0, 100)
+            # Setup animation for each node
+            self.timer = QTimeLine(5000)
+            self.timer.setFrameRange(0, 100)
+            self.animations = []
             for node in newGraph.nodes:
                 item = self.scene().nodeDict[node.id]
                 #item.setPos(node.graphics.x, node.graphics.y)
@@ -198,21 +205,16 @@ class View(QGraphicsView):
                 
                 animation = QGraphicsItemAnimation()
                 animation.setItem(item)
-                animation.setTimeLine(timer)
-                
+                animation.setTimeLine(self.timer)
+                self.animations.append(animation)
                 for i in range(0,200):
                     animation.setPosAt(i/200.0, QPointF(x1+dx*i, y1+dy*i))
-                animations.append(animation)
-            timer.start()
-            self.scene().update()
-
-            """myrect = self.scene().sceneRect()
-            r = QGraphicsRectItem(myrect)
-            self.scene().addItem(r)"""
-            timer.finished.connect(self.fitNewLayout)
-            assert 1==2
             
-    def switchToLayout(self, layoutName):
+            self.timer.finished.connect(self.restoreEdges)
+            return True
+            
+            
+    def switchToLayoutNoAnimation(self, layoutName):
         filename = self.scene().filename
         if not hasattr(self, 'originalFileName'):
                 self.originalFileName = filename
@@ -229,18 +231,8 @@ class View(QGraphicsView):
             # Load the resulting file.
             self.scene().reloadGraph("%s%s.gml" % (filename.split(".")[0], exename.split(".")[0]) )
 
-
-        print self.scene().sceneRect()
         self.fitInView(self.scene().sceneRect(), Qt.KeepAspectRatio)
         self.scene().update(self.scene().sceneRect())
-        #self.fitInView(self.mapFromScene(self.scene().sceneRect()).boundingRect(), Qt.KeepAspectRatio)
-        #self.centerOn(QPointF(-1000.0 ,81.0))
-        self.centerOn(-1300,0)
-        #self.resetMatrix()
-        #self.setSceneRect(self.scene().sceneRect())
-        myrect = self.scene().sceneRect()
-        r = QGraphicsRectItem(myrect)
-        self.scene().addItem(r)
 
     def printGraph(self):
         dialog = QPrintDialog(self.printer)

@@ -11,6 +11,7 @@ class SettingsDialog(QDialog):
     def __init__(self):
         QDialog.__init__(self)
         self.setWindowTitle("RobinViz - Settings")
+        self.setWindowFlags(Qt.Window|Qt.FramelessWindowHint)
         self.layout = QVBoxLayout(self)
         self.tabWidget = QTabWidget()
 

@@ -274,12 +274,12 @@ class CircleNode(QGraphicsEllipseItem):
         # Set Color
         self.color = QColor(node.graphics.outline)
         
-        if  self.color.value() > 230 or self.color.value() < 10:
+        """if  self.color.value() > 230 or self.color.value() < 10:
             # If it is too bright or dark:
             self.selectedColor = QColor(Qt.yellow)
         else:
-            # If it is dark enough to highlight with a lighter color,
-            self.selectedColor = self.color.lighter(200)
+            # If it is dark enough to highlight with a lighter color,"""
+        self.selectedColor = self.color.lighter(150)
                 
         self.setBrush(self.color)
         
@@ -317,16 +317,15 @@ class CircleNode(QGraphicsEllipseItem):
         if change == QGraphicsItem.ItemPositionChange:
             for arrow in self.arrows:
                 arrow.updatePosition()
-
-            self.setToolTip("(%.2f,%.2f)" % (self.centerPos().x(), self.centerPos().y()) )
+                
         elif change == QGraphicsItem.ItemSelectedChange:
             if self.isSelected():
                 self.setBrush(self.color)
                 self.stopAnimation()
             else:
                 self.setBrush(self.selectedColor)
-                if self.selectedColor == Qt.yellow:
-                    self.text.setDefaultTextColor(QColor(Qt.black))
+                """if self.selectedColor == Qt.yellow:
+                    self.text.setDefaultTextColor(QColor(Qt.black))"""
                 self.startAnimation()
 
         return QVariant(value)
