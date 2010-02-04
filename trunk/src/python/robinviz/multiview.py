@@ -82,6 +82,10 @@ class MultiViewWindow(QMainWindow):
 
     def loadMainScene(self):
         """Loads the main scene after the results are found."""
+        if not os.path.exists(normcase("outputs/graphs/maingraph.gml")):
+            QMessageBox.information(self, 'No recent results',
+     "No recent results found. Please run the program.")
+            return
         self.pScenes = {} # Peripheral scenes
         self.mainScene = MainScene()
         self.mainScene.loadGraph(normcase("outputs/graphs/maingraph.gml"))
@@ -267,8 +271,10 @@ class MultiViewWindow(QMainWindow):
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(run)
+        fileMenu.addSeparator()
         fileMenu.addAction(displayLast)
         fileMenu.addAction(settings)
+        fileMenu.addSeparator()
         fileMenu.addAction(exit)
 
 
