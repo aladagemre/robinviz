@@ -1,9 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 
-def clean():
+def clean(param=None):
     print "Performing cleaning of the leftover files."
+    # Revert some files
+    if param == "rv":
+	files = ("sources/usr_sources/visualization_data/genenames.txt",
+		 "sources/usr_sources/visualization_data/geneNameConversion.txt",
+		 "settings.ini",)
+	for filename in files:
+	    os.system("svn revert %s" % filename)
+    
+    
     # Remove series of files.
     for directory in ("sources/graph_sources", "outputs/heatmap", "outputs/bicgenes", "outputs/graphs", "outputs/psfiles", "outputs/enrich", "outputs/parallel", "outputs/go"):
 	fileList = os.listdir(directory)
@@ -56,4 +66,7 @@ def clean():
 	    pass
 
 if __name__ == "__main__":
-    clean()
+    if len(sys.argv) > 1:
+	clean(sys.argv[1])
+    else:
+	clean()
