@@ -745,7 +745,8 @@ GRAPH<int,int> RUN_SELF2( GRAPH<int,int> &G,
 			  double nodeSize,
 			  double edgeBendImp,
 			  double colorScale,
-			  double edgThicknessTher
+			  double edgThicknessTher,
+			  list<int> categ
  ){
 
 	GRAPH<int,int> H;
@@ -1335,7 +1336,7 @@ cout << "\n Dummy Adding Done \n" ;
 
 // 		ledaToGraphviz( G, Layers, isDummy, Layers.size(), "graph_graphviz", Colors, false, Names, false ); 
 		G.del_nodes( dummyNodes );
-		pos = draw_final2 ( G, Layers, max, dummyNodes, edgePositionsX , edgePositionsY, bends, 1, Hvalues, xpos, ypos, decision, nodeSize,edgeBendImp,colorScale,edgThicknessTher );
+		pos = draw_final2 ( G, Layers, max, dummyNodes, edgePositionsX , edgePositionsY, bends, 1, Hvalues, xpos, ypos, decision, nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );
 // 
 
 // 		node_array<point> pos(G);

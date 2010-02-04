@@ -234,7 +234,7 @@ int functionalCategoryFinder( list<CAT> &categ, array<char> &abbreviation ){
 	return i;
 }
 
-void analyseGenes( char fileName[], int biNumber, int dimension1, int dimension2  ){
+void analyseGenes( char fileName[], list<int> &categoriesBicluster, int biNumber, int dimension1, int dimension2  ){
 
     list<CAT> categoriesOfGenes;
     FILE *fptr,*resultPtr;
@@ -394,9 +394,16 @@ void analyseGenes( char fileName[], int biNumber, int dimension1, int dimension2
 	    for( int counter = 0; counter < numberOfBiclusters; counter++ ){
 		    for( int i = 0; i < cat_num; i++ )
 			    categoryPerGenesRatio[ counter ].append( 0.0 );
+		    int maxCategId = 0; 
+		    double maxValue = 0;
 		    for( int i = 0; i < cat_num; i++ ){
 			    categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )] = (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / (double)categoryMaxGenes[ i ];
+			    if( maxValue < categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )] ){
+				maxValue = categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )];
+				maxCategId = i;
+			    }
 		    }
+		    categoriesBicluster.append( maxCategId ); 
 	    }
 	    fclose( efptr );
 	    char c;
@@ -535,7 +542,7 @@ void analyseGenes( char fileName[], int biNumber, int dimension1, int dimension2
     }
 }
 
-void analyseGenes2( char fileName[], int biNumber, char algName[], int dimension1, int dimension ){
+void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumber, char algName[], int dimension1, int dimension ){
 
     list<CAT> categoriesOfGenes;
     FILE *fptr,*resultPtr;
@@ -697,10 +704,18 @@ void analyseGenes2( char fileName[], int biNumber, char algName[], int dimension
 	    for( int counter = 0; counter < numberOfBiclusters; counter++ ){
 		    for( int i = 0; i < cat_num; i++ )
 			    categoryPerGenesRatio[ counter ].append( 0.0 );
+		    int maxCategId = 0; 
+		    double maxValue = 0;
 		    for( int i = 0; i < cat_num; i++ ){
 			    categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )] = (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / (double)categoryMaxGenes[ i ];
+			    if( maxValue < categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )] ){
+				maxValue = categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )];
+				maxCategId = i;
+			    }
 		    }
+		    categoriesBicluster.append( maxCategId ); 
 	    }
+
 	    fclose( efptr );
 	    char c;
 // 	    cout << " Beginning to html file\n" << endl;

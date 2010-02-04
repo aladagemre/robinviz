@@ -2301,8 +2301,8 @@ void draw_finalY( GRAPH<int,int> &G , array<list<node> > &AB, int KEYWSIZE, list
 }
 
 // This function is for drawing the main layout for the proposed in ISB 2010 Paper as it is shown in Figure 1 and Figure 3
-node_array<point> draw_final2( GRAPH<int,int> &G , array<list<node> > &AB, int KEYWSIZE, list<node> dummy, edge_array<list<double> > &z, edge_array<list<double> > &w, edge_array<list<point> > bends, int graphNo, node_array<double> &Hvalues, node_array<double> &x , node_array<double> &y, int decision, double nodeSize, double edgeBendImp, double colorScale, double edgThicknessTher ){
-	cout << " 1 " << endl;
+node_array<point> draw_final2( GRAPH<int,int> &G , array<list<node> > &AB, int KEYWSIZE, list<node> dummy, edge_array<list<double> > &z, edge_array<list<double> > &w, edge_array<list<point> > bends, int graphNo, node_array<double> &Hvalues, node_array<double> &x , node_array<double> &y, int decision, double nodeSize, double edgeBendImp, double colorScale, double edgThicknessTher, list<int> &categ ){
+// 	cout << " 1 " << endl;
 	double initialX = 0 , initialY = 100 * KEYWSIZE , incX = 150 , incY = 100 ,i;
 	list<node> A;
 	color blue( 4 );
@@ -2404,7 +2404,7 @@ node_array<point> draw_final2( GRAPH<int,int> &G , array<list<node> > &AB, int K
 	}
 	list<two_tuple<color,int> > variations;
 	list<int> edgeWeights;
-	cout << " 2 " << endl;
+// 	cout << " 2 " << endl;
 	// Store Edge weights
 	forall_edges( e, G ){
 		int flag = 0;
@@ -2449,7 +2449,7 @@ node_array<point> draw_final2( GRAPH<int,int> &G , array<list<node> > &AB, int K
 // 		cout << " increase : " << increase << endl;
 	}
 
-	cout << " 3 " << endl;
+// 	cout << " 3 " << endl;
 	node_array<int> layerInts( G, 0 );
         count = 0;
 	// Found layers and store into this node array
@@ -2547,7 +2547,7 @@ node_array<point> draw_final2( GRAPH<int,int> &G , array<list<node> > &AB, int K
 	sprintf( filename4, "sources//outputs//graphs//maingraph2.gml" );
 #endif
 	gw.save_gml( filename4 );
-	cout << " 4 " << endl;
+// 	cout << " 4 " << endl;
 // 	array<color> color_l2( 11 );
 // 	count = 255;
 // 	for( int j = 0; j < color_l2.size(); j++ ){
@@ -2630,7 +2630,12 @@ node_array<point> draw_final2( GRAPH<int,int> &G , array<list<node> > &AB, int K
 
 	//gw.set_edge_thickness( 3, true );
 	//gw.set_node_height(50,true);
-	gw.set_node_border_color( black, true );
+	count = 0;
+	forall_nodes( n, G ){
+			color random( categ[ categ.get_item(count)] );
+			gw.set_border_color( n, random );
+			count++;
+	}
 	gw.set_node_border_thickness( 4, true );
 	//gw.set_node_width( 100, true );
 	gw.set_node_shape( leda::circle_node, true );
@@ -2647,7 +2652,7 @@ node_array<point> draw_final2( GRAPH<int,int> &G , array<list<node> > &AB, int K
 	sprintf( filename3, "outputs//graphs//maingraph.gml" );
 #endif
 	gw.save_gml( filename3 );
-	cout << " 5 " << endl;
+// 	cout << " 5 " << endl;
 #ifdef LINUX
 	char filename2[32] = "outputs/psfiles/main";
 #else

@@ -85,7 +85,7 @@ matrix wolf_m( matrix &M ){
 			i++;
 		}
 	}
-	return M;
+	return M2;
 }
 
 matrix wolf_m( matrix &M, array<int> &labelsIndex ){
@@ -126,5 +126,5 @@ matrix wolf_m( matrix &M, array<int> &labelsIndex ){
 		}
 	}
 	labelsIndex = labelsIndex_t;
-	return M;
+	return M2;
 }
