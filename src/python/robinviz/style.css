@@ -1,0 +1,3 @@
+QMainWindow,QDialog,QMenu,QMenuBar,QPushButton { background-color: black ; color: white}
+QLineEdit, QRadioButton,QCheckBox,QLabel,QSpinBox,QDoubleSpinBox { background-color: rgba(0,0,0, 0%); color: white}
+QGraphicsView { background-color: lightgray}
