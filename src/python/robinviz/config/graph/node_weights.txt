@@ -1,6 +1,6 @@
-Main Graph Node Weights
+Node Weights in Bicluster Graph
 Based on
-hvalueWeighting 1 radio Calculated H-values
-enrichmentWeighting_o 0 radio Functional Enrichment Ratios specified by user
-enrichmentWeighting_f 0 radio Functional Enrichment Ratios extracted from FuncAssociate
-ppihitratioWeighting 0 radio The number of interactions inherited from PPI network
+hvalueWeighting 1 radio H-value
+enrichmentWeighting_o 0 radio Functional Enrichment Ratio(user)
+enrichmentWeighting_f 0 radio Functional Enrichment Ratio(FuncAssociate)
+ppihitratioWeighting 0 radio PPI Hit Ratio
