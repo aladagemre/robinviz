@@ -3,6 +3,7 @@
 import os
 
 def clean():
+    print "Performing cleaning of the leftover files."
     # Remove series of files.
     for directory in ("sources/graph_sources", "outputs/heatmap", "outputs/bicgenes", "outputs/graphs", "outputs/psfiles", "outputs/enrich", "outputs/parallel", "outputs/go"):
 	fileList = os.listdir(directory)
@@ -23,11 +24,11 @@ def clean():
     for directory in directories:
 	for filename in os.listdir(directory):
 	    try:
-		print "Removing", filename
+		#print "Removing", filename
 		os.remove(directory+'/'+filename)
 	    except:
-		print "Could not remove", filename
-
+		#print "Could not remove", filename
+		pass
     # Remove individual files.
     files = ("src/python/xcoord/gmls/pyt_inp.gml", 
     "src/python/xcoord/gmls/pyt_out.gml",
@@ -48,11 +49,11 @@ def clean():
     )
     for filename in files:
 	try:
-	    print "Removing:", filename
+	    #print "Removing:", filename
 	    os.remove(filename)
 	except:
-	    print filename, "does not exist."
-
+	    #print filename, "does not exist."
+	    pass
 
 if __name__ == "__main__":
     clean()

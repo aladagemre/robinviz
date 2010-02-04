@@ -307,20 +307,19 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.tabWidget.addTab(self.bioTab, "Biological")
         self.bioLayout = QGridLayout(self.bioTab)
 
-        
-        ######## MICROARRAY FILE PART ###############
+        ######## MICROARRAY (Expression Matrix) FILE PART ###############
 
-        self.radioMicroArrayInput = CustomRadio("Microarray Data w/o Labels:")
-        self.browseMicroArrayInput = FileBrowser(abspath(dirname(self.parameters["dataName"])))
+        self.radioExpressionMatrixInput = CustomRadio("Expression Matrix w/o Labels:")
+        self.browseExpressionMatrixInput = FileBrowser(abspath(dirname(self.parameters["dataName"])))
 
-        self.radioMicroArrayInputLabel = CustomRadio("Microarray Data w/ Labels:")
-        self.browseMicroArrayInputLabel = FileBrowser(abspath(dirname(self.parameters["dataName2"])))
+        self.radioExpressionMatrixInputLabel = CustomRadio("Expression Matrix w/ Labels:")
+        self.browseExpressionMatrixInputLabel = FileBrowser(abspath(dirname(self.parameters["dataName2"])))
 
         # Select the radio button
         if self.parameters["readOption"]:
-            self.radioMicroArrayInputLabel.setChecked(True)
+            self.radioExpressionMatrixInputLabel.setChecked(True)
         else:
-            self.radioMicroArrayInput.setChecked(True)
+            self.radioExpressionMatrixInput.setChecked(True)
 
         ######## GENE ONTOLOGY PART #############
         self.checkGo = CustomCheckBox("Gene Ontology File:")
@@ -332,19 +331,19 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.browsePPIInput = FileBrowser(abspath(dirname(self.parameters["ppifilename"])))
         
         # Match parameters with widgets
-        self.parameterWidgets["dataName"] = self.browseMicroArrayInput
-        self.parameterWidgets["dataName2"] = self.browseMicroArrayInputLabel
-        self.parameterWidgets["readOption"] = self.radioMicroArrayInputLabel
+        self.parameterWidgets["dataName"] = self.browseExpressionMatrixInput
+        self.parameterWidgets["dataName2"] = self.browseExpressionMatrixInputLabel
+        self.parameterWidgets["readOption"] = self.radioExpressionMatrixInputLabel
         self.parameterWidgets["go_info"] = self.checkGo
         self.parameterWidgets["gofile"] = self.browseGoInput
         self.parameterWidgets["ppifilename"] = self.browsePPIInput
 
         # ADD TO LAYOUT
         
-        self.bioLayout.addWidget(self.radioMicroArrayInput, 0, 0)
-        self.bioLayout.addLayout(self.browseMicroArrayInput, 0, 1)
-        self.bioLayout.addWidget(self.radioMicroArrayInputLabel, 1, 0)
-        self.bioLayout.addLayout(self.browseMicroArrayInputLabel, 1, 1)
+        self.bioLayout.addWidget(self.radioExpressionMatrixInput, 0, 0)
+        self.bioLayout.addLayout(self.browseExpressionMatrixInput, 0, 1)
+        self.bioLayout.addWidget(self.radioExpressionMatrixInputLabel, 1, 0)
+        self.bioLayout.addLayout(self.browseExpressionMatrixInputLabel, 1, 1)
         self.bioLayout.addWidget(self.checkGo, 2, 0)
         self.bioLayout.addLayout(self.browseGoInput, 2, 1)
         self.bioLayout.addWidget(self.labelPPIFile, 3, 0)
