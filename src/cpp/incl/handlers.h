@@ -273,25 +273,25 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 * @param dimension1(int) size of the data row dimension
 * @param dimension2(int) size of the data column dimension
 */
-void biclusterHandling( matrix &INPUT, list<list<GENES> > &biclusters, list<leda::matrix> &matrixBiclusters, list<double> &H_values, double &Hmax, int minBicSize, int maxBicSize, int biclustering, int dimension1, int dimension2  ){
+void biclusterHandling( matrix &INPUT, list<list<GENES> > &biclusters, list<int> &categ, list<leda::matrix> &matrixBiclusters, list<double> &H_values, double &Hmax, int minBicSize, int maxBicSize, int biclustering, int dimension1, int dimension2  ){
         list_item it;
 	leda::matrix inverseINPUT = INPUT.trans();
 	list<list<CONDS> > conditions;
 	if( biclustering == 1 ){
 		getBiclustersFromFile( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 ); 
-		analyseGenes2( "geneResult", biclusters.size(), "", dimension1, dimension2  );
+		analyseGenes2( "geneResult", categ, biclusters.size(), "", dimension1, dimension2  );
 	}
 	if( biclustering == 2 ){ 
 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "BIMAX", dimension1, dimension2 );
-		analyseGenes2( "geneResult", biclusters.size(), "BIMAX", dimension1, dimension2  );
+		analyseGenes2( "geneResult", categ, biclusters.size(), "BIMAX", dimension1, dimension2  );
 	}
 	if( biclustering == 3 ){
 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "CC", dimension1, dimension2 ); 
-		analyseGenes2( "geneResult", biclusters.size(), "CC", dimension1, dimension2  );
+		analyseGenes2( "geneResult", categ, biclusters.size(), "CC", dimension1, dimension2  );
 	}
 	if( biclustering == 4 ){
 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "RLEB", dimension1, dimension2 ); 
-		analyseGenes2( "geneResult", biclusters.size(), "RLEB" , dimension1, dimension2 );
+		analyseGenes2( "geneResult", categ, biclusters.size(), "RLEB" , dimension1, dimension2 );
 	}
 // 	if( biclustering == 5 ){
 // 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "SAMBA", dimension1, dimension2 ); 
@@ -1158,7 +1158,8 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 				  bool hvalueWeighting,
 				  bool enrichmentWeighting_o,
 				  bool enrichmentWeighting_f,
-				  bool ppihitratioWeighting
+				  bool ppihitratioWeighting,
+				  list<int> &categ
 				)
 {
 
@@ -1609,7 +1610,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	edgeNumbersForInt_ = edgeNumbersForInt;
 // 	cout << " E4 -  " << PROJECT2.number_of_edges() << endl;
 	i = 0;
-	RUN_SELF2( PROJECT2, max_weight, 10, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher );	
+	RUN_SELF2( PROJECT2, max_weight, 10, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
 // 	cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
 	return PROJECT2;
 }

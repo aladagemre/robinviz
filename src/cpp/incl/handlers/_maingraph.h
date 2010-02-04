@@ -39,7 +39,8 @@ void mainGraph( GRAPH<leda::string,int> &PROJECT,
 		bool hvalueWeighting,
 		bool enrichmentWeighting_o,
 		bool enrichmentWeighting_f,
-		bool ppihitratioWeighting )
+		bool ppihitratioWeighting,
+		list<int> &categ)
 {
 		int max_weight=10;
 		bool autoFlag = true;
@@ -91,7 +92,8 @@ void mainGraph( GRAPH<leda::string,int> &PROJECT,
 							      hvalueWeighting,
 							      enrichmentWeighting_o,
 							      enrichmentWeighting_f,
-							      ppihitratioWeighting ); 
+							      ppihitratioWeighting,
+							      categ ); 
 	cout << "/**************************************************/" << endl;
 	cout << "\t" << " End of Building High Level Graph " << endl;
 	cout << "/**************************************************/" << endl;
@@ -163,7 +165,8 @@ void mainGraph2( GRAPH<leda::string,int> &PROJECT,
 		bool hvalueWeighting,
 		bool enrichmentWeighting_o,
 		bool enrichmentWeighting_f,
-		bool ppihitratioWeighting )
+		bool ppihitratioWeighting,
+		list<int> &categ )
 {
 		int max_weight=10;
 		bool autoFlag = true;
@@ -215,7 +218,8 @@ void mainGraph2( GRAPH<leda::string,int> &PROJECT,
 							      hvalueWeighting,
 							      enrichmentWeighting_o,
 							      enrichmentWeighting_f,
-							      ppihitratioWeighting ); 
+							      ppihitratioWeighting,
+							      categ ); 
 
 	cout << "/**************************************************/" << endl;
 	cout << "\t" << " End of Building High Level Graph " << endl;

@@ -209,6 +209,7 @@
 	array<GENES> geneArray;  
 	array<CONDS> condArray;
 	list<CAT> categoriesOfGenes;
+        list<int> categ;
 #endif LEDAVARS
 
 int main(){
@@ -540,7 +541,7 @@ int main(){
 			}
 		}
 		
-		bicRead( INPUT, biclusters, matrixBiclusters, H_values, Hmax, minBicSize, maxBicSize, biclustering, INPUT.dim1(), INPUT.dim2() );
+                bicRead( INPUT, biclusters, categ, matrixBiclusters, H_values, Hmax, minBicSize, maxBicSize, biclustering, INPUT.dim1(), INPUT.dim2() );
 		cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
 		if( go_info == 1 ){
                         array<GENEONTO> geneOntoForData = geneOntologyHandling(gofile);
@@ -577,13 +578,13 @@ int main(){
 		if( layered_layout ){
 			mainGraph( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
 				  increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
-				  POS, BENDS, LAYERS, abbv, cat_num, Categories, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting ); 
+                                  POS, BENDS, LAYERS, abbv, cat_num, Categories, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
 		}
 		else{
 			if( ffd_layout ){
 				mainGraph2( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
 				  increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
-				  POS, BENDS, LAYERS, abbv, cat_num, Categories, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting ); 
+                                  POS, BENDS, LAYERS, abbv, cat_num, Categories, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
 			}
 		}
 		cout << "/**************************************************/" << endl;
