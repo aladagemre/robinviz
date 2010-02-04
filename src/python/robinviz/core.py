@@ -53,6 +53,9 @@ class View(QGraphicsView):
 
         menu = QMenu(self)
         newWindow = menu.addAction("Open in &new window")
+
+        menu.addSeparator()
+
         saveAsImage = menu.addAction("Save as &Image")
         saveAsGML= menu.addAction("Save as &GML")
         printGraph = menu.addAction("&Print")
@@ -70,6 +73,8 @@ class View(QGraphicsView):
             clearAction = menu.addAction("Clear")
             actionToFunction[clearAction] = self.clearView
             
+            menu.addSeparator()
+
             goTable = menu.addAction("GO Table")
             actionToFunction[goTable] = self.showGOTable
 

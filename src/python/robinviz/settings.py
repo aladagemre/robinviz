@@ -21,14 +21,13 @@ class SettingsDialog(QDialog):
         self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
 
-
         self.loadSettings()
         
+        self.setupBiologicalTab()
         self.setupBiclusteringTab()
         self.setupGraphTab()
         self.setupDrawingTab()
-        self.setupBiologicalTab()
-
+        
 
         self.setValues()
         
@@ -42,6 +41,7 @@ class SettingsDialog(QDialog):
         
     def loadSettings(self):
         self.parameters = {}
+        self.parameterWidgets = {}
         f = open("settings.ini")
         # TODO: handle spaces!
         for line in f:
@@ -181,8 +181,6 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.biclusteringTab = QWidget()
         self.tabWidget.addTab(self.biclusteringTab, "Biclustering")
         self.bicLayout = QGridLayout(self.biclusteringTab)
-
-        self.parameterWidgets = {}
 
         algorithmSelectionLayout = QHBoxLayout()
         self.labelUseAlgorithm = QLabel("    Use:")

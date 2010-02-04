@@ -14,7 +14,7 @@ def clean():
 		# If last digit before the extension is number, delete it. It's an output.
 		try:
 		    lastdigit = int(lastdigit)
-		    print "Removing:", filename
+		    #print "Removing:", filename
 		    os.remove(directory+"/"+filename)		
 		except:
 		    pass
