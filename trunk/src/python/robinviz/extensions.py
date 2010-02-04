@@ -270,6 +270,18 @@ class CircleNode(QGraphicsEllipseItem):
         # Store node data
         self.node = node
         self.w = node.graphics.w
+
+        # Set Color
+        self.color = QColor(node.graphics.outline)
+        colorDecValue = int(node.graphics.outline[1:], 16)
+        if  colorDecValue > int("EEEEEE", 16) or colorDecValue < int("222222", 16):
+            # If it is to bright or dark:
+            self.selectedColor = QColor(Qt.yellow)
+        else:
+            # If it is dark enough to highlight with a lighter color,
+            self.selectedColor = self.color.lighter()
+                
+        self.setBrush(self.color)
         
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
@@ -283,6 +295,8 @@ class CircleNode(QGraphicsEllipseItem):
         textFont.setBold(True)
         textFont.setPointSize(20)
         self.text.setFont(textFont)
+        if node.graphics.outline == "#000000":
+            self.text.setDefaultTextColor(QColor(Qt.white))
 
         # Set node id as text.
         self.text.setPlainText(str(node.id))
@@ -291,7 +305,7 @@ class CircleNode(QGraphicsEllipseItem):
         boundRect = self.text.boundingRect()
         # Align text to the center.
         self.text.setPos((self.w - boundRect.width()) / 2, (self.w - boundRect.height()) / 2)
-
+        
 
     def centerPos(self):
         """Returns the center coordinate of the item."""
@@ -308,10 +322,28 @@ class CircleNode(QGraphicsEllipseItem):
             if self.isSelected():
                 self.setBrush(self.color)
             else:
-                self.setBrush(self.selectedColor)               
-                
-        return QVariant(value)
+                self.setBrush(self.selectedColor)
+                if self.selectedColor == Qt.yellow:
+                    self.text.setDefaultTextColor(QColor(Qt.black))
+                self.animateNode()
 
+        return QVariant(value)
+    
+    def animateNode(self):
+        timer = QTimeLine(1000)
+        timer.setCurveShape(QTimeLine.SineCurve)
+        timer.setFrameRange(0, 100)
+
+        animation = QGraphicsItemAnimation()
+        animation.setItem(self)
+        animation.setTimeLine(timer)
+
+        for i in range(100):
+            animation.setScaleAt(i/100.0, 1 + 0.01 * i, 1 + 0.01 * i)
+        timer.start()
+        #timer.finished.connect(self.nodeTimerFinished)
+        return
+    
 class SquareNode(QGraphicsPolygonItem):
     def __init__(self, node, parent=None, scene=None):
         QGraphicsPolygonItem.__init__(self, parent, scene)
