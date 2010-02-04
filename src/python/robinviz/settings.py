@@ -179,6 +179,7 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
     
     def setupBiclusteringTab(self):
         self.biclusteringTab = QWidget()
+        self.tabWidget.addTab(self.biclusteringTab, "Biclustering")
         self.bicLayout = QGridLayout(self.biclusteringTab)
 
         self.parameterWidgets = {}
@@ -240,7 +241,7 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         if useCachedResults:
             self.comboAlgorithm.setCurrentIndex(self.comboAlgorithm.count() - 1)
               
-        self.tabWidget.addTab(self.biclusteringTab, "Biclustering")
+        
 
     def browseInputFile(self):
         fileName = QFileDialog.getOpenFileName(self, "Open File",
@@ -248,6 +249,7 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.inputUrlBox.setText(fileName)
     def setupDrawingTab(self):
         self.drawingTab = QWidget()
+        self.tabWidget.addTab(self.drawingTab, "Drawing")
         self.drawingLayout = QGridLayout(self.drawingTab)
 
         self.labelMaximumWidth = QLabel("Maximum Width:")
@@ -284,17 +286,15 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.drawingLayout.addWidget(self.spinMinimumSeparationY, 4, 1)
         self.parameterWidgets["increment"] = self.spinMinimumSeparationY
 
-        
-        self.tabWidget.addTab(self.drawingTab, "Drawing Settings")
-        
 
     def setupGraphTab(self):
         self.graphTab = QWidget()
+        self.tabWidget.addTab(self.graphTab, "Graph")
         self.graphLayout = QGridLayout(self.graphTab)
         basePath = "src/python/robinviz/config/graph/"
         options = ("edge_weights.txt", "node_weights.txt")
         
-        self.tabWidget.addTab(self.graphTab, "Graph Settings")
+        
         for option in options:
             groupBox = RadioGroup(basePath + option)
             self.graphLayout.addWidget(groupBox.widget)
@@ -304,7 +304,7 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
                 widget.setChecked(self.parameters[flagName] == 1)
     def setupBiologicalTab(self):
         self.bioTab = QWidget()
-        self.tabWidget.addTab(self.bioTab, "Biological Settings")
+        self.tabWidget.addTab(self.bioTab, "Biological")
         self.bioLayout = QGridLayout(self.bioTab)
 
         
