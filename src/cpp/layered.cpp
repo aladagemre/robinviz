@@ -172,6 +172,23 @@
 	double Hmax;
 	bool wolfFlag = true, baryFlag = false, medianFlag = false, pmFlag = false, greFlag = false;
 	char empty[32];
+        int colors[17][3] ={ {255,255,255},
+                             {0,0,0},
+                             {255,0,0},
+                             {0,255,0},
+                             {0,0,160},
+                             {255,255,0},
+                             {128,0,255},
+                             {255,128,0},
+                             {0,255,255},
+                             {128,0,0},
+                             {255,0,255},
+                             {0,128,128},
+                             {100,100,255},
+                             {220,220,220},
+                             {175,175,175},
+                             {128,128,128},
+                             {255,255,230}};
 #endif ORDVARS
 
 #ifdef LEDAVARS
@@ -547,11 +564,29 @@ int main(){
                         array<GENEONTO> geneOntoForData = geneOntologyHandling(gofile);
 			geneOntologyToBiclusterHandling( biclusters, geneOntoForData );
 		}
+                FILE *cfptr;
+                if( (cfptr =fopen("outputs/colors_func.txt", "w"))==NULL && (cfptr=fopen("outputs//colors_func.txt", "w")) ==NULL ){
+                    cout << " Error: Cannot write into ouptus folder";
+                    return 0;
+                }
+                else{
+                    list_item cit;
+                    int colorCount = 0;
+                    forall_items( cit, categoriesOfGenes){
+                        fprintf( cfptr, "%s %d %d %d\n",categoriesOfGenes[cit].categ, colors[colorCount][0], colors[colorCount][1], colors[colorCount][2] );
+                        //printf( "%s %d %d %d\n",categoriesOfGenes[cit].categ, colors[colorCount][0], colors[colorCount][1], colors[colorCount][2] );
+                        colorCount++;
+                    }
+                    fclose( cfptr );
+                }
                 interactionRead( temp, GenesNode, INTERACTIONS, TEMPINT, ppifilename );
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " Produce Bicluster Graphs" << endl;
 		cout << "/**************************************************/" << endl;
 		Categories.resize( INTERACTIONS.number_of_nodes() );
+                node n;
+                for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
+                    Categories[ i ] = 'X';
 		listOfGraphs.resize( 0, biclusters.size() );
 		inpGraphProdHandling( G, listOfGraphs, abbv, Categories, temp, GenesNode, INTERACTIONS, TEMPINT, biclusters, cat_num );
 		cout << "/**************************************************/" << endl;

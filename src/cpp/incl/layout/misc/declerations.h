@@ -69,6 +69,7 @@ Created
 #define LINUX
 //  #define WINDOWS
 
+// #define DEBUG_ROBINVIZ
 
 using namespace leda;
 

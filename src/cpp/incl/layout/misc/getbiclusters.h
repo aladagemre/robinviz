@@ -815,7 +815,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 		fclose( resultPtr );
 #endif
 	    for( int i = 0; i < cat_num; i++ ){
-		    fprintf( efptr, "\n\t<th scope=\"col\"> %s </th>\n", categoriesOfGenes[ categoriesOfGenes.get_item( i ) ].categ );
+		    fprintf( efptr, "\n\t<th scope=\"col\"> %s </th>\n", categoriesOfGenes2[ categoriesOfGenes2.get_item( i ) ].categ );
 	    }
 //     </tr>
 //     </thead>
@@ -1054,12 +1054,16 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 
 			fscanf( fptr, "%d%d", &numberOfConditions , &numberOfGenes );
 			//TEMP.print();
+#ifdef DEBUG_ROBINVIZ
 			cout << "\n Bicluster " << bicount << " is processed";
+#endif
 			bicount++;
 // 			geneCount++;
 		}
 	}
+#ifdef DEBUG_ROBINVIZ
  	cout << endl;
+#endif
 }
 
 // FOR CC and BIMAX
@@ -1263,11 +1267,15 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
 		indexGenes.clear();
 		fscanf( fptr, "%d%d", &numberOfConditions , &numberOfGenes );	
 		//TEMP.print();
+#ifdef DEBUG_ROBINVIZ
 		cout << "\n Bicluster " << bicount << " is processed";
+#endif
 		bicount++;
 // 		geneCount++;
 	}
+#ifdef DEBUG_ROBINVIZ
 	cout << endl;
+#endif
 	fclose(fptr);
 	M = M.trans();
 }
