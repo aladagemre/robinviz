@@ -7,13 +7,14 @@ import sys
 
 class FastAndSimple:
     """Implementation of the paper "Fast and Simple Horizontal Coordinate Assignment" by Ulrik Brandes and Boris Köpf."""
-    def __init__(self, input_file, minimum_distance, vstart, hstart, layersorpositions='layers'):
+    def __init__(self, input_file, minimum_distance, vstart, hstart, layersorpositions='layers', verboseMode=False):
         self.sink = {}
         self.shift = {}
         self.x = {}
         self.align={}
         self.minimum_distance = int(minimum_distance)
         self.layersorpositions = layersorpositions
+        self.verboseMode = verboseMode
 
         if isinstance(input_file, Graph):
             self.g = input_file
@@ -31,7 +32,8 @@ class FastAndSimple:
         #if self.detect_type2():
             #print "Because of the type 2 crossings, there might be problems."
            
-        print "Preprocessing..."
+        if self.verboseMode:
+            print "Preprocessing..."
         self.preprocessing()
 
         self.decide_alignment(vstart, hstart) # DOES ALIGNMENT AND COMPACTION
@@ -85,7 +87,8 @@ class FastAndSimple:
        
     def correct_triple_edge(self):
         """Corrects sloping inner segment of 3 segmented edges."""
-        print "Correcting triple edges..."
+        if self.verboseMode:
+            print "Correcting triple edges..."
         for u in self.g.virtual_nodes:
             upper_real = u.upper_neighbors()[0]
             if upper_real.virtual: continue
@@ -144,7 +147,8 @@ class FastAndSimple:
        
     def detect_type2(self):
         """Detects type 2 crossings."""
-        print "Searching for type 2 crossings..."""
+        if self.verboseMode:
+            print "Searching for type 2 crossings..."""
         detected = False
         for layer in self.g.layers:
             for u in self.g.layers[layer]:
@@ -156,7 +160,8 @@ class FastAndSimple:
                                 v = self.g.layers[layer][i]
                                 for edge in v.outgoing_edges:
                                     if edge.u.virtual and edge.v.virtual and edge.v.position < out_edge.v.position:
-                                        print "(%d, %d) and (%d, %d) are type 2 crossing." % (out_edge.u.id, out_edge.v.id, edge.u.id, edge.v.id)
+                                        if self.verboseMode:
+                                            print "(%d, %d) and (%d, %d) are type 2 crossing." % (out_edge.u.id, out_edge.v.id, edge.u.id, edge.v.id)
                                         detected = True
         return detected
            
@@ -190,12 +195,14 @@ class FastAndSimple:
     def post_adjustments(self):
         """Some post adjustments after balancing."""
         # Shifts the overlapping nodes by half of their widths.
-        print "Post adjustments..."
+        if self.verboseMode:
+            print "Post adjustments..."
        
         layer_overlaps = {0: 1}
         tour = 0
         while sum(layer_overlaps.values()) != 0:
-            print "New tour"
+            if self.verboseMode:
+                print "New tour"
             tour += 1
            
             for layer in self.g.layers:
@@ -204,12 +211,14 @@ class FastAndSimple:
                     for v in self.g.layers[layer]:
                         if u!=v and abs(u.graphics.x - v.graphics.x) < (u.graphics.w + v.graphics.w)/2 :
                             if tour > 15:
-                                print u.id,":",u.graphics.x,"---",v.id,":", v.graphics.x
-                                print "-------------------------------------------------"*10
+                                if self.verboseMode:
+                                    print u.id,":",u.graphics.x,"---",v.id,":", v.graphics.x
+                                    print "-------------------------------------------------"*10
                                 return
                            
                            
-                            print "Adjusting %d and %d" % (u.id, v.id)
+                            if self.verboseMode:
+                                print "Adjusting %d and %d" % (u.id, v.id)
                             if u.position < v.position:
                                 if u.pred:
                                     prev_x = u.pred.graphics.x
@@ -276,7 +285,8 @@ class FastAndSimple:
                
     def straighten_bends(self):
         """Straightens the edge bends."""
-        print "Straightening bends."                            
+        if self.verboseMode:
+            print "Straightening bends."
        
         # Start from the middle.
        
@@ -449,7 +459,8 @@ class FastAndSimple:
                        
     def hide_dummy_nodes(self):
         """Hides dummy nodes in the graph"""
-        print "Hiding dummy nodes..."
+        if self.verboseMode:
+            print "Hiding dummy nodes..."
         #print self.g.virtual_nodes
         for node in self.g.virtual_nodes:
             node.graphics.w = 0.01
@@ -462,7 +473,8 @@ class FastAndSimple:
     def adjustments(self):
         """Some adjustments for the bug of the algorithm. Seperates overlapping nodes."""
        
-        print "Adjusting..."
+        if self.verboseMode:
+            print "Adjusting..."
         # Aligns the false-ordered nodes to their root.        
         for layer in self.g.layers:
             for i in range(len(self.g.layers[layer])):
@@ -499,16 +511,18 @@ class FastAndSimple:
         """
         Some debugging stuff
         """
-        print "Checking for overlaps..."
+        if self.verboseMode:
+            print "Checking for overlaps..."
         # Print the nodes that are overlapping
         count = 0
         for layer in self.g.layers:
             for u in self.g.layers[layer]:    
                 for v in self.g.layers[layer]:
                     if u!=v and u.graphics.x == v.graphics.x and u.graphics.y == v.graphics.y:
-                        print "%s (%0.0f, %0.0f) , %s (%0.0f, %0.0f)" % (u.id, u.graphics.x, u.graphics.y, v.id, v.graphics.x, v.graphics.y)
+                        if self.verboseMode:
+                            print "%s (%0.0f, %0.0f) , %s (%0.0f, %0.0f)" % (u.id, u.graphics.x, u.graphics.y, v.id, v.graphics.x, v.graphics.y)
                         count+=1
-        if count:
+        if self.verboseMode and count:
             print "%d overlaps exist." % count
        
     def preprocessing(self):
@@ -532,7 +546,8 @@ class FastAndSimple:
    
     def vertical_alignment_up_left(self):
         """Aligns the nodes to their roots (constructing blocks) - ALG2 for upper left"""
-        print "Vertical Alignment Up left..."
+        if self.verboseMode:
+            print "Vertical Alignment Up left..."
         self.root = {}
         self.align = {}
         for node in self.g.nodes:
@@ -557,7 +572,8 @@ class FastAndSimple:
                
     def vertical_alignment_up_right(self):
         """Aligns the nodes to their roots (constructing blocks) - ALG2 for upper right"""
-        print "Vertical Alignment Up Right..."
+        if self.verboseMode:
+            print "Vertical Alignment Up Right..."
         self.root = {}
         self.align = {}
         for node in self.g.nodes:
@@ -583,7 +599,8 @@ class FastAndSimple:
                                
     def vertical_alignment_down_right(self):
         """Aligns the nodes to their roots (constructing blocks) - ALG2 for lower right"""
-        print "Vertical Alignment Down Right..."
+        if self.verboseMode:
+            print "Vertical Alignment Down Right..."
         self.root = {}
         self.align = {}
         for node in self.g.nodes:
@@ -610,7 +627,8 @@ class FastAndSimple:
                                
     def vertical_alignment_down_left(self):
         """Aligns the nodes to their roots (constructing blocks) - ALG2 for lower left"""
-        print "Vertical Alignment Down left..."
+        if self.verboseMode:
+			print "Vertical Alignment Down left..."
         self.root = {}
         self.align = {}
         for node in self.g.nodes:
@@ -680,7 +698,8 @@ class FastAndSimple:
    
     def horizontal_compaction_up_left(self):
         """Final X-coordinate assignment phase (ALG3) for upper left."""
-        print "Horizontal Compaction up left..."
+        if self.verboseMode:
+            print "Horizontal Compaction up left..."
         for v in self.g.nodes:
             self.sink[v] = v
             self.shift[v] = float("infinity")
@@ -704,7 +723,8 @@ class FastAndSimple:
 
     def horizontal_compaction_down_left(self):
         """Final X-coordinate assignment phase (ALG3) for lower left."""
-        print "Horizontal Compaction down left..."
+        if self.verboseMode:
+            print "Horizontal Compaction down left..."
         for v in self.g.nodes:
             self.sink[v] = v
             self.shift[v] = float("infinity")
@@ -726,7 +746,8 @@ class FastAndSimple:
            
     def horizontal_compaction_up_right(self):
         """Final X-coordinate assignment phase (ALG3) for upper right."""
-        print "Horizontal Compaction up right..."
+        if self.verboseMode:
+            print "Horizontal Compaction up right..."
         for v in self.g.nodes:
             self.sink[v] = v
             self.shift[v] = float("infinity")
@@ -747,7 +768,8 @@ class FastAndSimple:
                    
     def horizontal_compaction_down_right(self):
         """Final X-coordinate assignment phase (ALG3) for lower right."""
-        print "Horizontal Compaction down right..."
+        if self.verboseMode:
+            print "Horizontal Compaction down right..."
         for v in self.g.nodes:
             self.sink[v] = v
             self.shift[v] = float("infinity")
@@ -824,12 +846,12 @@ class FastAndSimple:
         elif self.layersorpositions == "positions":
             self.write_positions()
         else:
-            print "Unknown txt type: %s. It should be either layers or positions" % self.layersorpositions
+            if self.verboseMode:
+		print "Unknown txt type: %s. It should be either layers or positions" % self.layersorpositions
 
 class Aligner:
     """Utilities for aligning the 4 candidate graphs."""
     def __init__(self, graphs):
-        print "Combiner..."
         # Store x values
         x_ul = {}
         x_dl = {}
@@ -907,23 +929,33 @@ class Aligner:
 def main():
     """Main program, handles arguments and starts the FaSCA algorithm accordingly"""
     # COMBINED
+    if len(sys.argv) > 7 and sys.argv[7] == "-v":
+	verbose = True
+    else:
+	verbose = False
+		
     if sys.argv[4] == "combined":
-        print "Up Left"
-        ul = FastAndSimple(sys.argv[1], sys.argv[3], "up", "left", sys.argv[6])
-        print
-        print "Up Right"
-        ur = FastAndSimple(sys.argv[1], sys.argv[3], "up", "right", sys.argv[6])
-        print
-        print "Down Left"
-        dl = FastAndSimple(sys.argv[1], sys.argv[3], "down", "left", sys.argv[6])
-        print
-        print "Down Right"
-        dr = FastAndSimple(sys.argv[1], sys.argv[3], "down", "right", sys.argv[6])
+        if verbose:
+            print "Up Left"
+        ul = FastAndSimple(sys.argv[1], sys.argv[3], "up", "left", sys.argv[6], verbose)
+        if verbose:
+            print
+            print "Up Right"
+        ur = FastAndSimple(sys.argv[1], sys.argv[3], "up", "right", sys.argv[6], verbose)
+        if verbose:
+            print
+            print "Down Left"
+        dl = FastAndSimple(sys.argv[1], sys.argv[3], "down", "left", sys.argv[6], verbose)
+        if verbose:
+            print
+            print "Down Right"
+        dr = FastAndSimple(sys.argv[1], sys.argv[3], "down", "right", sys.argv[6], verbose)
        
-       
+        if verbose:
+            print "Alignment..."
         aligner = Aligner((ul.g, ur.g, dl.g, dr.g))
         result = aligner.get_result()
-        fs = FastAndSimple(result, sys.argv[3], None, None, sys.argv[6])
+        fs = FastAndSimple(result, sys.argv[3], None, None, sys.argv[6], verbose)
        
         fs.node_sort_combined_heuristic()
         fs.center_nodes()
@@ -937,7 +969,7 @@ def main():
         fs.write_txt()
     else:
         # SINGLE WAY
-        fs = FastAndSimple(sys.argv[1], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6])
+        fs = FastAndSimple(sys.argv[1], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], verbose)
         #fs.color_blocks()
         #fs.color_classes()
         #fs.node_sort_combined_heuristic()        
@@ -953,9 +985,9 @@ def main():
    
    
 if __name__ == "__main__":
-    if len(sys.argv) > 4:
+    if len(sys.argv) > 6:
         #cProfile.run('main()')
         main()
     else:
         print "Insufficient parameters"
-        print "Usage: python %s <input file> <output file> <minimum distance> <combined/up/down> [left/right] [layers/positions]" % sys.argv[0]
+        print "Usage: python %s <input file> <output file> <minimum distance> <combined/up/down> [left/right] [layers/positions] [-v for verbosemode]" % sys.argv[0]
