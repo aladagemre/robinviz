@@ -286,8 +286,9 @@ GRAPH<int,int> RUN_SELF(  GRAPH<int,int> &G,
 
 /*********************** END OF ACYLIC **************************/
 /****************************************************************/
-		
+#ifdef DEBUG_ROBINVIZ		
 cout << "\n Acyclic Done \n" ;
+#endif
 /****************************************************************/
 /******************** LAYER ASSIGNMENT **************************/
 
@@ -341,9 +342,9 @@ cout << "\n Acyclic Done \n" ;
 /******************** END OF LAYER ASSIGNMENT *******************/
 /****************************************************************/
 
-        
+#ifdef DEBUG_ROBINVIZ        
 cout << "\n Layering Done \n" ;
-
+#endif
 /****************************************************************/
 /******************** ADD DUMMY VERTICES ************************/
 		node target,source;
@@ -394,9 +395,9 @@ cout << "\n Layering Done \n" ;
 /******************** END OF ADDING DUMMY VERTICES **************/
 /****************************************************************/
 
-
+#ifdef DEBUG_ROBINVIZ
 cout << "\n Dummy Adding Done \n" ;
-
+#endif
 /****************************************************************/
 /********************* CROSSING REDUCTION ***********************/
 
@@ -471,9 +472,9 @@ cout << "\n Dummy Adding Done \n" ;
 
 /********************* END OF CROSSING REDUCTION ****************/
 /****************************************************************/
-		
+#ifdef DEBUG_ROBINVIZ
         cout << "\n Crossing Done \n";
-
+#endif
 		GraphWin gw(G);
 
 		node_array<double> xpos(G);
@@ -968,8 +969,9 @@ GRAPH<int,int> RUN_SELF2( GRAPH<int,int> &G,
 
 /*********************** END OF ACYLIC **************************/
 /****************************************************************/
-		
+#ifdef DEBUG_ROBINVIZ
 cout << "\n Acyclic Done \n" ;
+#endif
 /****************************************************************/
 /******************** LAYER ASSIGNMENT **************************/
 
@@ -1022,9 +1024,9 @@ cout << "\n Acyclic Done \n" ;
 /******************** END OF LAYER ASSIGNMENT *******************/
 /****************************************************************/
 
-        
+#ifdef DEBUG_ROBINVIZ        
 cout << "\n Layering Done \n" ;
-
+#endif
 /****************************************************************/
 /******************** ADD DUMMY VERTICES ************************/
 		node target,source;
@@ -1075,9 +1077,9 @@ cout << "\n Layering Done \n" ;
 /******************** END OF ADDING DUMMY VERTICES **************/
 /****************************************************************/
 
-
+#ifdef DEBUG_ROBINVIZ
 cout << "\n Dummy Adding Done \n" ;
-
+#endif
 /****************************************************************/
 /********************* CROSSING REDUCTION ***********************/
 
@@ -1137,9 +1139,9 @@ cout << "\n Dummy Adding Done \n" ;
 
 /********************* END OF CROSSING REDUCTION ****************/
 /****************************************************************/
-		
+#ifdef DEBUG_ROBINVIZ
         cout << "\n Crossing Done \n";
-
+#endif
 		GraphWin gw(G);
 // 		list<double> hvalues;
 // 		forall_nodes( n, G ){
@@ -1147,7 +1149,9 @@ cout << "\n Dummy Adding Done \n" ;
 // 			hvalues.append( Hvalues[ n ] );
 // 
 // }
+#ifdef DEBUG_ROBINVIZ
         cout << "\n Crossing Done \n";
+#endif
 		node_array<double> xpos(G);
 		node_array<double> ypos(G);
 
@@ -1498,7 +1502,7 @@ void RUN_AGAIN2(  GRAPH<int,int> G,
 		forall_nodes( n, G ){
 			for( int i = 0; i < cat_num; i++ ){
 				if( Categories[ G[ n ] ] == abbv[ i ] ){
-					leda::color x( i + 1 );
+					leda::color x( i /*+ 1*/ );
 					gw2.set_border_color( n,x );
 				}
 			}

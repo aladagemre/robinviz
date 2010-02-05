@@ -566,10 +566,11 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 	      cout << Categories[ INTERACTIONS[n] ] << " ";
 	}*/
 	fclose( categoryOfGenes );
-
+#ifdef DEBUG_ROBINVIZ
 	cout << endl << " * Gene File is loaded from ppi_sources" << endl;
 	
 	cout << endl << " * Loading biclusters to form their ppi graphs " << endl;
+#endif
 		    TEMPINT = INTERACTIONS;
 	array<int> nodePar( INTERACTIONS.number_of_nodes()+1 );
 	int nPar = 0;
@@ -591,8 +592,9 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 	for( int i = 0; i < biclusters.size(); i++ ){
 		G = listOfGraphs[ i ];				                                       
 		list<GENES> tmp1 = biclusters[ it_b1 ];
-		
+#ifdef DEBUG_ROBINVIZ
 		cout << " GRAPH " << i << " WITH SIZE " << tmp1.size() << " || ";
+#endif
 		forall_nodes( m1, G ){
 			if( tmp1.size() == 0 ){
 				G.clear();					
@@ -609,21 +611,27 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 				G.del_node( m1 );
 			}
 		}
+#ifdef DEBUG_ROBINVIZ
 		cout << " GRAPH IS PRODUCED ||";
+#endif
 		forall_nodes( m1, G ){
 		    list<edge> inedges = G.in_edges( m1 );
 		    list<edge> outedges = G.out_edges( m1 );
 		    if( (inedges.size() + outedges.size() ) == 0 )
 			G.del_node( m1 );
 		}
+#ifdef DEBUG_ROBINVIZ
 		cout << endl;
 		forall_nodes( m1, G ){
 			cout <<  GenesNode[  G[ m1 ] ].GENE << "-";
 		}
 		cout << endl;
+#endif
 		listOfGraphs[ i ] = G;
 		it_b1 = biclusters.succ( it_b1 );
+#ifdef DEBUG_ROBINVIZ
 		cout << " GRAPH IS CLEANED " << endl;
+#endif
 	}
 }
 
@@ -836,7 +844,9 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 // 					cout << INDEX_S[ layerTemp[ it ] ] << " ";
 // 				  }
 			}
+#ifdef DEBUG_ROBINVIZ
 			cout << endl;
+#endif
 			for( j = 0; j < layers.size(); j++ ){
 			    list<node> layerTemp = layers[ j ];
 // 				  forall_items( it, layerTemp ){
@@ -1070,7 +1080,9 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 // 					cout << INDEX_S[ layerTemp[ it ] ] << " ";
 // 				  }
 			}
+#ifdef DEBUG_ROBINVIZ
 			cout << endl;
+#endif
 			for( j = 0; j < layers.size(); j++ ){
 			    list<node> layerTemp = layers[ j ];
 // 				  forall_items( it, layerTemp ){

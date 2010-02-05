@@ -1452,7 +1452,9 @@ void writeToFileTheReadGraphPositions( GRAPH<int,int> &G , array<list<node> > &A
 
 void identify_dummy_positionsY( GRAPH<int,int> &G , array<list<node> > &AB, int KEYWSIZE, list<node> &dummy, node_array<double> &x , node_array<double> &y, int &algorithmFlag , int space, int increment, bool ledaPostFlag ){
 	bool ces = false;
+#ifdef DEBUG_ROBINVIZ
 	cout << "\nXcoordinate Begins  \n";
+#endif
 	double initialX = 0 , initialY = space * KEYWSIZE , incX = 150 , incY = 100 ,i;
 	list<node> A;
 	color blue( 4 );
@@ -1506,7 +1508,9 @@ void identify_dummy_positionsY( GRAPH<int,int> &G , array<list<node> > &AB, int 
 // 	if( ledaPostFlag == true )
 // 		pos_process( G, AB, x, space, space, 20 );
 	gw.set_position(x,y);
+#ifdef DEBUG_ROBINVIZ
 	cout << "\nPython Call Begins \n";
+#endif
 	char command[256];
 #ifdef LINUX
 	sprintf( command, "src/python/xcoord/gmls/pyt_inp.gml" );
@@ -1593,12 +1597,15 @@ void identify_dummy_positionsY( GRAPH<int,int> &G , array<list<node> > &AB, int 
 	gw.zoom_graph();
 	gw.edit();*/	
 //  #endif
+#ifdef DEBUG_ROBINVIZ
 	cout << "\nXcoordinate Done \n";
-
+#endif
 }
 
 void identify_dummy_positionsX( GRAPH<int,int> &G , array<list<node> > &AB, int KEYWSIZE, list<node> &dummy, node_array<double> &x , node_array<double> &y, int &algorithmFlag, int space, int increment, bool ledaPostFlag ){
+#ifdef DEBUG_ROBINVIZ
 	cout << "\nXcoordinate Begins  \n";
+#endif
 	double initialX = 0 , initialY = 100 * KEYWSIZE , incX = 150 , incY = 100 ,i;
 	list<node> A;
 	color blue( 4 );
@@ -1643,7 +1650,9 @@ void identify_dummy_positionsX( GRAPH<int,int> &G , array<list<node> > &AB, int 
 	gw.set_edge_label_font(leda::roman_font, 24);
 	gw.set_edge_shape( leda::circle_edge, true );
 	gw.set_position(x,y);
+#ifdef DEBUG_ROBINVIZ
 	cout << "\nPython Call Begins \n";
+#endif
 	char command[256];
 #ifdef LINUX
 	sprintf( command, "src/python/xcoord/gmls/pyt_inp.gml" );
@@ -1715,7 +1724,9 @@ void identify_dummy_positionsX( GRAPH<int,int> &G , array<list<node> > &AB, int 
 	} 
 	//if( ledaPostFlag == true )
 	//	pos_process( G, AB, x, space, space, 20, dummy );
+#ifdef DEBUG_ROBINVIZ
 	cout << "\nXcoordinate Done \n";
+#endif
 	sprintf( command, "" );
 }
 
@@ -2633,7 +2644,7 @@ node_array<point> draw_final2( GRAPH<int,int> &G, node_array<int> &PARS, array<l
 	//gw.set_node_height(50,true);
 	count = 0;
 	forall_nodes( n, G ){
-			color random( categ[ categ.get_item(count)]+1 );
+			color random( categ[ categ.get_item(count)]/*+1*/ );
 			gw.set_border_color( n, random );
 			count++;
 	}
