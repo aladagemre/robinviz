@@ -11,7 +11,7 @@ class MultiViewWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupGUI()
-        self.setWindowFlags(Qt.Window|Qt.FramelessWindowHint)
+        #self.setWindowFlags(Qt.Window|Qt.FramelessWindowHint)
 
     def setupGUI(self):
         desktop = QDesktopWidget().availableGeometry()
@@ -195,8 +195,9 @@ class MultiViewWindow(QMainWindow):
             del self.mainScene
         
     def setDisplayGrid(self, value):
-        self.mainScene.gridActive = value
-        self.mainScene.update()
+        if hasattr(self, 'mainScene'):
+            self.mainScene.gridActive = value
+            self.mainScene.update()
 
     def displaySettings(self):
         self.settingsDialog = SettingsDialog()

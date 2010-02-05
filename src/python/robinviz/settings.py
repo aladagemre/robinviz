@@ -11,7 +11,7 @@ class SettingsDialog(QDialog):
     def __init__(self):
         QDialog.__init__(self)
         self.setWindowTitle("RobinViz - Settings")
-        self.setWindowFlags(Qt.Window|Qt.FramelessWindowHint)
+        #self.setWindowFlags(Qt.Window|Qt.FramelessWindowHint)
         self.layout = QVBoxLayout(self)
         self.tabWidget = QTabWidget()
 
@@ -72,6 +72,9 @@ class SettingsDialog(QDialog):
             
         
     def save(self):
+        """Saves the settings to settings.ini."""
+        # TODO: Check form values, file existance, bicluster limits, etc.
+        
         # Update parameter dictionary from the widgets.
         for parameter in self.parameterWidgets.keys():
             value = self.parameterWidgets[parameter].value()
@@ -301,52 +304,26 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
             for flagName, widget in groupBox.parameterDict.items():
                 self.parameterWidgets[flagName] = widget
                 widget.setChecked(self.parameters[flagName] == 1)
+
     def setupBiologicalTab(self):
-        self.bioTab = QWidget()
-        self.tabWidget.addTab(self.bioTab, "Biological")
-        self.bioLayout = QGridLayout(self.bioTab)
+        self.biologicalTab = QWidget()
+        self.tabWidget.addTab(self.biologicalTab, "Biological")
+        self.biologicalLayout = QGridLayout(self.biologicalTab)
 
-        ######## MICROARRAY (Expression Matrix) FILE PART ###############
+        ########## ORGANISM CHOICE ##############
 
-        self.radioExpressionMatrixInput = CustomRadio("Expression Matrix w/o Labels:")
-        self.browseExpressionMatrixInput = FileBrowser(abspath(dirname(self.parameters["dataName"])))
+        self.organismSelector = OrganismSelector(self.parameters)
 
-        self.radioExpressionMatrixInputLabel = CustomRadio("Expression Matrix w/ Labels:")
-        self.browseExpressionMatrixInputLabel = FileBrowser(abspath(dirname(self.parameters["dataName2"])))
-
-        # Select the radio button
-        if self.parameters["readOption"]:
-            self.radioExpressionMatrixInputLabel.setChecked(True)
-        else:
-            self.radioExpressionMatrixInput.setChecked(True)
-
-        ######## GENE ONTOLOGY PART #############
-        self.checkGo = CustomCheckBox("Gene Ontology File:")
-        self.checkGo.setChecked(self.parameters["go_info"])
-        self.browseGoInput = FileBrowser(abspath(dirname(self.parameters["gofile"])))
-
-        ####### PPI FILE PART ######################
-        self.labelPPIFile = QLabel("PPI Network File:")
-        self.browsePPIInput = FileBrowser(abspath(dirname(self.parameters["ppifilename"])))
-        
         # Match parameters with widgets
-        self.parameterWidgets["dataName"] = self.browseExpressionMatrixInput
-        self.parameterWidgets["dataName2"] = self.browseExpressionMatrixInputLabel
-        self.parameterWidgets["readOption"] = self.radioExpressionMatrixInputLabel
-        self.parameterWidgets["go_info"] = self.checkGo
-        self.parameterWidgets["gofile"] = self.browseGoInput
-        self.parameterWidgets["ppifilename"] = self.browsePPIInput
+        self.parameterWidgets["dataName"] = self.organismSelector.browseExpressionMatrixInput
+        self.parameterWidgets["dataName2"] = self.organismSelector.browseExpressionMatrixInputLabel
+        self.parameterWidgets["readOption"] = self.organismSelector.radioExpressionMatrixInputLabel
+        self.parameterWidgets["go_info"] = self.organismSelector.checkGo
+        self.parameterWidgets["gofile"] = self.organismSelector.browseGoInput
+        self.parameterWidgets["ppifilename"] = self.organismSelector.browsePPIInput
 
         # ADD TO LAYOUT
-        
-        self.bioLayout.addWidget(self.radioExpressionMatrixInput, 0, 0)
-        self.bioLayout.addLayout(self.browseExpressionMatrixInput, 0, 1)
-        self.bioLayout.addWidget(self.radioExpressionMatrixInputLabel, 1, 0)
-        self.bioLayout.addLayout(self.browseExpressionMatrixInputLabel, 1, 1)
-        self.bioLayout.addWidget(self.checkGo, 2, 0)
-        self.bioLayout.addLayout(self.browseGoInput, 2, 1)
-        self.bioLayout.addWidget(self.labelPPIFile, 3, 0)
-        self.bioLayout.addLayout(self.browsePPIInput, 3, 1)
+        self.biologicalLayout.addWidget(self.organismSelector, 0, 0, 1, 2)
 
 def main():
     app = QApplication(sys.argv)
