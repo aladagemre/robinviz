@@ -616,6 +616,11 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 		    if( (inedges.size() + outedges.size() ) == 0 )
 			G.del_node( m1 );
 		}
+		cout << endl;
+		forall_nodes( m1, G ){
+			cout <<  GenesNode[  G[ m1 ] ].GENE << "-";
+		}
+		cout << endl;
 		listOfGraphs[ i ] = G;
 		it_b1 = biclusters.succ( it_b1 );
 		cout << " GRAPH IS CLEANED " << endl;
@@ -685,7 +690,7 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 	wptr3 = fopen( "sources//graph_sources//graph_infos.txt", "w" );
 #endif
 	for(int i = 0; i < biclusters.size(); i++ ){	
-		if( listOfGraphs[ i ].empty() != true ){
+// 		if( listOfGraphs[ i ].empty() != true ){
 		    pos.init( listOfGraphs[ i ] );
 		    bends.init( listOfGraphs[ i ] );   
 		    array<int> nodePar( listOfGraphs[ i ].number_of_nodes()+1 );
@@ -695,7 +700,8 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 // 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
 			  nPar++;
 		    }
-		    H = RUN_SELF( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag );
+		    if( listOfGraphs[ i ].empty() != true )
+			      H = RUN_SELF( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag );
 
 		    nPar = 0;
 		    forall_nodes( n, listOfGraphs[ i ] ){
@@ -845,7 +851,7 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 			GraphList_S.append( HAsString );
 			//cout << " Size 1 : " << HAsString.number_of_nodes() << " Size 2 : " << listOfGraphs[ i ].number_of_nodes() << " Size 3 : " << nameGraph.size() << endl;
 			HAsString.clear();
-		}
+// 		}
 			    /************************************************/
 			    /* End of Copy Graph as leda::string type Graph */
 			    /************************************************/			
@@ -1580,8 +1586,10 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	}	
 	node_array<double> HValues2( PROJECT2 );
 	count = 0;
+	node_array<int> PARS( PROJECT2 );
 	forall_nodes( n1, PROJECT2 ){
 		HValues2[ n1 ] = HValues[ Nodes[ count ] ];
+		PARS[ n1 ] = count;
 		count++;
 	}
 	count = 0;
@@ -1610,7 +1618,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	edgeNumbersForInt_ = edgeNumbersForInt;
 // 	cout << " E4 -  " << PROJECT2.number_of_edges() << endl;
 	i = 0;
-	RUN_SELF2( PROJECT2, max_weight, 10, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
+	RUN_SELF2( PROJECT2, PARS, max_weight, 10, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
 // 	cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
 	return PROJECT2;
 }
