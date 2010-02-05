@@ -85,7 +85,7 @@ class MultiViewWindow(QMainWindow):
         """Loads the main scene after the results are found."""
         if not os.path.exists(normcase("outputs/graphs/maingraph.gml")):
             QMessageBox.information(self, 'No recent results',
-     "No recent results found. Please run the program.")
+     "Results not found. Please report this issue.")
             return
         self.pScenes = {} # Peripheral scenes
         self.mainScene = MainScene()
@@ -225,8 +225,12 @@ class MultiViewWindow(QMainWindow):
         self.unsetCursor()
         self.setWindowTitle("RobinViz")
     def displayLast(self):
-        self.loadMainScene()
-        self.connectSlots()
+        if not os.path.exists(normcase("outputs/graphs/maingraph.gml")):
+            QMessageBox.information(self, 'No recent results',
+            "No recent results not found. Please run the program.")
+        else:
+            self.loadMainScene()
+            self.connectSlots()
         
     def displayAboutDialog(self):
         from misc.about import Ui_AboutDialog
