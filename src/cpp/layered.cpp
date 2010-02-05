@@ -59,8 +59,8 @@
 	* Variables for the visualization system, considering the proposed system of weighted and layered
         * drawings of graphs
 	**/
-		int minBicSize = 50; // minimum number of genes that bicluster can have
-		int maxBicSize = 100; // maximum number of genes that bicluster can have
+                int minBicSize = 0; // minimum number of genes that bicluster can have
+                int maxBicSize = 1000; // maximum number of genes that bicluster can have
 		int width = 10;       // Layering max width
 		int space = 150;      // yspace between layers
 		int increment = 125;  // xspace between nodes

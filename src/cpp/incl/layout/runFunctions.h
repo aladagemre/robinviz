@@ -726,6 +726,7 @@ it performs again weighted layout over the
 collected graph edges according to criteria
 shown in ISB paper */
 GRAPH<int,int> RUN_SELF2( GRAPH<int,int> &G, 
+			  node_array<int> &PARS,
 			  int max_height, 
 			  int W, 
 			  node_array<double> &Xpos,
@@ -1336,7 +1337,7 @@ cout << "\n Dummy Adding Done \n" ;
 
 // 		ledaToGraphviz( G, Layers, isDummy, Layers.size(), "graph_graphviz", Colors, false, Names, false ); 
 		G.del_nodes( dummyNodes );
-		pos = draw_final2 ( G, Layers, max, dummyNodes, edgePositionsX , edgePositionsY, bends, 1, Hvalues, xpos, ypos, decision, nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );
+		pos = draw_final2 ( G, PARS, Layers, max, dummyNodes, edgePositionsX , edgePositionsY, bends, 1, Hvalues, xpos, ypos, decision, nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );
 // 
 
 // 		node_array<point> pos(G);
@@ -1478,7 +1479,7 @@ void RUN_AGAIN2(  GRAPH<int,int> G,
 		  double colorScale, 
 		  double edgThicknessTher
  ){
-
+	if( G.number_of_nodes() != 0 ){
 		node n;
 		GraphWin gw2(G,300,300);	
 
@@ -1587,6 +1588,7 @@ void RUN_AGAIN2(  GRAPH<int,int> G,
 		sprintf( filename2, "%s%d%s", filename2, graphNo, ".ps" );
 		gw2.save_ps( filename2 );
 // 		gw2.edit();
+	}
 }
 
 

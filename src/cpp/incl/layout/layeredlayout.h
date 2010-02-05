@@ -2301,7 +2301,7 @@ void draw_finalY( GRAPH<int,int> &G , array<list<node> > &AB, int KEYWSIZE, list
 }
 
 // This function is for drawing the main layout for the proposed in ISB 2010 Paper as it is shown in Figure 1 and Figure 3
-node_array<point> draw_final2( GRAPH<int,int> &G , array<list<node> > &AB, int KEYWSIZE, list<node> dummy, edge_array<list<double> > &z, edge_array<list<double> > &w, edge_array<list<point> > bends, int graphNo, node_array<double> &Hvalues, node_array<double> &x , node_array<double> &y, int decision, double nodeSize, double edgeBendImp, double colorScale, double edgThicknessTher, list<int> &categ ){
+node_array<point> draw_final2( GRAPH<int,int> &G, node_array<int> &PARS, array<list<node> > &AB, int KEYWSIZE, list<node> dummy, edge_array<list<double> > &z, edge_array<list<double> > &w, edge_array<list<point> > bends, int graphNo, node_array<double> &Hvalues, node_array<double> &x , node_array<double> &y, int decision, double nodeSize, double edgeBendImp, double colorScale, double edgThicknessTher, list<int> &categ ){
 // 	cout << " 1 " << endl;
 	double initialX = 0 , initialY = 100 * KEYWSIZE , incX = 150 , incY = 100 ,i;
 	list<node> A;
@@ -2359,6 +2359,7 @@ node_array<point> draw_final2( GRAPH<int,int> &G , array<list<node> > &AB, int K
 
 	// Make all of the node as orange
 	forall_nodes( n, G ){
+			G[ n ] = PARS[ n ];
 			color random( random_value );
 #ifdef DRAW_FINAL2
 			gw.set_color( n, random);
@@ -2632,7 +2633,7 @@ node_array<point> draw_final2( GRAPH<int,int> &G , array<list<node> > &AB, int K
 	//gw.set_node_height(50,true);
 	count = 0;
 	forall_nodes( n, G ){
-			color random( categ[ categ.get_item(count)] );
+			color random( categ[ categ.get_item(count)]+1 );
 			gw.set_border_color( n, random );
 			count++;
 	}

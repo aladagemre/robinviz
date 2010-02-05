@@ -395,11 +395,15 @@ void analyseGenes( char fileName[], list<int> &categoriesBicluster, int biNumber
 		    for( int i = 0; i < cat_num; i++ )
 			    categoryPerGenesRatio[ counter ].append( 0.0 );
 		    int maxCategId = 0; 
+		    double gene_sum = 0;
+		    for( int k = 0; k < cat_num; k++ ){
+			    gene_sum += categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( k )];
+		    }
 		    double maxValue = 0;
 		    for( int i = 0; i < cat_num; i++ ){
 			    categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )] = (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / (double)categoryMaxGenes[ i ];
-			    if( maxValue < categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )] ){
-				maxValue = categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )];
+			    if( maxValue <  (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / gene_sum ){
+				maxValue = (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / gene_sum;
 				maxCategId = i;
 			    }
 		    }
@@ -705,11 +709,15 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 		    for( int i = 0; i < cat_num; i++ )
 			    categoryPerGenesRatio[ counter ].append( 0.0 );
 		    int maxCategId = 0; 
+		    double gene_sum = 0;
+		    for( int k = 0; k < cat_num; k++ ){
+			    gene_sum += categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( k )];
+		    }
 		    double maxValue = 0;
 		    for( int i = 0; i < cat_num; i++ ){
 			    categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )] = (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / (double)categoryMaxGenes[ i ];
-			    if( maxValue < categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )] ){
-				maxValue = categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )];
+			    if( maxValue <  (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / gene_sum ){
+				maxValue = (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / gene_sum;
 				maxCategId = i;
 			    }
 		    }
