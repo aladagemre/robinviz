@@ -205,7 +205,7 @@ class MultiViewWindow(QMainWindow):
 
     def run(self):
         print "Starting operation"
-        self.setWindowTitle("RobinViz - Please wait, window might not response for a while...")
+        self.setWindowTitle("RobinViz - Please wait, window might not respond for a while...")
         self.setCursor(Qt.WaitCursor)
         errorFile = "outputs/error.txt"
         if os.path.exists(errorFile):
@@ -220,7 +220,7 @@ class MultiViewWindow(QMainWindow):
             if os.path.exists(normcase(errorFile)):
                 message = open(normcase(errorFile)).read()
             else:
-                message = "Unknown error occured. Please report the debug messages on the console"
+                message = "Unknown error occured. Please report the debug messages on the console."
 
             QMessageBox.information(self, 'Failed', message)
         self.unsetCursor()
