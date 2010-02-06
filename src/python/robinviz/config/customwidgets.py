@@ -91,15 +91,20 @@ class OrganismSelector(QGroupBox):
         self.checkGo = CustomCheckBox("Use Gene Ontology")
         self.checkGo.setChecked(self.parameters["go_info"])
         self.browseGoInput = FileBrowser(abspath(dirname(self.parameters["gofile"])))
+        self.browseGoInput.setTitle("Select Gene Ontology File")
+        self.browseGoInput.setFilter("Gene Ontology File (*.txt)")
 
         ######## MICROARRAY (Expression Matrix) FILE PART ###############
 
         self.radioExpressionMatrixInput = CustomRadio("Expression Matrix w/o Labels:")
         self.browseExpressionMatrixInput = FileBrowser(abspath(dirname(self.parameters["dataName"])))
+        self.browseExpressionMatrixInput.setTitle("Select Expression Matrix File (without label)")
+        self.browseExpressionMatrixInput.setFilter("Expression Matrix File (*.txt)")
 
         self.radioExpressionMatrixInputLabel = CustomRadio("Expression Matrix w/ Labels:")
         self.browseExpressionMatrixInputLabel = FileBrowser(abspath(dirname(self.parameters["dataName2"])))
-
+        self.browseExpressionMatrixInputLabel.setTitle("Select Expression Matrix File (with label)")
+        self.browseExpressionMatrixInputLabel.setFilter("Expression Matrix File (*.txt)")
         # Select the radio button
         if self.parameters["readOption"]:
             self.radioExpressionMatrixInputLabel.setChecked(True)
@@ -110,10 +115,14 @@ class OrganismSelector(QGroupBox):
         ####### PPI FILE PART ######################
         self.labelPPIFile = QLabel("PPI Network File:")
         self.browsePPIInput = FileBrowser(abspath(dirname(self.parameters["ppifilename"])))
+        self.browsePPIInput.setTitle("Select PPI File")
+        self.browsePPIInput.setFilter("PPI File (*.txt)")
 
         ###### CATEGORY FILE PART ##################
         self.labelCategoryFile = QLabel("Category File:")
         self.browseCategoryFile = FileBrowser(abspath(dirname(self.parameters["catfile"])))
+        self.browseCategoryFile.setTitle("Select Category File")
+        self.browseCategoryFile.setFilter("Category File (*.txt)")
 
         # ADD TO LAYOUT
         self.layout.addWidget(self.labelOrganism, 0, 0, Qt.AlignTop|Qt.AlignLeft)
@@ -241,6 +250,9 @@ class FileBrowser(QHBoxLayout):
         self.addWidget(self.inputBox)
         self.addWidget(self.browseButton)
         self.browseButton.clicked.connect(self.browse)
+        self.title = "Select your file"
+        self.filter = "Text File (*.txt);;All files (*.*)"
+
     def value(self):
         """Returns the filebox text."""
         return normcase(str(self.inputBox.text()))
@@ -249,9 +261,15 @@ class FileBrowser(QHBoxLayout):
         """Sets filebox text."""
         self.inputBox.setText(value)
 
+    def setTitle(self, title):
+        self.title = title
+        
+    def setFilter(self, filter):
+        self.filter = filter + ";;All files (*.*)"
+
     def browse(self):
         """Opens file dialog for browsing file."""
-        s = QFileDialog.getOpenFileName(None, "Select your microarray data", self.defaultDirectory, "Microarray Data (*.txt)")
+        s = QFileDialog.getOpenFileName(None, self.title, self.defaultDirectory, self.filter)
         if s:
             self.inputBox.setText(s)
 
