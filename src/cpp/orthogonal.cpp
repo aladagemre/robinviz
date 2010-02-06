@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
 
                 gw.set_layout( pos, bends );
 		gw.place_into_box(x0, y0, x1, y1);
-                fname = fname.replace( ".gml", "othogonal.gml" );
+                fname = fname.replace( ".gml", "orthogonal.gml" );
 		gw.save_gml( fname );
 	}
 	return 0;
