@@ -1,4 +1,0 @@
-QMainWindow,QDialog,QMenu,QMenuBar,QPushButton { background-color: black ; color: white}
-QLineEdit, QRadioButton,QCheckBox,QLabel,QSpinBox,QDoubleSpinBox, QComboBox, QGroupBox, QToolBox{ background-color: rgba(0,0,0, 0%); color: white}
-QGraphicsView { background-color: lightgray}
-QToolBox::title { color: white }
