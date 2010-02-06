@@ -422,14 +422,17 @@ int main(){
                         fprintf( kfptr, "%d\n", number_of_category );
                         for( int i = 0; i < number_of_category; i++ ){
                             fscanf( fptr, "%s%s", tc_array, tc_array2 );
-                            fprintf( kfptr, "%s\t%s\n", tc_array, tc_array2 );
+                            if( i != number_of_category - 1 )
+                                fprintf( kfptr, "%s\t%s\n", tc_array, tc_array2 );
+                            else
+                                fprintf( kfptr, "%s\t%s", tc_array, tc_array2 );
                         }
                         fclose(kfptr);
                         if( (kfptr = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "w" )) != NULL || (kfptr = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "w" )) != NULL ){
                                char cat_c;
                                while( !feof( fptr ) ){
                                    fscanf( fptr, "%s%c", tc_array, &cat_c );
-                                   fprintf( kfptr, "%s%c", tc_array, cat_c );
+                                   fprintf( kfptr, "%s\t%c\n", tc_array, cat_c );
                                }
                                fclose(kfptr);
                                fclose(fptr);
