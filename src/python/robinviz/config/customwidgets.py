@@ -18,23 +18,35 @@ class Organism:
             self.setExpressionMatrix(join(directory, "expression_matrix.txt"))
             self.setPPI(join(directory, "ppi.txt"))
             self.setGO(join(directory, "go.txt"))
+            self.setCategory(join(directory, "category.txt"))
     
     def setName(self, name):
         """Sets its name (directory name)."""
         self.name = name
     def setExpressionMatrix(self, path):
         """Sets expression matrix file. File must exist."""
-        assert exists(path)        
-        self.expressionMatrix = path
+        if not exists(path):
+            QMessageBox.information(None, 'File does not exist', 'File %s does not exist. Please check it.' % path)
+        else:
+            self.expressionMatrix = path
     def setPPI(self, path):
         """Sets PPI file. File must exist."""
-        assert exists(path)
-        self.PPI = path
+        if not exists(path):
+            QMessageBox.information(None, 'File does not exist', 'File %s does not exist. Please check it.' % path)
+        else:
+            self.PPI = path
     def setGO(self, path):
         """As this file is optional, only a warning is issued if file does not exist."""
         if not exists(path):
             print "GO File %s does not exist" % path
         self.go = path
+    def setCategory(self, path):
+        """Sets category file. This must exist."""
+        if not exists(path):
+            QMessageBox.information(None, 'File does not exist', 'File %s does not exist. Please check it.' % path)
+        else:
+            self.category = path
+        
     def title(self):
         """Adds space between the name and the dimensions and returns it."""
         for i in range(len(self.name)):
@@ -75,6 +87,11 @@ class OrganismSelector(QGroupBox):
             self.comboOrganism.addItem(organismTitle, self.organismDict[organismTitle])
         self.comboOrganism.addItem("Other")
 
+        ######## GENE ONTOLOGY PART #############
+        self.checkGo = CustomCheckBox("Use Gene Ontology")
+        self.checkGo.setChecked(self.parameters["go_info"])
+        self.browseGoInput = FileBrowser(abspath(dirname(self.parameters["gofile"])))
+
         ######## MICROARRAY (Expression Matrix) FILE PART ###############
 
         self.radioExpressionMatrixInput = CustomRadio("Expression Matrix w/o Labels:")
@@ -90,15 +107,13 @@ class OrganismSelector(QGroupBox):
             self.radioExpressionMatrixInput.setChecked(True)
 
 
-        ######## GENE ONTOLOGY PART #############
-        self.checkGo = CustomCheckBox("Use Gene Ontology")
-        self.checkGo.setChecked(self.parameters["go_info"])
-        self.browseGoInput = FileBrowser(abspath(dirname(self.parameters["gofile"])))
-
         ####### PPI FILE PART ######################
         self.labelPPIFile = QLabel("PPI Network File:")
         self.browsePPIInput = FileBrowser(abspath(dirname(self.parameters["ppifilename"])))
 
+        ###### CATEGORY FILE PART ##################
+        self.labelCategoryFile = QLabel("Category File:")
+        self.browseCategoryFile = FileBrowser(abspath(dirname(self.parameters["catfile"])))
 
         # ADD TO LAYOUT
         self.layout.addWidget(self.labelOrganism, 0, 0, Qt.AlignTop|Qt.AlignLeft)
@@ -111,6 +126,8 @@ class OrganismSelector(QGroupBox):
         self.layout.addLayout(self.browseExpressionMatrixInputLabel, 3, 1,Qt.AlignBottom|Qt.AlignLeft)
         self.layout.addWidget(self.labelPPIFile, 4, 0, Qt.AlignBottom|Qt.AlignLeft)
         self.layout.addLayout(self.browsePPIInput, 4, 1, Qt.AlignBottom|Qt.AlignLeft)
+        self.layout.addWidget(self.labelCategoryFile, 5, 0, Qt.AlignBottom|Qt.AlignLeft)
+        self.layout.addLayout(self.browseCategoryFile, 5, 1, Qt.AlignBottom|Qt.AlignLeft)
         
 
 
@@ -122,6 +139,8 @@ class OrganismSelector(QGroupBox):
                                 self.browsePPIInput,
                                 #self.checkGo,
                                 self.browseGoInput,
+                                self.labelCategoryFile,
+                                self.browseCategoryFile,
                                 )
                                 
         for widget in self.portableWidgets:
@@ -134,18 +153,24 @@ class OrganismSelector(QGroupBox):
             parameterEMPath = correctPath(self.parameters["dataName2"])
             parameterPPIPath = correctPath(self.parameters["ppifilename"])
             parameterGOPath = correctPath(self.parameters["gofile"])
+            parameterCATPath = correctPath(self.parameters["catfile"])
             for org in self.organisms:
                 # For each organism, look for EM filename.
                 if parameterEMPath == org.expressionMatrix \
                 and parameterPPIPath == org.PPI \
-                and parameterGOPath == org.go:
+                and parameterGOPath == org.go \
+                and parameterCATPath == org.category:
                     # If filenames matches, find its index and select it.
                     index = self.comboOrganism.findText(org.title())
                     self.comboOrganism.setCurrentIndex(index)
                     break
             else:
-                # Select "Other"
+                # Select "Other" as no matching record found
                 self.comboOrganism.setCurrentIndex(self.comboOrganism.count() - 1)
+        else:
+            # Select other because default organisms use labelled EM.
+            self.comboOrganism.setCurrentIndex(self.comboOrganism.count() - 1)
+
 
     def organismSelected(self, itemText):
         # TODO: (Usability) When Others selected and some custom conf is made,

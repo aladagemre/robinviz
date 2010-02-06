@@ -106,6 +106,7 @@ edgThicknessTher 4.0
 dataName %(dataName)s
 dataName2 %(dataName2)s
 ppifilename %(ppifilename)s
+catfile %(catfile)s
 biclustering 1
 bimax_low_dim1 %(bimax_low_dim1)d
 bimax_low_dim2 %(bimax_low_dim2)d
@@ -321,6 +322,7 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
         self.parameterWidgets["go_info"] = self.organismSelector.checkGo
         self.parameterWidgets["gofile"] = self.organismSelector.browseGoInput
         self.parameterWidgets["ppifilename"] = self.organismSelector.browsePPIInput
+        self.parameterWidgets["catfile"] = self.organismSelector.browseCategoryFile
 
         # ADD TO LAYOUT
         self.biologicalLayout.addWidget(self.organismSelector, 0, 0, 1, 2)
