@@ -13,20 +13,15 @@ from os.path import normcase
 import os
 import math
 
+GRAPH_LAYOUTS = {}
+layoutFile = open("layouts.ini")
+for line in layoutFile:
+    if line.startswith("//"):
+        continue # this is a comment
+    name, filename = line.strip().split(":")
+    GRAPH_LAYOUTS[name] = filename
 
-GRAPH_LAYOUTS = {'Layered' : 'dir',
-                 'Circular': 'circular.exe',
-                 'T-Circular': 'tcircular.exe',
-                 'Force Directed' : 'force.exe',
-                 'Star' : 'star.exe'}
 
-class TimerThread(QThread):
-    def __init__(self, timer):
-        self.timer = timer
-        
-    def run(self):
-        self.timer.start()
-        
 class View(QGraphicsView):
     def __init__(self, parent=None):
         QGraphicsView.__init__(self, parent)
