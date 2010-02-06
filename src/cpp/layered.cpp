@@ -162,6 +162,14 @@
 #else
                 char gofile[256] = "sources//usr_sources//visualization_data//funcassociate_go_associations.txt";
 #endif
+        /**
+        *	Category File
+        **/
+#ifdef LINUX
+                char catfile[256] = "sources/usr_sources/visualization_data/category.txt";
+#else
+                char catfile[256] = "sources//usr_sources//visualization_data//category.txt";
+#endif
 	/* This flag for changing the layout using x-coordinate assignment  */
 	/* 1 for python and 0 for old non including x-coordinate assignment */
 	int algorithmFlag = 1;
@@ -277,6 +285,8 @@ int main(){
 		fscanf( fptr, "%s%s", empty, dataName2 );
                 //cout << empty << " " << dataName2 << endl;
                 fscanf( fptr, "%s%s", empty, ppifilename );
+                //cout << empty << " " << ppifilename << endl;
+                fscanf( fptr, "%s%s", empty, catfile );
                 //cout << empty << " " << ppifilename << endl;
 		// 	biclustering = 1
 		fscanf( fptr, "%s%d", empty, &biclustering );
@@ -401,8 +411,69 @@ int main(){
 		fscanf( fptr, "%s%d", empty, &bool_i );
 		ppihitratioWeighting = ( bool_i == 0 ? 0 : 1 );
 		//cout << empty << " " << ppihitratioWeighting << endl;
-
 		fclose( fptr );
+
+                FILE *kfptr;
+                if( (fptr = fopen( catfile , "r" )) !=NULL ){
+                    if( (kfptr = fopen( "sources/usr_sources/visualization_data/functions.txt", "w" )) != NULL || (kfptr = fopen( "sources//usr_sources//visualization_data//functions.txt", "w" )) != NULL ){
+                        int number_of_category;
+                        char tc_array[20], tc_array2[256];
+                        fscanf( fptr, "%d", &number_of_category );
+                        fprintf( kfptr, "%d\n", number_of_category );
+                        for( int i = 0; i < number_of_category; i++ ){
+                            fscanf( fptr, "%s%s", tc_array, tc_array2 );
+                            fprintf( kfptr, "%s\t%s\n", tc_array, tc_array2 );
+                        }
+                        fclose(kfptr);
+                        if( (kfptr = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "w" )) != NULL || (kfptr = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "w" )) != NULL ){
+                               char cat_c;
+                               while( !feof( fptr ) ){
+                                   fscanf( fptr, "%s%c", tc_array, &cat_c );
+                                   fprintf( kfptr, "%s%c", tc_array, cat_c );
+                               }
+                               fclose(kfptr);
+                               fclose(fptr);
+                        }
+                        else{
+                            FILE *erptr;
+#ifdef LINUX
+                            erptr = fopen( "outputs/error.txt", "w" );
+#else
+                            erptr = fopen( "outputs//error.txt", "w" );
+#endif
+                            fprintf( erptr, "You Probably Deleted genefunctions.txt\n" );
+                            fclose( erptr );
+                            cout << "\nYou Probably Deleted genefunctions.txt\n";
+                            exit(1);
+                        }
+                    }
+                    else{
+                        FILE *erptr;
+#ifdef LINUX
+                        erptr = fopen( "outputs/error.txt", "w" );
+#else
+                        erptr = fopen( "outputs//error.txt", "w" );
+#endif
+                        fprintf( erptr, "You Probably Deleted functions.txt\n" );
+                        fclose( erptr );
+                        cout << "\nYou Probably Deleted functions.txt\n";
+                        exit(1);
+
+                    }
+                }
+                else{
+                    FILE *erptr;
+#ifdef LINUX
+                    erptr = fopen( "outputs/error.txt", "w" );
+#else
+                    erptr = fopen( "outputs//error.txt", "w" );
+#endif
+                    fprintf( erptr, "Check that you specifiy the correct category file\n" );
+                    fclose( erptr );
+                    cout << "\nCheck that you specifiy the correct category file\n";
+                    exit(1);
+                }
+
 		if( readOption == false ){
 			INPUT = dataRead( dataName );
 		}
@@ -566,7 +637,7 @@ int main(){
 		}
                 FILE *cfptr;
                 if( (cfptr =fopen("outputs/colors_func.txt", "w"))==NULL && (cfptr=fopen("outputs//colors_func.txt", "w")) ==NULL ){
-                    cout << " Error: Cannot write into ouptus folder";
+                    cout << " Error: Cannot write into outputs folder";
                     return 0;
                 }
                 else{
