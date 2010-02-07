@@ -229,6 +229,7 @@ class MultiViewWindow(QMainWindow):
             QMessageBox.information(self, 'Failed', message)
         self.unsetCursor()
         self.setWindowTitle("RobinViz")
+
     def displayLast(self):
         if not os.path.exists(normcase("outputs/graphs/maingraph.gml")):
             QMessageBox.information(self, 'No recent results',
