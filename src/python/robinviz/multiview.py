@@ -17,9 +17,12 @@ class MultiViewWindow(QMainWindow):
         desktop = QDesktopWidget().availableGeometry()
         brPoint = desktop.bottomRight()
         self.windowWidth = brPoint.x()
-        self.windowHeight = brPoint.y() - 25
+        self.windowHeight = brPoint.y()
         self.mainView = MainView()
         self.mainView.setRenderHints(QPainter.Antialiasing)
+	self.setMaximumWidth(self.windowWidth-10)
+	#self.setMaximumHeight(self.windowHeight)
+	#self.setMinimumHeight(self.windowHeight)
 
         #self.loadMainScene()
         layout = QVBoxLayout()
@@ -59,9 +62,9 @@ class MultiViewWindow(QMainWindow):
         centerBand.addLayout(centerRightLayout)
         layout.addLayout(centerBand)
 
-        self.mainView.setMinimumHeight(self.windowHeight * 0.70 - 35)
-        self.mainView.setMaximumHeight(self.windowHeight * 0.70 - 35)
-        self.mainView.setMinimumWidth(self.windowWidth * 0.50 + 20)
+        #self.mainView.setMinimumHeight(self.windowHeight * 0.70 - 35)
+        #self.mainView.setMaximumHeight(self.windowHeight * 0.70)
+        self.mainView.setMaximumWidth(self.windowWidth * 0.60)
 
 
         bottomBand = QHBoxLayout()
@@ -147,10 +150,10 @@ class MultiViewWindow(QMainWindow):
 
         ratio = 0.15
         margin = 5
-        widget.setMinimumHeight(self.windowHeight * ratio)
+        #widget.setMinimumHeight(self.windowHeight * ratio)
         widget.setMaximumHeight(self.windowHeight * ratio)
-        widget.setMinimumWidth(self.windowWidth * 0.25 - margin)
-        widget.setMaximumWidth(self.windowWidth * 0.25 - margin)
+        #widget.setMinimumWidth(self.windowWidth * 0.25)
+        widget.setMaximumWidth(self.windowWidth * 0.25)
         l = QHBoxLayout(widget)
 
         view = PeripheralView()
@@ -169,9 +172,10 @@ class MultiViewWindow(QMainWindow):
         widget = QWidget()
 
         ratio = 0.70
-        margin = 35
+        margin = self.windowHeight * 0.10 # 0.70 - 0.15*4
         widget.setMinimumHeight((self.windowHeight * ratio)/4  - margin)
         widget.setMaximumHeight((self.windowHeight * ratio - margin)/4)
+        widget.setMaximumWidth(self.windowWidth * 0.20)
 
         l = QHBoxLayout(widget)
 
@@ -328,6 +332,7 @@ if __name__ == "__main__":
     mainWindow = MultiViewWindow()
     #mainWindow.setGeometry(100, 100, 800, 500)
     mainWindow.showMaximized()
+    #mainWindow.show()
     #mainWindow.showFullScreen()
 
 

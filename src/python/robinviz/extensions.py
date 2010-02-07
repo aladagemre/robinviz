@@ -286,6 +286,9 @@ class CircleNode(QGraphicsEllipseItem):
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
         self.setToolTip("Weight :" + str(node.graphics.w))
+        """tip = "Weight: %s\nCategory: %s" % (str(node.graphics.w), CATEGORY_COLORS[self.color])
+        self.setToolTip(tip)"""
+        
         self.setRect(0, 0, self.w, self.w)
         
         # Construct the text.
@@ -293,7 +296,8 @@ class CircleNode(QGraphicsEllipseItem):
         self.text.root = self
         textFont = QFont()
         textFont.setBold(True)
-        textFont.setPointSize(20)
+        #textFont.setPointSize(20)
+	textFont.setPixelSize(self.w/2)
         self.text.setFont(textFont)
         if node.graphics.outline == "#000000":
             self.text.setDefaultTextColor(QColor(Qt.white))
@@ -407,8 +411,8 @@ class SquareNode(QGraphicsPolygonItem):
         print self.centerPos()"""
 
     def associateWithNode(self, node):
-
-        self.setBrush(QColor(node.graphics.outline)) # Give the category color.
+        self.color = QColor(node.graphics.outline)
+        self.setBrush(self.color) # Give the category color.
         margin = 2.0
         # Construct the text.
         self.text = QGraphicsTextItem(self)
@@ -440,5 +444,8 @@ class SquareNode(QGraphicsPolygonItem):
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.h/2))
         self.setToolTip("Weight: " + str(node.graphics.w))
 
+        """tip = "Weight: %s\nCategory: %s" % (str(node.graphics.w), CATEGORY_COLORS[self.color])
+        self.setToolTip(tip)"""
+            
         # Leave some margin for the text.
         self.text.setPos(1,1)

@@ -21,6 +21,12 @@ for line in layoutFile:
     name, filename = line.strip().split(":")
     GRAPH_LAYOUTS[name] = filename
 
+CATEGORY_COLORS = {}
+colorFile = open("outputs/colors_func.txt")
+for line in colorFile:
+    name, r, g, b = line.strip().split()
+    CATEGORY_COLORS[QColor(int(r), int(g), int(b))] = name.replace("_", " ")
+    
 
 class View(QGraphicsView):
     def __init__(self, parent=None):
