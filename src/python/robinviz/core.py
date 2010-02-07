@@ -154,13 +154,13 @@ class View(QGraphicsView):
         self.timer.start()
 
     def switchToLayout(self, layoutName):
-        if self.setupLayoutAnimation(layoutName):
+        if self.setupLayoutSwitch(layoutName):
             self.startLayoutAnimation()
         
-    def setupLayoutAnimation(self, layoutName):
+    def setupLayoutSwitch(self, layoutName):
         filename = self.scene().filename
         if not hasattr(self, 'originalFileName'):
-                self.originalFileName = filename
+            self.originalFileName = filename
 
         if layoutName == "Layered":
             # Switch back to original.
@@ -181,7 +181,11 @@ class View(QGraphicsView):
             
             # Load the graph
             self.newGraph = newGraph = Graph()
-            self.newGraph.read_gml("%s%s.gml" % (filename.split(".")[0], exename.split(".")[0]))
+            """if str(layoutName) == "Layered":
+                newFileName = filename
+            else:""" # this part is for animation to layered in the future.
+            newFileName = "%s%s.gml" % (filename.split(".")[0], exename.split(".")[0])
+            self.newGraph.read_gml(newFileName)
             newGraph.prepare()
 
             # Clear the scene
