@@ -1,4 +1,5 @@
 #include "incl/handlers.h"
+#include <LEDA/graph/graph_draw.h>
 
 int main(int argc, char** argv) {
 	GraphWin gw;
@@ -32,7 +33,7 @@ int main(int argc, char** argv) {
 		ypos[ maxDegNode ] = gw.get_ymin() + ( abs( gw.get_ymin() ) + abs( gw.get_ymax() ) ) / 2.0;
 		fixedNodes.append( maxDegNode );
 		list<node> N = G.adj_nodes( maxDegNode );
-		circle C( 0, 0, N.size() * 50.0 );
+                circle C( 0, 0, abs( abs( gw.get_ymax() ) - gw.get_ymin() ) / 3.0 );
 		double min = pi / (double)count;
 		forall( n , N ){
 		      pos[ n ] = C.point_on_circle( tmp );
@@ -41,8 +42,29 @@ int main(int argc, char** argv) {
 		      fixedNodes.append( n );
 		      tmp -= min;   
 		}
+
+
+
+                int lower_bound=static_cast<int>(gw.get_xmin()+20.0);
+                int upper_bound=static_cast<int>(gw.get_xmax()-20.0);
+                random_source S2(lower_bound,upper_bound);
+                int x1_;
+                node v;
+                forall_nodes(v,G) {
+                    S2 >> x1_;
+                    xpos[v]=x1_;
+                }
+                lower_bound=static_cast<int>(gw.get_ymin()+20.0);
+                upper_bound=static_cast<int>(gw.get_ymax()-20.0);
+                S2.set_range(lower_bound,upper_bound);
+                int y1_;
+                forall_nodes(v,G) {
+                    S2 >> y1_;
+                    ypos[v]=y1_;
+                }
+
 // 		cout << gw.get_xmin() << "\t" << gw.get_xmax() << "\t" << gw.get_ymin() << "\t" << gw.get_ymax() << endl;
-		SPRING_EMBEDDING_our( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
+                SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
 		gw.remove_bends();
 		forall_nodes( n, G ){
 			xpos[ n ] = xpos[ n ]*5.0;
