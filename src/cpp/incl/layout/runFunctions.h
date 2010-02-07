@@ -1503,11 +1503,13 @@ void RUN_AGAIN2(  GRAPH<int,int> G,
 			for( int i = 0; i < cat_num; i++ ){
 				if( Categories[ G[ n ] ] == abbv[ i ] ){
 					leda::color x( i /*+ 1*/ );
+					G.assign( n, i );
 					gw2.set_border_color( n,x );
 				}
 			}
 			gw2.set_color( n, red );
 		}
+		gw2.update_graph();
 		edge e;
 		array<color> color_l( 5 );
 
