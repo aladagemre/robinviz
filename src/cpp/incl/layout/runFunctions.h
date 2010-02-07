@@ -1497,19 +1497,18 @@ void RUN_AGAIN2(  GRAPH<int,int> G,
 				break;
 			counter++;
 		}
-		
+		node_array<int> catid( G, 0 );
 		gw2.set_edge_thickness( 3, true );
 		forall_nodes( n, G ){
 			for( int i = 0; i < cat_num; i++ ){
 				if( Categories[ G[ n ] ] == abbv[ i ] ){
 					leda::color x( i /*+ 1*/ );
-					G.assign( n, i );
 					gw2.set_border_color( n,x );
+					catid[ n ] = i;
 				}
 			}
 			gw2.set_color( n, red );
 		}
-		gw2.update_graph();
 		edge e;
 		array<color> color_l( 5 );
 
@@ -1579,9 +1578,10 @@ void RUN_AGAIN2(  GRAPH<int,int> G,
 		forall_nodes( s, G ){
 			temp_str = nodeNames[ it ];
 			gw2.set_label(s,temp_str.name);
+			G.assign( s, catid[ s ] );
 			it = nodeNames.succ( it );
 		}
-
+		gw2.update_graph();
 		gw2.set_layout( pos, bends );
 // 		gw2.set_edge_shape( leda::bezier_edge, true );
 		
