@@ -2645,9 +2645,11 @@ node_array<point> draw_final2( GRAPH<int,int> &G, node_array<int> &PARS, array<l
 	count = 0;
 	forall_nodes( n, G ){
 			color random( categ[ categ.get_item(count)]/*+1*/ );
+			G.assign( n, categ[ categ.get_item(count)] );
 			gw.set_border_color( n, random );
 			count++;
 	}
+	gw.update_graph();
 	gw.set_node_border_thickness( 4, true );
 	//gw.set_node_width( 100, true );
 	gw.set_node_shape( leda::circle_node, true );
