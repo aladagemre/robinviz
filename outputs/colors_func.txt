@@ -10,4 +10,4 @@ transport_and_sensing 0 255 255
 stress_and_defense 128 0 0
 genome_maintenance 255 0 255
 cellular_fate_/_organization 0 128 128
-uncharacterizeddd 100 100 255
+uncharacterized 100 100 255
