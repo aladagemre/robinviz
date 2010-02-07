@@ -211,6 +211,10 @@ class CircleNode(QGraphicsEllipseItem):
         
     def addEdge(self, e):
         self.arrows.append(e)
+		
+    def updateEdges(self):
+        for arrow in self.arrows:
+			arrow.updatePosition()
 
     def contextMenuEvent(self, event):
         menu = QMenu()
@@ -285,9 +289,9 @@ class CircleNode(QGraphicsEllipseItem):
         
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
-        self.setToolTip("Weight :" + str(node.graphics.w))
-        """tip = "Weight: %s\nCategory: %s" % (str(node.graphics.w), CATEGORY_COLORS[self.color])
-        self.setToolTip(tip)"""
+        #self.setToolTip("Weight :" + str(node.graphics.w))
+        tip = "Weight: %s\nCategory: %s" % (str(node.graphics.w), CATEGORY_COLORS[node.parameter])
+        self.setToolTip(tip)
         
         self.setRect(0, 0, self.w, self.w)
         
@@ -333,7 +337,7 @@ class CircleNode(QGraphicsEllipseItem):
                 self.startAnimation()
 
         return QVariant(value)
-    
+
     def setupAnimation(self):
         self.originalPos = self.scenePos()
         self.timeline = QTimeLine(1000)
@@ -344,6 +348,7 @@ class CircleNode(QGraphicsEllipseItem):
         self.animation = QGraphicsItemAnimation()
         self.animation.setItem(self)
         self.animation.setTimeLine(self.timeline)
+        self.timeline.stateChanged.connect(self.updateEdges)
 
         for i in range(100):
             newxPos = self.originalPos.x() - (0.01 * i) * (self.w /2)
@@ -351,7 +356,6 @@ class CircleNode(QGraphicsEllipseItem):
 
             self.animation.setPosAt(i/100.0, QPointF(newxPos, newyPos))
             self.animation.setScaleAt(i/100.0, 1 + 0.01 * i, 1 + 0.01 * i)
-
     def startAnimation(self):
         """Starts the selected node animation."""
         self.timeline.start()
@@ -360,6 +364,7 @@ class CircleNode(QGraphicsEllipseItem):
         """Stops the selected node animation."""
         self.animation.setStep(0)
         self.timeline.stop()
+
 
 class SquareNode(QGraphicsPolygonItem):
     def __init__(self, node, parent=None, scene=None):
@@ -442,10 +447,9 @@ class SquareNode(QGraphicsPolygonItem):
         self.node = node
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.h/2))
-        self.setToolTip("Weight: " + str(node.graphics.w))
-
-        """tip = "Weight: %s\nCategory: %s" % (str(node.graphics.w), CATEGORY_COLORS[self.color])
-        self.setToolTip(tip)"""
+        #self.setToolTip("Weight: " + str(node.graphics.w))
+        tip = "Weight: %s\nCategory: %s" % (str(node.graphics.w), CATEGORY_COLORS[node.parameter])
+        self.setToolTip(tip)
             
         # Leave some margin for the text.
         self.text.setPos(1,1)
