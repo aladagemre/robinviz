@@ -304,9 +304,9 @@ class CircleNode(QGraphicsEllipseItem):
         #textFont.setPointSize(20)
 	textFont.setPixelSize(self.w/2)
         self.text.setFont(textFont)
-        if node.graphics.outline == "#000000":
+        if self.color < 250 or self.color in (Qt.red, Qt.green, Qt.blue, Qt.black, QColor("#0000CD")):
             self.text.setDefaultTextColor(QColor(Qt.white))
-
+        
         # Set node id as text.
         self.text.setPlainText(str(node.id))
         self.text.contextMenuEvent = self.contextMenuEvent
