@@ -125,6 +125,7 @@ class PeripheralView(View):
         if not hasattr(self, 'specialWindow'):
             self.specialWindow = SinglePeripheralViewWindow()
             self.specialWindow.loadGraph(self.scene().filename)
+            self.specialWindow.scene.setId(self.scene().id)
         self.specialWindow.showMaximized()
     
     def focusInEvent(self, event):

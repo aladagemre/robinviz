@@ -291,44 +291,13 @@ class Scene(QGraphicsScene):
     def reloadGraph(self, filename):
         # First clear
         self.clear()
-        #self.clear2()
         self.setSceneRect(self.itemsBoundingRect())
         
         # Then load the graph
         self.loadGraph(filename)
         self.setSceneRect(self.itemsBoundingRect())
         
-    def clear2(self):
-        """Removes all the items from the scene."""
-        QGraphicsScene.clear(self)
-        for item in self.items():
-            if not isinstance(item, QGraphicsTextItem):
-                self.removeItem(item)
-                del item
-        self.setSceneRect(self.itemsBoundingRect())
-        
-        """myrect = self.sceneRect()
-        r = QGraphicsRectItem(myrect)
-        self.addItem(r)
-        print self.sceneRect()"""
 
-    """def render(self, imagePainter):
-        image= QImage(self.width(), self.height(),  QImage.Format_ARGB32_Premultiplied)
-        self.image = image
-        #imagePainter.initFrom(self)
-        imagePainter.setRenderHint(QPainter.Antialiasing, True)
-        imagePainter.setRenderHint(QPainter.Antialiasing)
-        imagePainter.setRenderHint(QPainter.TextAntialiasing)
-        imagePainter.setPen(self.palette().color(QPalette.Mid))
-        imagePainter.setBrush(self.palette().brush(QPalette.AlternateBase))
-        imagePainter.eraseRect(self.sceneRect())
-
-        QGraphicsScene.render(self, imagePainter)
-
-        imagePainter.end()
-        painter = QPainter()
-        painter.drawImage(0, 0, image)"""
-        
     def drawBackground(self, painter, rect):
         if self.gridActive:
             gridSize = 50
@@ -347,7 +316,7 @@ class Scene(QGraphicsScene):
             painter.drawLines(lines)
 
     def constructGraph(self):        
-	g = Graph()
+    	g = Graph()
         #gp = GMLParser(self.filename, g)
         g.read_gml(self.filename)
         g.prepare()
@@ -369,9 +338,6 @@ class Scene(QGraphicsScene):
             self.addEdge(edge)
             
         self.g = g
-
-    def replaceEdge(self, edge):
-        pass
 
     def addEdge(self, edge):
         source = edge.u
