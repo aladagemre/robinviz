@@ -143,9 +143,6 @@ class View(QGraphicsView):
             edge.minWidth = edgeWidthMin
             edge.maxWidth = edgeWidthMax
             self.scene().addEdge(edge)
-        for item in self.scene().items():
-            if isinstance(item, EdgeItem):
-                item.onlyUpMiddle = False
                 
         self.scene().update()
         self.fitInView(self.scene().sceneRect(), Qt.KeepAspectRatio)
@@ -193,7 +190,8 @@ class View(QGraphicsView):
                 if isinstance(item, EdgeItem):
                     self.scene().removeItem(item)
                     del item
-
+            self.scene().update()
+            
             # Setup animation for each node
             self.timer = QTimeLine(5000)
             self.timer.setFrameRange(0, 100)
@@ -282,13 +280,14 @@ class Scene(QGraphicsScene):
     def __init__(self, parent=None):
         QGraphicsScene.__init__(self, parent)
         self.gridActive = False
+        self.directed = False
     
     def loadGraph(self, filename):
         self.nodeDict = {}
         self.edgeDict = {}
         self.filename = filename
-        self.directed = False
         self.constructGraph()
+        
     def mouseMoveEvent(self, event):
         QGraphicsScene.mouseMoveEvent(self, event)
         self.emit(SIGNAL("sceneMouseMove"), QPointF(event.scenePos()))
@@ -336,11 +335,6 @@ class Scene(QGraphicsScene):
                 edgeWidthMin = edge.graphics.width
             elif edge.graphics.width > edgeWidthMax:
                 edgeWidthMax = edge.graphics.width
-
-            if self.directed:
-                edge.directed = True
-            else:
-                edge.directed = False
                 
         for edge in g.edges:
             edge.minWidth = edgeWidthMin
@@ -386,7 +380,6 @@ class EdgeItem(QGraphicsItem):
         self.edge = edge
         self.arrowHead = QPolygonF()
         self.onlyUpMiddle = True
-        self.directed = True
         
         intersectionPoint = self.startPoint()
         path[0] = intersectionPoint
@@ -454,7 +447,7 @@ class EdgeItem(QGraphicsItem):
             line = QLineF(s.x(), s.y(), e.x(), e.y())
             painter.drawLine(line)
 
-        if not self.directed:
+        if not self.scene().directed:
             return
         
         noArrow = True

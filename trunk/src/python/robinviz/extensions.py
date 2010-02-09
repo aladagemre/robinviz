@@ -154,7 +154,9 @@ class MainScene(Scene):
     def __init__(self, parent=None):
         Scene.__init__(self, parent)
         self.readSettings()
-        
+
+        # By default, Scene is NOT directed.
+        # But main scene can be directed or undirected.
         if self.parameters["edgesBetween"]:
             self.directed = True
         else:
@@ -465,6 +467,8 @@ class SquareNode(QGraphicsPolygonItem):
         if change == QGraphicsItem.ItemPositionChange:
             for arrow in self.arrows:
                 arrow.updatePosition()
+            if self.scene():
+                self.scene().update()
         return QVariant(value)
 
     """def mouseDoubleClickEvent(self, event):
@@ -502,7 +506,6 @@ class SquareNode(QGraphicsPolygonItem):
         self.node = node
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.h/2))
-        #self.setToolTip("Weight: " + str(node.graphics.w))
         tip = "Category: %s" % CATEGORY_COLORS[node.parameter]
         self.setToolTip(tip)
             
