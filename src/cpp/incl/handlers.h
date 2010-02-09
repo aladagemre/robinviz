@@ -102,7 +102,8 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		list<GENES> dataGenes;
 		char line[ 100000 ];
 		char *pc,*pend,*go,*cat;
-		const char *strDelim = " \t";
+		const char *strDelim = "\t";
+		const char *strDelim2 = " ";
 #ifdef LINUX
 		char filePath[256] = "sources/usr_sources/visualization_data/funcassociate_go_associations.txt";
 		char filePath2[256] = "sources/usr_sources/visualization_data/genenames.txt";
@@ -169,10 +170,13 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 				break;
 			int count = 0;
 			while( pc != NULL ){
-				pc = strtok( NULL, strDelim );
-				if( count == 0 )
+				if( count == 0 ){
+					pc = strtok( NULL, strDelim );
 					cat = pc;
+// 					cout << cat << endl;
+				}
 				else{
+					pc = strtok( NULL, strDelim2 );
 					for( int i = 0; i < dataGenes.size(); i++ ){
 						if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 200 ){
 							sprintf( inputGenes[ i ].categories[ inputGenes[ i ].index ].catName, "%s", cat );
@@ -1560,7 +1564,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	/*								    */
 	/********************************************************************/
 	forall_edges( e1, PROJECT ){
-		//cout << PROJECT[ e1 ] << " - " << " old " << endl;	
+		cout << PROJECT[ e1 ] << " - " << " old " << endl;	
 		n = PROJECT.source( e1 );
 		list<edge> edges_l = G.out_edges( n );
 		PROJECT[ e1 ] = (int)((double)PROJECT[ e1 ] * multiply);
@@ -1570,7 +1574,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 		}
 		else{
 			old_edges.append( PROJECT[ e1 ] );			
-			//cout << PROJECT[ e1 ] << " - " << " new " << endl;
+			cout << PROJECT[ e1 ] << " - " << " new " << endl;
 		}
 	}
 
