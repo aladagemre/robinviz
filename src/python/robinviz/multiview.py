@@ -20,9 +20,7 @@ class MultiViewWindow(QMainWindow):
         self.windowHeight = brPoint.y()
         self.mainView = MainView()
         self.mainView.setRenderHints(QPainter.Antialiasing)
-	self.setMaximumWidth(self.windowWidth-10)
-	#self.setMaximumHeight(self.windowHeight)
-	#self.setMinimumHeight(self.windowHeight)
+	#self.setMaximumWidth(self.windowWidth)
 
         #self.loadMainScene()
         layout = QVBoxLayout()
@@ -130,7 +128,6 @@ class MultiViewWindow(QMainWindow):
         for view in self.pViews:
             if view.scene() == scene:
                 view.setScene(None)
-                print view.scene()
                 break
             elif not view.scene():
                 view.setScene(scene)

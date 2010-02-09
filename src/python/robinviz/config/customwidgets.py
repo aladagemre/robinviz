@@ -66,6 +66,7 @@ class OrganismSelector(QGroupBox):
         self.createOrganisms()
         self.fillGUI()
     def createOrganisms(self):
+        """Creates organism instances reading from the organism directory."""
         # Create Organism instances
         self.organisms = []
         self.organismDict = {}
@@ -182,6 +183,7 @@ class OrganismSelector(QGroupBox):
 
 
     def organismSelected(self, itemText):
+        """When an organism selected, load the defaults"""
         # TODO: (Usability) When Others selected and some custom conf is made,
         # and then switched to a defined organism, all the conf is lost.
         
@@ -200,6 +202,7 @@ class OrganismSelector(QGroupBox):
             self.browseExpressionMatrixInputLabel.setValue(abspath(normcase(sOrganism.expressionMatrix)))
             self.browsePPIInput.setValue(abspath(normcase(sOrganism.PPI)))
             self.browseGoInput.setValue(abspath(normcase(sOrganism.go)))
+            self.browseCategoryFile.setValue(abspath(normcase(sOrganism.category)))
             self.radioExpressionMatrixInputLabel.setChecked(True)
             self.radioExpressionMatrixInput.setChecked(False)
         
