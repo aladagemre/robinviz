@@ -431,13 +431,17 @@ class EdgeItem(QGraphicsItem):
         thickPen = QPen()
         #thickPen.setWidth(10*self.edge.graphics.width / self.edge.minWidth)
         #thickPen.setColor(QColor(self.edge.graphics.fill))
-        newRange = 225
+        thicknessRange = 10
         if self.edge.maxWidth == self.edge.minWidth:
-            newRatio = 255
+            newWidth = 1
         else:
-            newRatio = ((self.edge.graphics.width - self.edge.minWidth)/(self.edge.maxWidth - self.edge.minWidth)) * newRange + 30
-        thickPen.setWidth(newRatio/22.5)
+            newWidth = 1 + (thicknessRange * (self.edge.graphics.width - self.edge.minWidth)) / (self.edge.maxWidth - self.edge.minWidth)
+            #newRatio = ((self.edge.graphics.width - self.edge.minWidth)/(self.edge.maxWidth - self.edge.minWidth)) * newRange + 30
+
+
+        thickPen.setWidthF(newWidth)
         #thickPen.setColor(QColor(0,0,0, newRatio))
+        
 
         painter.setPen(thickPen)
         for i in range(len(self.path) - 1):
@@ -453,30 +457,27 @@ class EdgeItem(QGraphicsItem):
         if not self.directed:
             return
         
-        noArrow = False
+        noArrow = True
         
-        if self.onlyUpMiddle:
-            if line.p2().y() < line.p1().y():
-                # If the line is going upwards, then draw the arrows.
+        if self.onlyUpMiddle and line.p2().y() < line.p1().y():
+            # If the line is going upwards, then draw the arrows.
 
-                if len(self.path) > 3:
-                    # If more than 3 segments, better use 2nd from the end.
-                    arrowBase = lastLine
-                else:
-                    # If less than 3 segments, use the last segment.
-                    arrowBase = line
-
-                centerPoint = (arrowBase.p1() + arrowBase.p2()) / 2.0
-
-                line = QLineF(arrowBase.p1(), centerPoint)
-
+            if len(self.path) > 3:
+                # If more than 3 segments, better use 2nd from the end.
+                arrowBase = lastLine
             else:
-                # Going down, so no arrow.
-                noArrow = True
+                # If less than 3 segments, use the last segment.
+                arrowBase = line
+
+            centerPoint = (arrowBase.p1() + arrowBase.p2()) / 2.0
+
+            line = QLineF(arrowBase.p1(), centerPoint)
+            noArrow = False
+
 
         # Now arrow
         if not noArrow:
-            arrowSize = 20.0
+            arrowSize = 40.0
             myColor = QColor(Qt.black)
             painter.setBrush(myColor)
             angle = math.acos(line.dx() / line.length())
@@ -542,8 +543,6 @@ class NodeItem(QGraphicsItem):
         if change == QGraphicsItem.ItemPositionChange:
             for arrow in self.arrows:
                 arrow.updatePosition()
-
-            self.setToolTip("(%.2f,%.2f)" % (self.centerPos().x(), self.centerPos().y()) )
 
         return QVariant(value)
 
