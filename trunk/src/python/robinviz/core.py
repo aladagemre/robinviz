@@ -287,6 +287,7 @@ class Scene(QGraphicsScene):
         self.nodeDict = {}
         self.edgeDict = {}
         self.filename = filename
+        self.directed = False
         self.constructGraph()
     def mouseMoveEvent(self, event):
         QGraphicsScene.mouseMoveEvent(self, event)
@@ -335,6 +336,11 @@ class Scene(QGraphicsScene):
                 edgeWidthMin = edge.graphics.width
             elif edge.graphics.width > edgeWidthMax:
                 edgeWidthMax = edge.graphics.width
+
+            if self.directed:
+                edge.directed = True
+            else:
+                edge.directed = False
                 
         for edge in g.edges:
             edge.minWidth = edgeWidthMin
@@ -380,6 +386,7 @@ class EdgeItem(QGraphicsItem):
         self.edge = edge
         self.arrowHead = QPolygonF()
         self.onlyUpMiddle = True
+        self.directed = True
         
         intersectionPoint = self.startPoint()
         path[0] = intersectionPoint
@@ -443,6 +450,9 @@ class EdgeItem(QGraphicsItem):
             line = QLineF(s.x(), s.y(), e.x(), e.y())
             painter.drawLine(line)
 
+        if not self.directed:
+            return
+        
         noArrow = False
         
         if self.onlyUpMiddle:
@@ -486,14 +496,14 @@ class EdgeItem(QGraphicsItem):
             painter.drawPolygon(self.arrowHead)
 
         # Arrow drawing has finished.
-        
+        """
         if self.isSelected():
             painter.setPen(QPen(myColor, 1, Qt.DashLine))
             myLine = QLineF(line)
             myLine.translate(0, 4.0)
             painter.drawLine(myLine)
             myLine.translate(0,-8.0)
-            painter.drawLine(myLine)
+            painter.drawLine(myLine)"""
 
 
     def findBoundingRect(self):

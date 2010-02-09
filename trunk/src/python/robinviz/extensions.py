@@ -126,7 +126,14 @@ class PeripheralView(View):
             self.specialWindow = SinglePeripheralViewWindow()
             self.specialWindow.loadGraph(self.scene().filename)
             self.specialWindow.scene.setId(self.scene().id)
-        self.specialWindow.showMaximized()
+        if len(self.scene().items())>30:
+            self.specialWindow.showMaximized()
+        else:
+            view = self.specialWindow.view
+            view.fitInView(view.sceneRect())
+            self.specialWindow.show()
+
+
     
     def focusInEvent(self, event):
         """Highlights the view with color yellow when focused."""
@@ -146,13 +153,63 @@ class PeripheralView(View):
 class MainScene(Scene):
     def __init__(self, parent=None):
         Scene.__init__(self, parent)
+        self.readSettings()
+        
+        if self.parameters["edgesBetween"]:
+            self.directed = True
+        else:
+            self.directed = False
+            
+    def loadGraph(self, filename):
+        Scene.loadGraph(self, filename)
+        self.determineScoring()
+        
     def addNode(self, node):
         item = CircleNode(node)
         self.addItem(item)
         self.nodeDict[node] = item
         self.nodeDict[node.id] = item
-        #item.associateWithNode(node)
         
+    def readSettings(self):
+        """Read settings from the settings file(s)"""
+        self.parameters = {}
+        f = open("settings.ini")
+        # TODO: handle spaces!
+        for line in f:
+            (parameterName, parameterValue) = line.strip().split()
+            # Try to convert it to int or float
+            try:
+                parameterValue = int(parameterValue)
+            except:
+                try:
+                    parameterValue = float(parameterValue)
+                except:
+                    pass
+            self.parameters[parameterName] = parameterValue
+            
+    def determineScoring(self):
+        """Assigns scoring name and value to the tooltips of the nodes."""
+        # Set scoring name
+
+        if self.parameters["hvalueWeighting"]:
+            self.scoringName = "H-Value"
+        elif self.parameters["enrichmentWeighting_o"]:
+            self.scoringName = "Enrichment Ratio"
+        elif self.parameters["enrichmentWeighting_f"]:
+            self.scoringName = "Enrichment Ratio"
+        elif self.parameters["ppihitratioWeighting"]:
+            self.scoringName = "PPI Hit Ratio"
+
+        f = open("outputs/biclusters/scoring.txt")
+        f.readline() # for the first line (scoring scheme : blabla)
+        for line in f:
+            ( biclusterstr, id, value ) = line.strip().split()
+            item = self.nodeDict[int(id)]
+            tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
+            item.setToolTip(tip)
+            
+
+
     def mouseDoubleClickEvent(self, event):
         """When double clicked on a node, signals the node id so that
         matching PPI graph can be displayed on pViews."""
@@ -290,9 +347,6 @@ class CircleNode(QGraphicsEllipseItem):
         
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
-        #self.setToolTip("Weight :" + str(node.graphics.w))
-        tip = "Weight: %s\nCategory: %s" % (str(node.graphics.w), CATEGORY_COLORS[node.parameter])
-        self.setToolTip(tip)
         
         self.setRect(0, 0, self.w, self.w)
         
@@ -449,7 +503,7 @@ class SquareNode(QGraphicsPolygonItem):
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.h/2))
         #self.setToolTip("Weight: " + str(node.graphics.w))
-        tip = "Weight: %s\nCategory: %s" % (str(node.graphics.w), CATEGORY_COLORS[node.parameter])
+        tip = "Category: %s" % CATEGORY_COLORS[node.parameter]
         self.setToolTip(tip)
             
         # Leave some margin for the text.
