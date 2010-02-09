@@ -1194,17 +1194,27 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 // 		cout << counter << " - " << H_values[ H_values.get_item( counter )] << endl;
 // 		counter++;
 // 	}
+	FILE *reportScoring;
+#ifdef LINUX
+	char scoringFile[256] = "outputs/biclusters/scoring.txt";
+#else
+	char scoringFile[256] = "outputs//biclusters//scoring.txt";
+#endif
 	if( hvalueWeighting == true ){
 		counter = 0;
+		reportScoring = fopen( scoringFile, "w" );
+		fprintf( reportScoring, "Scoring Scheme: H-value\n" );
 		forall_nodes( n, PROJECT ){
 			HValues[ n ] = H_values[ H_values.get_item( counter )];
 			//cout << counter << " - " << HValues[ n ] << endl;
+			fprintf( reportScoring, "Bicluster %d %lf\n", counter, H_values[ H_values.get_item( counter )] );
 			counter++;
 		}
 	}
 	else{
 		if( ppihitratioWeighting == true ){
 			double max = 0;
+			fprintf( reportScoring, "Scoring Scheme: PPI-HitRatio\n" );
 			forall_items( it, GraphList_S){
 				if( (double)(GraphList_S[ it ].number_of_edges() / (double)(GraphList_S[ it ].number_of_nodes() * GraphList_S[ it ].number_of_nodes())) > max )
 					max = (double)((double)GraphList_S[ it ].number_of_edges() / (double)(GraphList_S[ it ].number_of_nodes() * GraphList_S[ it ].number_of_nodes()));
@@ -1216,6 +1226,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 							(double)( GraphList_S[ GraphList_S.get_item( counter )].number_of_nodes() * GraphList_S[ GraphList_S.get_item( counter )].number_of_nodes() ) ) /
 							max * Hmax;
 				H_values[ H_values.get_item( counter )] = HValues[ n ];
+				fprintf( reportScoring, "Bicluster %d %lf\n", counter, H_values[ H_values.get_item( counter )] );
 // 				cout << counter << " - " << HValues[ n ] << max;
 // 				cout << " - " << GraphList_S[ GraphList_S.get_item( counter )].number_of_nodes();
 // 				cout << " - "  << GraphList_S[ GraphList_S.get_item( counter )].number_of_edges() << endl;
@@ -1239,6 +1250,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 					exit(1);
 				}
 				else{
+					fprintf( reportScoring, "Scoring Scheme: Enrichment-Ratio\n" );
 					char readCatName[128];
 					for( int i = 0; i <= cat_num; i++ ){
 						fscanf( efptr, "%s", readCatName );
@@ -1292,6 +1304,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 					forall_nodes( n, PROJECT ){
 						HValues[ n ] = HValues[ n ] / max * Hmax;
 						H_values[ H_values.get_item( counter )] = HValues[ n ];
+						fprintf( reportScoring, "Bicluster %d %lf\n", counter, H_values[ H_values.get_item( counter )] );
 // 						cout << counter << " - " << HValues[ n ] << " - " << max << endl;
 						counter++;
 					}
@@ -1303,7 +1316,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 			}
 		}
 	}
-
+	fclose( reportScoring );
 // 	cout << " E1 -  " << PROJECT.number_of_edges() << endl;
 	it2 = namesForEachGraph.first_item();
 	forall_items( it, GraphList_S){
@@ -1564,7 +1577,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	/*								    */
 	/********************************************************************/
 	forall_edges( e1, PROJECT ){
-		cout << PROJECT[ e1 ] << " - " << " old " << endl;	
+// 		cout << PROJECT[ e1 ] << " - " << " old " << endl;	
 		n = PROJECT.source( e1 );
 		list<edge> edges_l = G.out_edges( n );
 		PROJECT[ e1 ] = (int)((double)PROJECT[ e1 ] * multiply);
@@ -1574,7 +1587,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 		}
 		else{
 			old_edges.append( PROJECT[ e1 ] );			
-			cout << PROJECT[ e1 ] << " - " << " new " << endl;
+// 			cout << PROJECT[ e1 ] << " - " << " new " << endl;
 		}
 	}
 
