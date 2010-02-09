@@ -343,24 +343,14 @@ class RadioGroup:
     def createWidget(self):
         self.widget = QGroupBox()
         w = self.widget
-
         w.setTitle(self.title)
         self.layout = QVBoxLayout(w)
-        #self.layout = QGridLayout(w)
-        #row = 0
-
+        
         if self.commonStart:
             self.layout.addWidget(QLabel(self.commonStart))
 
 
         for parameter in self.parameters:
-            #label = QLabel(parameter.description)
-            #label.setWordWrap(True)
             radio = CustomRadio(parameter.description, w)
-            radio.setToolTip(parameter.flagName)
             self.layout.addWidget(radio)
-            #self.layout.addWidget(radio, row, 0)
-            #self.layout.addWidget(label, row, 1)
-
-            #row += 1
             self.parameterDict[parameter.flagName] = radio

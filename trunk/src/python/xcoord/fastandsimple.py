@@ -270,16 +270,18 @@ class FastAndSimple:
         if len(first_line) < 3:
             for node in first_line:
                 oe = node.outgoing_edges
-                xs = ( e.v.graphics.x for e in oe )
-                new_coordinate = sum(xs)/len(oe)
-                node.graphics.x = new_coordinate
+                if oe > 0:
+                    xs = ( e.v.graphics.x for e in oe )
+                    new_coordinate = sum(xs)/len(oe)
+                    node.graphics.x = new_coordinate
                
         if len(last_line) < 3:
             for node in last_line:
                 oe = node.incoming_edges
-                xs = ( e.u.graphics.x for e in oe )
-                new_coordinate = sum(xs)/len(oe)
-                node.graphics.x = new_coordinate
+                if oe > 0:
+                    xs = ( e.u.graphics.x for e in oe )
+                    new_coordinate = sum(xs)/len(oe)
+                    node.graphics.x = new_coordinate
                
                        
                
