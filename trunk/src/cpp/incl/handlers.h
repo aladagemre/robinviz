@@ -1200,9 +1200,10 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 #else
 	char scoringFile[256] = "outputs//biclusters//scoring.txt";
 #endif
+
+	reportScoring = fopen( scoringFile, "w" );
 	if( hvalueWeighting == true ){
 		counter = 0;
-		reportScoring = fopen( scoringFile, "w" );
 		fprintf( reportScoring, "Scoring Scheme: H-value\n" );
 		forall_nodes( n, PROJECT ){
 			HValues[ n ] = H_values[ H_values.get_item( counter )];
@@ -1389,37 +1390,37 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 					}
 					cout << endl << "--------------------------" << endl;*/
 					
-					node_array<bool> mark( G1, false );
-					node_array<bool> mark2( G2, false );
 					if( it1 != it2 ){
+						int countedges = 0;
 						forall_nodes( n1, G1 ){
 							forall_nodes( n2, G2 ){
-								if( strcmp( G1[ n1 ],G2[ n2 ] ) == 0 && mark[ n1 ] == false && mark2[ n2 ] == false ){
-
-									int flag_e = 0;
+								if( strcmp( G1[ n1 ],G2[ n2 ] ) == 0 ){
+									
 									edge e1;
 // 									if( DEBUG_GIVING_NAMES )
 // 										cout << "\n 5 gecti" << endl;
-									edge ee;
-									forall_edges( ee, PROJECT ){
-										if( (PROJECT.source( ee ) == f1 && PROJECT.target( ee ) == f2) || (PROJECT.source( ee ) == f2 && PROJECT.target( ee ) == f1)  ){
-											flag_e = 1;
-											e = ee;
-											break;
-										}
-									}
-									if( flag_e == 0 && f1 != NULL && f2 != NULL ){
-										e = PROJECT.new_edge( f1 ,f2 );
-										PROJECT[ e ] = 1;
-									}
-									else{
-										if( e != NULL )
-											PROJECT[ e ]++;
-									}
+									countedges++;
 								}
-								mark2[ n2 ] = true;
+// 								mark2[ n2 ] = true;
 							}
-							mark[ n1 ] = true;
+// 							mark[ n1 ] = true;
+						}
+						edge ee;
+						int flag_e = 0;
+						forall_edges( ee, PROJECT ){
+							if( (PROJECT.source( ee ) == f1 && PROJECT.target( ee ) == f2) || (PROJECT.source( ee ) == f2 && PROJECT.target( ee ) == f1)  ){
+								flag_e = 1;
+								e = ee;
+								break;
+							}
+						}
+						if( flag_e == 0 && f1 != NULL && f2 != NULL ){
+							e = PROJECT.new_edge( f1 ,f2 );
+							PROJECT[ e ] = countedges;
+						}
+						else{
+							if( e != NULL )
+								PROJECT[ e ] += countedges;
 						}
 					}
 					countIN++;
