@@ -1181,7 +1181,8 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 				  bool enrichmentWeighting_o,
 				  bool enrichmentWeighting_f,
 				  bool ppihitratioWeighting,
-				  list<int> &categ
+				  list<int> &categ,
+				  int width
 				)
 {
 
@@ -1648,7 +1649,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	edgeNumbersForInt_ = edgeNumbersForInt;
 // 	cout << " E4 -  " << PROJECT2.number_of_edges() << endl;
 	i = 0;
-	RUN_SELF2( PROJECT2, PARS, max_weight, 10, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
+	RUN_SELF2( PROJECT2, PARS, max_weight, width, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
 // 	cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
 	return PROJECT2;
 }
