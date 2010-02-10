@@ -94,8 +94,8 @@ void hvalueCalculator( list<four_tuple<int,int,double,matrix> > &matrices, char 
 			sprintf( fileToOpen, "%sAverages.txt", filename );
 			FILE *fptrOnlyHvalueAverages = fopen( fileToOpen , "a" );
 			fprintf( fptrResults, "\n%s\n%d\t%d\n", "*********************", 
-												matrices[matrices.first_item()].fourth().dim1(), 
-												matrices[matrices.first_item()].fourth().dim2() 
+				matrices[matrices.first_item()].fourth().dim1(), 
+				matrices[matrices.first_item()].fourth().dim2() 
 			);
 			int k = 1;
 			forall_items( it , matrices ){
@@ -296,6 +296,8 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 					break;
 				random_source G( 0, data_dim1 - randomSubmatrixIndexs[ it ].first() - 1 );
 				random_source C( 0, data_dim2 - randomSubmatrixIndexs[ it ].second() - 1 );
+				G.set_seed(count);
+				C.set_seed(count);
 				int t_g, t_c;
 				G >> t_g;
 				C >> t_c;

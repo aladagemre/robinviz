@@ -93,7 +93,8 @@ void mainGraph( GRAPH<leda::string,int> &PROJECT,
 							      enrichmentWeighting_o,
 							      enrichmentWeighting_f,
 							      ppihitratioWeighting,
-							      categ ); 
+							      categ,
+                                                              width ); 
 	cout << "/**************************************************/" << endl;
 	cout << "\t" << " End of Building High Level Graph " << endl;
 	cout << "/**************************************************/" << endl;
@@ -219,7 +220,8 @@ void mainGraph2( GRAPH<leda::string,int> &PROJECT,
 							      enrichmentWeighting_o,
 							      enrichmentWeighting_f,
 							      ppihitratioWeighting,
-							      categ ); 
+							      categ,
+							      width ); 
 
 	cout << "/**************************************************/" << endl;
 	cout << "\t" << " End of Building High Level Graph " << endl;
