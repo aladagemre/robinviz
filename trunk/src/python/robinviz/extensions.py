@@ -260,21 +260,26 @@ class CircleNode(QGraphicsEllipseItem):
     def __init__(self, node, parent=None, scene=None):
         QGraphicsEllipseItem.__init__(self, parent, scene)
 
-        self.setFlag(QGraphicsItem.ItemIsMovable, True)
+        #self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        self.setAcceptsHoverEvents(True)
         self.arrows = []
         self.color = QColor("#52C6FF")
         self.selectedColor = QColor("#E6FF23")
         self.setBrush(self.color)
         self.associateWithNode(node)
 
+    def hoverEnterEvent(self, event):
+        self.scene().views()[0].setDragMode(QGraphicsView.NoDrag)
+    def hoverLeaveEvent(self, event):
+        self.scene().views()[0].setDragMode(QGraphicsView.ScrollHandDrag)
         
     def addEdge(self, e):
         self.arrows.append(e)
 		
     def updateEdges(self):
         for arrow in self.arrows:
-			arrow.updatePosition()
+            arrow.updatePosition()
 
     def contextMenuEvent(self, event):
         menu = QMenu()
@@ -435,9 +440,14 @@ class SquareNode(QGraphicsPolygonItem):
 
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        self.setAcceptsHoverEvents(True)
         self.arrows = []
         self.associateWithNode(node)
 
+    def hoverEnterEvent(self, event):
+        self.scene().views()[0].setDragMode(QGraphicsView.NoDrag)
+    def hoverLeaveEvent(self, event):
+        self.scene().views()[0].setDragMode(QGraphicsView.ScrollHandDrag)
     def addEdge(self, e):
         self.arrows.append(e)
 
