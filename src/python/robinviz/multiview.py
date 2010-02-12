@@ -184,7 +184,21 @@ class MultiViewWindow(QMainWindow):
         return view, widget
 
 
+    def stopAllAnimations(self):
+        # First of all, we have to stop all the animation on selected nodes.
+        if hasattr(self, 'mainScene'):
+            for item in self.mainScene.selectedItems():
+                item.stopAnimation()
+
+        # Then we stop layout animations.
+        self.mainView.stopLayoutAnimation()
+        for pView in self.pViews:
+            pView.stopLayoutAnimation()
+            
     def clearViews(self):
+        """Clears all the views in the window."""
+        self.stopAllAnimations()
+        
         for view in self.pViews:
             view.setScene(None)
         self.mainView.setScene(None)
@@ -204,6 +218,8 @@ class MultiViewWindow(QMainWindow):
         self.settingsDialog.show()
 
     def run(self):
+        self.clearViews()
+        
         print "Starting operation"
         self.setWindowTitle("RobinViz - Please wait, window might not respond for a while...")
         self.setCursor(Qt.WaitCursor)
@@ -227,6 +243,8 @@ class MultiViewWindow(QMainWindow):
         self.setWindowTitle("RobinViz")
         
     def displayLast(self):
+        self.clearViews()
+        
         if not os.path.exists(normcase("outputs/graphs/maingraph.gml")):
             QMessageBox.information(self, 'No recent results',
             "No recent results not found. Please run the program.")

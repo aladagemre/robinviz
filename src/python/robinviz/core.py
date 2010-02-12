@@ -36,6 +36,7 @@ class View(QGraphicsView):
         self.printer = QPrinter(QPrinter.HighResolution)
         self.printer.setPageSize(QPrinter.A4)
         self.useAnimation = True # TODO: Add this as an option
+        self.setDragMode(QGraphicsView.ScrollHandDrag)
         
     def wheelEvent(self, event):
         coords = self.mapToScene(event.pos())
@@ -149,6 +150,9 @@ class View(QGraphicsView):
 
     def startLayoutAnimation(self):
         self.timer.start()
+    def stopLayoutAnimation(self):
+        if hasattr(self, 'timer'):
+            self.timer.stop()
 
     def switchToLayout(self, layoutName):
         if self.setupLayoutSwitch(layoutName):
@@ -257,7 +261,7 @@ class View(QGraphicsView):
         frame.moveTo(0., 0.)
         image = QImage(frame.size().toSize(), QImage.Format_RGB32)
         painter = QPainter(image)
-        #painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.Antialiasing)
         #painter.setRenderHint(QPainter.TextAntialiasing)
         painter.fillRect(frame, QBrush(Qt.white))
         self.scene().render(painter)
@@ -426,9 +430,9 @@ class EdgeItem(QGraphicsItem):
         #thickPen.setColor(QColor(self.edge.graphics.fill))
         thicknessRange = 10
         if self.edge.maxWidth == self.edge.minWidth:
-            newWidth = 1
+            newWidth = 10
         else:
-            newWidth = 1 + (thicknessRange * (self.edge.graphics.width - self.edge.minWidth)) / (self.edge.maxWidth - self.edge.minWidth)
+            newWidth = 10 + (thicknessRange * (self.edge.graphics.width - self.edge.minWidth)) / (self.edge.maxWidth - self.edge.minWidth)
             #newRatio = ((self.edge.graphics.width - self.edge.minWidth)/(self.edge.maxWidth - self.edge.minWidth)) * newRange + 30
 
 
