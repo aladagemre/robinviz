@@ -1,0 +1,23 @@
+#summary Screenshots from the program
+
+= Screenshots =
+===Main Screen with Layered Bicluster Graph and PPI Previews===
+http://hacivat.khas.edu.tr/~robinviz/screenshots/robinviz-screen1.png
+
+===Circular Layout===
+http://hacivat.khas.edu.tr/~robinviz/screenshots/robinviz-screen2.png
+
+===Enrichment Table===
+http://hacivat.khas.edu.tr/~robinviz/screenshots/robinviz-screen3.png
+
+===Single Window - PPI Graph===
+http://hacivat.khas.edu.tr/~robinviz/screenshots/robinviz-screen4.png
+
+===Gene Ontology Table===
+http://hacivat.khas.edu.tr/~robinviz/screenshots/robinviz-screen5.png
+
+===Enrichment Ratio for a bicluster===
+http://hacivat.khas.edu.tr/~robinviz/screenshots/robinviz-screen6.png
+
+===Heatmap and Parallel plotting (data table) for a bicluster.===
+http://hacivat.khas.edu.tr/~robinviz/screenshots/robinviz-screen7.png
