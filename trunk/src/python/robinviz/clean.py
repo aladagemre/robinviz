@@ -51,10 +51,11 @@ def clean(param=None):
     "outputs/psfiles/main.ps",
     "outputs/enrich/result.html",
     "outputs/enrich/result.txt",
-    "outputs/biclusters/CCResult.txt",
     "src/cpp/incl/bicalg/cc/matrix_robin.txt",
+    "outputs/biclusters/CCResult.txt",
     "outputs/biclusters/RLEBResult.txt",
     "outputs/biclusters/BIMAXResult.txt",
+    "outputs/biclusters/scoring.txt",
     "outputs/localization/localized_input.txt",
     )
     for filename in files:
