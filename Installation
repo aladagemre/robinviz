@@ -1,0 +1,31 @@
+/******* ROBINVIZ Installation/Running Instructions **********/
+
+This document explains how to compile and run Robinviz under Linux.
+
+Requirements
+===============
+Python 2.6
+PyQt4.5+
+Bash
+
+
+Installation Steps
+================
+1. Copy the distribution folder to anywhere you like.
+2. Add the following line to your ~/.bashrc file:
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/robinviz/bin
+3. Move to the robinviz directory and give the following command on console:
+./compile.sh
+
+Done!
+
+Running
+================
+Running the executable robinviz.exe in the robinviz directory shall start the program. This program is just a starter, calling the PyQt4 GUI:
+./robinviz.exe
+
+Other executables:
+================
+layered.exe : This is the backbone of our program. Most of the scientific calculation is done by this program. It produces outputs in the robinviz/outputs/ directory.
+circular.exe, force.exe, etc. are for producing graphs with other layouts. They can be used as following:
+./circular input.gml output.gml
