@@ -35,8 +35,9 @@ class View(QGraphicsView):
         QGraphicsView.__init__(self, parent)
         self.printer = QPrinter(QPrinter.HighResolution)
         self.printer.setPageSize(QPrinter.A4)
+        #self.printer.setFullPage(True)
+        self.printer.setPageMargins(10, 10, 10, 10, QPrinter.Millimeter)
         self.useAnimation = True # TODO: Add this as an option
-        self.setDragMode(QGraphicsView.ScrollHandDrag)
         
     def wheelEvent(self, event):
         coords = self.mapToScene(event.pos())
@@ -144,28 +145,51 @@ class View(QGraphicsView):
             edge.minWidth = edgeWidthMin
             edge.maxWidth = edgeWidthMax
             self.scene().addEdge(edge)
-                
+
+        self.reselectItemsAfterLayoutChange()
+        
         self.scene().update()
         self.fitInView(self.scene().sceneRect(), Qt.KeepAspectRatio)
 
+    def reselectItemsAfterLayoutChange(self):
+        """Re-selects previously selected items after layout changed."""
+        for item in self.scene().items():
+            if isinstance(item, QGraphicsEllipseItem):
+                item.setupAnimation() # Setup individual "selected" animation for new position.
+                if getattr(item, 'lastSelected', False):
+                    item.setSelected(True)
+                    item.lastSelected = False
+
     def startLayoutAnimation(self):
+        """Starts the layout animation"""
         self.timer.start()
     def stopLayoutAnimation(self):
+        """Stops the layout animation."""
         if hasattr(self, 'timer'):
             self.timer.stop()
 
     def switchToLayout(self, layoutName):
+        """Switches to the given layout with/without animation."""
+        selectedItems = self.scene().selectedItems()
+        for selectedItem in selectedItems:
+            selectedItem.stopAnimation()
+            selectedItem.setSelected(False)
+            selectedItem.lastSelected = True
+
         if self.setupLayoutSwitch(layoutName):
-            self.startLayoutAnimation()
-        
+            self.startLayoutAnimation()          
+    
     def setupLayoutSwitch(self, layoutName):
+        """Setups how the layout switch shall be."""
         filename = self.scene().filename
         if not hasattr(self, 'originalFileName'):
             self.originalFileName = filename
 
         if layoutName == "Layered":
+            self.scene().clear()
             # Switch back to original.
             self.scene().reloadGraph(self.originalFileName)
+            #self.reselectItemsLayeredLayout()
             return False
         else:
             # Find the exe
@@ -218,31 +242,10 @@ class View(QGraphicsView):
                 self.animations.append(animation)
                 for i in range(0,200):
                     animation.setPosAt(i/200.0, QPointF(x1+dx*i, y1+dy*i))
-            
+
             self.timer.finished.connect(self.restoreEdges)
             return True
             
-            
-    def switchToLayoutNoAnimation(self, layoutName):
-        filename = self.scene().filename
-        if not hasattr(self, 'originalFileName'):
-                self.originalFileName = filename
-                
-        if layoutName == "Layered":
-            # Switch back to original.
-            self.scene().reloadGraph(self.originalFileName)
-        else:
-            # Find the exe
-            exename = GRAPH_LAYOUTS[str(layoutName)]
-            # Run the exe
-            command = "./%s %s" % (exename, filename)
-            os.system(normcase(command))
-            # Load the resulting file.
-            self.scene().reloadGraph("%s%s.gml" % (filename.split(".")[0], exename.split(".")[0]) )
-
-        self.fitInView(self.scene().sceneRect(), Qt.KeepAspectRatio)
-        self.scene().update(self.scene().sceneRect())
-
     def printGraph(self):
         dialog = QPrintDialog(self.printer)
         if dialog.exec_():
@@ -285,12 +288,16 @@ class Scene(QGraphicsScene):
         QGraphicsScene.__init__(self, parent)
         self.gridActive = False
         self.directed = False
+        
     
     def loadGraph(self, filename):
         self.nodeDict = {}
         self.edgeDict = {}
         self.filename = filename
         self.constructGraph()
+        for view in self.views():
+            view.setDragMode(QGraphicsView.ScrollHandDrag)
+            view.update()
         
     def mouseMoveEvent(self, event):
         QGraphicsScene.mouseMoveEvent(self, event)
