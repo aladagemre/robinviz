@@ -37,7 +37,7 @@ class BaseClass:
     def print_subsection(self, name, fields):
         """Prints the subsection of Node/Edge."""
         output = ""
-        if "Line" in fields: print fields
+        #if "Line" in fields: print fields
         try:			
 
             output += "\t\t%s [\n" % name
@@ -45,7 +45,6 @@ class BaseClass:
                 if field != "Line":
                     output += "\t\t\t%s %s\n" % (field, format_value(fields[field]))
                 else:
-                    print "Line"
                     # If we're dealing with Line,
                     output += "\t\t\tLine [\n"
                     for point in fields["Line"]:

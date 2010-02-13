@@ -120,10 +120,19 @@ class MultiViewWindow(QMainWindow):
     def nodeDoubleClicked(self, id):
         scene = self.pScenes.get(id)
         if not scene:
-            scene = PeripheralScene()
-            scene.loadGraph(normcase('outputs/graphs/graph%d.gml' % id ))
-            scene.setId(id)
-            self.pScenes[id] = scene
+            try:
+                scene = PeripheralScene()
+                scene.loadGraph(normcase('outputs/graphs/graph%d.gml' % id ))
+                scene.setId(id)
+                self.pScenes[id] = scene
+            except:
+                QMessageBox.information(self, 'Empty Bicluster',
+                    "No interactions found in this bicluster")
+                radialGrad = QRadialGradient (QPointF(25, 25), 30)
+                radialGrad.setColorAt(0, Qt.black)
+                radialGrad.setColorAt(0.5, Qt.white)
+                radialGrad.setColorAt(1, Qt.black)
+                self.mainScene.nodeDict[id].color = radialGrad
 
         for view in self.pViews:
             if view.scene() == scene:
@@ -201,12 +210,17 @@ class MultiViewWindow(QMainWindow):
         
         for view in self.pViews:
             view.setScene(None)
+            view.setDragMode(QGraphicsView.NoDrag)
+
         self.mainView.setScene(None)
+        self.mainView.setDragMode(QGraphicsView.NoDrag)
         if hasattr(self, 'pScenes'):
             for scene in self.pScenes:
                 del scene
         if hasattr(self, 'mainScene'):
             del self.mainScene
+
+
         
     def setDisplayGrid(self, value):
         if hasattr(self, 'mainScene'):
