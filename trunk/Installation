@@ -8,14 +8,13 @@ Python 2.6
 PyQt4.5+
 Bash
 
-
 Installation Steps
 ================
 1. Copy the distribution folder to anywhere you like.
 2. Add the following line to your ~/.bashrc file:
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/robinviz/bin
-3. Move to the robinviz directory and give the following command on console:
-./compile.sh
+3. Give the following command on console: 
+source ~/.bashrc
 
 Done!
 
@@ -29,3 +28,31 @@ Other executables:
 layered.exe : This is the backbone of our program. Most of the scientific calculation is done by this program. It produces outputs in the robinviz/outputs/ directory.
 circular.exe, force.exe, etc. are for producing graphs with other layouts. They can be used as following:
 ./circular input.gml output.gml
+
+
+COMPILATION FROM SOURCE CODE
+================================
+Requirements
+=================
+LEDA 5.1+ Library from Algorithmic Solutions
+libX11-dev
+g++
+
+
+Steps
+==================
+1. Add the following lines to your ~/.bashrc:
+
+export LEDAROOT=/path/to/LEDA
+export PATH=$PATH:$LEDAROOT/Manual/cmd
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LEDAROOT
+
+Make sure that incl folder is inside this LEDA_ROOT.
+2. Give the following command on console: 
+
+source ~/.bashrc
+
+3. Move to the robinviz directory on console and give the following command:
+sh compile.sh
+
+All the executables should be compiled.
