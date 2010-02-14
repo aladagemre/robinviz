@@ -9,7 +9,9 @@ def clean(param=None):
     if param == "rv":
 	files = ("sources/usr_sources/visualization_data/genenames.txt",
 		 "sources/usr_sources/visualization_data/geneNameConversion.txt",
-		 "settings.ini",)
+		 "settings.ini",
+		 "src/cpp/incl/bicalg/bimax/matrix_robin.txt",
+		 "outputs/colors_func.txt", )
 	for filename in files:
 	    os.system("svn revert %s" % filename)
     
