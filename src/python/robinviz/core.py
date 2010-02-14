@@ -73,7 +73,7 @@ class View(QGraphicsView):
                             saveAsGML       : self.saveAsGML
                             }
 
-        if hasattr(self, 'main'):
+        if getattr(self, 'main', False):
             enrichmentTable = menu.addAction("Enrichment Table")
             actionToFunction[enrichmentTable] = self.showEnrichmentTable
         else:
