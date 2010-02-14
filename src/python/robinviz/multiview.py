@@ -205,32 +205,7 @@ class MultiViewWindow(QMainWindow):
         for pView in self.pViews:
             pView.stopLayoutAnimation()
             
-    def clearViews(self):
-        """Clears all the views in the window."""
-        self.stopAllAnimations()
-        
-        for view in self.pViews:
-            view.setScene(None)
-            view.setDragMode(QGraphicsView.NoDrag)
-
-        self.mainView.setScene(None)
-        self.mainView.setDragMode(QGraphicsView.NoDrag)
-        if hasattr(self, 'pScenes'):
-            for scene in self.pScenes:
-                del scene
-        if hasattr(self, 'mainScene'):
-            del self.mainScene
-
-
-        
-    def setDisplayGrid(self, value):
-        if hasattr(self, 'mainScene'):
-            self.mainScene.gridActive = value
-            self.mainScene.update()
-
-    def displaySettings(self):
-        self.settingsDialog = SettingsDialog()
-        self.settingsDialog.show()
+    ################## FILE MENU #######################
 
     def run(self):
         self.clearViews()
@@ -256,7 +231,22 @@ class MultiViewWindow(QMainWindow):
             QMessageBox.information(self, 'Failed', message)
         self.unsetCursor()
         self.setWindowTitle("RobinViz")
-        
+
+    def loadSession(self):
+        fileName = QFileDialog.getOpenFileName(self, "Load Session File",
+                                                 "sessions/", "Session File (*.ses)");
+
+        if fileName:
+            self.clearViews()
+            os.system(normcase("./session.exe load %s" % fileName))
+            QMessageBox.information(self, "Session loaded", "The session you provided has been loaded. You may now start working.")
+            
+    def saveSession(self):
+        fileName = QFileDialog.getSaveFileName(self, "Save Session File",
+                                                 "sessions/", "Session File (*.ses)");
+        if filename:
+            os.system(normcase("./session.exe save %s %d" % ( fileName, len(self.mainView.scene().g.nodes) )))
+    
     def displayLast(self):
         self.clearViews()
         
@@ -266,7 +256,36 @@ class MultiViewWindow(QMainWindow):
         else:
             self.loadMainScene()
             self.connectSlots()
+
+    def displaySettings(self):
+        self.settingsDialog = SettingsDialog()
+        self.settingsDialog.show()
         
+    ############### VIEW MENU ###################
+    def clearViews(self):
+        """Clears all the views in the window."""
+        self.stopAllAnimations()
+        
+        for view in self.pViews:
+            view.setScene(None)
+            view.setDragMode(QGraphicsView.NoDrag)
+
+        self.mainView.setScene(None)
+        self.mainView.setDragMode(QGraphicsView.NoDrag)
+        if hasattr(self, 'pScenes'):
+            for scene in self.pScenes:
+                del scene
+        if hasattr(self, 'mainScene'):
+            del self.mainScene
+
+
+        
+    def setDisplayGrid(self, value):
+        if hasattr(self, 'mainScene'):
+            self.mainScene.gridActive = value
+            self.mainScene.update()
+            
+    ############### HELP MENU ###################
     def displayAboutDialog(self):
         from misc.about import Ui_AboutDialog
         self.AboutDialog = QDialog()
@@ -290,21 +309,33 @@ class MultiViewWindow(QMainWindow):
         # FILE MENU
         run = QAction('Run', self)
         run.setShortcut('Ctrl+R')
-        run.setStatusTip('Run the program')
+        run.setStatusTip('&Run the program')
         self.connect(run, SIGNAL('triggered()'), self.run)
 
-        settings = QAction('Settings', self)
+        loadSession = QAction('L&oad Session', self)
+        loadSession.setShortcut('Ctrl+O')
+        loadSession.setStatusTip('Load a saved session.')
+        self.connect(loadSession, SIGNAL('triggered()'), self.loadSession)
+
+        saveSession = QAction('&Save Session', self)
+        saveSession.setShortcut('Ctrl+S')
+        saveSession.setStatusTip('Save your session.')
+        self.connect(saveSession, SIGNAL('triggered()'), self.saveSession)
+        
+        displayLast = QAction('Display R&ecent Results', self)
+        displayLast.setShortcut('Ctrl+E')
+        displayLast.setStatusTip('Display Recent Results without running the program again.')
+        self.connect(displayLast, SIGNAL('triggered()'), self.displayLast)
+
+
+
+        settings = QAction('Se&ttings', self)
         settings.setShortcut('Ctrl+T')
         settings.setStatusTip('Program Settings')
         self.connect(settings, SIGNAL('triggered()'), self.displaySettings)
 
-        
-        displayLast = QAction('Display Recent Results', self)
-        displayLast.setShortcut('Ctrl+E')
-        displayLast.setStatusTip('Display Recent Results without running the program again.')
-        self.connect(displayLast, SIGNAL('triggered()'), self.displayLast)
-        
-        exit = QAction('Exit', self)
+
+        exit = QAction('E&xit', self)
         exit.setShortcut('Ctrl+Q')
         exit.setStatusTip('Exit application')
         self.connect(exit, SIGNAL('triggered()'), SLOT('close()'))
@@ -314,6 +345,8 @@ class MultiViewWindow(QMainWindow):
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(run)
         fileMenu.addSeparator()
+        fileMenu.addAction(loadSession)
+        fileMenu.addAction(saveSession)
         fileMenu.addAction(displayLast)
         fileMenu.addAction(settings)
         fileMenu.addSeparator()
@@ -321,7 +354,7 @@ class MultiViewWindow(QMainWindow):
 
 
         # VIEW MENU
-        displayGrid = QAction('Display Grid', self)
+        displayGrid = QAction('Display &Grid', self)
         displayGrid.setCheckable(True)
         #displayGrid.setChecked(self.mainScene.gridActive)
         displayGrid.setShortcut('Ctrl+G')
@@ -329,12 +362,12 @@ class MultiViewWindow(QMainWindow):
         self.connect(displayGrid, SIGNAL('toggled(bool)'), self.setDisplayGrid)
         self.statusBar()
         
-        clearViews = QAction("Clear Views", self)
+        clearViews = QAction("C&lear Views", self)
         clearViews.setShortcut('Ctrl+L')
         clearViews.setStatusTip('Clear the views in the window.')
         self.connect(clearViews, SIGNAL('triggered()'), self.clearViews)
 
-        showFullscreen = QAction("Fullscreen", self)
+        showFullscreen = QAction("&Fullscreen", self)
         showFullscreen.setCheckable(True)
         showFullscreen.setShortcut("F11")
         showFullscreen.setStatusTip('Display the window in fullscreen')

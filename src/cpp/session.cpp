@@ -21,10 +21,10 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	if( argc == 4 ){
-        if( argc > 1 && argc < 5 && strcmp( argv[3], "save" ) == 0 ){
+        if( argc > 1 && argc < 5 && strcmp( argv[1], "save" ) == 0 ){
                 char filename[256],line[1000];
-                sprintf( filename, "%s", argv[1] );
-                int numberOfBiclusters = char_arr_to_int( argv[2] );
+                sprintf( filename, "%s", argv[2] );
+                int numberOfBiclusters = char_arr_to_int( argv[3] );
                 FILE * fptr = fopen( filename, "w" );
                 FILE *fptr2;
                 fprintf( fptr, "%d\n", numberOfBiclusters );
@@ -234,10 +234,10 @@ int main(int argc, char** argv) {
 		}
 	}
     else{
-        if( argc > 1 && argc < 4 && strcmp( argv[2], "load" ) == 0 ){
+        if( argc > 1 && argc < 4 && strcmp( argv[1], "load" ) == 0 ){
 			    //cout << "\n******************************************************\n";
                 char filename[256],line[1000];
-                sprintf( filename, "%s", argv[1] );
+                sprintf( filename, "%s", argv[2] );
 				cout << filename << endl;
                 int numberOfBiclusters;
                 FILE * fptr = fopen( filename, "r" );
