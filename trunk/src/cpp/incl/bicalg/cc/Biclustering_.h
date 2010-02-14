@@ -212,7 +212,7 @@ static void displayBicluster(void)
 
 	fprintf( fptr, "%d\t%d\n", r_count, c_count );
 	c_count = 0; r_count = 0;
-	for (i = 0; i < numberOfRows; ++i)
+	for (i = 0; i < numberOfRows; i++)
 	{
 	    if (remainingRs[i])
 	    {
@@ -226,7 +226,7 @@ static void displayBicluster(void)
 	puts("\n-----------------------------------------");
 	puts("Columns:");
 #endif
-	for (j = 0; j < numberOfColumns; ++j)
+	for (j = 0; j < numberOfColumns; j++)
 	{
 	    if (remainingCs[j])
 	    {

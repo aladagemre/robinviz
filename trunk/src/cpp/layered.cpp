@@ -562,9 +562,9 @@ int main(){
                                 }
 				biclustering = 3;
 				#ifdef LINUX
-                                        ccMain( "src/cpp/incl/bicalg/cc/matrix_robin.txt", INPUT.dim1(), INPUT.dim2(), 10, maxScore_, minHeight_, minWidth_ );
+                                        ccMain( "src/cpp/incl/bicalg/cc/matrix_robin.txt", INPUT.dim2(), INPUT.dim1(), bic_num_cc, maxScore_, minHeight_, minWidth_ );
 				#else
-                                        ccMain( "src//cpp//incl//bicalg//cc//matrix_robin.txt", INPUT.dim1(), INPUT.dim2(), 10, maxScore_, minHeight_, minWidth_ );
+                                        ccMain( "src//cpp//incl//bicalg//cc//matrix_robin.txt", INPUT.dim2(), INPUT.dim1(), bic_num_cc, maxScore_, minHeight_, minWidth_ );
 				#endif
 			}else{
 				if( rlebFlag == true ){
