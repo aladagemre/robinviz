@@ -2119,7 +2119,7 @@ void draw_finalX( GRAPH<int,int> &G , array<list<node> > &AB, int KEYWSIZE, list
 	gw.set_layout( pos, bends );
 	gw.set_animation_steps(5);
 
-	gw.save_gml( filename );
+// 	gw.save_gml( filename );
 	gw.display();
 
 	gw.zoom_graph();
@@ -2140,23 +2140,23 @@ void draw_finalX( GRAPH<int,int> &G , array<list<node> > &AB, int KEYWSIZE, list
 		gw.set_edge_color( leda::blue , true );
 		gw.set_layout( pos, bends );
         
-		gw.save_gml( filename );
+// 		gw.save_gml( filename );
 #ifdef DRAW_FINAL
 	gw.set_animation_steps(5);
 	gw.display();
 	gw.zoom_graph();
 	gw.edit();
 #endif
-		char filen[ 1024 ];
-#ifdef LINUX
-		sprintf( filen , "sources/graph_sources/Layout%d.txt" , graphNo );
-#else
-		sprintf( filen , "sources//graph_sources//Layout%d.txt" , graphNo );
-#endif
-		
-		bool flag = gw.save_layout( filen );
-		if( flag == false )
-			cout << " Unavailable to write\n";
+// 		char filen[ 1024 ];
+// #ifdef LINUX
+// 		sprintf( filen , "sources/graph_sources/Layout%d.txt" , graphNo );
+// #else
+// 		sprintf( filen , "sources//graph_sources//Layout%d.txt" , graphNo );
+// #endif
+// 		
+// 		bool flag = gw.save_layout( filen );
+// 		if( flag == false )
+// 			cout << " Unavailable to write\n";
 	}
 }
 void draw_finalY( GRAPH<int,int> &G , array<list<node> > &AB, int KEYWSIZE, list<node> dummy , edge_array<list<double> > &z, edge_array<list<double> > &w, edge_array<list<point> > bends, int graphNo, node_array<point> &pos, node_array<double> &Hvalues  ){
@@ -3335,11 +3335,11 @@ node_array<point> draw_final3( GRAPH<int,int> &G , array<list<node> > &AB, int K
         }
        
         char filename[64];
-#ifdef LINUX
-	sprintf( filename, "sources/graph_sources/graph_gml%d.gml", graphNo );
-#else
-	sprintf( filename, "sources//graph_sources//graph_gml%d.gml", graphNo );
-#endif
+// #ifdef LINUX
+// 	sprintf( filename, "sources/graph_sources/graph_gml%d.gml", graphNo );
+// #else
+// 	sprintf( filename, "sources//graph_sources//graph_gml%d.gml", graphNo );
+// #endif
 #ifdef DRAW_FINAL	
 	gw.set_edge_thickness( 3, true );
 	gw.set_node_height(50,true);
@@ -3354,7 +3354,7 @@ node_array<point> draw_final3( GRAPH<int,int> &G , array<list<node> > &AB, int K
 	gw.set_layout( pos, bends );
 	gw.set_animation_steps(5);
 
-	gw.save_gml( filename );
+// 	gw.save_gml( filename );
 	gw.display();
 
 	gw.zoom_graph();
@@ -3375,23 +3375,23 @@ node_array<point> draw_final3( GRAPH<int,int> &G , array<list<node> > &AB, int K
 		gw.set_edge_color( leda::blue , true );
 		gw.set_layout( pos, bends );
         
-		gw.save_gml( filename );
+// 		gw.save_gml( filename );
 #ifdef DRAW_FINAL
 	gw.set_animation_steps(5);
 	gw.display();
 	gw.zoom_graph();
 	gw.edit();
 #endif
-		char filen[ 1024 ];
-#ifdef LINUX
-		sprintf( filen , "sources/graph_sources/Layout%d.txt" , graphNo );
-#else
-		sprintf( filen , "sources//graph_sources//Layout%d.txt" , graphNo );
-#endif	
-		
-		bool flag = gw.save_layout( filen );
-		if( flag == false )
-			cout << " Unavailable to write\n";
+// 		char filen[ 1024 ];
+// #ifdef LINUX
+// 		sprintf( filen , "sources/graph_sources/Layout%d.txt" , graphNo );
+// #else
+// 		sprintf( filen , "sources//graph_sources//Layout%d.txt" , graphNo );
+// #endif	
+// 		
+// 		bool flag = gw.save_layout( filen );
+// 		if( flag == false )
+// 			cout << " Unavailable to write\n";
 	}
         return pos;
     }

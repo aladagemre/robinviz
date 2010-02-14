@@ -29,7 +29,7 @@
 *                                                                               			*
 *	Contacts for Implementation Issues                                      			*
 *                                                                               			*
-*  Melih Sözdinler, melihsozdinler{at}gmail.com, melih.sozdinler{at}boun{dot}edu{dot}tr 		*
+*  Melih Sözdinler, melihsozdinler{at}gmail{dot}com, melih.sozdinler{at}boun{dot}edu{dot}tr 		*
 *  Ahmet Emre Aladağ, aladagemre{at}gmail{dot}com, emre.aladag{at}stu{dot}khas{dot}edu{dot}tr      	*
 *                                                                               			*
 ********************************************************************************************************/
@@ -477,6 +477,8 @@ int main(){
                     exit(1);
                 }
 
+                char defaultBicFile[256];
+
 		if( readOption == false ){
 			INPUT = dataRead( dataName );
 		}
@@ -504,6 +506,22 @@ int main(){
                              fprintf( defaultRunTo, "%s%d\t%s\n", "gene", i, geneArray[ i ].GENE );
                          }
                          fclose( defaultRunTo );
+                         leda::string FILENAME( "%s", dataName2 );
+                         if( FILENAME.contains( "Yeast" ) ){
+#ifdef LINUX
+                             sprintf( defaultBicFile, "%s%s%s", "sources/bicluster_sources/biclusteringresult", "Yeast" ,".txt" );
+#else
+                             sprintf( defaultBicFile, "%s%s%s", "sources//bicluster_sources//biclusteringresult", "Yeast" ,".txt" );
+#endif
+                         }
+                         if( FILENAME.contains( "Thaliana" ) ){
+#ifdef LINUX
+                             sprintf( defaultBicFile, "%s%s%s", "sources/bicluster_sources/biclusteringresult", "Thaliana" ,".txt" );
+#else
+                             sprintf( defaultBicFile, "%s%s%s", "sources//bicluster_sources//biclusteringresult", "Thaliana" ,".txt" );
+#endif
+                         }
+
                          //cout << "\nDONE\n";
 	// 		drawHeatmap( INPUT, geneArray, condArray, "outputs/heatmap/out.html" );
 		}
@@ -632,7 +650,7 @@ int main(){
 			}
 		}
 		
-                bicRead( INPUT, biclusters, categ, matrixBiclusters, H_values, Hmax, minBicSize, maxBicSize, biclustering, INPUT.dim1(), INPUT.dim2() );
+                bicRead( INPUT, defaultBicFile, biclusters, categ, matrixBiclusters, H_values, Hmax, minBicSize, maxBicSize, biclustering, INPUT.dim1(), INPUT.dim2() );
 		cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
 		if( go_info == 1 ){
                         array<GENEONTO> geneOntoForData = geneOntologyHandling(gofile);

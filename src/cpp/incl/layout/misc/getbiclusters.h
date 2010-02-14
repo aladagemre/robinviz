@@ -868,7 +868,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 ** conditions number of number1
 ** genes number of number2 
 */
- void getBiclustersFromFile( leda::matrix &M , int inp, int fraction, int high, list<leda::matrix> &matrixList_l, list<list<GENES> > &results, list<list<CONDS> > &conditions, int dimension1, int dimension2  ){
+ void getBiclustersFromFile( leda::matrix &M , char defaultBicFile[256], int inp, int fraction, int high, list<leda::matrix> &matrixList_l, list<list<GENES> > &results, list<list<CONDS> > &conditions, int dimension1, int dimension2  ){
 	random_source S(1,inp);
 	int numberOfGenes = 0;
 	int numberOfConditions = 0;
@@ -882,8 +882,18 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 	int numberOfBiclusters;
 	FILE *fptr;
 
-	if( (fptr = fopen( "sources/bicluster_sources/biclusteringresult.txt", "r")) == NULL && (fptr = fopen( "sources//bicluster_sources//biclusteringresult.txt", "r")) == NULL )
-		cout << "\n Could not open specified file \n";
+	if( ( fptr = fopen( defaultBicFile, "r") ) == NULL ){
+	    FILE *erptr;
+#ifdef LINUX
+	    erptr = fopen( "outputs/error.txt", "w" );
+#else
+		erptr = fopen( "outputs//error.txt", "w" );
+#endif
+	    fprintf( erptr, "Error-id8: %s does not exist\n", defaultBicFile );
+	    fclose( erptr );
+	    cout << "\nError-id8: " << defaultBicFile << " file does not exist\n"; 
+	    exit(1);
+	}
 	else{
 		fscanf( fptr, "%d", &numberOfBiclusters );
 		fscanf( fptr, "%d%d", &numberOfConditions , &numberOfGenes );	

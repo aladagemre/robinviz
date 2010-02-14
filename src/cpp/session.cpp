@@ -223,7 +223,35 @@ int main(int argc, char** argv) {
                         fclose( fptr2 );
                     }
                     else{
-						fprintf( fptr, "%s\t", filename );
+                        fprintf( fptr, "%s\t", filename );
+                        fprintf( fptr, "%d\n", 0 );
+                    }
+
+                    ///////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////
+
+#ifdef LINUX
+                    sprintf( filename, "outputs/biclusters/scoring.txt" );
+#else
+                    sprintf( filename, "outputs//biclusters//scoring.txt" );
+#endif
+                    if( ( fptr2 = fopen( filename, "r") ) != NULL ){
+                        fprintf( fptr, "%s\t", filename );
+                        int lines = 0;
+                        while( !feof( fptr2 ) ){
+                                fgets( line, 1000, fptr2 );
+                                lines++;
+                        }
+                        rewind( fptr2 );
+                        fprintf( fptr, "%d\n", lines );
+                        while( !feof( fptr2 ) ){
+                                fgets( line, 1000, fptr2 );
+                                fputs (line, fptr);
+                        }
+                        fclose( fptr2 );
+                    }
+                    else{
+                        fprintf( fptr, "%s\t", filename );
                         fprintf( fptr, "%d\n", 0 );
                     }
 
@@ -328,7 +356,7 @@ int main(int argc, char** argv) {
                     ///////////////////////////////////////////////////////////
                     ///////////////////////////////////////////////////////////
 
-					//cout << "\n******************************************************\n";
+                    //cout << "\n******************************************************\n";
                     for( int i = 0; i < numberOfBiclusters; i++ ){
                         fscanf( fptr, "%d", &i );
 #ifdef LINUX
@@ -395,14 +423,37 @@ int main(int argc, char** argv) {
                         fscanf( fptr, "%d", &lines );
                         while( j <= lines ){
                             fgets( line, 1000, fptr );								
-							if( j != 0 ){
-								cout << line << endl;
+                            if( j != 0 ){
+                                //cout << line << endl;
                                 fputs (line, fptr2 );
-							}
+                            }
                             j++;
                         }
                         fclose( fptr2 );
 
+                    ///////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////
+
+#ifdef LINUX
+                    sprintf( filename, "outputs/biclusters/scoring.txt" );
+#else
+                    sprintf( filename, "outputs//biclusters//scoring.txt" );
+#endif
+                    fptr2 = fopen( filename, "w");
+                        //cout << filename << endl;
+                        fscanf( fptr, "%s", filename );
+                        //cout << filename << endl;
+                        j = 0;
+                        fscanf( fptr, "%d", &lines );
+                        while( j <= lines ){
+                            fgets( line, 1000, fptr );
+                            if( j != 0 ){
+                                //cout << line << endl;
+                                fputs (line, fptr2 );
+                            }
+                            j++;
+                        }
+                        fclose( fptr2 );
                     ///////////////////////////////////////////////////////////
                     ///////////////////////////////////////////////////////////
                     fclose( fptr );
