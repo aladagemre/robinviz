@@ -33,6 +33,7 @@ for line in colorFile:
 class View(QGraphicsView):
     def __init__(self, parent=None):
         QGraphicsView.__init__(self, parent)
+        self.main = False
         self.printer = QPrinter(QPrinter.HighResolution)
         self.printer.setPageSize(QPrinter.A4)
         #self.printer.setFullPage(True)
@@ -170,11 +171,12 @@ class View(QGraphicsView):
 
     def switchToLayout(self, layoutName):
         """Switches to the given layout with/without animation."""
-        selectedItems = self.scene().selectedItems()
-        for selectedItem in selectedItems:
-            selectedItem.stopAnimation()
-            selectedItem.setSelected(False)
-            selectedItem.lastSelected = True
+        if self.main:
+            selectedItems = self.scene().selectedItems()
+            for selectedItem in selectedItems:
+                selectedItem.stopAnimation()
+                selectedItem.setSelected(False)
+                selectedItem.lastSelected = True
 
         if self.setupLayoutSwitch(layoutName):
             self.startLayoutAnimation()          
@@ -212,7 +214,7 @@ class View(QGraphicsView):
             newFileName = "%s%s.gml" % (filename.split(".")[0], exename.split(".")[0])
             self.newGraph.read_gml(newFileName)
             newGraph.prepare()
-
+            self.scene().filename = newFileName
             # Clear the scene
             for item in self.scene().items():
                 if isinstance(item, EdgeItem):
