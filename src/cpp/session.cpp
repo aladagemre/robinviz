@@ -21,7 +21,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	if( argc == 4 ){
-        if( argc > 1 && argc < 5 && strcmp( argv[3], "saving" ) == 0 ){
+        if( argc > 1 && argc < 5 && strcmp( argv[3], "save" ) == 0 ){
                 char filename[256],line[1000];
                 sprintf( filename, "%s", argv[1] );
                 int numberOfBiclusters = char_arr_to_int( argv[2] );
@@ -234,7 +234,7 @@ int main(int argc, char** argv) {
 		}
 	}
     else{
-        if( argc > 1 && argc < 4 && strcmp( argv[2], "loading" ) == 0 ){
+        if( argc > 1 && argc < 4 && strcmp( argv[2], "load" ) == 0 ){
 			    //cout << "\n******************************************************\n";
                 char filename[256],line[1000];
                 sprintf( filename, "%s", argv[1] );
