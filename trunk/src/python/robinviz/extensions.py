@@ -3,8 +3,12 @@ from bicluster import *
 
 
 class SingleMainViewWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, scene=None):
         QMainWindow.__init__(self)
+        if scene:
+            self.scene = scene
+            self.view = MainView(self.scene)
+            self.setupGUI()
 
     def loadGraph(self, filename):
         self.scene = MainScene()
@@ -85,8 +89,8 @@ class SingleMainViewWindow(QMainWindow):
 
 
 class SinglePeripheralViewWindow(SingleMainViewWindow):
-    def __init__(self):
-        SingleMainViewWindow.__init__(self)
+    def __init__(self, scene=None):
+        SingleMainViewWindow.__init__(self, scene)
 
     def loadGraph(self, filename):
         self.scene = PeripheralScene()
@@ -103,8 +107,8 @@ class MainView(View):
 
     def newWindow(self):
         if not hasattr(self, 'specialWindow'):
-            self.specialWindow = SingleMainViewWindow()
-            self.specialWindow.loadGraph(self.scene().filename)
+            self.specialWindow = SingleMainViewWindow(self.scene())
+            #self.specialWindow.loadGraph(self.scene().filename)
         self.specialWindow.showMaximized()
 
 
@@ -123,9 +127,9 @@ class PeripheralView(View):
 
     def newWindow(self):
         if not hasattr(self, 'specialWindow'):
-            self.specialWindow = SinglePeripheralViewWindow()
-            self.specialWindow.loadGraph(self.scene().filename)
-            self.specialWindow.scene.setId(self.scene().id)
+            self.specialWindow = SinglePeripheralViewWindow(self.scene())
+            #self.specialWindow.loadGraph(self.scene().filename)
+            #self.specialWindow.scene.setId(self.scene().id)
         if len(self.scene().items())>30:
             self.specialWindow.showMaximized()
         else:
