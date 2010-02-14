@@ -133,6 +133,7 @@ class MultiViewWindow(QMainWindow):
                 radialGrad.setColorAt(0.5, Qt.white)
                 radialGrad.setColorAt(1, Qt.black)
                 self.mainScene.nodeDict[id].color = radialGrad
+                return
 
         for view in self.pViews:
             if view.scene() == scene:
