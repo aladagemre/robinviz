@@ -619,33 +619,33 @@ int main(){
                                              fclose( defaultRunTo );
                                          }
                                          //cout << "\nDONE2\n";
-#ifdef LINUX
-                                         defaultRunFrom = fopen( "sources/ppi_sources/genefunctions.txt", "r" );
-                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "w" );
-#else
-                                         defaultRunFrom = fopen( "sources//ppi_sources//genefunctions.txt", "r" );
-                                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "w" );
-#endif
-                                         while( !feof( defaultRunFrom )){
-                                             fscanf( defaultRunFrom, "%c", &chr );
-                                             fprintf( defaultRunTo, "%c", chr );
-                                         }
-                                         fclose( defaultRunFrom );
-                                         fclose( defaultRunTo );
-#ifdef LINUX
-                                         defaultRunFrom = fopen( "sources/ppi_sources/functions.txt", "r" );
-                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/functions.txt", "w" );
-#else
-                                         defaultRunFrom = fopen( "sources//ppi_sources//functions.txt", "r" );
-                                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//functions.txt", "w" );
-#endif
-                                         while( !feof( defaultRunFrom )){
-                                             fscanf( defaultRunFrom, "%c", &chr );
-                                             fprintf( defaultRunTo, "%c", chr );
-                                         }
-                                         fclose( defaultRunFrom );
-                                         fclose( defaultRunTo );
-                                         //cout << "\nDONE\n";
+//#ifdef LINUX
+//                                         defaultRunFrom = fopen( "sources/ppi_sources/genefunctions.txt", "r" );
+//                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "w" );
+//#else
+//                                         defaultRunFrom = fopen( "sources//ppi_sources//genefunctions.txt", "r" );
+//                                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "w" );
+//#endif
+//                                         while( !feof( defaultRunFrom )){
+//                                             fscanf( defaultRunFrom, "%c", &chr );
+//                                             fprintf( defaultRunTo, "%c", chr );
+//                                         }
+//                                         fclose( defaultRunFrom );
+//                                         fclose( defaultRunTo );
+//#ifdef LINUX
+//                                         defaultRunFrom = fopen( "sources/ppi_sources/functions.txt", "r" );
+//                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/functions.txt", "w" );
+//#else
+//                                         defaultRunFrom = fopen( "sources//ppi_sources//functions.txt", "r" );
+//                                         defaultRunTo = fopen( "sources//usr_sources//visualization_data//functions.txt", "w" );
+//#endif
+//                                         while( !feof( defaultRunFrom )){
+//                                             fscanf( defaultRunFrom, "%c", &chr );
+//                                             fprintf( defaultRunTo, "%c", chr );
+//                                         }
+//                                         fclose( defaultRunFrom );
+//                                         fclose( defaultRunTo );
+//                                         //cout << "\nDONE\n";
                                 }
 			}
 		}
