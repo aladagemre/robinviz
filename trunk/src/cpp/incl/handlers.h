@@ -277,12 +277,12 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 * @param dimension1(int) size of the data row dimension
 * @param dimension2(int) size of the data column dimension
 */
-void biclusterHandling( matrix &INPUT, list<list<GENES> > &biclusters, list<int> &categ, list<leda::matrix> &matrixBiclusters, list<double> &H_values, double &Hmax, int minBicSize, int maxBicSize, int biclustering, int dimension1, int dimension2  ){
+void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES> > &biclusters, list<int> &categ, list<leda::matrix> &matrixBiclusters, list<double> &H_values, double &Hmax, int minBicSize, int maxBicSize, int biclustering, int dimension1, int dimension2  ){
         list_item it;
 	leda::matrix inverseINPUT = INPUT.trans();
 	list<list<CONDS> > conditions;
 	if( biclustering == 1 ){
-		getBiclustersFromFile( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 ); 
+		getBiclustersFromFile( inverseINPUT, defaultBicFile, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 ); 
 		analyseGenes2( "geneResult", categ, biclusters.size(), "", dimension1, dimension2  );
 	}
 	if( biclustering == 2 ){ 
@@ -313,9 +313,9 @@ void biclusterHandling( matrix &INPUT, list<list<GENES> > &biclusters, list<int>
 		cout << "\nError-id1: No bicluster candidate to draw, make sure that you use correct parameters\n"; 
 		exit(1);
 	}
-	cout << " GENE LIST size : " << biclusters.size() << endl;
-	cout << " COND LIST size : " << conditions.size() << endl;
-	cout << " MATRIX LIST size : " << matrixBiclusters.size() << endl;
+// 	cout << " GENE LIST size : " << biclusters.size() << endl;
+// 	cout << " COND LIST size : " << conditions.size() << endl;
+// 	cout << " MATRIX LIST size : " << matrixBiclusters.size() << endl;
 
 	for( int i=0; i < biclusters.size(); i++ ){
 #ifdef LINUX
@@ -695,12 +695,12 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 	int ncount=0,ecount=0;
 	int fileIndex = 0;
 	char filename[ 1024 ];
-        FILE *wptr2,*wptr3;
-#ifdef LINUX
-	wptr3 = fopen( "sources/graph_sources/graph_infos.txt", "w" );
-#else
-	wptr3 = fopen( "sources//graph_sources//graph_infos.txt", "w" );
-#endif
+//         FILE *wptr2,*wptr3;
+// #ifdef LINUX
+// 	wptr3 = fopen( "sources/graph_sources/graph_infos.txt", "w" );
+// #else
+// 	wptr3 = fopen( "sources//graph_sources//graph_infos.txt", "w" );
+// #endif
 	for(int i = 0; i < biclusters.size(); i++ ){	
 // 		if( listOfGraphs[ i ].empty() != true ){
 		    pos.init( listOfGraphs[ i ] );
@@ -723,18 +723,18 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 		    }  
 
 			GraphList.append( listOfGraphs[ i ] );
-#ifdef LINUX
-			sprintf( filename , "sources/graph_sources/Graph%d.txt" , i+1 );
-#else
-			sprintf( filename , "sources//graph_sources//Graph%d.txt" , i+1 );
-#endif
-			ofstream GRAPHS( filename , ios::in | ios::trunc );
+// #ifdef LINUX
+// 			sprintf( filename , "sources/graph_sources/Graph%d.txt" , i+1 );
+// #else
+// 			sprintf( filename , "sources//graph_sources//Graph%d.txt" , i+1 );
+// #endif
+// 			ofstream GRAPHS( filename , ios::in | ios::trunc );
 		    
 		        
-			fprintf( wptr3, "%s\n", "_________________________________" );
-			fprintf( wptr3, "%s\t%s\n", "File Name      :", filename ); 
-			fprintf( wptr3, "%s\t%d\n", "Number of Graph:", i );
-			fprintf( wptr3, "%s\n", "_________________________________" );
+// 			fprintf( wptr3, "%s\n", "_________________________________" );
+// 			fprintf( wptr3, "%s\t%s\n", "File Name      :", filename ); 
+// 			fprintf( wptr3, "%s\t%d\n", "Number of Graph:", i );
+// 			fprintf( wptr3, "%s\n", "_________________________________" );
 			projectNode = PROJECT.new_node();
 			char nameS[ 200 ][ 16 ];
 			list<Strings> nameGraph;
@@ -753,23 +753,23 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 			/*forall_items( it, nameGraph )
 				printf( "%s\n", (char*)nameGraph[ it ].name );*/
 			namesForEachGraph.append(nameGraph);
-#ifdef LINUX
-			sprintf( filename , "sources/graph_sources/Relation%d.txt" , i+1 );
-#else
-			sprintf( filename , "sources//graph_sources//Relation%d.txt" , i+1 );
-#endif
-			wptr2 = fopen( filename, "w" );
+// #ifdef LINUX
+// 			sprintf( filename , "sources/graph_sources/Relation%d.txt" , i+1 );
+// #else
+// 			sprintf( filename , "sources//graph_sources//Relation%d.txt" , i+1 );
+// #endif
+// 			wptr2 = fopen( filename, "w" );
 			forall_edges( e, listOfGraphs[ i ] ){
 				node source = listOfGraphs[ i ].source( e );
 				node target = listOfGraphs[ i ].target( e );
-				fprintf( wptr2, "%s\t=>\t%s\t|\t|\n", nameS[ INDEX[ source ] ], nameS[ INDEX[target] ] );
+// 				fprintf( wptr2, "%s\t=>\t%s\t|\t|\n", nameS[ INDEX[ source ] ], nameS[ INDEX[target] ] );
 			}
 
-			fclose( wptr2 );
+// 			fclose( wptr2 );
 
 			leda::string m = "";
-			listOfGraphs[ i ].write( GRAPHS );
-			GRAPHS.close();
+// 			listOfGraphs[ i ].write( GRAPHS );
+// 			GRAPHS.close();
 
 			/************************************************/
 			/*    Copy Graph as leda::string type Graph     */
@@ -870,7 +870,7 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 			    /* End of Copy Graph as leda::string type Graph */
 			    /************************************************/			
 	}
-	fclose( wptr3 );
+// 	fclose( wptr3 );
 }
 
 
@@ -931,11 +931,11 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 	int fileIndex = 0;
 	char filename[ 1024 ];
         FILE *wptr2,*wptr3;
-#ifdef LINUX
-	wptr3 = fopen( "sources/graph_sources/graph_infos.txt", "w" );
-#else
-	wptr3 = fopen( "sources//graph_sources//graph_infos.txt", "w" );
-#endif
+// #ifdef LINUX
+// 	wptr3 = fopen( "sources/graph_sources/graph_infos.txt", "w" );
+// #else
+// 	wptr3 = fopen( "sources//graph_sources//graph_infos.txt", "w" );
+// #endif
 	for(int i = 0; i < biclusters.size(); i++ ){	
 		if( listOfGraphs[ i ].empty() != true ){
 			pos.init( listOfGraphs[ i ] );
@@ -958,18 +958,18 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 			}  
 
 			GraphList.append( listOfGraphs[ i ] );
-#ifdef LINUX
-			sprintf( filename , "sources/graph_sources/Graph%d.txt" , i+1 );
-#else
-			sprintf( filename , "sources//graph_sources//Graph%d.txt" , i+1 );
-#endif
-			ofstream GRAPHS( filename , ios::in | ios::trunc );
+// #ifdef LINUX
+// 			sprintf( filename , "sources/graph_sources/Graph%d.txt" , i+1 );
+// #else
+// 			sprintf( filename , "sources//graph_sources//Graph%d.txt" , i+1 );
+// #endif
+// 			ofstream GRAPHS( filename , ios::in | ios::trunc );
 		    
 		    
-			fprintf( wptr3, "%s\n", "_________________________________" );
-			fprintf( wptr3, "%s\t%s\n", "File Name      :", filename ); 
-			fprintf( wptr3, "%s\t%d\n", "Number of Graph:", i );
-			fprintf( wptr3, "%s\n", "_________________________________" );
+// 			fprintf( wptr3, "%s\n", "_________________________________" );
+// 			fprintf( wptr3, "%s\t%s\n", "File Name      :", filename ); 
+// 			fprintf( wptr3, "%s\t%d\n", "Number of Graph:", i );
+// 			fprintf( wptr3, "%s\n", "_________________________________" );
 			projectNode = PROJECT.new_node();
 			char nameS[ 200 ][ 16 ];
 			list<Strings> nameGraph;
@@ -988,24 +988,24 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 			/*forall_items( it, nameGraph )
 				printf( "%s\n", (char*)nameGraph[ it ].name );*/
 			namesForEachGraph.append(nameGraph);
-#ifdef LINUX
-			sprintf( filename , "sources/graph_sources/Relation%d.txt" , i+1 );
-#else
-			sprintf( filename , "sources//graph_sources//Relation%d.txt" , i+1 );
-#endif
-			wptr2 = fopen( filename, "w" );
+// #ifdef LINUX
+// 			sprintf( filename , "sources/graph_sources/Relation%d.txt" , i+1 );
+// #else
+// 			sprintf( filename , "sources//graph_sources//Relation%d.txt" , i+1 );
+// #endif
+// 			wptr2 = fopen( filename, "w" );
 			forall_edges( e, listOfGraphs[ i ] ){
 				node source = listOfGraphs[ i ].source( e );
 				node target = listOfGraphs[ i ].target( e );
-				fprintf( wptr2, "%s\t=>\t%s\t|\t|\n", nameS[ INDEX[ source ] ], nameS[ INDEX[target] ] );
+// 				fprintf( wptr2, "%s\t=>\t%s\t|\t|\n", nameS[ INDEX[ source ] ], nameS[ INDEX[target] ] );
 			}
 
-			fclose( wptr2 );
+// 			fclose( wptr2 );
 
 
 			leda::string m = "";
-			listOfGraphs[ i ].write( GRAPHS );
-			GRAPHS.close();
+// 			listOfGraphs[ i ].write( GRAPHS );
+// 			GRAPHS.close();
 
 			/************************************************/
 			/*    Copy Graph as leda::string type Graph     */
@@ -1106,7 +1106,7 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 			/* End of Copy Graph as leda::string type Graph */
 			/************************************************/			
 	}
-	fclose( wptr3 );
+// 	fclose( wptr3 );
 }
 
 
