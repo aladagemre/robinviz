@@ -69,9 +69,9 @@ void dataWriteCC( matrix &M ){
 	for( int i = 0; i < M.dim1(); i++ ){
 		for( int j = 0; j < M.dim2(); j++ ){
 			if( j != M.dim2() -1 )
-				fprintf( fptr, "%d ", (int)(M(i,j)) );
+				fprintf( fptr, "%d ", (int)(M(i,j)*10) );
 			else
-				fprintf( fptr, "%d", (int)(M(i,j)) );
+				fprintf( fptr, "%d", (int)(M(i,j)*10) );
 		}
 		fprintf( fptr, "\n" );
 	}
