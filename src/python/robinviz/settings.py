@@ -164,6 +164,8 @@ ppihitratioWeighting %(ppihitratioWeighting)d""" %  self.parameters
             valueWidget = QDoubleSpinBox()
             valueWidget.setRange(parameter.min, parameter.max)
             valueWidget.setSingleStep(parameter.step)
+            if parameter.name == "ther_disc":
+                valueWidget.setDecimals(4)
         elif parameter.type == "file":
             valueWidget = QHBoxLayout()
             lineEdit = QLineEdit()
