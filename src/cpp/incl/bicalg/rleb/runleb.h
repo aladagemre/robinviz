@@ -341,7 +341,7 @@ void rlebmain( matrix &INPUT, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatrix_
 
 	edge_array<int> control( G, 0);
 	
-	for( int a = 0; a != 5 ; a++ ){
+	for( int a = 0; a != 10 ; a++ ){
 		cout << endl << " Turn " << a + 1 << endl;
 		if( debugANH )
 			cout << "        * NOW CM begins  *\n";
@@ -410,7 +410,7 @@ void rlebmain_m( matrix &INPUT, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatri
 		conditions_i[ j ] = j;
 	}
 
-	for( int a = 0; a != 5 ; a++ ){
+	for( int a = 0; a != 10 ; a++ ){
 		cout << endl << " Turn " << a + 1 << endl;
 		if( debugANH )
 			cout << "        * NOW CM begins  *\n";
