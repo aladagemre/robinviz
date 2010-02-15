@@ -298,6 +298,17 @@ class MultiViewWindow(QMainWindow):
             self.toggleFullScreen()"""
             
     ############### HELP MENU ###################
+    def displayManualDialog(self):
+        self.manualDialog= QtWebKit.QWebView()
+        self.manualDialog.setUrl(QUrl("http://hacivat.khas.edu.tr/~robinviz/manuals/manual.html"))
+        self.manualDialog.show()
+        
+    def displayUpdateDialog(self):
+        from misc.updatergui import UpdaterDialog
+        self.updateDialog = UpdaterDialog()
+        self.updateDialog.show()
+
+
     def displayAboutDialog(self):
         from misc.about import Ui_AboutDialog
         self.AboutDialog = QDialog()
@@ -305,12 +316,8 @@ class MultiViewWindow(QMainWindow):
         ui.setupUi(self.AboutDialog)
         self.AboutDialog.show()
 
-    def displayUpdateDialog(self):
-        from misc.updatergui import UpdaterDialog
-        self.updateDialog = UpdaterDialog()
-        self.updateDialog.show()
     
-            
+    
     def createActions(self):
 
         # FILE MENU
@@ -387,18 +394,25 @@ class MultiViewWindow(QMainWindow):
 
 
         # HELP MENU
-        aboutDialog = QAction('About', self)
-        aboutDialog.setStatusTip('About RobinViz')
-        self.connect(aboutDialog, SIGNAL('triggered()'), self.displayAboutDialog)
-
-        updateDialog = QAction('Update', self)
+        
+        manualDialog = QAction('&Manual', self)
+        manualDialog.setStatusTip('RobinViz Documentation')
+        self.connect(manualDialog, SIGNAL('triggered()'), self.displayManualDialog)
+        
+        updateDialog = QAction('&Update', self)
         updateDialog.setStatusTip('Update RobinViz')
         self.connect(updateDialog, SIGNAL('triggered()'), self.displayUpdateDialog)
 
+        aboutDialog = QAction('&About', self)
+        aboutDialog.setStatusTip('About RobinViz')
+        self.connect(aboutDialog, SIGNAL('triggered()'), self.displayAboutDialog)
+
         helpMenu = menubar.addMenu('&Help')
-        #helpMenu.addAction(Manual)
-        helpMenu.addAction(aboutDialog)
+        helpMenu.addAction(manualDialog)
         helpMenu.addAction(updateDialog)
+        helpMenu.addSeparator()
+        helpMenu.addAction(aboutDialog)
+        
 
 if __name__ == "__main__":
 
