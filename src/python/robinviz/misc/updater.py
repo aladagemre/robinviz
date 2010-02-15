@@ -4,6 +4,10 @@ import os
 import os.path
 import zipfile
 
+from PyQt4.QtCore import SIGNAL, emit
+from PyQt4.QtGui import QWidget
+
+
 
 ROOT_PATH = "../../../.."
 updateServers = ("http://hacivat.khas.edu.tr/~robinviz/updates/",
@@ -18,14 +22,18 @@ else:
 
 
 
-class UpdateChecker:
+class UpdateChecker(QWidget):
     def __init__(self):
         self.currentVersion = __VERSION__
 
+    def sendErrorMessage(self, text):
+        self.emit(SIGNAL("error(QString)"), text)
+        print text
+    def sendMessage(self, text):
+        self.emit(SIGNAL("message(QString)"), text)
+        print text
+
     def checkUpdate(self):
-
-
-        
         checkDone = False
         
         for server in updateServers:
@@ -35,19 +43,25 @@ class UpdateChecker:
                     # 0.1.0 0.1.1 updatefile.zip
                     fromVersion, toVersion, updateZip = line.strip().split(" ")
                     if fromVersion == self.currentVersion:
-                        # DO IT
+                        # update found
                         self.updateZip = updateZip
                         self.zipFileName = self.updateZip.split('/')[-1]
                         checkDone = True
+                        self.emit(SIGNAL("updateFound(QString)"), self.updateZip)
+                        print "Update found:", updateZip
                         break
-
+                else:
+                    # No update found
+                    self.sendErrorMessage("No updates found")
+                    
             except:
-                print "Could not download file %s" % (server+updateFile)
-
+                self.sendErrorMessage("Could not download file %s" % (server+updateFile))
+                
             if checkDone:
                 break
         else:
-            print "Could not connect to any of the update servers."
+            self.sendErrorMessage("Could not connect to any of the update servers.")
+
         
     def downloadUpdate(self):
         """Downloads the update file"""
@@ -59,21 +73,30 @@ class UpdateChecker:
 
             webFile.close()
             localFile.close()
+
+            self.sendMessage("Update archive downloaded.")
         else:
-            print "No update zip defined."
+            self.sendErrorMessage("Could not download the update file.")
             
     def unzip(self):
         if getattr(self, "zipFileName", None) and os.path.exists(self.zipFileName):
             self.unzipper = Unzipper()
             self.unzipper.extract(self.zipFileName, ROOT_PATH)
+            self.sendMessage("Update archive extracted.")
         else:
-            print "No update zip file found"
+            self.sendErrorMessage("No update zip file found")
         
-    def startUpdate(self):
+    def postUpdateOperations(self):
+        self.sendMessage("Performing post-update operations...")
         os.chdir(ROOT_PATH)
         os.system("python %s" % UPDATE_SCRIPT)
         #os.remove(UPDATE_SCRIPT)
 
+    def installUpdate(self):
+        self.downloadUpdate()
+        self.unzip()
+        self.postUpdateOperations()
+        self.sendMessage("Update finished...")
 
 class Unzipper:
     """Written By Doug Tolton on ActiveState.com"""
@@ -145,4 +168,4 @@ if __name__ == "__main__":
     uc.checkUpdate()
     uc.downloadUpdate()
     uc.unzip()
-    uc.startUpdate()
+    uc.postUpdateOperations()
