@@ -275,7 +275,7 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 	#pragma region EXTRACTION
 		list<two_tuple<int,int> > randomSubmatrixIndexs;
 		list<four_tuple<int,int,double,matrix> > results;
-	        list<four_tuple<int,int,double,matrix> > output;
+	        list<four_tuple<int,int,double,matrix> > output,output2;
 
 		for( int i = minSizeSubMatrix_exp1_g; i <= maxSizeSubMatrix_exp1_g; i+= increment_exp1_g ){
 			for( int j = minSizeSubMatrix_exp1_c; j <= maxSizeSubMatrix_exp1_c; j+= increment_exp1_c ){
@@ -291,9 +291,8 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 		forall_items( it, randomSubmatrixIndexs ){
 			//cout << "\n2\n";
 			int count_bic = 0;
+			double max_hvalue = 0;
 			for( int count = 0; count < repeat; count++ ){
-				if( count_bic > 5 )
-					break;
 				random_source G( 0, data_dim1 - randomSubmatrixIndexs[ it ].first() - 1 );
 				random_source C( 0, data_dim2 - randomSubmatrixIndexs[ it ].second() - 1 );
 				G.set_seed(count);
@@ -315,8 +314,41 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 				//cout << "\n2.2\n";
 				if( results[ results.first_item() ].third() < hvaluemin )
 					output.append( results[ results.first_item() ]);
+				if( max_hvalue < results[ results.first_item() ].third() )
+					max_hvalue = results[ results.first_item() ].third();
 				results.clear();
 				count_bic++;
+			}
+			list<int> index_to_report;
+			if( output.size() > 0 ){
+				for( int count = 0; count < 2; count++ ){
+					if( count == output.size() )
+						break;
+	// 				cout << count << " - " << max_hvalue << "\n";
+					double min_hvalue = output[ output.first_item() ].third();
+					int count2_i = 0, store_index_i = 0;
+					bool flag = false;
+					forall_items( it2, output ){
+	// 					cout << count2_i << " - " << min_hvalue << "\n";
+						if( output[ it2 ].third() < min_hvalue ){
+							min_hvalue = output[ it2 ].third();
+							store_index_i = count2_i;
+							flag = true;
+						}
+						count2_i++;
+					}
+					if( flag ){
+	// 					cout << " Found 1 \n";
+						index_to_report.append( store_index_i );
+						output[ output.get_item( store_index_i ) ].third() = max_hvalue;
+					}
+				}
+				if( index_to_report.size() != 0 ){
+					forall_items( it2, index_to_report )
+						output2.append( output[ output.get_item( index_to_report[ it2 ] ) ] ); 
+					output = output2;
+					output2.clear();
+				}
 			}
 			//hvvalueCalculator( results, "Modified" );
 			FILE *fptr;
