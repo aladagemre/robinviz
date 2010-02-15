@@ -86,22 +86,35 @@ class UpdateChecker(QWidget):
     def unzip(self):
         if getattr(self, "zipFileName", None) and os.path.exists(self.zipFileName):
             self.unzipper = Unzipper()
-            self.unzipper.extract(self.zipFileName, ROOT_PATH)
+            try:
+                self.unzipper.extract(self.zipFileName, ROOT_PATH)
+            except zipfile.BadZipfile:
+                self.sendErrorMessage("Corrupted update archive: %s" % self.updateZip)
+                return False
             self.sendMessage("Update archive extracted.")
+            return True
         else:
             self.sendErrorMessage("No update zip file found")
+            return False
+
         
     def postUpdateOperations(self):
-        self.sendMessage("Performing post-update operations...")
-        os.chdir(ROOT_PATH)
-        os.system("python %s" % UPDATE_SCRIPT)
-        #os.remove(UPDATE_SCRIPT)
+        try:
+            self.sendMessage("Performing post-update operations...")
+            os.chdir(ROOT_PATH)
+            os.system("python %s" % UPDATE_SCRIPT)
+            #os.remove(self.zipFile)
+            #os.remove(UPDATE_SCRIPT)    
+        except:
+            self.sendErrorMessage("Error occured while performing post update operations.")
+            return False
+        
+        return True
 
     def installUpdate(self):
         self.downloadUpdate()
-        self.unzip()
-        self.postUpdateOperations()
-        self.sendMessage("Update finished...")
+        if self.unzip() and self.postUpdateOperations():
+            self.sendMessage("Update finished...")
 
 class Unzipper:
     """Written By Doug Tolton on ActiveState.com"""
