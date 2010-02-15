@@ -322,6 +322,7 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 			list<int> index_to_report;
 			if( output.size() > 0 ){
 				for( int count = 0; count < 2; count++ ){
+// 					cout << "|";
 					if( count == output.size() )
 						break;
 	// 				cout << count << " - " << max_hvalue << "\n";
@@ -343,11 +344,14 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 						output[ output.get_item( store_index_i ) ].third() = max_hvalue;
 					}
 				}
+// 				cout << endl;
 				if( index_to_report.size() != 0 ){
 					forall_items( it2, index_to_report )
 						output2.append( output[ output.get_item( index_to_report[ it2 ] ) ] ); 
 					output = output2;
 					output2.clear();
+				}else{
+					output.clear();
 				}
 			}
 			//hvvalueCalculator( results, "Modified" );
