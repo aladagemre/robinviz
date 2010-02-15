@@ -4,7 +4,7 @@ import os
 import os.path
 import zipfile
 
-from PyQt4.QtCore import SIGNAL, emit
+from PyQt4.QtCore import SIGNAL
 from PyQt4.QtGui import QWidget
 
 
@@ -24,6 +24,7 @@ else:
 
 class UpdateChecker(QWidget):
     def __init__(self):
+        QWidget.__init__(self)
         self.currentVersion = __VERSION__
 
     def sendErrorMessage(self, text):
