@@ -9,7 +9,8 @@ from PyQt4.QtGui import QWidget
 
 
 
-ROOT_PATH = "../../../.."
+#ROOT_PATH = "../../../.."
+ROOT_PATH = "."
 updateServers = ("http://hacivat.khas.edu.tr/~robinviz/updates/",
                  "http://www.emrealadag.com/robinviz/updates/", )
 
@@ -54,9 +55,12 @@ class UpdateChecker(QWidget):
                 else:
                     # No update found
                     self.sendErrorMessage("No updates found")
+                    return
                     
             except:
+                # If found the file but could not download it,
                 self.sendErrorMessage("Could not download file %s" % (server+updateFile))
+                return
                 
             if checkDone:
                 break

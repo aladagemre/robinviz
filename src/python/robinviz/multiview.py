@@ -284,6 +284,18 @@ class MultiViewWindow(QMainWindow):
         if hasattr(self, 'mainScene'):
             self.mainScene.gridActive = value
             self.mainScene.update()
+
+
+    def setFullScreen(self, value):
+        if value:
+            self.showFullScreen()
+        else:
+            self.showMaximized()
+
+    """def keyPressEvent(self, event):
+        key = event.key()
+        if key == Qt.Key_F11:
+            self.toggleFullScreen()"""
             
     ############### HELP MENU ###################
     def displayAboutDialog(self):
@@ -293,16 +305,11 @@ class MultiViewWindow(QMainWindow):
         ui.setupUi(self.AboutDialog)
         self.AboutDialog.show()
 
-    def setFullScreen(self, value):
-        if value:
-            self.showFullScreen()
-        else:
-            self.showMaximized()
-            
-    def keyPressEvent(self, event):
-        key = event.key()
-        """if key == Qt.Key_F11:
-            self.toggleFullScreen()"""
+    def displayUpdateDialog(self):
+        from misc.updatergui import UpdaterDialog
+        self.updateDialog = UpdaterDialog()
+        self.updateDialog.show()
+    
             
     def createActions(self):
 
@@ -384,10 +391,14 @@ class MultiViewWindow(QMainWindow):
         aboutDialog.setStatusTip('About RobinViz')
         self.connect(aboutDialog, SIGNAL('triggered()'), self.displayAboutDialog)
 
+        updateDialog = QAction('Update', self)
+        updateDialog.setStatusTip('Update RobinViz')
+        self.connect(updateDialog, SIGNAL('triggered()'), self.displayUpdateDialog)
 
         helpMenu = menubar.addMenu('&Help')
         #helpMenu.addAction(Manual)
         helpMenu.addAction(aboutDialog)
+        helpMenu.addAction(updateDialog)
 
 if __name__ == "__main__":
 

@@ -48,26 +48,24 @@ class UpdaterDialog(QDialog):
         self.setButtonText()
         
     def slotButtonClicked(self):
-        print "Clicked"
         if self.buttonTextIndex == 0:
             # Check for updates
-            print "Lets look for updates"
             self.updater.checkUpdate()
             
         elif self.buttonTextIndex == 1:
             # Install the updates
-            print "Install updates"
             self.updater.installUpdate()
         else:
-            print "Bye"
             # Close the dialog
             self.close()
-        
-        self.buttonTextIndex += 1
-        self.setButtonText()
+        try:
+            self.buttonTextIndex += 1
+            self.setButtonText()
+        except:
+            # Closing dialog
+            pass
         
     def connectSlots(self):
-        print "Connecting slots"
         self.connect(self.button, SIGNAL('clicked()'), self.slotButtonClicked)
         self.connect(self.updater, SIGNAL('message(QString)'), self.slotAddLog)
         self.connect(self.updater, SIGNAL('updateFound(QString)'), self.slotUpdateFound)
