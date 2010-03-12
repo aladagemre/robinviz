@@ -1,8 +1,8 @@
 #summary One-sentence summary of this page.
 
-= Bibtex =
+= Bibtex Entry =
 
-[
+{{{
 @inproceedings{1722052,
  author = {Alada\u{g}, Ahmet Emre and Erten, Cesim and S\"{o}zdinler, Melih},
  title = {An integrated model for visualizing biclusters from gene expression data and PPI networks},
@@ -15,4 +15,4 @@
  publisher = {ACM},
  address = {New York, NY, USA},
  }
-]
+}}}
