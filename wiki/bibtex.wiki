@@ -1,3 +1,18 @@
 #summary One-sentence summary of this page.
 
 = Bibtex =
+
+[
+@inproceedings{1722052,
+ author = {Alada\u{g}, Ahmet Emre and Erten, Cesim and S\"{o}zdinler, Melih},
+ title = {An integrated model for visualizing biclusters from gene expression data and PPI networks},
+ booktitle = {ISB '10: Proceedings of the International Symposium on Biocomputing},
+ year = {2010},
+ isbn = {978-1-60558-722-6},
+ pages = {1--8},
+ location = {Calicut, Kerala, India},
+ doi = {http://doi.acm.org/10.1145/1722024.1722052},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }
+]
