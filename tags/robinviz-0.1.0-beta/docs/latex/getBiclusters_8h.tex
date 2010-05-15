@@ -1,0 +1,155 @@
+\hypertarget{getBiclusters_8h}{
+\section{getBiclusters.h File Reference}
+\label{getBiclusters_8h}\index{getBiclusters.h@{getBiclusters.h}}
+}
+{\tt \#include \char`\"{}declerations.h\char`\"{}}\par
+\subsection*{Classes}
+\begin{CompactItemize}
+\item 
+struct \hyperlink{structgenes}{genes}
+\item 
+struct \hyperlink{structgenesx}{genesx}
+\item 
+struct \hyperlink{structgenes3}{genes3}
+\end{CompactItemize}
+\subsection*{Defines}
+\begin{CompactItemize}
+\item 
+\#define \hyperlink{getBiclusters_8h_937efd574b51f15d2441e2d98203b9b7}{ESIT}~==
+\end{CompactItemize}
+\subsection*{Typedefs}
+\begin{CompactItemize}
+\item 
+typedef struct \hyperlink{structgenes}{genes} \hyperlink{getBiclusters_8h_227a00339d5a4932a74f9bcb518a34ba}{GENES}
+\item 
+typedef struct \hyperlink{structgenesx}{genesx} \hyperlink{getBiclusters_8h_a3108616e3cb1428fc293c57b96e7f40}{GNDATAx}
+\item 
+typedef struct \hyperlink{structgenes3}{genes3} \hyperlink{getBiclusters_8h_1a1abdd58848d7ff7cad33849f293693}{GNDATA2}
+\end{CompactItemize}
+\subsection*{Functions}
+\begin{CompactItemize}
+\item 
+matrix \hyperlink{getBiclusters_8h_637887b5efd7f0b26fbd10dcde4e23cc}{getMatrixFromFile} (char filename\mbox{[}10\mbox{]}, double multiplyParameter, int \&dimension1, int \&dimension2)
+\item 
+matrix \hyperlink{getBiclusters_8h_920fc03d7435e2fae71f1eb9bc6ecc53}{getMatrixFromFile} (char filename\mbox{[}10\mbox{]}, int forOtherAlgorithms, int \&dimension1, int \&dimension2)
+\item 
+void \hyperlink{getBiclusters_8h_9ba2454ca73ee42bd52576c8633bb456}{analyseGenes} (char fileName\mbox{[}$\,$\mbox{]}, int biNumber, int dimension1, int dimension2)
+\item 
+void \hyperlink{getBiclusters_8h_dea99e343f7a4d3efc498f0175febdab}{analyseGenes2} (char fileName\mbox{[}$\,$\mbox{]}, int biNumber, char algName\mbox{[}$\,$\mbox{]}, int dimension1, int dimension)
+\item 
+void \hyperlink{getBiclusters_8h_d8283e5ab084421261d216af02f1be59}{getBiclustersFromFile} (leda::matrix \&M, int inp, int fraction, int high, list$<$ leda::matrix $>$ \&matrixList\_\-l, list$<$ list$<$ \hyperlink{structgenes}{GENES} $>$ $>$ \&results, int dimension1, int dimension2)
+\item 
+void \hyperlink{getBiclusters_8h_d7508c68a0f9fa09dc2ad880220138fd}{getBiclustersFromFile2} (leda::matrix \&M, int inp, int fraction, int high, list$<$ leda::matrix $>$ \&matrixList\_\-l, list$<$ list$<$ \hyperlink{structgenes}{GENES} $>$ $>$ \&results, char algName\mbox{[}$\,$\mbox{]}, int dimension1, int dimension2)
+\item 
+void \hyperlink{getBiclusters_8h_4a6a1fa0c800f68dfdf4c6838a76b06b}{getBiclustersFromFile3} (leda::matrix \&M, int inp, int fraction, int high, list$<$ leda::matrix $>$ \&matrixList\_\-l, list$<$ list$<$ \hyperlink{structgenes}{GENES} $>$ $>$ \&results, char algName\mbox{[}$\,$\mbox{]}, int dimension1, int dimension2)
+\item 
+void \hyperlink{getBiclusters_8h_beff90029d52971661727685d1ce47ff}{getBiclustersFromFile5} (leda::matrix \&M, int inp, int fraction, int high, list$<$ leda::matrix $>$ \&matrixList\_\-l, list$<$ list$<$ \hyperlink{structgenes}{GENES} $>$ $>$ \&results, char algName\mbox{[}$\,$\mbox{]}, int modOrPure, int dimension1, int dimension2)
+\end{CompactItemize}
+\subsection*{Variables}
+\begin{CompactItemize}
+\item 
+\hyperlink{structgenesx}{GNDATAx} \hyperlink{getBiclusters_8h_0f7498f5b9f1d97ca60f9527af7d793b}{gx} \mbox{[}6241\mbox{]}
+\end{CompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{getBiclusters_8h_937efd574b51f15d2441e2d98203b9b7}{
+\index{getBiclusters.h@{getBiclusters.h}!ESIT@{ESIT}}
+\index{ESIT@{ESIT}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{ESIT}]{\setlength{\rightskip}{0pt plus 5cm}\#define ESIT~==}}
+\label{getBiclusters_8h_937efd574b51f15d2441e2d98203b9b7}
+
+
+
+
+\subsection{Typedef Documentation}
+\hypertarget{getBiclusters_8h_227a00339d5a4932a74f9bcb518a34ba}{
+\index{getBiclusters.h@{getBiclusters.h}!GENES@{GENES}}
+\index{GENES@{GENES}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{GENES}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf genes} {\bf GENES}}}
+\label{getBiclusters_8h_227a00339d5a4932a74f9bcb518a34ba}
+
+
+\hypertarget{getBiclusters_8h_1a1abdd58848d7ff7cad33849f293693}{
+\index{getBiclusters.h@{getBiclusters.h}!GNDATA2@{GNDATA2}}
+\index{GNDATA2@{GNDATA2}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{GNDATA2}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf genes3} {\bf GNDATA2}}}
+\label{getBiclusters_8h_1a1abdd58848d7ff7cad33849f293693}
+
+
+\hypertarget{getBiclusters_8h_a3108616e3cb1428fc293c57b96e7f40}{
+\index{getBiclusters.h@{getBiclusters.h}!GNDATAx@{GNDATAx}}
+\index{GNDATAx@{GNDATAx}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{GNDATAx}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf genesx} {\bf GNDATAx}}}
+\label{getBiclusters_8h_a3108616e3cb1428fc293c57b96e7f40}
+
+
+
+
+\subsection{Function Documentation}
+\hypertarget{getBiclusters_8h_9ba2454ca73ee42bd52576c8633bb456}{
+\index{getBiclusters.h@{getBiclusters.h}!analyseGenes@{analyseGenes}}
+\index{analyseGenes@{analyseGenes}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{analyseGenes}]{\setlength{\rightskip}{0pt plus 5cm}void analyseGenes (char {\em fileName}\mbox{[}$\,$\mbox{]}, \/  int {\em biNumber}, \/  int {\em dimension1}, \/  int {\em dimension2})}}
+\label{getBiclusters_8h_9ba2454ca73ee42bd52576c8633bb456}
+
+
+\hypertarget{getBiclusters_8h_dea99e343f7a4d3efc498f0175febdab}{
+\index{getBiclusters.h@{getBiclusters.h}!analyseGenes2@{analyseGenes2}}
+\index{analyseGenes2@{analyseGenes2}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{analyseGenes2}]{\setlength{\rightskip}{0pt plus 5cm}void analyseGenes2 (char {\em fileName}\mbox{[}$\,$\mbox{]}, \/  int {\em biNumber}, \/  char {\em algName}\mbox{[}$\,$\mbox{]}, \/  int {\em dimension1}, \/  int {\em dimension})}}
+\label{getBiclusters_8h_dea99e343f7a4d3efc498f0175febdab}
+
+
+\hypertarget{getBiclusters_8h_d8283e5ab084421261d216af02f1be59}{
+\index{getBiclusters.h@{getBiclusters.h}!getBiclustersFromFile@{getBiclustersFromFile}}
+\index{getBiclustersFromFile@{getBiclustersFromFile}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{getBiclustersFromFile}]{\setlength{\rightskip}{0pt plus 5cm}void getBiclustersFromFile (leda::matrix \& {\em M}, \/  int {\em inp}, \/  int {\em fraction}, \/  int {\em high}, \/  list$<$ leda::matrix $>$ \& {\em matrixList\_\-l}, \/  list$<$ list$<$ {\bf GENES} $>$ $>$ \& {\em results}, \/  int {\em dimension1}, \/  int {\em dimension2})}}
+\label{getBiclusters_8h_d8283e5ab084421261d216af02f1be59}
+
+
+\hypertarget{getBiclusters_8h_d7508c68a0f9fa09dc2ad880220138fd}{
+\index{getBiclusters.h@{getBiclusters.h}!getBiclustersFromFile2@{getBiclustersFromFile2}}
+\index{getBiclustersFromFile2@{getBiclustersFromFile2}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{getBiclustersFromFile2}]{\setlength{\rightskip}{0pt plus 5cm}void getBiclustersFromFile2 (leda::matrix \& {\em M}, \/  int {\em inp}, \/  int {\em fraction}, \/  int {\em high}, \/  list$<$ leda::matrix $>$ \& {\em matrixList\_\-l}, \/  list$<$ list$<$ {\bf GENES} $>$ $>$ \& {\em results}, \/  char {\em algName}\mbox{[}$\,$\mbox{]}, \/  int {\em dimension1}, \/  int {\em dimension2})}}
+\label{getBiclusters_8h_d7508c68a0f9fa09dc2ad880220138fd}
+
+
+\hypertarget{getBiclusters_8h_4a6a1fa0c800f68dfdf4c6838a76b06b}{
+\index{getBiclusters.h@{getBiclusters.h}!getBiclustersFromFile3@{getBiclustersFromFile3}}
+\index{getBiclustersFromFile3@{getBiclustersFromFile3}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{getBiclustersFromFile3}]{\setlength{\rightskip}{0pt plus 5cm}void getBiclustersFromFile3 (leda::matrix \& {\em M}, \/  int {\em inp}, \/  int {\em fraction}, \/  int {\em high}, \/  list$<$ leda::matrix $>$ \& {\em matrixList\_\-l}, \/  list$<$ list$<$ {\bf GENES} $>$ $>$ \& {\em results}, \/  char {\em algName}\mbox{[}$\,$\mbox{]}, \/  int {\em dimension1}, \/  int {\em dimension2})}}
+\label{getBiclusters_8h_4a6a1fa0c800f68dfdf4c6838a76b06b}
+
+
+\hypertarget{getBiclusters_8h_beff90029d52971661727685d1ce47ff}{
+\index{getBiclusters.h@{getBiclusters.h}!getBiclustersFromFile5@{getBiclustersFromFile5}}
+\index{getBiclustersFromFile5@{getBiclustersFromFile5}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{getBiclustersFromFile5}]{\setlength{\rightskip}{0pt plus 5cm}void getBiclustersFromFile5 (leda::matrix \& {\em M}, \/  int {\em inp}, \/  int {\em fraction}, \/  int {\em high}, \/  list$<$ leda::matrix $>$ \& {\em matrixList\_\-l}, \/  list$<$ list$<$ {\bf GENES} $>$ $>$ \& {\em results}, \/  char {\em algName}\mbox{[}$\,$\mbox{]}, \/  int {\em modOrPure}, \/  int {\em dimension1}, \/  int {\em dimension2})}}
+\label{getBiclusters_8h_beff90029d52971661727685d1ce47ff}
+
+
+\hypertarget{getBiclusters_8h_920fc03d7435e2fae71f1eb9bc6ecc53}{
+\index{getBiclusters.h@{getBiclusters.h}!getMatrixFromFile@{getMatrixFromFile}}
+\index{getMatrixFromFile@{getMatrixFromFile}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{getMatrixFromFile}]{\setlength{\rightskip}{0pt plus 5cm}matrix getMatrixFromFile (char {\em filename}\mbox{[}10\mbox{]}, \/  int {\em forOtherAlgorithms}, \/  int \& {\em dimension1}, \/  int \& {\em dimension2})}}
+\label{getBiclusters_8h_920fc03d7435e2fae71f1eb9bc6ecc53}
+
+
+\hypertarget{getBiclusters_8h_637887b5efd7f0b26fbd10dcde4e23cc}{
+\index{getBiclusters.h@{getBiclusters.h}!getMatrixFromFile@{getMatrixFromFile}}
+\index{getMatrixFromFile@{getMatrixFromFile}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{getMatrixFromFile}]{\setlength{\rightskip}{0pt plus 5cm}matrix getMatrixFromFile (char {\em filename}\mbox{[}10\mbox{]}, \/  double {\em multiplyParameter}, \/  int \& {\em dimension1}, \/  int \& {\em dimension2})}}
+\label{getBiclusters_8h_637887b5efd7f0b26fbd10dcde4e23cc}
+
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{getBiclusters_8h_0f7498f5b9f1d97ca60f9527af7d793b}{
+\index{getBiclusters.h@{getBiclusters.h}!gx@{gx}}
+\index{gx@{gx}!getBiclusters.h@{getBiclusters.h}}
+\subsubsection[{gx}]{\setlength{\rightskip}{0pt plus 5cm}{\bf GNDATAx} {\bf gx}\mbox{[}6241\mbox{]}}}
+\label{getBiclusters_8h_0f7498f5b9f1d97ca60f9527af7d793b}
+
+

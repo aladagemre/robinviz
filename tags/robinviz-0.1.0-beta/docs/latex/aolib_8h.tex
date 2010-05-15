@@ -1,0 +1,927 @@
+\hypertarget{aolib_8h}{
+\section{aolib.h File Reference}
+\label{aolib_8h}\index{aolib.h@{aolib.h}}
+}
+{\tt \#include $<$LEDA/graph/graph.h$>$}\par
+{\tt \#include $<$LEDA/graph/graph\_\-gen.h$>$}\par
+{\tt \#include $<$LEDA/graph/edge\_\-array.h$>$}\par
+{\tt \#include $<$LEDA/graphics/graphwin.h$>$}\par
+{\tt \#include $<$LEDA/core/list.h$>$}\par
+{\tt \#include $<$LEDA/core/string.h$>$}\par
+{\tt \#include $<$iostream$>$}\par
+{\tt \#include $<$LEDA/graph/graph\_\-misc.h$>$}\par
+{\tt \#include $<$LEDA/numbers/integer\_\-matrix.h$>$}\par
+{\tt \#include $<$LEDA/numbers/matrix.h$>$}\par
+{\tt \#include $<$fstream$>$}\par
+{\tt \#include $<$LEDA/graph/node\_\-matrix.h$>$}\par
+{\tt \#include $<$LEDA/core/queue.h$>$}\par
+{\tt \#include $<$iomanip$>$}\par
+{\tt \#include $<$ctime$>$}\par
+{\tt \#include $<$time.h$>$}\par
+\subsection*{Defines}
+\begin{CompactItemize}
+\item 
+\#define \hyperlink{aolib_8h_43011aabc923f9b33f1f51dc03b23539}{POINT}~point;
+\item 
+\#define \hyperlink{aolib_8h_113de2ca40cbca6b88da9af6be44dc70}{arda}
+\item 
+\#define \hyperlink{aolib_8h_a5d91000eef7dfc9c4ed8677994fdf92}{melih}
+\item 
+\#define \hyperlink{aolib_8h_e2bc3f58a7b5ecbee1ff3546484406bd}{omer}
+\item 
+\#define \hyperlink{aolib_8h_d9a263ee8510889abdf768e7354afbd1}{IsArc\_\-}(x, \hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y})~(mCross\mbox{[}x\mbox{]}\mbox{[}\hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y}\mbox{]} $<$ mCross\mbox{[}\hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y}\mbox{]}\mbox{[}x\mbox{]})
+\item 
+\#define \hyperlink{aolib_8h_73caba128af7581204f9a29fcadc0050}{Weight\_\-}(x, \hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y})~(mCross\mbox{[}\hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y}\mbox{]}\mbox{[}x\mbox{]} - mCross\mbox{[}x\mbox{]}\mbox{[}\hyperlink{matrixToGraph_8h_22a46938cbacb5bc35041b19a4122099}{y}\mbox{]})
+\end{CompactItemize}
+\subsection*{Enumerations}
+\begin{CompactItemize}
+\item 
+enum \{ \hyperlink{aolib_8h_06fc87d81c62e9abb8790b6e5713c55bc157bdf0b85a40d2619cbc8bc1ae5fe2}{NONE}, 
+\hyperlink{aolib_8h_06fc87d81c62e9abb8790b6e5713c55bb118dac9cc2ccfb354db4ae325af3724}{DOING}, 
+\hyperlink{aolib_8h_06fc87d81c62e9abb8790b6e5713c55b9c954bcf443428c80b0f107b3bc48749}{DONE}
+ \}
+\end{CompactItemize}
+\subsection*{Functions}
+\begin{CompactItemize}
+\item 
+int \hyperlink{aolib_8h_3999beabf587cd12da8ec280a172619a}{W} (matrix \&m, int left, int right, int row)
+\item 
+void \hyperlink{aolib_8h_fffd386a3a7249e4b173528da1442821}{barycenter\_\-calc} (matrix \&m)
+\item 
+matrix \hyperlink{aolib_8h_9d4ae273e5f13ce5da44a45351c707ac}{g2m} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ A, list$<$ node $>$ B, bool)
+\item 
+void \hyperlink{aolib_8h_9bf28990ac58007d971c2255aa8e0861}{m2g} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B, matrix \&m, bool)
+\item 
+void \hyperlink{aolib_8h_28e01d8ac9fedab1c09101a684f9efd2}{wolf} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B)
+\item 
+integer \hyperlink{aolib_8h_408b5ed5e5cccfe76c15955be90f882d}{W2} (GRAPH$<$ int, int $>$ \&G, node alt1, node alt2, node ust, list$<$ node $>$)
+\item 
+void \hyperlink{aolib_8h_4e149b26cc59044c642e7e25eabd8eb7}{merge} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&ptRow, list$<$ node $>$ \&L, list$<$ node $>$ \&R, node owner, list$<$ node $>$ \&alt)
+\item 
+void \hyperlink{aolib_8h_3c2da8ab3c068c90d1bb458850817ef7}{wolf\_\-ph2} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&ptRow, node owner, list$<$ node $>$ alt)
+\item 
+void \hyperlink{aolib_8h_8410d42aef0eccf807a02dc0d17a610b}{writeRow} (ofstream \&report, int, int, int, int, int, array$<$ integer $>$, string extra, array$<$ int $>$)
+\item 
+integer \hyperlink{aolib_8h_01797b0d27ac3dc67917935efd9b4d3a}{crossing\_\-numberM} (matrix \&m)
+\item 
+integer \hyperlink{aolib_8h_c7c1aa295a19dab2d559cdda21468668}{crossing\_\-numberM} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B)
+\item 
+integer \hyperlink{aolib_8h_78b3509aa793c7341019884ad4bfcb45}{crossing\_\-numberG} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B)
+\item 
+void \hyperlink{aolib_8h_76c35fa110bf4912df418c5ffcf16a66}{randomGraph\_\-} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B, int iANodeCount, int iBNodeCount, int completeNess, int sumOfWeight, bool useCoefficient)
+\item 
+int \hyperlink{aolib_8h_b19596afb5679a762461e4d389fb9697}{calculateSumOfWeight} (int a, int b, int cn, int averageWeight)
+\item 
+void \hyperlink{aolib_8h_2c1f179881581879687bdf585f9ff4bb}{randomGraph2} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B, int aCount, int bCount, double edgeDensity, int sumOfWeight, int weightBalance)
+\item 
+void \hyperlink{aolib_8h_0fb267ea0075208d75d412db80175c36}{assignWeight} (matrix \&m, int sumOfWeight, int weightBalance)
+\item 
+double \hyperlink{aolib_8h_57de83ebd7a62ba331e3c1187e55bf42}{crossing\_\-for\_\-an\_\-edge} (matrix \&m, int i, int j)
+\item 
+integer \hyperlink{aolib_8h_639869119ec1e5342b789e327c61a527}{crossing\_\-number} (matrix \&m)
+\item 
+void \hyperlink{aolib_8h_3e97e90a22be9c334f16ca515c3093ab}{barycenter\_\-graph} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B)
+\item 
+void \hyperlink{aolib_8h_952162886440e2fa558db479bb80e219}{median\_\-graph} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B)
+\item 
+void \hyperlink{aolib_8h_bcab7a15eaf3a4b983b138b096a950d9}{GRE\_\-graph} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B)
+\item 
+void \hyperlink{aolib_8h_d142b952fdc035ce9eb11deffd3b88cf}{resetWinTable} (array$<$ int $>$ \&winTable)
+\item 
+void \hyperlink{aolib_8h_aa8ceee87926351206240ec65e531d48}{resetCrossingTable} (array$<$ integer $>$ \&crossingTable)
+\item 
+void \hyperlink{aolib_8h_49016f6fa0be5f78dc018369b9b6c8d5}{resetCrossingAvgTable} (array$<$ integer $>$ \&crossingAvgTable)
+\item 
+void \hyperlink{aolib_8h_e42124fe152633d47e95a758e19a4472}{WDFS} (node inRoot, bool \&thruRemoved, node\_\-array$<$ int $>$ \&theVisited, node\_\-array$<$ int $>$ \&theParent, int \&thruPenaltyArcs)
+\item 
+void \hyperlink{aolib_8h_a00bdcf4e96130264ec80f80daf35fb0}{WDFSOrder} (node inRoot, node\_\-array$<$ int $>$ \&theVisited, int \&inPosition)
+\item 
+void \hyperlink{aolib_8h_4e9758f022cc4e57bcf55c41edbe4c02}{index} ()
+\item 
+integer \hyperlink{aolib_8h_caaa8be33ecd907abbd60ede63312d54}{crossCount} (node u, node v)
+\item 
+void \hyperlink{aolib_8h_3e21d4b31f3734a1a6c5aa656191c91b}{BuildCrossTable} ()
+\item 
+void \hyperlink{aolib_8h_f3e2e485f3ff008910d925cbb25f3a73}{initGlobals} ()
+\item 
+void \hyperlink{aolib_8h_077109df72bfa35883b0a3099618cf62}{RunPMAlgorithm} (GRAPH$<$ int, int $>$ \&G)
+\item 
+void \hyperlink{aolib_8h_8ff8e77df70a3e4756cd3ef819a7b564}{barycenter\_\-calc\_\-for\_\-median} (matrix \&m, int a, int b)
+\item 
+void \hyperlink{aolib_8h_943fd4fbd9f7b6867693e35a22afa4b5}{Partition\_\-Preprocess} (matrix \&m, matrix \&median\_\-index, matrix \&partition)
+\item 
+node\_\-array$<$ int $>$ \hyperlink{aolib_8h_0c59066e44eee42caf1cb6f12eadcb05}{indexApm} (\hyperlink{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{Gpm})
+\item 
+node\_\-array$<$ int $>$ \hyperlink{aolib_8h_239d60041d737b4a6177a255fa781e53}{indexBpm} (\hyperlink{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{Gpm})
+\item 
+node\_\-array$<$ int $>$ \hyperlink{aolib_8h_2cced4f2b15c6b288a11186cfa793f74}{indexApm2} (\hyperlink{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{Gpm})
+\item 
+array$<$ node $>$ \hyperlink{aolib_8h_6cb9d50b8b1a42073d4a66b0f7b99cae}{arrayApm} (AG.size())
+\item 
+array$<$ node $>$ \hyperlink{aolib_8h_d95abe5494022bc457090d0fb9016032}{arrayApm2} (AG.size())
+\item 
+node\_\-matrix$<$ integer $>$ \hyperlink{aolib_8h_fc332429aa1b4d9d20cfc69e88648d2f}{mCross} (\hyperlink{aolib__eski2_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{Gpm})
+\item 
+integer \hyperlink{aolib_8h_020a3b224e6d5d5dcbf49f36ea87dce0}{minimum} (integer a, integer b)
+\item 
+integer \hyperlink{aolib_8h_8e4821f1affb5b78b4ecea9f4c9661c9}{totalCrossPm} ()
+\item 
+void \hyperlink{aolib_8h_31f3283662f4b2c36973c456184e9778}{printOrder} (node\_\-array$<$ int $>$ index)
+\item 
+void \hyperlink{aolib_8h_90049e8ec0f782952e0a7a245e6fc1dc}{orderAG} (list$<$ node $>$ \&newA)
+\item 
+void \hyperlink{aolib_8h_b6b2b9128217f98c13508797ed0a6080}{readFromFile} ()
+\item 
+void \hyperlink{aolib_8h_cc3a3f6c7f2b28901f4bdac30bca0120}{writeToFileForPM} ()
+\item 
+void \hyperlink{aolib_8h_90be651467903fb32078cc555b2b0299}{writeTolog} ()
+\item 
+integer \hyperlink{aolib_8h_be58d3960676ce316a5fbaa18b391af1}{crossCount\_\-} (node u, node v, node\_\-array$<$ int $>$ \&naiA, node\_\-array$<$ int $>$ \&naiB, GRAPH$<$ int, int $>$ \&G)
+\item 
+integer \hyperlink{aolib_8h_4c23769473613fe9a8974a5f7cefbec5}{lowerBound} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B)
+\item 
+void \hyperlink{aolib_8h_9ec6e473373b4c06353ee8951206b818}{printNodeMatrix} (node\_\-matrix$<$ integer $>$ m, list$<$ node $>$ A)
+\item 
+void \hyperlink{aolib_8h_546f01a34c7e038ecc36950113f064d2}{printNodeArray} (node\_\-array$<$ int $>$ theVisited, string name)
+\item 
+void \hyperlink{aolib_8h_d6734f50a8599b2a306c3bec1e1af0e7}{index2} ()
+\item 
+integer \hyperlink{aolib_8h_4385c9655867d20ee018711e7f1d5cd9}{crossCount} (list$<$ edge $>$ outU, list$<$ edge $>$ outV, bool UinRight)
+\item 
+void \hyperlink{aolib_8h_e6f11429346ec62fb898f0d0197cc560}{destroyCrossTable} ()
+\item 
+node\_\-matrix$<$ double $>$ \hyperlink{aolib_8h_da8c9036dc778520fef36fee680c254b}{buildCrossTableNodeMatrix} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B)
+\item 
+void \hyperlink{aolib_8h_a58a5781d940497038005a480a6a38f2}{median\_\-calc} (matrix \&m)
+\item 
+void \hyperlink{aolib_8h_2ba36dad325c02f3a3acc463e7970d37}{generateFileName} (char $\ast$graphfile, int wb, int aw, int aCount, int bCount, int cn, int ri)
+\item 
+integer \hyperlink{aolib_8h_56f47b4a5ea634d1f560378e61c70829}{crossingNumber} (matrix \&m)
+\item 
+integer \hyperlink{aolib_8h_6185cc9b6f81244abe432aac3b57d6d9}{crossingNumber} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B)
+\item 
+int \hyperlink{aolib_8h_78259d9b12fd51203f13d98185e8db45}{getCrossings} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ \&B)
+\item 
+void \hyperlink{aolib_8h_f57368790b019defca6077c34b354339}{wolfPhase2} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&ptRow, node owner, list$<$ node $>$ alt)
+\item 
+void \hyperlink{aolib_8h_97b39482f381436f54ef950b4b18ae04}{wolfBarycenter} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B)
+\item 
+void \hyperlink{aolib_8h_b53dfcc34d996dfae0e8683e6df92c77}{wolfBarycenterSlidingWindow} (GRAPH$<$ int, int $>$ \&G, list$<$ node $>$ \&A, list$<$ node $>$ B, int wsk=1)
+\item 
+void \hyperlink{aolib_8h_bd6bc87c09d720d69be7b0ad5658c8ae}{split} (const std::string \&str, list$<$ list$<$ int $>$ $>$ \&output, const string \&delimiters=\char`\"{},\char`\"{})
+\item 
+void \hyperlink{aolib_8h_fb6930b09928137da22b4cd5441758ab}{split} (const std::string \&str, list$<$ int $>$ \&output, const string \&delimiters=\char`\"{},\char`\"{})
+\end{CompactItemize}
+\subsection*{Variables}
+\begin{CompactItemize}
+\item 
+int \hyperlink{aolib_8h_b0808031e753da2c0fddfec38aaed895}{crossingIndexInc} = 0
+\item 
+int \hyperlink{aolib_8h_42445aeaa7fc54d9b42341055e6c813f}{defOriginal} = \hyperlink{aolib_8h_b0808031e753da2c0fddfec38aaed895}{crossingIndexInc}++
+\item 
+int \hyperlink{aolib_8h_9fbcf49e0859ec7d4b4f1f6c565aab63}{defWolf} = \hyperlink{aolib_8h_b0808031e753da2c0fddfec38aaed895}{crossingIndexInc}++
+\item 
+int \hyperlink{aolib_8h_3e7112ff134567e852c722ca81f540fb}{defWolfBary} = \hyperlink{aolib_8h_b0808031e753da2c0fddfec38aaed895}{crossingIndexInc}++
+\item 
+int \hyperlink{aolib_8h_06d95c2b643af57acbda1a4956b5ad4a}{defWolfBaryWindow} = \hyperlink{aolib_8h_b0808031e753da2c0fddfec38aaed895}{crossingIndexInc}++
+\item 
+int \hyperlink{aolib_8h_d87d98637570fa50dad51fc9002cbd3d}{defBary} = \hyperlink{aolib_8h_b0808031e753da2c0fddfec38aaed895}{crossingIndexInc}++
+\item 
+int \hyperlink{aolib_8h_0f8f69edac7d9abb665fb35d4871799e}{defMedian} = \hyperlink{aolib_8h_b0808031e753da2c0fddfec38aaed895}{crossingIndexInc}++
+\item 
+int \hyperlink{aolib_8h_4642a3efb27dd42777f3d22616191d36}{defGre} = \hyperlink{aolib_8h_b0808031e753da2c0fddfec38aaed895}{crossingIndexInc}++
+\item 
+int \hyperlink{aolib_8h_75858416c8e60f3f309e60386bc72cd7}{defPm} = \hyperlink{aolib_8h_b0808031e753da2c0fddfec38aaed895}{crossingIndexInc}++
+\item 
+int \hyperlink{aolib_8h_3e3257a31d746832e584b37f0df0d7ec}{defLast} = 7
+\item 
+char $\ast$ \hyperlink{aolib_8h_949673dfc44597942c3a6e0dcc869b12}{defS} \mbox{[}$\,$\mbox{]} = \{\char`\"{}Original\char`\"{},\char`\"{}Wolf\char`\"{},\char`\"{}WolfBary\char`\"{},\char`\"{}WolfBaryWindow1\char`\"{},\char`\"{}Bary\char`\"{},\char`\"{}Median\char`\"{},\char`\"{}GRE\char`\"{}\}
+\item 
+int \hyperlink{aolib_8h_d3e76470679f86b988cae65755b565c9}{wolfDebug} = 0
+\item 
+int \hyperlink{aolib_8h_05eef49850bae44414d4be10b57ceadd}{partitionCount}
+\item 
+int \hyperlink{aolib_8h_d38037bf00c1027e0c88453038371378}{wolfWin}
+\item 
+int \hyperlink{aolib_8h_c820ba639850d325591b873fbc964e92}{baryWin}
+\item 
+int \hyperlink{aolib_8h_faac179044337a3d1f8441195e196f11}{experimentCount}
+\item 
+int \hyperlink{aolib_8h_eb76d796d9a5153d13110fe84ae704e5}{justRunPhase1} = false
+\item 
+ofstream \hyperlink{aolib_8h_d445eb84da11034a167a557434110ad1}{afile}
+\item 
+ofstream \hyperlink{aolib_8h_bb265f916ed2ca1d52238afdb30e036b}{pmfile}
+\item 
+ifstream \hyperlink{aolib_8h_055e662a5bccb40a6ae4508616a4f599}{pmin}
+\item 
+list$<$ node $>$ \hyperlink{aolib_8h_1c9089e5ae8c97255e0a031aee85fcbe}{AG}
+\item 
+list$<$ node $>$ \hyperlink{aolib_8h_4c81f9f4f59751ccd512642be3e2ccb1}{BG}
+\item 
+list$<$ node $>$ \hyperlink{aolib_8h_917c5d500ebadcd57803261bc94d17b8}{Apm}
+\item 
+GRAPH$<$ int, int $>$ \hyperlink{aolib_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{Gpm}
+\item 
+int \hyperlink{aolib_8h_cd7b38bdbcc0bc99848a6edee0a504f6}{theRuns}
+\end{CompactItemize}
+
+
+\subsection{Define Documentation}
+\hypertarget{aolib_8h_113de2ca40cbca6b88da9af6be44dc70}{
+\index{aolib.h@{aolib.h}!arda@{arda}}
+\index{arda@{arda}!aolib.h@{aolib.h}}
+\subsubsection[{arda}]{\setlength{\rightskip}{0pt plus 5cm}\#define arda}}
+\label{aolib_8h_113de2ca40cbca6b88da9af6be44dc70}
+
+
+\hypertarget{aolib_8h_d9a263ee8510889abdf768e7354afbd1}{
+\index{aolib.h@{aolib.h}!IsArc\_\-@{IsArc\_\-}}
+\index{IsArc\_\-@{IsArc\_\-}!aolib.h@{aolib.h}}
+\subsubsection[{IsArc\_\-}]{\setlength{\rightskip}{0pt plus 5cm}\#define IsArc\_\-(x, \/  {\bf y})~(mCross\mbox{[}x\mbox{]}\mbox{[}{\bf y}\mbox{]} $<$ mCross\mbox{[}{\bf y}\mbox{]}\mbox{[}x\mbox{]})}}
+\label{aolib_8h_d9a263ee8510889abdf768e7354afbd1}
+
+
+\hypertarget{aolib_8h_a5d91000eef7dfc9c4ed8677994fdf92}{
+\index{aolib.h@{aolib.h}!melih@{melih}}
+\index{melih@{melih}!aolib.h@{aolib.h}}
+\subsubsection[{melih}]{\setlength{\rightskip}{0pt plus 5cm}\#define melih}}
+\label{aolib_8h_a5d91000eef7dfc9c4ed8677994fdf92}
+
+
+\hypertarget{aolib_8h_e2bc3f58a7b5ecbee1ff3546484406bd}{
+\index{aolib.h@{aolib.h}!omer@{omer}}
+\index{omer@{omer}!aolib.h@{aolib.h}}
+\subsubsection[{omer}]{\setlength{\rightskip}{0pt plus 5cm}\#define omer}}
+\label{aolib_8h_e2bc3f58a7b5ecbee1ff3546484406bd}
+
+
+\hypertarget{aolib_8h_43011aabc923f9b33f1f51dc03b23539}{
+\index{aolib.h@{aolib.h}!POINT@{POINT}}
+\index{POINT@{POINT}!aolib.h@{aolib.h}}
+\subsubsection[{POINT}]{\setlength{\rightskip}{0pt plus 5cm}\#define POINT~point;}}
+\label{aolib_8h_43011aabc923f9b33f1f51dc03b23539}
+
+
+\hypertarget{aolib_8h_73caba128af7581204f9a29fcadc0050}{
+\index{aolib.h@{aolib.h}!Weight\_\-@{Weight\_\-}}
+\index{Weight\_\-@{Weight\_\-}!aolib.h@{aolib.h}}
+\subsubsection[{Weight\_\-}]{\setlength{\rightskip}{0pt plus 5cm}\#define Weight\_\-(x, \/  {\bf y})~(mCross\mbox{[}{\bf y}\mbox{]}\mbox{[}x\mbox{]} - mCross\mbox{[}x\mbox{]}\mbox{[}{\bf y}\mbox{]})}}
+\label{aolib_8h_73caba128af7581204f9a29fcadc0050}
+
+
+
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{aolib_8h_06fc87d81c62e9abb8790b6e5713c55b}{
+\subsubsection[{"@0}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}}
+\label{aolib_8h_06fc87d81c62e9abb8790b6e5713c55b}
+
+
+\begin{Desc}
+\item[Enumerator: ]\par
+\begin{description}
+\index{NONE@{NONE}!aolib.h@{aolib.h}}\index{aolib.h@{aolib.h}!NONE@{NONE}}\item[{\em 
+\hypertarget{aolib_8h_06fc87d81c62e9abb8790b6e5713c55bc157bdf0b85a40d2619cbc8bc1ae5fe2}{
+NONE}
+\label{aolib_8h_06fc87d81c62e9abb8790b6e5713c55bc157bdf0b85a40d2619cbc8bc1ae5fe2}
+}]\index{DOING@{DOING}!aolib.h@{aolib.h}}\index{aolib.h@{aolib.h}!DOING@{DOING}}\item[{\em 
+\hypertarget{aolib_8h_06fc87d81c62e9abb8790b6e5713c55bb118dac9cc2ccfb354db4ae325af3724}{
+DOING}
+\label{aolib_8h_06fc87d81c62e9abb8790b6e5713c55bb118dac9cc2ccfb354db4ae325af3724}
+}]\index{DONE@{DONE}!aolib.h@{aolib.h}}\index{aolib.h@{aolib.h}!DONE@{DONE}}\item[{\em 
+\hypertarget{aolib_8h_06fc87d81c62e9abb8790b6e5713c55b9c954bcf443428c80b0f107b3bc48749}{
+DONE}
+\label{aolib_8h_06fc87d81c62e9abb8790b6e5713c55b9c954bcf443428c80b0f107b3bc48749}
+}]\end{description}
+\end{Desc}
+
+
+
+\subsection{Function Documentation}
+\hypertarget{aolib_8h_6cb9d50b8b1a42073d4a66b0f7b99cae}{
+\index{aolib.h@{aolib.h}!arrayApm@{arrayApm}}
+\index{arrayApm@{arrayApm}!aolib.h@{aolib.h}}
+\subsubsection[{arrayApm}]{\setlength{\rightskip}{0pt plus 5cm}array$<$node$>$ arrayApm (AG. {\em size}())}}
+\label{aolib_8h_6cb9d50b8b1a42073d4a66b0f7b99cae}
+
+
+\hypertarget{aolib_8h_d95abe5494022bc457090d0fb9016032}{
+\index{aolib.h@{aolib.h}!arrayApm2@{arrayApm2}}
+\index{arrayApm2@{arrayApm2}!aolib.h@{aolib.h}}
+\subsubsection[{arrayApm2}]{\setlength{\rightskip}{0pt plus 5cm}array$<$node$>$ arrayApm2 (AG. {\em size}())}}
+\label{aolib_8h_d95abe5494022bc457090d0fb9016032}
+
+
+\hypertarget{aolib_8h_0fb267ea0075208d75d412db80175c36}{
+\index{aolib.h@{aolib.h}!assignWeight@{assignWeight}}
+\index{assignWeight@{assignWeight}!aolib.h@{aolib.h}}
+\subsubsection[{assignWeight}]{\setlength{\rightskip}{0pt plus 5cm}void assignWeight (matrix \& {\em m}, \/  int {\em sumOfWeight}, \/  int {\em weightBalance})}}
+\label{aolib_8h_0fb267ea0075208d75d412db80175c36}
+
+
+\hypertarget{aolib_8h_fffd386a3a7249e4b173528da1442821}{
+\index{aolib.h@{aolib.h}!barycenter\_\-calc@{barycenter\_\-calc}}
+\index{barycenter\_\-calc@{barycenter\_\-calc}!aolib.h@{aolib.h}}
+\subsubsection[{barycenter\_\-calc}]{\setlength{\rightskip}{0pt plus 5cm}void barycenter\_\-calc (matrix \& {\em m})}}
+\label{aolib_8h_fffd386a3a7249e4b173528da1442821}
+
+
+\hypertarget{aolib_8h_8ff8e77df70a3e4756cd3ef819a7b564}{
+\index{aolib.h@{aolib.h}!barycenter\_\-calc\_\-for\_\-median@{barycenter\_\-calc\_\-for\_\-median}}
+\index{barycenter\_\-calc\_\-for\_\-median@{barycenter\_\-calc\_\-for\_\-median}!aolib.h@{aolib.h}}
+\subsubsection[{barycenter\_\-calc\_\-for\_\-median}]{\setlength{\rightskip}{0pt plus 5cm}void barycenter\_\-calc\_\-for\_\-median (matrix \& {\em m}, \/  int {\em a}, \/  int {\em b})}}
+\label{aolib_8h_8ff8e77df70a3e4756cd3ef819a7b564}
+
+
+\hypertarget{aolib_8h_3e97e90a22be9c334f16ca515c3093ab}{
+\index{aolib.h@{aolib.h}!barycenter\_\-graph@{barycenter\_\-graph}}
+\index{barycenter\_\-graph@{barycenter\_\-graph}!aolib.h@{aolib.h}}
+\subsubsection[{barycenter\_\-graph}]{\setlength{\rightskip}{0pt plus 5cm}void barycenter\_\-graph (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{aolib_8h_3e97e90a22be9c334f16ca515c3093ab}
+
+
+\hypertarget{aolib_8h_3e21d4b31f3734a1a6c5aa656191c91b}{
+\index{aolib.h@{aolib.h}!BuildCrossTable@{BuildCrossTable}}
+\index{BuildCrossTable@{BuildCrossTable}!aolib.h@{aolib.h}}
+\subsubsection[{BuildCrossTable}]{\setlength{\rightskip}{0pt plus 5cm}void BuildCrossTable ()}}
+\label{aolib_8h_3e21d4b31f3734a1a6c5aa656191c91b}
+
+
+\hypertarget{aolib_8h_da8c9036dc778520fef36fee680c254b}{
+\index{aolib.h@{aolib.h}!buildCrossTableNodeMatrix@{buildCrossTableNodeMatrix}}
+\index{buildCrossTableNodeMatrix@{buildCrossTableNodeMatrix}!aolib.h@{aolib.h}}
+\subsubsection[{buildCrossTableNodeMatrix}]{\setlength{\rightskip}{0pt plus 5cm}node\_\-matrix$<$double$>$ buildCrossTableNodeMatrix (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{aolib_8h_da8c9036dc778520fef36fee680c254b}
+
+
+\hypertarget{aolib_8h_b19596afb5679a762461e4d389fb9697}{
+\index{aolib.h@{aolib.h}!calculateSumOfWeight@{calculateSumOfWeight}}
+\index{calculateSumOfWeight@{calculateSumOfWeight}!aolib.h@{aolib.h}}
+\subsubsection[{calculateSumOfWeight}]{\setlength{\rightskip}{0pt plus 5cm}int calculateSumOfWeight (int {\em a}, \/  int {\em b}, \/  int {\em cn}, \/  int {\em averageWeight})}}
+\label{aolib_8h_b19596afb5679a762461e4d389fb9697}
+
+
+\hypertarget{aolib_8h_4385c9655867d20ee018711e7f1d5cd9}{
+\index{aolib.h@{aolib.h}!crossCount@{crossCount}}
+\index{crossCount@{crossCount}!aolib.h@{aolib.h}}
+\subsubsection[{crossCount}]{\setlength{\rightskip}{0pt plus 5cm}integer crossCount (list$<$ edge $>$ {\em outU}, \/  list$<$ edge $>$ {\em outV}, \/  bool {\em UinRight})}}
+\label{aolib_8h_4385c9655867d20ee018711e7f1d5cd9}
+
+
+\hypertarget{aolib_8h_caaa8be33ecd907abbd60ede63312d54}{
+\index{aolib.h@{aolib.h}!crossCount@{crossCount}}
+\index{crossCount@{crossCount}!aolib.h@{aolib.h}}
+\subsubsection[{crossCount}]{\setlength{\rightskip}{0pt plus 5cm}integer crossCount (node {\em u}, \/  node {\em v})}}
+\label{aolib_8h_caaa8be33ecd907abbd60ede63312d54}
+
+
+\hypertarget{aolib_8h_be58d3960676ce316a5fbaa18b391af1}{
+\index{aolib.h@{aolib.h}!crossCount\_\-@{crossCount\_\-}}
+\index{crossCount\_\-@{crossCount\_\-}!aolib.h@{aolib.h}}
+\subsubsection[{crossCount\_\-}]{\setlength{\rightskip}{0pt plus 5cm}integer crossCount\_\- (node {\em u}, \/  node {\em v}, \/  node\_\-array$<$ int $>$ \& {\em naiA}, \/  node\_\-array$<$ int $>$ \& {\em naiB}, \/  GRAPH$<$ int, int $>$ \& {\em G})}}
+\label{aolib_8h_be58d3960676ce316a5fbaa18b391af1}
+
+
+\hypertarget{aolib_8h_57de83ebd7a62ba331e3c1187e55bf42}{
+\index{aolib.h@{aolib.h}!crossing\_\-for\_\-an\_\-edge@{crossing\_\-for\_\-an\_\-edge}}
+\index{crossing\_\-for\_\-an\_\-edge@{crossing\_\-for\_\-an\_\-edge}!aolib.h@{aolib.h}}
+\subsubsection[{crossing\_\-for\_\-an\_\-edge}]{\setlength{\rightskip}{0pt plus 5cm}double crossing\_\-for\_\-an\_\-edge (matrix \& {\em m}, \/  int {\em i}, \/  int {\em j})}}
+\label{aolib_8h_57de83ebd7a62ba331e3c1187e55bf42}
+
+
+\hypertarget{aolib_8h_639869119ec1e5342b789e327c61a527}{
+\index{aolib.h@{aolib.h}!crossing\_\-number@{crossing\_\-number}}
+\index{crossing\_\-number@{crossing\_\-number}!aolib.h@{aolib.h}}
+\subsubsection[{crossing\_\-number}]{\setlength{\rightskip}{0pt plus 5cm}integer crossing\_\-number (matrix \& {\em m})}}
+\label{aolib_8h_639869119ec1e5342b789e327c61a527}
+
+
+\hypertarget{aolib_8h_78b3509aa793c7341019884ad4bfcb45}{
+\index{aolib.h@{aolib.h}!crossing\_\-numberG@{crossing\_\-numberG}}
+\index{crossing\_\-numberG@{crossing\_\-numberG}!aolib.h@{aolib.h}}
+\subsubsection[{crossing\_\-numberG}]{\setlength{\rightskip}{0pt plus 5cm}integer crossing\_\-numberG (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B})}}
+\label{aolib_8h_78b3509aa793c7341019884ad4bfcb45}
+
+
+\hypertarget{aolib_8h_c7c1aa295a19dab2d559cdda21468668}{
+\index{aolib.h@{aolib.h}!crossing\_\-numberM@{crossing\_\-numberM}}
+\index{crossing\_\-numberM@{crossing\_\-numberM}!aolib.h@{aolib.h}}
+\subsubsection[{crossing\_\-numberM}]{\setlength{\rightskip}{0pt plus 5cm}integer crossing\_\-numberM (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B})}}
+\label{aolib_8h_c7c1aa295a19dab2d559cdda21468668}
+
+
+\hypertarget{aolib_8h_01797b0d27ac3dc67917935efd9b4d3a}{
+\index{aolib.h@{aolib.h}!crossing\_\-numberM@{crossing\_\-numberM}}
+\index{crossing\_\-numberM@{crossing\_\-numberM}!aolib.h@{aolib.h}}
+\subsubsection[{crossing\_\-numberM}]{\setlength{\rightskip}{0pt plus 5cm}integer crossing\_\-numberM (matrix \& {\em m})}}
+\label{aolib_8h_01797b0d27ac3dc67917935efd9b4d3a}
+
+
+\hypertarget{aolib_8h_6185cc9b6f81244abe432aac3b57d6d9}{
+\index{aolib.h@{aolib.h}!crossingNumber@{crossingNumber}}
+\index{crossingNumber@{crossingNumber}!aolib.h@{aolib.h}}
+\subsubsection[{crossingNumber}]{\setlength{\rightskip}{0pt plus 5cm}integer crossingNumber (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B})}}
+\label{aolib_8h_6185cc9b6f81244abe432aac3b57d6d9}
+
+
+\hypertarget{aolib_8h_56f47b4a5ea634d1f560378e61c70829}{
+\index{aolib.h@{aolib.h}!crossingNumber@{crossingNumber}}
+\index{crossingNumber@{crossingNumber}!aolib.h@{aolib.h}}
+\subsubsection[{crossingNumber}]{\setlength{\rightskip}{0pt plus 5cm}integer crossingNumber (matrix \& {\em m})}}
+\label{aolib_8h_56f47b4a5ea634d1f560378e61c70829}
+
+
+\hypertarget{aolib_8h_e6f11429346ec62fb898f0d0197cc560}{
+\index{aolib.h@{aolib.h}!destroyCrossTable@{destroyCrossTable}}
+\index{destroyCrossTable@{destroyCrossTable}!aolib.h@{aolib.h}}
+\subsubsection[{destroyCrossTable}]{\setlength{\rightskip}{0pt plus 5cm}void destroyCrossTable ()}}
+\label{aolib_8h_e6f11429346ec62fb898f0d0197cc560}
+
+
+\hypertarget{aolib_8h_9d4ae273e5f13ce5da44a45351c707ac}{
+\index{aolib.h@{aolib.h}!g2m@{g2m}}
+\index{g2m@{g2m}!aolib.h@{aolib.h}}
+\subsubsection[{g2m}]{\setlength{\rightskip}{0pt plus 5cm}matrix g2m (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ {\em A}, \/  list$<$ node $>$ {\em B}, \/  bool {\em weighted} = {\tt true})}}
+\label{aolib_8h_9d4ae273e5f13ce5da44a45351c707ac}
+
+
+\hypertarget{aolib_8h_2ba36dad325c02f3a3acc463e7970d37}{
+\index{aolib.h@{aolib.h}!generateFileName@{generateFileName}}
+\index{generateFileName@{generateFileName}!aolib.h@{aolib.h}}
+\subsubsection[{generateFileName}]{\setlength{\rightskip}{0pt plus 5cm}void generateFileName (char $\ast$ {\em graphfile}, \/  int {\em wb}, \/  int {\em aw}, \/  int {\em aCount}, \/  int {\em bCount}, \/  int {\em cn}, \/  int {\em ri})}}
+\label{aolib_8h_2ba36dad325c02f3a3acc463e7970d37}
+
+
+\hypertarget{aolib_8h_78259d9b12fd51203f13d98185e8db45}{
+\index{aolib.h@{aolib.h}!getCrossings@{getCrossings}}
+\index{getCrossings@{getCrossings}!aolib.h@{aolib.h}}
+\subsubsection[{getCrossings}]{\setlength{\rightskip}{0pt plus 5cm}int getCrossings (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B})}}
+\label{aolib_8h_78259d9b12fd51203f13d98185e8db45}
+
+
+\hypertarget{aolib_8h_bcab7a15eaf3a4b983b138b096a950d9}{
+\index{aolib.h@{aolib.h}!GRE\_\-graph@{GRE\_\-graph}}
+\index{GRE\_\-graph@{GRE\_\-graph}!aolib.h@{aolib.h}}
+\subsubsection[{GRE\_\-graph}]{\setlength{\rightskip}{0pt plus 5cm}void GRE\_\-graph (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{aolib_8h_bcab7a15eaf3a4b983b138b096a950d9}
+
+
+\hypertarget{aolib_8h_4e9758f022cc4e57bcf55c41edbe4c02}{
+\index{aolib.h@{aolib.h}!index@{index}}
+\index{index@{index}!aolib.h@{aolib.h}}
+\subsubsection[{index}]{\setlength{\rightskip}{0pt plus 5cm}void index ()}}
+\label{aolib_8h_4e9758f022cc4e57bcf55c41edbe4c02}
+
+
+\hypertarget{aolib_8h_d6734f50a8599b2a306c3bec1e1af0e7}{
+\index{aolib.h@{aolib.h}!index2@{index2}}
+\index{index2@{index2}!aolib.h@{aolib.h}}
+\subsubsection[{index2}]{\setlength{\rightskip}{0pt plus 5cm}void index2 ()}}
+\label{aolib_8h_d6734f50a8599b2a306c3bec1e1af0e7}
+
+
+\hypertarget{aolib_8h_0c59066e44eee42caf1cb6f12eadcb05}{
+\index{aolib.h@{aolib.h}!indexApm@{indexApm}}
+\index{indexApm@{indexApm}!aolib.h@{aolib.h}}
+\subsubsection[{indexApm}]{\setlength{\rightskip}{0pt plus 5cm}node\_\-array$<$int$>$ indexApm ({\bf Gpm})}}
+\label{aolib_8h_0c59066e44eee42caf1cb6f12eadcb05}
+
+
+\hypertarget{aolib_8h_2cced4f2b15c6b288a11186cfa793f74}{
+\index{aolib.h@{aolib.h}!indexApm2@{indexApm2}}
+\index{indexApm2@{indexApm2}!aolib.h@{aolib.h}}
+\subsubsection[{indexApm2}]{\setlength{\rightskip}{0pt plus 5cm}node\_\-array$<$int$>$ indexApm2 ({\bf Gpm})}}
+\label{aolib_8h_2cced4f2b15c6b288a11186cfa793f74}
+
+
+\hypertarget{aolib_8h_239d60041d737b4a6177a255fa781e53}{
+\index{aolib.h@{aolib.h}!indexBpm@{indexBpm}}
+\index{indexBpm@{indexBpm}!aolib.h@{aolib.h}}
+\subsubsection[{indexBpm}]{\setlength{\rightskip}{0pt plus 5cm}node\_\-array$<$int$>$ indexBpm ({\bf Gpm})}}
+\label{aolib_8h_239d60041d737b4a6177a255fa781e53}
+
+
+\hypertarget{aolib_8h_f3e2e485f3ff008910d925cbb25f3a73}{
+\index{aolib.h@{aolib.h}!initGlobals@{initGlobals}}
+\index{initGlobals@{initGlobals}!aolib.h@{aolib.h}}
+\subsubsection[{initGlobals}]{\setlength{\rightskip}{0pt plus 5cm}void initGlobals ()}}
+\label{aolib_8h_f3e2e485f3ff008910d925cbb25f3a73}
+
+
+\hypertarget{aolib_8h_4c23769473613fe9a8974a5f7cefbec5}{
+\index{aolib.h@{aolib.h}!lowerBound@{lowerBound}}
+\index{lowerBound@{lowerBound}!aolib.h@{aolib.h}}
+\subsubsection[{lowerBound}]{\setlength{\rightskip}{0pt plus 5cm}integer lowerBound (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B})}}
+\label{aolib_8h_4c23769473613fe9a8974a5f7cefbec5}
+
+
+\hypertarget{aolib_8h_9bf28990ac58007d971c2255aa8e0861}{
+\index{aolib.h@{aolib.h}!m2g@{m2g}}
+\index{m2g@{m2g}!aolib.h@{aolib.h}}
+\subsubsection[{m2g}]{\setlength{\rightskip}{0pt plus 5cm}void m2g (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  matrix \& {\em m}, \/  bool {\em weighted} = {\tt true})}}
+\label{aolib_8h_9bf28990ac58007d971c2255aa8e0861}
+
+
+\hypertarget{aolib_8h_fc332429aa1b4d9d20cfc69e88648d2f}{
+\index{aolib.h@{aolib.h}!mCross@{mCross}}
+\index{mCross@{mCross}!aolib.h@{aolib.h}}
+\subsubsection[{mCross}]{\setlength{\rightskip}{0pt plus 5cm}node\_\-matrix$<$integer$>$ mCross ({\bf Gpm})}}
+\label{aolib_8h_fc332429aa1b4d9d20cfc69e88648d2f}
+
+
+\hypertarget{aolib_8h_a58a5781d940497038005a480a6a38f2}{
+\index{aolib.h@{aolib.h}!median\_\-calc@{median\_\-calc}}
+\index{median\_\-calc@{median\_\-calc}!aolib.h@{aolib.h}}
+\subsubsection[{median\_\-calc}]{\setlength{\rightskip}{0pt plus 5cm}void median\_\-calc (matrix \& {\em m})}}
+\label{aolib_8h_a58a5781d940497038005a480a6a38f2}
+
+
+\hypertarget{aolib_8h_952162886440e2fa558db479bb80e219}{
+\index{aolib.h@{aolib.h}!median\_\-graph@{median\_\-graph}}
+\index{median\_\-graph@{median\_\-graph}!aolib.h@{aolib.h}}
+\subsubsection[{median\_\-graph}]{\setlength{\rightskip}{0pt plus 5cm}void median\_\-graph (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{aolib_8h_952162886440e2fa558db479bb80e219}
+
+
+\hypertarget{aolib_8h_4e149b26cc59044c642e7e25eabd8eb7}{
+\index{aolib.h@{aolib.h}!merge@{merge}}
+\index{merge@{merge}!aolib.h@{aolib.h}}
+\subsubsection[{merge}]{\setlength{\rightskip}{0pt plus 5cm}void merge (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em ptRow}, \/  list$<$ node $>$ \& {\em L}, \/  list$<$ node $>$ \& {\em R}, \/  node {\em owner}, \/  list$<$ node $>$ \& {\em alt})}}
+\label{aolib_8h_4e149b26cc59044c642e7e25eabd8eb7}
+
+
+\hypertarget{aolib_8h_020a3b224e6d5d5dcbf49f36ea87dce0}{
+\index{aolib.h@{aolib.h}!minimum@{minimum}}
+\index{minimum@{minimum}!aolib.h@{aolib.h}}
+\subsubsection[{minimum}]{\setlength{\rightskip}{0pt plus 5cm}integer minimum (integer {\em a}, \/  integer {\em b})}}
+\label{aolib_8h_020a3b224e6d5d5dcbf49f36ea87dce0}
+
+
+\hypertarget{aolib_8h_90049e8ec0f782952e0a7a245e6fc1dc}{
+\index{aolib.h@{aolib.h}!orderAG@{orderAG}}
+\index{orderAG@{orderAG}!aolib.h@{aolib.h}}
+\subsubsection[{orderAG}]{\setlength{\rightskip}{0pt plus 5cm}void orderAG (list$<$ node $>$ \& {\em newA})}}
+\label{aolib_8h_90049e8ec0f782952e0a7a245e6fc1dc}
+
+
+\hypertarget{aolib_8h_943fd4fbd9f7b6867693e35a22afa4b5}{
+\index{aolib.h@{aolib.h}!Partition\_\-Preprocess@{Partition\_\-Preprocess}}
+\index{Partition\_\-Preprocess@{Partition\_\-Preprocess}!aolib.h@{aolib.h}}
+\subsubsection[{Partition\_\-Preprocess}]{\setlength{\rightskip}{0pt plus 5cm}void Partition\_\-Preprocess (matrix \& {\em m}, \/  matrix \& {\em median\_\-index}, \/  matrix \& {\em partition})}}
+\label{aolib_8h_943fd4fbd9f7b6867693e35a22afa4b5}
+
+
+\hypertarget{aolib_8h_546f01a34c7e038ecc36950113f064d2}{
+\index{aolib.h@{aolib.h}!printNodeArray@{printNodeArray}}
+\index{printNodeArray@{printNodeArray}!aolib.h@{aolib.h}}
+\subsubsection[{printNodeArray}]{\setlength{\rightskip}{0pt plus 5cm}void printNodeArray (node\_\-array$<$ int $>$ {\em theVisited}, \/  string {\em name})}}
+\label{aolib_8h_546f01a34c7e038ecc36950113f064d2}
+
+
+\hypertarget{aolib_8h_9ec6e473373b4c06353ee8951206b818}{
+\index{aolib.h@{aolib.h}!printNodeMatrix@{printNodeMatrix}}
+\index{printNodeMatrix@{printNodeMatrix}!aolib.h@{aolib.h}}
+\subsubsection[{printNodeMatrix}]{\setlength{\rightskip}{0pt plus 5cm}void printNodeMatrix (node\_\-matrix$<$ integer $>$ {\em m}, \/  list$<$ node $>$ {\em A})}}
+\label{aolib_8h_9ec6e473373b4c06353ee8951206b818}
+
+
+\hypertarget{aolib_8h_31f3283662f4b2c36973c456184e9778}{
+\index{aolib.h@{aolib.h}!printOrder@{printOrder}}
+\index{printOrder@{printOrder}!aolib.h@{aolib.h}}
+\subsubsection[{printOrder}]{\setlength{\rightskip}{0pt plus 5cm}void printOrder (node\_\-array$<$ int $>$ {\em index})}}
+\label{aolib_8h_31f3283662f4b2c36973c456184e9778}
+
+
+\hypertarget{aolib_8h_2c1f179881581879687bdf585f9ff4bb}{
+\index{aolib.h@{aolib.h}!randomGraph2@{randomGraph2}}
+\index{randomGraph2@{randomGraph2}!aolib.h@{aolib.h}}
+\subsubsection[{randomGraph2}]{\setlength{\rightskip}{0pt plus 5cm}void randomGraph2 (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  int {\em aCount}, \/  int {\em bCount}, \/  double {\em edgeDensity}, \/  int {\em sumOfWeight}, \/  int {\em weightBalance})}}
+\label{aolib_8h_2c1f179881581879687bdf585f9ff4bb}
+
+
+\hypertarget{aolib_8h_76c35fa110bf4912df418c5ffcf16a66}{
+\index{aolib.h@{aolib.h}!randomGraph\_\-@{randomGraph\_\-}}
+\index{randomGraph\_\-@{randomGraph\_\-}!aolib.h@{aolib.h}}
+\subsubsection[{randomGraph\_\-}]{\setlength{\rightskip}{0pt plus 5cm}void randomGraph\_\- (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ \& {\em B}, \/  int {\em iANodeCount}, \/  int {\em iBNodeCount}, \/  int {\em completeNess}, \/  int {\em sumOfWeight}, \/  bool {\em useCoefficient} = {\tt false})}}
+\label{aolib_8h_76c35fa110bf4912df418c5ffcf16a66}
+
+
+\hypertarget{aolib_8h_b6b2b9128217f98c13508797ed0a6080}{
+\index{aolib.h@{aolib.h}!readFromFile@{readFromFile}}
+\index{readFromFile@{readFromFile}!aolib.h@{aolib.h}}
+\subsubsection[{readFromFile}]{\setlength{\rightskip}{0pt plus 5cm}void readFromFile ()}}
+\label{aolib_8h_b6b2b9128217f98c13508797ed0a6080}
+
+
+\hypertarget{aolib_8h_49016f6fa0be5f78dc018369b9b6c8d5}{
+\index{aolib.h@{aolib.h}!resetCrossingAvgTable@{resetCrossingAvgTable}}
+\index{resetCrossingAvgTable@{resetCrossingAvgTable}!aolib.h@{aolib.h}}
+\subsubsection[{resetCrossingAvgTable}]{\setlength{\rightskip}{0pt plus 5cm}void resetCrossingAvgTable (array$<$ integer $>$ \& {\em crossingAvgTable})}}
+\label{aolib_8h_49016f6fa0be5f78dc018369b9b6c8d5}
+
+
+\hypertarget{aolib_8h_aa8ceee87926351206240ec65e531d48}{
+\index{aolib.h@{aolib.h}!resetCrossingTable@{resetCrossingTable}}
+\index{resetCrossingTable@{resetCrossingTable}!aolib.h@{aolib.h}}
+\subsubsection[{resetCrossingTable}]{\setlength{\rightskip}{0pt plus 5cm}void resetCrossingTable (array$<$ integer $>$ \& {\em crossingTable})}}
+\label{aolib_8h_aa8ceee87926351206240ec65e531d48}
+
+
+\hypertarget{aolib_8h_d142b952fdc035ce9eb11deffd3b88cf}{
+\index{aolib.h@{aolib.h}!resetWinTable@{resetWinTable}}
+\index{resetWinTable@{resetWinTable}!aolib.h@{aolib.h}}
+\subsubsection[{resetWinTable}]{\setlength{\rightskip}{0pt plus 5cm}void resetWinTable (array$<$ int $>$ \& {\em winTable})}}
+\label{aolib_8h_d142b952fdc035ce9eb11deffd3b88cf}
+
+
+\hypertarget{aolib_8h_077109df72bfa35883b0a3099618cf62}{
+\index{aolib.h@{aolib.h}!RunPMAlgorithm@{RunPMAlgorithm}}
+\index{RunPMAlgorithm@{RunPMAlgorithm}!aolib.h@{aolib.h}}
+\subsubsection[{RunPMAlgorithm}]{\setlength{\rightskip}{0pt plus 5cm}void RunPMAlgorithm (GRAPH$<$ int, int $>$ \& {\em G})}}
+\label{aolib_8h_077109df72bfa35883b0a3099618cf62}
+
+
+\hypertarget{aolib_8h_fb6930b09928137da22b4cd5441758ab}{
+\index{aolib.h@{aolib.h}!split@{split}}
+\index{split@{split}!aolib.h@{aolib.h}}
+\subsubsection[{split}]{\setlength{\rightskip}{0pt plus 5cm}void split (const std::string \& {\em str}, \/  list$<$ int $>$ \& {\em output}, \/  const string \& {\em delimiters} = {\tt \char`\"{},\char`\"{}})}}
+\label{aolib_8h_fb6930b09928137da22b4cd5441758ab}
+
+
+\hypertarget{aolib_8h_bd6bc87c09d720d69be7b0ad5658c8ae}{
+\index{aolib.h@{aolib.h}!split@{split}}
+\index{split@{split}!aolib.h@{aolib.h}}
+\subsubsection[{split}]{\setlength{\rightskip}{0pt plus 5cm}void split (const std::string \& {\em str}, \/  list$<$ list$<$ int $>$ $>$ \& {\em output}, \/  const string \& {\em delimiters} = {\tt \char`\"{},\char`\"{}})}}
+\label{aolib_8h_bd6bc87c09d720d69be7b0ad5658c8ae}
+
+
+\hypertarget{aolib_8h_8e4821f1affb5b78b4ecea9f4c9661c9}{
+\index{aolib.h@{aolib.h}!totalCrossPm@{totalCrossPm}}
+\index{totalCrossPm@{totalCrossPm}!aolib.h@{aolib.h}}
+\subsubsection[{totalCrossPm}]{\setlength{\rightskip}{0pt plus 5cm}integer totalCrossPm ()}}
+\label{aolib_8h_8e4821f1affb5b78b4ecea9f4c9661c9}
+
+
+\hypertarget{aolib_8h_3999beabf587cd12da8ec280a172619a}{
+\index{aolib.h@{aolib.h}!W@{W}}
+\index{W@{W}!aolib.h@{aolib.h}}
+\subsubsection[{W}]{\setlength{\rightskip}{0pt plus 5cm}int W (matrix \& {\em m}, \/  int {\em left}, \/  int {\em right}, \/  int {\em row})}}
+\label{aolib_8h_3999beabf587cd12da8ec280a172619a}
+
+
+\hypertarget{aolib_8h_408b5ed5e5cccfe76c15955be90f882d}{
+\index{aolib.h@{aolib.h}!W2@{W2}}
+\index{W2@{W2}!aolib.h@{aolib.h}}
+\subsubsection[{W2}]{\setlength{\rightskip}{0pt plus 5cm}integer W2 (GRAPH$<$ int, int $>$ \& {\em G}, \/  node {\em alt1}, \/  node {\em alt2}, \/  node {\em ust}, \/  list$<$ node $>$ {\em alt})}}
+\label{aolib_8h_408b5ed5e5cccfe76c15955be90f882d}
+
+
+\hypertarget{aolib_8h_e42124fe152633d47e95a758e19a4472}{
+\index{aolib.h@{aolib.h}!WDFS@{WDFS}}
+\index{WDFS@{WDFS}!aolib.h@{aolib.h}}
+\subsubsection[{WDFS}]{\setlength{\rightskip}{0pt plus 5cm}void WDFS (node {\em inRoot}, \/  bool \& {\em thruRemoved}, \/  node\_\-array$<$ int $>$ \& {\em theVisited}, \/  node\_\-array$<$ int $>$ \& {\em theParent}, \/  int \& {\em thruPenaltyArcs})}}
+\label{aolib_8h_e42124fe152633d47e95a758e19a4472}
+
+
+\hypertarget{aolib_8h_a00bdcf4e96130264ec80f80daf35fb0}{
+\index{aolib.h@{aolib.h}!WDFSOrder@{WDFSOrder}}
+\index{WDFSOrder@{WDFSOrder}!aolib.h@{aolib.h}}
+\subsubsection[{WDFSOrder}]{\setlength{\rightskip}{0pt plus 5cm}void WDFSOrder (node {\em inRoot}, \/  node\_\-array$<$ int $>$ \& {\em theVisited}, \/  int \& {\em inPosition})}}
+\label{aolib_8h_a00bdcf4e96130264ec80f80daf35fb0}
+
+
+\hypertarget{aolib_8h_28e01d8ac9fedab1c09101a684f9efd2}{
+\index{aolib.h@{aolib.h}!wolf@{wolf}}
+\index{wolf@{wolf}!aolib.h@{aolib.h}}
+\subsubsection[{wolf}]{\setlength{\rightskip}{0pt plus 5cm}void wolf (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{aolib_8h_28e01d8ac9fedab1c09101a684f9efd2}
+
+
+\hypertarget{aolib_8h_3c2da8ab3c068c90d1bb458850817ef7}{
+\index{aolib.h@{aolib.h}!wolf\_\-ph2@{wolf\_\-ph2}}
+\index{wolf\_\-ph2@{wolf\_\-ph2}!aolib.h@{aolib.h}}
+\subsubsection[{wolf\_\-ph2}]{\setlength{\rightskip}{0pt plus 5cm}void wolf\_\-ph2 (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em ptRow}, \/  node {\em owner}, \/  list$<$ node $>$ {\em alt})}}
+\label{aolib_8h_3c2da8ab3c068c90d1bb458850817ef7}
+
+
+\hypertarget{aolib_8h_97b39482f381436f54ef950b4b18ae04}{
+\index{aolib.h@{aolib.h}!wolfBarycenter@{wolfBarycenter}}
+\index{wolfBarycenter@{wolfBarycenter}!aolib.h@{aolib.h}}
+\subsubsection[{wolfBarycenter}]{\setlength{\rightskip}{0pt plus 5cm}void wolfBarycenter (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B})}}
+\label{aolib_8h_97b39482f381436f54ef950b4b18ae04}
+
+
+\hypertarget{aolib_8h_b53dfcc34d996dfae0e8683e6df92c77}{
+\index{aolib.h@{aolib.h}!wolfBarycenterSlidingWindow@{wolfBarycenterSlidingWindow}}
+\index{wolfBarycenterSlidingWindow@{wolfBarycenterSlidingWindow}!aolib.h@{aolib.h}}
+\subsubsection[{wolfBarycenterSlidingWindow}]{\setlength{\rightskip}{0pt plus 5cm}void wolfBarycenterSlidingWindow (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em A}, \/  list$<$ node $>$ {\em B}, \/  int {\em wsk} = {\tt 1})}}
+\label{aolib_8h_b53dfcc34d996dfae0e8683e6df92c77}
+
+
+\hypertarget{aolib_8h_f57368790b019defca6077c34b354339}{
+\index{aolib.h@{aolib.h}!wolfPhase2@{wolfPhase2}}
+\index{wolfPhase2@{wolfPhase2}!aolib.h@{aolib.h}}
+\subsubsection[{wolfPhase2}]{\setlength{\rightskip}{0pt plus 5cm}void wolfPhase2 (GRAPH$<$ int, int $>$ \& {\em G}, \/  list$<$ node $>$ \& {\em ptRow}, \/  node {\em owner}, \/  list$<$ node $>$ {\em alt})}}
+\label{aolib_8h_f57368790b019defca6077c34b354339}
+
+
+\hypertarget{aolib_8h_8410d42aef0eccf807a02dc0d17a610b}{
+\index{aolib.h@{aolib.h}!writeRow@{writeRow}}
+\index{writeRow@{writeRow}!aolib.h@{aolib.h}}
+\subsubsection[{writeRow}]{\setlength{\rightskip}{0pt plus 5cm}void writeRow (ofstream \& {\em report}, \/  int {\em aCount}, \/  int {\em bCount}, \/  int {\em cn}, \/  int {\em sumOfWeight}, \/  int {\em aw}, \/  array$<$ integer $>$ {\em crossingAverages}, \/  string {\em extra}, \/  array$<$ int $>$ {\em winTable})}}
+\label{aolib_8h_8410d42aef0eccf807a02dc0d17a610b}
+
+
+\hypertarget{aolib_8h_cc3a3f6c7f2b28901f4bdac30bca0120}{
+\index{aolib.h@{aolib.h}!writeToFileForPM@{writeToFileForPM}}
+\index{writeToFileForPM@{writeToFileForPM}!aolib.h@{aolib.h}}
+\subsubsection[{writeToFileForPM}]{\setlength{\rightskip}{0pt plus 5cm}void writeToFileForPM ()}}
+\label{aolib_8h_cc3a3f6c7f2b28901f4bdac30bca0120}
+
+
+\hypertarget{aolib_8h_90be651467903fb32078cc555b2b0299}{
+\index{aolib.h@{aolib.h}!writeTolog@{writeTolog}}
+\index{writeTolog@{writeTolog}!aolib.h@{aolib.h}}
+\subsubsection[{writeTolog}]{\setlength{\rightskip}{0pt plus 5cm}void writeTolog ()}}
+\label{aolib_8h_90be651467903fb32078cc555b2b0299}
+
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{aolib_8h_d445eb84da11034a167a557434110ad1}{
+\index{aolib.h@{aolib.h}!afile@{afile}}
+\index{afile@{afile}!aolib.h@{aolib.h}}
+\subsubsection[{afile}]{\setlength{\rightskip}{0pt plus 5cm}ofstream {\bf afile}}}
+\label{aolib_8h_d445eb84da11034a167a557434110ad1}
+
+
+\hypertarget{aolib_8h_1c9089e5ae8c97255e0a031aee85fcbe}{
+\index{aolib.h@{aolib.h}!AG@{AG}}
+\index{AG@{AG}!aolib.h@{aolib.h}}
+\subsubsection[{AG}]{\setlength{\rightskip}{0pt plus 5cm}list$<$node$>$ {\bf AG}}}
+\label{aolib_8h_1c9089e5ae8c97255e0a031aee85fcbe}
+
+
+\hypertarget{aolib_8h_917c5d500ebadcd57803261bc94d17b8}{
+\index{aolib.h@{aolib.h}!Apm@{Apm}}
+\index{Apm@{Apm}!aolib.h@{aolib.h}}
+\subsubsection[{Apm}]{\setlength{\rightskip}{0pt plus 5cm}list$<$node$>$ {\bf Apm}}}
+\label{aolib_8h_917c5d500ebadcd57803261bc94d17b8}
+
+
+\hypertarget{aolib_8h_c820ba639850d325591b873fbc964e92}{
+\index{aolib.h@{aolib.h}!baryWin@{baryWin}}
+\index{baryWin@{baryWin}!aolib.h@{aolib.h}}
+\subsubsection[{baryWin}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf baryWin}}}
+\label{aolib_8h_c820ba639850d325591b873fbc964e92}
+
+
+\hypertarget{aolib_8h_4c81f9f4f59751ccd512642be3e2ccb1}{
+\index{aolib.h@{aolib.h}!BG@{BG}}
+\index{BG@{BG}!aolib.h@{aolib.h}}
+\subsubsection[{BG}]{\setlength{\rightskip}{0pt plus 5cm}list$<$node$>$ {\bf BG}}}
+\label{aolib_8h_4c81f9f4f59751ccd512642be3e2ccb1}
+
+
+\hypertarget{aolib_8h_b0808031e753da2c0fddfec38aaed895}{
+\index{aolib.h@{aolib.h}!crossingIndexInc@{crossingIndexInc}}
+\index{crossingIndexInc@{crossingIndexInc}!aolib.h@{aolib.h}}
+\subsubsection[{crossingIndexInc}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf crossingIndexInc} = 0}}
+\label{aolib_8h_b0808031e753da2c0fddfec38aaed895}
+
+
+\hypertarget{aolib_8h_d87d98637570fa50dad51fc9002cbd3d}{
+\index{aolib.h@{aolib.h}!defBary@{defBary}}
+\index{defBary@{defBary}!aolib.h@{aolib.h}}
+\subsubsection[{defBary}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf defBary} = {\bf crossingIndexInc}++}}
+\label{aolib_8h_d87d98637570fa50dad51fc9002cbd3d}
+
+
+\hypertarget{aolib_8h_4642a3efb27dd42777f3d22616191d36}{
+\index{aolib.h@{aolib.h}!defGre@{defGre}}
+\index{defGre@{defGre}!aolib.h@{aolib.h}}
+\subsubsection[{defGre}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf defGre} = {\bf crossingIndexInc}++}}
+\label{aolib_8h_4642a3efb27dd42777f3d22616191d36}
+
+
+\hypertarget{aolib_8h_3e3257a31d746832e584b37f0df0d7ec}{
+\index{aolib.h@{aolib.h}!defLast@{defLast}}
+\index{defLast@{defLast}!aolib.h@{aolib.h}}
+\subsubsection[{defLast}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf defLast} = 7}}
+\label{aolib_8h_3e3257a31d746832e584b37f0df0d7ec}
+
+
+\hypertarget{aolib_8h_0f8f69edac7d9abb665fb35d4871799e}{
+\index{aolib.h@{aolib.h}!defMedian@{defMedian}}
+\index{defMedian@{defMedian}!aolib.h@{aolib.h}}
+\subsubsection[{defMedian}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf defMedian} = {\bf crossingIndexInc}++}}
+\label{aolib_8h_0f8f69edac7d9abb665fb35d4871799e}
+
+
+\hypertarget{aolib_8h_42445aeaa7fc54d9b42341055e6c813f}{
+\index{aolib.h@{aolib.h}!defOriginal@{defOriginal}}
+\index{defOriginal@{defOriginal}!aolib.h@{aolib.h}}
+\subsubsection[{defOriginal}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf defOriginal} = {\bf crossingIndexInc}++}}
+\label{aolib_8h_42445aeaa7fc54d9b42341055e6c813f}
+
+
+\hypertarget{aolib_8h_75858416c8e60f3f309e60386bc72cd7}{
+\index{aolib.h@{aolib.h}!defPm@{defPm}}
+\index{defPm@{defPm}!aolib.h@{aolib.h}}
+\subsubsection[{defPm}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf defPm} = {\bf crossingIndexInc}++}}
+\label{aolib_8h_75858416c8e60f3f309e60386bc72cd7}
+
+
+\hypertarget{aolib_8h_949673dfc44597942c3a6e0dcc869b12}{
+\index{aolib.h@{aolib.h}!defS@{defS}}
+\index{defS@{defS}!aolib.h@{aolib.h}}
+\subsubsection[{defS}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ {\bf defS}\mbox{[}$\,$\mbox{]} = \{\char`\"{}Original\char`\"{},\char`\"{}Wolf\char`\"{},\char`\"{}WolfBary\char`\"{},\char`\"{}WolfBaryWindow1\char`\"{},\char`\"{}Bary\char`\"{},\char`\"{}Median\char`\"{},\char`\"{}GRE\char`\"{}\}}}
+\label{aolib_8h_949673dfc44597942c3a6e0dcc869b12}
+
+
+\hypertarget{aolib_8h_9fbcf49e0859ec7d4b4f1f6c565aab63}{
+\index{aolib.h@{aolib.h}!defWolf@{defWolf}}
+\index{defWolf@{defWolf}!aolib.h@{aolib.h}}
+\subsubsection[{defWolf}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf defWolf} = {\bf crossingIndexInc}++}}
+\label{aolib_8h_9fbcf49e0859ec7d4b4f1f6c565aab63}
+
+
+\hypertarget{aolib_8h_3e7112ff134567e852c722ca81f540fb}{
+\index{aolib.h@{aolib.h}!defWolfBary@{defWolfBary}}
+\index{defWolfBary@{defWolfBary}!aolib.h@{aolib.h}}
+\subsubsection[{defWolfBary}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf defWolfBary} = {\bf crossingIndexInc}++}}
+\label{aolib_8h_3e7112ff134567e852c722ca81f540fb}
+
+
+\hypertarget{aolib_8h_06d95c2b643af57acbda1a4956b5ad4a}{
+\index{aolib.h@{aolib.h}!defWolfBaryWindow@{defWolfBaryWindow}}
+\index{defWolfBaryWindow@{defWolfBaryWindow}!aolib.h@{aolib.h}}
+\subsubsection[{defWolfBaryWindow}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf defWolfBaryWindow} = {\bf crossingIndexInc}++}}
+\label{aolib_8h_06d95c2b643af57acbda1a4956b5ad4a}
+
+
+\hypertarget{aolib_8h_faac179044337a3d1f8441195e196f11}{
+\index{aolib.h@{aolib.h}!experimentCount@{experimentCount}}
+\index{experimentCount@{experimentCount}!aolib.h@{aolib.h}}
+\subsubsection[{experimentCount}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf experimentCount}}}
+\label{aolib_8h_faac179044337a3d1f8441195e196f11}
+
+
+\hypertarget{aolib_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}{
+\index{aolib.h@{aolib.h}!Gpm@{Gpm}}
+\index{Gpm@{Gpm}!aolib.h@{aolib.h}}
+\subsubsection[{Gpm}]{\setlength{\rightskip}{0pt plus 5cm}GRAPH$<$int,int$>$ {\bf Gpm}}}
+\label{aolib_8h_66f160dd9b9a64a89ebe0c0d92c6d62e}
+
+
+\hypertarget{aolib_8h_eb76d796d9a5153d13110fe84ae704e5}{
+\index{aolib.h@{aolib.h}!justRunPhase1@{justRunPhase1}}
+\index{justRunPhase1@{justRunPhase1}!aolib.h@{aolib.h}}
+\subsubsection[{justRunPhase1}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf justRunPhase1} = false}}
+\label{aolib_8h_eb76d796d9a5153d13110fe84ae704e5}
+
+
+\hypertarget{aolib_8h_05eef49850bae44414d4be10b57ceadd}{
+\index{aolib.h@{aolib.h}!partitionCount@{partitionCount}}
+\index{partitionCount@{partitionCount}!aolib.h@{aolib.h}}
+\subsubsection[{partitionCount}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf partitionCount}}}
+\label{aolib_8h_05eef49850bae44414d4be10b57ceadd}
+
+
+\hypertarget{aolib_8h_bb265f916ed2ca1d52238afdb30e036b}{
+\index{aolib.h@{aolib.h}!pmfile@{pmfile}}
+\index{pmfile@{pmfile}!aolib.h@{aolib.h}}
+\subsubsection[{pmfile}]{\setlength{\rightskip}{0pt plus 5cm}ofstream {\bf pmfile}}}
+\label{aolib_8h_bb265f916ed2ca1d52238afdb30e036b}
+
+
+\hypertarget{aolib_8h_055e662a5bccb40a6ae4508616a4f599}{
+\index{aolib.h@{aolib.h}!pmin@{pmin}}
+\index{pmin@{pmin}!aolib.h@{aolib.h}}
+\subsubsection[{pmin}]{\setlength{\rightskip}{0pt plus 5cm}ifstream {\bf pmin}}}
+\label{aolib_8h_055e662a5bccb40a6ae4508616a4f599}
+
+
+\hypertarget{aolib_8h_cd7b38bdbcc0bc99848a6edee0a504f6}{
+\index{aolib.h@{aolib.h}!theRuns@{theRuns}}
+\index{theRuns@{theRuns}!aolib.h@{aolib.h}}
+\subsubsection[{theRuns}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf theRuns}}}
+\label{aolib_8h_cd7b38bdbcc0bc99848a6edee0a504f6}
+
+
+\hypertarget{aolib_8h_d3e76470679f86b988cae65755b565c9}{
+\index{aolib.h@{aolib.h}!wolfDebug@{wolfDebug}}
+\index{wolfDebug@{wolfDebug}!aolib.h@{aolib.h}}
+\subsubsection[{wolfDebug}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf wolfDebug} = 0}}
+\label{aolib_8h_d3e76470679f86b988cae65755b565c9}
+
+
+\hypertarget{aolib_8h_d38037bf00c1027e0c88453038371378}{
+\index{aolib.h@{aolib.h}!wolfWin@{wolfWin}}
+\index{wolfWin@{wolfWin}!aolib.h@{aolib.h}}
+\subsubsection[{wolfWin}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf wolfWin}}}
+\label{aolib_8h_d38037bf00c1027e0c88453038371378}
+
+
