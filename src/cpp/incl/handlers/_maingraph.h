@@ -178,7 +178,8 @@ void mainGraph2( GRAPH<leda::string,int> &PROJECT,
 		array<edge> edgeNumbersForInt;
 		edge e;
 		list_item it,it2;
-		GRAPH<int,int> PROJECT2 = mainGraphHandling(  PROJECT,
+		cout << " BEFORE MAIN LAYOUT FORM\n";
+		GRAPH<int,int> PROJECT2 = mainGraphHandling2(  PROJECT,
 							      nodesOfProjectStr,
 							      nodesOfProjectInt,
 							      GraphList,
@@ -234,17 +235,19 @@ void mainGraph2( GRAPH<leda::string,int> &PROJECT,
       	char filename[ 64 ];
 	if( autoFlag == true ){
 		for( count = 0; count < GraphList.size(); count++ ){
-
-			sprintf( filename, "sources/graphs/graph%d.gml", count );
+			
+			#ifdef LINUX
+				sprintf( filename, "outputs/graphs/graph%d.gml", count );
+			#else
+				sprintf( filename, "outputs//graphs//graph%d.gml", count );
+			#endif
 
 			array<list<node> > layers_ = LAYERS[ LAYERS.get_item( count )];
 			node_array<point> pos_ = POS[ POS.get_item( count )];
 			edge_array<list<point> > bends_ = BENDS[ BENDS.get_item( count )];
-
+			cout << " DUMMY\n";
 			G = GraphList[ GraphList.get_item( count ) ];
-			if( brandFlag == true || ourMethodFlag == true || brandFlag2 == true ){
-				RUN_FFD_AGAIN2( G, width, Xpos, Ypos, filename, count, namesForEachGraph, pos_, bends_, abbv, cat_num, Categories, edgeBendImp, colorScale, edgThicknessTher  ); 
-			}
+			RUN_FFD_AGAIN2( G, width, Xpos, Ypos, filename, count, namesForEachGraph, pos_, bends_, abbv, cat_num, Categories, edgeBendImp, colorScale, edgThicknessTher  ); 
 		}
 	}
 }

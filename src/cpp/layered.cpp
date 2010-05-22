@@ -672,6 +672,7 @@ int main(){
                     fclose( cfptr );
                 }
                 interactionRead( temp, GenesNode, INTERACTIONS, TEMPINT, ppifilename );
+                INTERACTIONS.write_gml( "whole.gml" );
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " Produce Bicluster Graphs" << endl;
 		cout << "/**************************************************/" << endl;
@@ -692,6 +693,7 @@ int main(){
 		}
 		else{
 			if( ffd_layout ){
+                                cout << " pirasa************************************* \n";
 				mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, biclusters, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num, Categories );
 			}
 		}

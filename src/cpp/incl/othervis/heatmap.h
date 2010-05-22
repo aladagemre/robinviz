@@ -167,3 +167,40 @@ void produceHeatmapInput( matrix M, list<GENES> &genes, list<CONDS> &conds, char
 	}
 	fclose( fptr );
 }
+
+/**
+* Function that takes a matrix of input or bicluster with respect to its
+* genes and conditions. Also, it takes the folder we want to put the output.
+* <list> version
+* @param M(matrix); it is n by m matrix
+* @param genes(list of GENES struct data type) the labels of dim1
+* @param conds(list of CONDS struct data type) the labels of dim2
+* @param filename(char *) output folder
+**/
+void produceHeatmapInput( matrix M, list<GENES> &genes, list<GENES> &conds, char filename[ 64 ] ){
+	FILE *fptr,*fptr2;
+	char c;
+	fptr = fopen( filename, "w" );
+	
+// 	cout << "DONE\n";
+	fprintf( fptr, "%d\t%d\n", M.dim1(), M.dim2() );
+	fprintf( fptr, "%s\t", "heatmap" );
+	for( int i = 0; i < M.dim2(); i++ ){
+		if( i != M.dim2() - 1 )
+			fprintf( fptr, "%s\t", conds[ conds.get_item( i )].GENE );
+		if( i == M.dim2() - 1 )
+			fprintf( fptr, "%s\n", conds[ conds.get_item( i )].GENE );
+	}
+	for( int i = 0; i < M.dim1(); i++ ){
+		for( int j = -1; j < M.dim2(); j++ ){
+			if( j == -1 ){
+				fprintf( fptr, "%s\t", genes[ genes.get_item( i )].GENE );
+			}
+			else{
+				fprintf( fptr, "%lf\t",M( i, j ) );
+			}
+		}
+		fprintf( fptr, "\n" );
+	}
+	fclose( fptr );
+}
