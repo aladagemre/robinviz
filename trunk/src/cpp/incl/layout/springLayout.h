@@ -80,169 +80,11 @@ void SPRING_EMBEDDING_(GRAPH<int,int>& G, node_array<double>& xpos,
         node_array<int> comp( G, 0 );
 	node n;
 	list_item it;
-        COMPONENTS( G, comp );
-        int max = 0;
-        forall_nodes( n, G ){
-            if( max < comp[ n ] )
-                max = comp[ n ];
-        }
-        array<list<node> > COMPS( max + 1 );
-	array<node> NODES( G.number_of_nodes() + 2 );
-        int count = 1;
-        forall_nodes( n, G ){
-            COMPS[ comp[ n ] ].append( n );
-	    NODES[ count ] = n;
-            G[ n ] = count;
-            count++;
-        }       
-       
-        array<GRAPH<int,int> > graphArray( max + 1 );
-        for( int i = 0; i < max+1; i++ )
-            graphArray[ i ] = G;
+	int count = 0;
 
-        for( int i = 0; i < max+1; i++ ){
-            list<node> nones;
-            forall_nodes( n, graphArray[ i ] ){
-                int flag = 0;
-                forall_items( it, COMPS[ i ] ){
-                    if( graphArray[ i ][ COMPS[ i ][ it ] ] == graphArray[ i ][ n ] ){
-                        flag = 1;
-                    }
-                }
-                if( flag == 0 )
-                    nones.append(n);
-            }
-            graphArray[ i ].del_nodes( nones );
-        }
-        array<node_array<double> > Xpos( max + 1 );
-        array<node_array<double> > Ypos( max + 1 );
-        for( int i = 0; i < max+1; i++ ){
-            node_array<double> xpos_( graphArray[ i ] );
-            node_array<double> ypos_( graphArray[ i ] );
-            Xpos[ i ] = xpos_;
-            Ypos[ i ] = ypos_;
-        }
-// 	array<two_tuple<int,int> > graphPartitionsX( max + 1 ); 
-// 	array<two_tuple<int,int> > graphPartitionsY( max + 1 );
-	array<int> graphSizes( max + 1 );
-	array<bool> graphDone( max + 1 );
-	int maxNodeSize = 0,minNodeSize,max_i,min_i;
-	double sum = 0;;
-	for( int i = 0; i < max+1; i++ ){
-		graphSizes[ i ] = (double)graphArray[ i ].number_of_nodes();
-		sum += graphArray[ i ].number_of_nodes();
-		graphDone[ i ] = false;
-		if( maxNodeSize < graphSizes[ i ] ){
-			maxNodeSize = graphSizes[ i ];
-			max_i = i;
-		}
-	}
-	minNodeSize = maxNodeSize;
-	for( int i = 0; i < max+1; i++ ){
-		if( minNodeSize > graphSizes[ i ] ){
-			minNodeSize = graphSizes[ i ];
-			min_i = i;
-		}
-// 		cout << graphSizes[ i ]<< "\t";
-	}
+	SPRING_EMBEDDING_our2(G,L,xpos,ypos,xleft,xright,ybottom,ytop,iterations,nodeIds); 
 
-// 	cout << "\n-------------------------------\n";
- 	int numberOfRegions = max+1;
-	rectangle R( 0,0, G.number_of_nodes()*10,  G.number_of_nodes()*3 );
-	list<int> indexs;
-	indexs.push_back( max_i );
-	graphDone[ max_i ] = true;
-// 	cout << graphSizes[ max_i ]<< "\t";
-	while( indexs.size() != max - 2 ){
-              int maxNow = minNodeSize;
-	      for( int i = 0; i < max+1; i++ ){
-		    if( maxNow <= graphSizes[ i ] && graphDone[ i ] == false ){
-			    maxNow = graphSizes[ i ];
-			    max_i = i;
-		    }
-	      }
-// 	      cout << graphSizes[ max_i ] << "\n";
-	      indexs.push_back( max_i );
-	      graphDone[ max_i ] = true;
-	}
-	indexs.push_back( min_i );
-// 	cout << graphSizes[ min_i ] << "\n";
-	graphDone[ min_i ] = true;
-	int leftOrDown = false; // Divide left if it is false, else divide down
-	point rupl = R.upper_left();  // returns the upper left corner.
-	point rupr = R.upper_right(); // returns the upper right corner.
-	point rlol = R.lower_left(); // returns the lower left corner.
-	point rlor = R.lower_right(); // returns the lower right corner. 
-        forall_items( it, indexs ){
-                  cout << "\n******************************************************\n";
-		  cout << graphArray[ indexs[it] ].number_of_nodes() <<  " - " << sum << endl;
-                  if( it == indexs.last() ){
-			cout << "\n LAST \n";
-			if( leftOrDown == false ){
-			      xleft = rupl.xcoord();
-			      xright = rupl.xcoord()+1;
-			      ybottom = rlol.ycoord();
-			      ytop = rupl.ycoord()+1;
-			      leftOrDown = true;
-			}
-			else{
-			      xleft = rupl.xcoord();
-			      xright = rupr.xcoord()+1;
-			      ybottom = rupl.ycoord();
-			      ytop = rupr.ycoord()+1;
-			      leftOrDown = false;
-			}			
-		  }
-		  else
-			if( leftOrDown == false ){
-			      cout << "\n CASE1 \n";
-			      double dist  = rupl.xdist( rupr );
-			      double dist2 = rlol.xdist( rlor );
-			      dist = dist * graphArray[ indexs[it] ].number_of_nodes() / sum;
-			      dist2 = dist2 * graphArray[ indexs[it] ].number_of_nodes() / sum;
-			      xleft = rupl.xcoord();
-			      xright = rupl.xcoord() + dist;
-			      ybottom = rlol.ycoord();
-			      ytop = rupl.ycoord();
-			      point rupl_( rupl.xcoord()+dist,rupl.ycoord() );
-			      rupl = rupl_;
-			      point rlol_( rlol.xcoord()+dist2,rlol.ycoord() );
-			      rlol = rlol_;
-			      leftOrDown = true;
-			}
-			else{
-			      cout << "\n CASE2 \n";
-			      double dist  = rupr.ydist( rlor );
-			      double dist2 = rupl.ydist( rlol );
-			      dist = dist * graphArray[ indexs[it] ].number_of_nodes() / sum;
-			      dist2 = dist2 * graphArray[ indexs[it] ].number_of_nodes() / sum;
-			      xleft = rupl.xcoord();
-			      xright = rupr.xcoord();
-			      ybottom = rupl.ycoord()-dist2;
-			      ytop = rupr.ycoord();
-			      point rupr_( rupr.xcoord(),rupr.ycoord()-dist);
-			      rupr = rupr_;
-			      point rupl_( rupl.xcoord(),rupl.ycoord()-dist2 );
-			      rupl = rupl_;
-			      leftOrDown = false;
-			}
-      //	  cout << rupl << " *** " << rupr << " *** " <<  rlol << " *** " << rlor << endl;
-		  cout << " low : " << xleft << " - " << ybottom << "\n up : " << xright << " - " << ytop << "\n";
-		  SPRING_EMBEDDING_our2(graphArray[ indexs[it] ],L,Xpos[ indexs[it] ],Ypos[ indexs[it] ],xleft,xright,ybottom,ytop,iterations,nodeIds); 
-		  sum = sum - graphArray[ indexs[it] ].number_of_nodes();
-// 		  cout << "\n******************************************************\n";
-        }
-// 	cout << "\n******************************************************\n";
-	xpos.init( G );
-	ypos.init( G );
-	for( int i = 0; i < max+1; i++ ){
-	      forall_nodes( n, graphArray[ i ] ){
-		    xpos[ NODES[ graphArray[ i ][ n ]] ] = Xpos[ i ][ n ];
-		    ypos[ NODES[ graphArray[ i ][ n ]] ] = Ypos[ i ][ n ];
-	      }
-        }
-
-	GraphWin gw( G, 500, 500 );
+	GraphWin gw( G );
 #ifdef SPRING_COLOR
 	random_source S3(1,13);
 	int random_value;
@@ -306,7 +148,7 @@ cout << "\n-------------------\n";
 cout << "\n--------\n";
 	int increase = (int) ((double)variations.size() / (double)edgeWeights.size());
 // 	cout << " increase : " << increase << endl;
-	forall_edges( e, G ){              
+	forall_edges( e, G ){		           
 		count = 0;
 		forall_items( it, edgeWeights ){
 		      if( edgeWeights[ it ] == G[ e ] ){
@@ -333,6 +175,20 @@ cout << "\n-----\n";
 // 	gw.zoom_graph();
 //  	gw.edit();
 #endif SPRING_DRAW
+}
+
+//i.   without fixed nodes for main graph
+void SPRING_EMBEDDING2_(	GRAPH<int,int>& G, 
+							node_array<double>& xpos,
+                            node_array<double>& ypos,
+                            double xleft, double xright,
+                            double ybottom, double ytop,
+                            int iterations,
+							node_array<int> &nodeIds,
+							node_array<double> &Hvalues )
+{ 
+	list<node> L;
+	SPRING_EMBEDDING_our2(G,L,xpos,ypos,xleft,xright,ybottom,ytop,iterations,nodeIds); 
 }
 
 //ii.  without border points and without fixed nodes
@@ -369,9 +225,25 @@ void SPRING_EMBEDDING_our(GRAPH<int,int>& G, list<node>& fixed_nodes,
 	int lower_bound=static_cast<int>(xleft);
 	int upper_bound=static_cast<int>(xright);
 	GraphWin gw( G, 500, 500 );
-	random_source S2(lower_bound,upper_bound);
-	int x1; 
 	node u,v;
+
+/*        COMPONENTS( G, comp );
+        int max = 0;
+        forall_nodes( n, G ){
+            if( max < comp[ n ] )
+                max = comp[ n ];
+        }
+        array<list<node> > COMPS( max + 1 );
+        int count = 1;
+        forall_nodes( n, G ){
+            COMPS[ comp[ n ] ].append( n );
+        }  */   
+	int max = 0;
+
+
+	
+	random_source S2(lower_bound,upper_bound);
+	int x1;
 	forall_nodes(v,G) {
 			S2 >> x1;
 			xpos[v]=x1;
@@ -390,6 +262,26 @@ void SPRING_EMBEDDING_our(GRAPH<int,int>& G, list<node>& fixed_nodes,
 	if (G.number_of_nodes() < 2) 
 		return;
 
+	forall_nodes( u, G ){
+		if( G.degree( u ) > max ){
+			max = G.degree( u );
+			v = u;
+		}
+	}
+	circle C( xpos[ v ], ypos[ v ], max * 20.0 );
+	max = 0;
+	forall_adj_nodes( u, v ){
+	      max++;
+	}
+	double min = 3.1415 / (double)max, tmp;
+	forall_adj_nodes( u, v ){
+	      point pos = C.point_on_circle( tmp );
+	      xpos[ u ] = pos.xcoord();
+	      ypos[ u ] = pos.ycoord();
+	      fixed_nodes.append( u );
+	      tmp -= min;   
+	}  
+	max = 0;
 	node_array<list_item> lit(G);
 	node_array<bool> fixed(G,false);
 
@@ -533,32 +425,32 @@ void SPRING_EMBEDDING_our(GRAPH<int,int>& G, list<node>& fixed_nodes,
 		c_f++;
 	}
 
-#ifdef SPRING_COLOR
-	random_source S3(1,13);
-	int random_value;
-
-	forall_nodes( v, G ){
-		//S3 >> random_value;
-		color random( nodeIds[ v ] );
-		gw.set_color( v, random);
-	}
-#endif SPRING_COLOR
-
-#ifdef SPRING_DRAW
-	gw.set_position( xpos, ypos );
-
-
-	gw.set_edge_thickness( 0.1, true );
-	gw.set_node_height(5,true);
-	gw.set_node_width(5,true);
-	gw.set_layout();
-	gw.set_animation_steps(3);
-	gw.set_edge_label_type(leda::data_label , true);
-	gw.display();
-	gw.zoom_graph();
- 	gw.edit();
-
-#endif SPRING_DRAW
+// #ifdef SPRING_COLOR
+// 	random_source S3(1,13);
+// 	int random_value;
+// 
+// 	forall_nodes( v, G ){
+// 		//S3 >> random_value;
+// 		color random( nodeIds[ v ] );
+// 		gw.set_color( v, random);
+// 	}
+// #endif SPRING_COLOR
+// 
+// #ifdef SPRING_DRAW
+// 	gw.set_position( xpos, ypos );
+// 
+// 
+// 	gw.set_edge_thickness( 0.1, true );
+// 	gw.set_node_height(5,true);
+// 	gw.set_node_width(5,true);
+// 	gw.set_layout();
+// 	gw.set_animation_steps(3);
+// 	gw.set_edge_label_type(leda::data_label , true);
+// 	gw.display();
+// 	gw.zoom_graph();
+//  	gw.edit();
+// 
+// #endif SPRING_DRAW
 }
 
 //2. Main Call 
@@ -681,7 +573,7 @@ void SPRING_EMBEDDING_our2(GRAPH<int,int>& G, list<node>& fixed_nodes,
 			double ydist=ypos[v]-ypos[u];
 			double dist=sqrt(xdist*xdist+ydist*ydist);
 
-			float f = (G.degree(u)+G.degree(v))/6.0;
+			float f = G[e] * (G.degree(u)+G.degree(v))/5.0;
 
 			dist /= f;
 

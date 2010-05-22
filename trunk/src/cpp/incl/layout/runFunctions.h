@@ -711,7 +711,11 @@ GRAPH<int,int> RUN_FFD(  GRAPH<int,int> &G,
 			G.del_edge( e );
 	}
 	node_array<int> nodeid( G, 3 );
-	SPRING_EMBEDDING_( G, xpos, ypos, 0,500,0,500, 500, nodeid, abbv, cat_num, Categories );
+	if( G.number_of_nodes() < 30 )
+		SPRING_EMBEDDING_( G, xpos, ypos, 0, 2000 ,0, 1000, 250, nodeid, abbv, cat_num, Categories );
+	else
+		SPRING_EMBEDDING_( G, xpos, ypos, 0, 2000 + G.number_of_nodes()*13 ,0, 1000 + G.number_of_nodes()*5, 250, nodeid, abbv, cat_num, Categories );
+
 	Xpos = xpos;
 	Ypos = ypos;
 
@@ -721,6 +725,987 @@ GRAPH<int,int> RUN_FFD(  GRAPH<int,int> &G,
 	}
 	return G;
 }
+
+
+/* Function is based for Force Directed Layout 
+Inputs are straightforward, this procedure 
+calculates the peripheral graphs */
+GRAPH<int,int> RUN_FFDANDCIRCLE(  GRAPH<int,int> &G, 
+			  array<list<node> > &layers, 
+			  int W, 
+			  node_array<double> &Xpos, 
+			  node_array<double> &Ypos, 
+			  int graphNo, 
+			  node_array<point> &posx,
+			  edge_array<list<point> > &bendsx, 
+			  int algorithmFlag, 
+			  int space, 
+			  bool xCoordFlag, 
+			  int increment,
+			  bool ledaPostFlag,
+			  array<char> &abbv,
+			  int cat_num,
+			  array<char> &Categories,
+			  int node_width,
+			  int minRadius
+){	
+	edge e;
+	node n;
+	int random_walk;
+	node_array<double> xpos( G, 0 );
+	node_array<double> ypos( G, 0 );
+//*********************//
+// Give rank assignmen //
+//*********************//
+	forall_edges( e, G )
+	{
+		if( G.source( e ) == G.target( e ) )
+			G.del_edge( e );
+	}
+	forall_edges( e, G )
+	{
+		if( G.source( e ) == G.target( e ) )
+			G.del_edge( e );
+	}
+	node_array<int> nodeid( G, 3 );
+	if( G.number_of_nodes() < 30 )
+		SPRING_EMBEDDING_( G, xpos, ypos, 0, 2000 ,0, 1000, 250, nodeid, abbv, cat_num, Categories );
+	else
+		SPRING_EMBEDDING_( G, xpos, ypos, 0, 2000 + G.number_of_nodes()*13 ,0, 1000 + G.number_of_nodes()*5, 250, nodeid, abbv, cat_num, Categories );
+
+	Xpos = xpos;
+	Ypos = ypos;
+
+	forall_nodes( n, G ){
+		point p( Xpos[ n ], Ypos[ n ] );
+		posx[ n ] = p;
+	}
+	
+	double xmean=0,ymean=0;
+	double xmax=xpos[G.first_node()],ymax=ypos[G.first_node()],xmin=xpos[G.first_node()],ymin=ypos[G.first_node()];
+	forall_nodes( n, G ){
+		xmean += xpos[ n ];
+		ymean += ypos[ n ];
+		if( xmax < xpos[ n ])
+			xmax = xpos[ n ];
+		if( xmin > xpos[ n ] )
+			xmin = xpos[ n ];
+		if( ymax < ypos[ n ])
+			ymax = ypos[ n ];
+		if( ymin > ypos[ n ] )
+			ymin = ypos[ n ];
+	}
+	double maxRadius = ( xmax - xmin ) / 2.0 > ( ymax - ymin ) / 2.0 ? ( xmax - xmin ) / 2.0 : ( ymax - ymin ) / 2.0;
+	xmean = xmean / (double)G.number_of_nodes();
+	ymean = ymean / (double)G.number_of_nodes();
+
+	list<circle> Circles;
+	double radius = minRadius,radBefore=0;
+	node_array<bool> marked( G, false );
+	int loopCount = 0;
+	while( allLabeled( G, marked ) != true ){
+		int count = 0;		
+		circle C( xmean, ymean, radius );
+		list<node> inCircles;
+		forall_nodes( n, G ){
+			if( marked[ n ] != true && C.inside( posx[ n ] ) ){
+				count++;
+				inCircles.append( n );
+				marked[ n ] = true;
+			}
+		}
+		if( count != 0 ){
+			array<bool> circlePosition( count + 1 );
+			array<double> radianPositions( count + 1 );
+			for( int a = 0; a < inCircles.size(); a++ ){
+				circlePosition[ a ] = false;
+			}
+			double length = node_width * count;		
+			double tmp = 2.0 * 3.147;
+			double radiusC = length / tmp;
+			circle C2;
+			if( loopCount == 0 ){
+				circle C3( xmean, ymean, radiusC );
+				C2 = C3;
+			}
+			else{
+				if( radiusC < radBefore + node_width * 2 ){
+					radiusC = radBefore + node_width * 2;
+					circle C3( xmean, ymean, radiusC );
+					C2 = C3;
+				}
+				else{
+					circle C3( xmean, ymean, radiusC );
+					C2 = C3;
+				}
+			}
+			double min = tmp / (double)count;
+			for( int a = 0; a < inCircles.size(); a++ ){
+				radianPositions[ a ] = tmp;
+				tmp -= min; 
+			}		
+			forall( n, inCircles ){
+				double minR = radiusC + 10000;
+				int storeA = 0;
+				for( int a = 0; a < inCircles.size(); a++ ){
+					point target = C2.point_on_circle( radianPositions[ a ] );
+					point source( xpos[ n ], ypos[ n ] );				
+					if( minR > abs( target.distance( source ) ) && circlePosition[ a ] == false ){
+						minR = abs( target.distance( source ) );
+						storeA = a;
+					}
+				}
+				circlePosition[ storeA ] = true;
+				xpos[ n ] = C2.point_on_circle( radianPositions[ storeA ] ).xcoord();
+				ypos[ n ] = C2.point_on_circle( radianPositions[ storeA ] ).ycoord();
+			}
+			radBefore = radiusC;	
+			loopCount++;
+		}
+		radius += radius;		
+	}
+
+	Xpos = xpos;
+	Ypos = ypos;
+	forall_nodes( n, G ){
+		point p( Xpos[ n ], Ypos[ n ] );
+		posx[ n ] = p;
+	}
+	return G;
+}
+
+
+
+/* Function is based for Force Directed Layout 
+Inputs are straightforward, this procedure 
+calculates the peripheral graphs */
+GRAPH<int,int> RUN_CIRCLEALONE(  GRAPH<int,int> &G, 
+			  array<list<node> > &layers, 
+			  int W, 
+			  node_array<double> &Xpos, 
+			  node_array<double> &Ypos, 
+			  int graphNo, 
+			  node_array<point> &posx,
+			  edge_array<list<point> > &bendsx, 
+			  int algorithmFlag, 
+			  int space, 
+			  bool xCoordFlag, 
+			  int increment,
+			  bool ledaPostFlag,
+			  array<char> &abbv,
+			  int cat_num,
+			  array<char> &Categories,
+			  int nodeWidth
+){	
+	edge e;
+	node n;
+	int random_walk;
+	node_array<double> xpos( G, 0 );
+	node_array<double> ypos( G, 0 );
+//*********************//
+// Give rank assignmen //
+//*********************//
+	forall_edges( e, G )
+	{
+		if( G.source( e ) == G.target( e ) )
+			G.del_edge( e );
+	}
+	forall_edges( e, G )
+	{
+		if( G.source( e ) == G.target( e ) )
+			G.del_edge( e );
+	}
+	node_array<int> nodeid( G, 3 );
+	node_array<point> pos( G );
+	double pi = 2.0 * 3.147;
+	double tmp = pi;
+	int count = 0;
+	double length = nodeWidth * G.number_of_nodes();
+	double radius = length / pi;
+	circle C( 0, 0, radius );
+	forall_nodes( n, G ){
+	      count++;
+	}
+
+	double min = pi / (double)count;
+	forall_nodes( n, G ){
+	      pos[ n ] = C.point_on_circle( tmp );
+	      tmp -= min;   
+	}      
+	forall_nodes( n, G ){
+		xpos[ n ] = pos[ n ].xcoord();
+		ypos[ n ] = pos[ n ].ycoord();
+	}
+
+	Xpos = xpos;
+	Ypos = ypos;
+
+	forall_nodes( n, G ){
+		point p( Xpos[ n ], Ypos[ n ] );
+		posx[ n ] = p;
+	}
+	return G;
+}
+
+
+/* Function is based for Heuristic Circular Layout
+that has two circles inside formed by lower degree
+nodes and hub nodes and their neigbors also form
+third outer circle around the two circle
+Inputs are straightforward, this procedure 
+calculates the peripheral graphs */
+GRAPH<int,int> RUN_CIRCULAR2C(  GRAPH<int,int> &G, 
+							  array<list<node> > &layers, 
+							  int W, 
+							  node_array<double> &Xpos, 
+							  node_array<double> &Ypos, 
+							  int graphNo, 
+							  node_array<point> &posx,
+							  edge_array<list<point> > &bendsx, 
+							  int algorithmFlag, 
+							  int space, 
+							  bool xCoordFlag, 
+							  int increment,
+							  bool ledaPostFlag,
+							  array<char> &abbv,
+							  int cat_num,
+							  array<char> &Categories,
+							  int nodeWidth
+){	
+	double threshold = 0.10;
+	int drawType = 1;
+	edge e;
+	node n,m,k;
+	int random_walk;
+	list_item it,it2;
+	node_array<double> xpos( G, 0 );
+	node_array<double> ypos( G, 0 );
+
+	forall_edges( e, G )
+	{
+		if( G.source( e ) == G.target( e ) )
+			G.del_edge( e );
+	}
+	forall_edges( e, G )
+	{
+		if( G.source( e ) == G.target( e ) )
+			G.del_edge( e );
+	}
+	
+	node_array<bool> marking( G, false );
+	node_array<int> degrees( G, 0 );
+	node_array<point> pos( G );
+	int max_degree = 0;
+	list<node> hubs,hubNeighbors;
+	list<two_tuple<node,list<node> > > HUBS;
+	forall_nodes( n, G ){
+		degrees[ n ] = G.degree( n );
+		if( max_degree < degrees[ n ] ){
+			max_degree = degrees[ n ];
+			m = n;
+		}
+	}
+	marking[ m ] = true;
+	forall_adj_nodes( n, m ){
+		hubNeighbors.append( n );
+		marking[ n ] = true;
+	}
+	two_tuple<node,list<node> > tup( m, hubNeighbors );
+	HUBS.append( tup );
+
+	forall_nodes( n, G ){
+		int count = 0;
+		forall_adj_nodes( k, n ){
+			if( marking[ k ] == false )
+				count++;
+		}
+		hubNeighbors.clear();
+		if( count >= max_degree * threshold ){
+			forall_adj_nodes( k, n ){
+				if( marking[ k ] == false ){
+					hubNeighbors.append( k );
+					marking[ k ] = true;
+				}
+			}
+			two_tuple<node,list<node> > tup( n, hubNeighbors );
+			HUBS.append( tup );
+		}
+	}
+
+
+	/* INNER CIRCLE Positioning */
+	list<node> alones;
+	forall_nodes( n, G ){
+		if( marking[ n ] == false )
+			alones.append( n );
+	}
+	int node_width = nodeWidth, node_height = 50;
+	int gaps = 20;
+	double radius = 2.0 * 3.14159;
+	double length = (double)alones.size() * (double)( node_width );
+	radius = length / radius;
+	circle C( 0, 0, radius );
+	double tmp = 2.0 * 3.14159;
+	double min = tmp / (double)alones.size();
+	if( drawType == 0 ){
+		forall_items( it, alones ){
+			  n = alones[ it ];
+			  pos[ n ] = C.point_on_circle( tmp );
+			  tmp -= min;   
+		}      
+	}
+	else{
+		if( drawType == 1 ){
+			list<node> lowDegree;
+			list<node> highDegree;
+			forall_items( it, alones ){
+				  n = alones[ it ];
+				  if( G.degree( n ) < 3 )
+					  lowDegree.append( n );
+				  else
+					  highDegree.append( n );
+			}    	
+
+			radius = 2.0 * 3.14159;
+			length = (double)lowDegree.size() * (double)( node_width );
+			radius = length / radius;
+			circle C2( 0, 0, radius );
+			tmp = 2.0 * 3.14159;
+			min = tmp / (double)lowDegree.size();
+			forall_items( it, lowDegree ){
+				  n = lowDegree[ it ];
+				  pos[ n ] = C2.point_on_circle( tmp );
+				  tmp -= min;   
+			}
+
+			radius = 2.0 * 3.14159;
+			length = (double)( (double)(highDegree.size() + lowDegree.size()) / 2.0 ) * (double)( node_width );
+			radius = length / radius;
+			if( radius < C2.radius() )
+				radius = C2.radius() * 1.5;
+			circle C1( 0, 0, radius );
+			tmp = 2.0 * 3.14159;
+			min = tmp / (double)highDegree.size();
+			forall_items( it, highDegree ){
+				  n = highDegree[ it ];
+				  pos[ n ] = C1.point_on_circle( tmp );
+				  tmp -= min;   
+			} 
+			C = C1;
+		}
+	}
+	forall_items( it, alones ){
+		n = alones[ it ];
+		xpos[ n ] = pos[ n ].xcoord();
+		ypos[ n ] = pos[ n ].ycoord();
+	}
+
+	/* OUTER CIRCLE Positioning */
+	list<double> radiuses;
+	double radiusesMax = 0;
+	double sumOfRadiuses = 0;
+	double totalLengthOfOuterCircle = 0;
+	forall_items( it, HUBS ){
+		two_tuple<node,list<node> > tup = HUBS[ it ];
+		radius = 2.0 * 3.14159;
+		length = (double)tup.second().size() * (double)( node_width );
+		radius = length / radius;
+		radiuses.append( radius );
+		sumOfRadiuses+=radius;
+		totalLengthOfOuterCircle += (radius);
+		if( radiusesMax < radius )
+			radiusesMax = radius;
+	}
+
+	circle OUTER;
+	if( radiusesMax + C.radius() > totalLengthOfOuterCircle ){
+		 circle T( 0, 0, C.radius() + radiusesMax * 3.0 );
+		 OUTER = T;
+	}
+	else{
+		circle T( 0, 0, totalLengthOfOuterCircle + radiusesMax * 3.0 );
+		OUTER = T;
+	}
+	int get_r = 0;
+	tmp = 2.0 * 3.14159;
+	forall_items( it, HUBS ){
+		radius = radiuses[ radiuses.get_item( get_r ) ];
+		point hubCenter = OUTER.point_on_circle( tmp );
+		xpos[ HUBS[ it ].first() ] = hubCenter.xcoord();
+		ypos[ HUBS[ it ].first() ] = hubCenter.ycoord();
+		/* Now Place Inner circle elemens */
+		circle INNER( hubCenter.xcoord(), hubCenter.ycoord(), radius );
+		double tmp2 = 2.0 * 3.14159;
+		double min2 =  tmp2 / (double)HUBS[ it ].second().size();
+		hubNeighbors = HUBS[ it ].second();
+		forall_items( it2, hubNeighbors ){
+		  n = hubNeighbors[ it2 ];
+	      pos[ n ] = INNER.point_on_circle( tmp2 );
+	      tmp2 -= min2;   
+		}      
+		forall_items( it2, hubNeighbors ){
+			n = hubNeighbors[ it2 ];
+			xpos[ n ] = pos[ n ].xcoord();
+			ypos[ n ] = pos[ n ].ycoord();
+		}
+		min = 2.0 * 3.14159 * radius / sumOfRadiuses;
+		tmp -= min;
+		get_r++;
+	}
+
+	Xpos = xpos;
+	Ypos = ypos;
+	forall_nodes( n, G ){
+		point p( Xpos[ n ], Ypos[ n ] );
+		posx[ n ] = p;
+	}
+	return G;
+}
+
+/* Function is based for Heuristic Circular Layout
+that has more than two circles inside formed by lower degree
+nodes and hub nodes and their neigbors also form
+final outer circle around the two circle
+Function is based for Heuristic Circular Layout
+Inputs are straightforward, this procedure 
+calculates the peripheral graphs */
+GRAPH<int,int> RUN_CIRCULARKC(  GRAPH<int,int> &G, 
+							  array<list<node> > &layers, 
+							  int W, 
+							  node_array<double> &Xpos, 
+							  node_array<double> &Ypos, 
+							  int graphNo, 
+							  node_array<point> &posx,
+							  edge_array<list<point> > &bendsx, 
+							  int algorithmFlag, 
+							  int space, 
+							  bool xCoordFlag, 
+							  int increment,
+							  bool ledaPostFlag,
+							  array<char> &abbv,
+							  int cat_num,
+							  array<char> &Categories,
+							  int nodeWidth,
+							  int drawType,
+							  double threshold
+){	
+	edge e;
+	node n,m,k;
+	int random_walk;
+	list_item it,it2;
+	node_array<double> xpos( G, 0 );
+	node_array<double> ypos( G, 0 );
+
+	forall_edges( e, G )
+	{
+		if( G.source( e ) == G.target( e ) )
+			G.del_edge( e );
+	}
+	forall_edges( e, G )
+	{
+		if( G.source( e ) == G.target( e ) )
+			G.del_edge( e );
+	}
+	
+	node_array<bool> marking( G, false );
+	node_array<int> degrees( G, 0 );
+	node_array<point> pos( G );
+	int max_degree = 0;
+	list<node> hubs,hubNeighbors;
+	list<two_tuple<node,list<node> > > HUBS;
+	forall_nodes( n, G ){
+		degrees[ n ] = G.degree( n );
+		if( max_degree < degrees[ n ] ){
+			max_degree = degrees[ n ];
+			m = n;
+		}
+	}
+	marking[ m ] = true;
+	forall_adj_nodes( n, m ){
+		hubNeighbors.append( n );
+		marking[ n ] = true;
+	}
+	two_tuple<node,list<node> > tup( m, hubNeighbors );
+	HUBS.append( tup );
+
+	forall_nodes( n, G ){
+		int count = 0;
+		forall_adj_nodes( k, n ){
+			if( marking[ k ] == false )
+				count++;
+		}
+		hubNeighbors.clear();
+		if( count >= max_degree * threshold ){
+			forall_adj_nodes( k, n ){
+				if( marking[ k ] == false ){
+					hubNeighbors.append( k );
+					marking[ k ] = true;
+				}
+			}
+			two_tuple<node,list<node> > tup( n, hubNeighbors );
+			HUBS.append( tup );
+		}
+	}
+
+
+	/* INNER CIRCLE Positioning */
+	list<node> alones;
+	forall_nodes( n, G ){
+		if( marking[ n ] == false )
+			alones.append( n );
+	}
+	int node_width = nodeWidth, node_height = 50;
+	int gaps = 20;
+	double radius = 2.0 * 3.14159;
+	double length = (double)alones.size() * (double)( node_width );
+	radius = length / radius;
+	circle C( 0, 0, radius );
+	double tmp = 2.0 * 3.14159;
+	double min = tmp / (double)alones.size();
+	if( drawType == 0 ){
+		forall_items( it, alones ){
+			  n = alones[ it ];
+			  pos[ n ] = C.point_on_circle( tmp );
+			  tmp -= min;   
+		}      
+	}
+	else{
+		if( drawType == 1 ){
+			list<node> lowDegree;
+			list<node> highDegree;
+			forall_items( it, alones ){
+				  n = alones[ it ];
+				  if( G.degree( n ) < 3 )
+					  lowDegree.append( n );
+				  else
+					  highDegree.append( n );
+			}    	
+
+			radius = 2.0 * 3.14159;
+			length = (double)lowDegree.size() * (double)( node_width );
+			radius = length / radius;
+			circle C2( 0, 0, radius );
+			tmp = 2.0 * 3.14159;
+			min = tmp / (double)lowDegree.size();
+			forall_items( it, lowDegree ){
+				  n = lowDegree[ it ];
+				  pos[ n ] = C2.point_on_circle( tmp );
+				  tmp -= min;   
+			}
+
+			radius = 2.0 * 3.14159;
+			length = (double)( (double)(highDegree.size() + lowDegree.size()) / 2.0 ) * (double)( node_width );
+			radius = length / radius;
+			if( radius < C2.radius() )
+				radius = C2.radius() * 1.5;
+			circle C1( 0, 0, radius );
+			tmp = 2.0 * 3.14159;
+			min = tmp / (double)highDegree.size();
+			forall_items( it, highDegree ){
+				  n = highDegree[ it ];
+				  pos[ n ] = C1.point_on_circle( tmp );
+				  tmp -= min;   
+			} 
+			C = C1;
+		}
+		else{
+			if( drawType == 2 ){
+				/*int circleCount = G.number_of_edges() / 1000;
+				array<list<node>> Degree( circleCount );
+				list<node> highDegree;
+				int maxDeg = 0;
+				forall_items( it, alones ){
+					n = alones[ it ];
+					if( G.degree( n ) > maxDeg )
+						maxDeg = G.degree( n );
+				}
+
+				forall_items( it, alones ){
+					  n = alones[ it ];
+					  Degree[floorf( maxDeg / G.degree( n ) )].append( n );
+				}    	
+
+				radius = 2.0 * 3.14159;
+				length = (double)Degree[ circleCount ].size() * (double)( node_width );
+				radius = length / radius;
+				circle C2( 0, 0, radius );
+				tmp = 2.0 * 3.14159;
+				min = tmp / (double)Degree[ circleCount ].size();
+				forall_items( it, Degree[ circleCount ] ){
+					  n = Degree[ circleCount ][ it ];
+					  pos[ n ] = C2.point_on_circle( tmp );
+					  tmp -= min;   
+				}
+
+				for( int x1 = circleCount-1; x1 >= 0; x1-- ){
+					radius = 2.0 * 3.14159;
+					double sum = 0;
+					for( int x2 = circleCount; x2 >= x1; x2-- ){
+						sum += Degree[ x2 ].size();
+					}
+					length = (double)( (double)(sum) / (double)(circleCount - x1 + 1 )) * (double)( node_width );
+					radius = length / radius;
+					if( radius < C2.radius() )
+						radius = C2.radius() * 1.5;
+					circle C1( 0, 0, radius );
+					tmp = 2.0 * 3.14159;
+					min = tmp / (double)Degree[ x1 ].size();
+					forall_items( it, Degree[ x1 ] ){
+						  n = Degree[ x1 ][ it ];
+						  pos[ n ] = C1.point_on_circle( tmp );
+						  tmp -= min;   
+					} 
+					C = C1;
+				}*/
+
+				list<node> lowDegree;
+				list<node> medDegree;
+				list<node> wellDegree;
+				list<node> highDegree;
+				list<node> highestDegree;
+				forall_items( it, alones ){
+					  n = alones[ it ];
+					  if( G.degree( n ) < 1 )
+						  lowDegree.append( n );
+					  else
+						  if( G.degree( n ) < 2 )
+							  medDegree.append( n );
+						  else
+							  if( G.degree( n ) < 5 )
+								  wellDegree.append( n );
+							  else
+								  if( G.degree( n ) < 7 )
+									  highDegree.append( n );
+								  else
+									  highestDegree.append( n );
+				}    	
+
+				radius = 2.0 * 3.14159;
+				length = (double)lowDegree.size() * (double)( node_width );
+				radius = length / radius;
+				circle C2( 0, 0, radius );
+				tmp = 2.0 * 3.14159;
+				min = tmp / (double)lowDegree.size();
+				forall_items( it, lowDegree ){
+					  n = lowDegree[ it ];
+					  pos[ n ] = C2.point_on_circle( tmp );
+					  tmp -= min;   
+				}
+
+				radius = 2.0 * 3.14159;
+				length = (double)( (double)(lowDegree.size() + medDegree.size()) / 2.0 ) * (double)( node_width );
+				radius = length / radius;
+				if( radius < C2.radius() )
+					radius = C2.radius() + 500;
+				circle C3( 0, 0, radius );
+				tmp = 2.0 * 3.14159;
+				min = tmp / (double)medDegree.size();
+				forall_items( it, medDegree ){
+					  n = medDegree[ it ];
+					  pos[ n ] = C3.point_on_circle( tmp );
+					  tmp -= min;   
+				} 
+				C2 = C3;
+
+				radius = 2.0 * 3.14159;
+				length = (double)( (double)(lowDegree.size() + medDegree.size() + wellDegree.size()) / 2.0 ) * (double)( node_width );
+				radius = length / radius;
+				if( radius < C2.radius() )
+					radius = C2.radius() + 500;
+				circle C4( 0, 0, radius );
+				tmp = 2.0 * 3.14159;
+				min = tmp / (double)wellDegree.size();
+				forall_items( it, wellDegree ){
+					  n = wellDegree[ it ];
+					  pos[ n ] = C4.point_on_circle( tmp );
+					  tmp -= min;   
+				} 
+				C2 = C4;
+
+				radius = 2.0 * 3.14159;
+				length = (double)( (double)(highDegree.size() + wellDegree.size() + medDegree.size() + lowDegree.size()) / 2.0 ) * (double)( node_width );
+				radius = length / radius;
+				if( radius < C2.radius() )
+					radius = C2.radius() + 500;
+				circle C5( 0, 0, radius );
+				tmp = 2.0 * 3.14159;
+				min = tmp / (double)highDegree.size();
+				forall_items( it, highDegree ){
+					  n = highDegree[ it ];
+					  pos[ n ] = C5.point_on_circle( tmp );
+					  tmp -= min;   
+				} 
+				C2 = C5;
+
+				radius = 2.0 * 3.14159;
+				length = (double)( (double)(highestDegree.size() + highDegree.size() + wellDegree.size() + medDegree.size() + lowDegree.size()) / 2.0 ) * (double)( node_width );
+				radius = length / radius;
+				if( radius < C2.radius() )
+					radius = C2.radius() + 500;
+				circle C1( 0, 0, radius );
+				tmp = 2.0 * 3.14159;
+				min = tmp / (double)highDegree.size();
+				forall_items( it, highestDegree ){
+					  n = highestDegree[ it ];
+					  pos[ n ] = C1.point_on_circle( tmp );
+					  tmp -= min;   
+				} 
+				C = C1;				
+			}
+		}
+	}
+	forall_items( it, alones ){
+		n = alones[ it ];
+		xpos[ n ] = pos[ n ].xcoord();
+		ypos[ n ] = pos[ n ].ycoord();
+	}
+
+	/* OUTER CIRCLE Positioning */
+	list<double> radiuses;
+	double radiusesMax = 0;
+	double sumOfRadiuses = 0;
+	double totalLengthOfOuterCircle = 0;
+	forall_items( it, HUBS ){
+		two_tuple<node,list<node> > tup = HUBS[ it ];
+		radius = 2.0 * 3.14159;
+		length = (double)tup.second().size() * (double)( node_width );
+		radius = length / radius;
+		radiuses.append( radius );
+		sumOfRadiuses+=radius;
+		totalLengthOfOuterCircle += (radius);
+		if( radiusesMax < radius )
+			radiusesMax = radius;
+	}
+
+	circle OUTER;
+	if( radiusesMax + C.radius() > totalLengthOfOuterCircle ){
+		 circle T( 0, 0, C.radius() + radiusesMax * 3.0 );
+		 OUTER = T;
+	}
+	else{
+		circle T( 0, 0, totalLengthOfOuterCircle + radiusesMax * 3.0 );
+		OUTER = T;
+	}
+	int get_r = 0;
+	tmp = 2.0 * 3.14159;
+	forall_items( it, HUBS ){
+		radius = radiuses[ radiuses.get_item( get_r ) ];
+		point hubCenter = OUTER.point_on_circle( tmp );
+		xpos[ HUBS[ it ].first() ] = hubCenter.xcoord();
+		ypos[ HUBS[ it ].first() ] = hubCenter.ycoord();
+		/* Now Place Inner circle elemens */
+		circle INNER( hubCenter.xcoord(), hubCenter.ycoord(), radius );
+		double tmp2 = 2.0 * 3.14159;
+		double min2 =  tmp2 / (double)HUBS[ it ].second().size();
+		hubNeighbors = HUBS[ it ].second();
+		forall_items( it2, hubNeighbors ){
+		  n = hubNeighbors[ it2 ];
+	      pos[ n ] = INNER.point_on_circle( tmp2 );
+	      tmp2 -= min2;   
+		}      
+		forall_items( it2, hubNeighbors ){
+			n = hubNeighbors[ it2 ];
+			xpos[ n ] = pos[ n ].xcoord();
+			ypos[ n ] = pos[ n ].ycoord();
+		}
+		min = 2.0 * 3.14159 * radius / sumOfRadiuses;
+		tmp -= min;
+		get_r++;
+	}
+
+	Xpos = xpos;
+	Ypos = ypos;
+	forall_nodes( n, G ){
+		point p( Xpos[ n ], Ypos[ n ] );
+		posx[ n ] = p;
+	}
+	return G;
+}
+
+
+/* Function is specialized to form main layout,
+it performs again weighted layout over the 
+collected graph edges according to criteria
+shown in journal paper */
+GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G, 
+			  node_array<int> &PARS,
+			  int max_height, 
+			  int W, 
+			  node_array<double> &Xpos,
+			  node_array<double> &Ypos, 
+			  int graphNo, 
+			  node_array<point> &posx,
+			  edge_array<list<point> > &bendsx, 
+			  node_array<double> &Hvalues,
+			  list<node> &hided, 
+			  int algorithmFlag,
+			  bool brandFlag,
+			  bool brandFlag2,
+			  bool ourMethodFlag,
+			  double space,
+			  int increment,
+			  bool ledaPostFlag,
+			  double nodeSize,
+			  double edgeBendImp,
+			  double colorScale,
+			  double edgThicknessTher,
+			  list<int> categ
+ ){
+
+	GRAPH<int,int> H;
+
+	edge e;
+	node n;
+	random_source S(1,max_height);
+	int random_walk;
+	color blue( 4 );
+	color orange( 7 );
+	node_array<point> pos(G);
+	cout << " 2 " << G.number_of_edges() << " - " << G.number_of_nodes() <<endl;
+	SPRING_EMBEDDING2_( G, Xpos, Ypos, 0, 2000 + G.number_of_nodes()*20 ,0, 700 + G.number_of_nodes()*7, 500, PARS, Hvalues );
+	cout << " 3 " << endl;
+	array<bool> colorChoose( 13 );
+	for( int c = 0; c < 13; c++ ){
+		colorChoose[ c ] = false;
+	}
+	colorChoose[ 7 ]  = true;
+	list_item it;
+
+	GraphWin gw(G);	
+	S(1,8);
+	int random_value;
+	for( int c = 0; c < 13; c++ ){
+		if(colorChoose[ c ] == true ){
+		      random_value = c;
+		      break;
+		}
+	}
+
+	// Make all of the node as orange
+	forall_nodes( n, G ){
+			G[ n ] = PARS[ n ];
+			G[ n ] = random_value;
+			color random( random_value );
+			gw.set_color( n, random);
+	}
+
+	forall_nodes( n, G ){
+			point p( Xpos[ n ], Ypos[ n ] );
+			pos[ n ] = p;
+	}
+
+	double Hmax = 0;
+	forall_nodes( n, G ){
+		if( Hmax <  Hvalues[n] )
+			Hmax = Hvalues[n];
+	}
+	// Arrange node sizes according to H-values for each nodes
+	forall_nodes( n, G ){
+		if( Hvalues[n] > 0 ){
+			if(  Hmax / Hvalues[n] > 1 ){
+				gw.set_width( n, nodeSize + Hvalues[n] / Hmax * 100 );
+				gw.set_height( n, nodeSize + Hvalues[n] / Hmax * 100 );
+			}
+			else{
+				gw.set_width( n, nodeSize );	
+				gw.set_height( n, nodeSize );	
+			}
+		}
+		else{
+				gw.set_width( n, nodeSize / 2.0 );	
+				gw.set_height( n, nodeSize / 2.0 );	
+		}
+	}
+	if( G.number_of_edges() != 0 ){
+		array<color> color_l( 20 );
+		int count = colorScale;
+		for( int j = 0; j < color_l.size(); j++ ){
+			color el( count, count, count );
+			color_l[ j ] = el;
+			count -= 7;
+		}
+		list<int> weights;
+		forall_edges( e, G ){
+
+		}
+		list<two_tuple<color,int> > variations;
+		list<int> edgeWeights;
+		cout << " 4 " << endl;
+		// Store Edge weights
+		forall_edges( e, G ){
+			int flag = 0;
+			cout << " 2.2 " << endl;
+			forall_items( it, edgeWeights ){
+				if( edgeWeights[ it ] == G[ e ] ){
+					flag = 1;
+					break;
+				}
+			}
+			if( flag == 0 ){
+				edgeWeights.push_back( G[ e ] );
+			}
+			cout << " 4.1 " << endl;
+		}
+		edgeWeights.sort();
+		count = 0;
+		// Found the variation of edge weights in the graph
+		for( int x = edgeWeights[edgeWeights.first()]; x <= edgeWeights[edgeWeights.last()]; x++ ){	
+			for( int j = 0; j < color_l.size(); j++ ){
+				two_tuple<color,int> Tp( color_l[ j ], x );
+	// 			cout << Tp << endl;
+				variations.push_back( Tp );
+			}
+			count++;
+			cout << " 4.2 " << endl;
+		}
+		cout << " 5 " << endl;
+	// 	int increase = (int) ((double)variations.size() / (double)edgeWeights.size() );
+		int increase = (int) ((double)variations.size() / (double)color_l.size() );
+
+	// 	cout << " increase : " << increase << endl;
+		// Form first coloring scheme
+		forall_edges( e, G ){              
+			count = 0;
+			forall_items( it, edgeWeights ){
+			      if( edgeWeights[ it ] == G[ e ] ){
+				    break;
+			      }
+			      count++;
+			}
+			two_tuple<color,int> Tp = variations[ variations.get_item( increase / edgThicknessTher * count ) ] ;
+			gw.set_thickness( e, Tp.second() / edgThicknessTher );
+			gw.set_color( e, Tp.first() );
+	// 		cout << Tp << endl;
+	// 		cout << " increase : " << increase << endl;
+		}
+	}
+
+	//gw.set_edge_thickness( 3, true );
+	//gw.set_node_height(50,true);
+	gw.set_node_border_color( black, true );
+	gw.set_node_border_thickness( 4, true );
+	//gw.set_node_width( 100, true );
+	gw.set_node_shape( leda::circle_node, true );
+// 	gw.set_edge_label_type( leda::data_label , true);
+	gw.set_edge_label_font( leda::roman_font, 42);
+	gw.set_edge_shape( leda::poly_edge, true );
+	gw.set_layout( pos );
+	char filename4[128];
+	
+#ifdef LINUX
+	sprintf( filename4, "outputs/graphs/maingraph.gml" );
+#else
+	sprintf( filename4, "outputs//graphs//maingraph.gml" );
+#endif
+	gw.save_gml( filename4 );
+	//gw.save_gml( "outputs/graphs/maingraph2.gml" );
+	return G;
+}	
+
+
+
+
+
 
 /* Function is specialized to form main layout,
 it performs again weighted layout over the 
@@ -1614,9 +2599,9 @@ void RUN_FFD_AGAIN2(  GRAPH<int,int> G,
 		  double colorScale, 
 		  double edgThicknessTher
  ){
-
+	if( G.number_of_nodes() != 0 ){
 		node n;
-		GraphWin gw2(G,500,500);	
+		GraphWin gw2(G,300,300);	
 
 		list<struct Strings> nodeNames;
 		//list<list<Strings>> namesForEachGraph
@@ -1628,13 +2613,14 @@ void RUN_FFD_AGAIN2(  GRAPH<int,int> G,
 				break;
 			counter++;
 		}
-		
+		node_array<int> catid( G, 0 );
 		gw2.set_edge_thickness( 3, true );
 		forall_nodes( n, G ){
 			for( int i = 0; i < cat_num; i++ ){
 				if( Categories[ G[ n ] ] == abbv[ i ] ){
-					leda::color x( i + 1 );
+					leda::color x( i /*+ 1*/ );
 					gw2.set_border_color( n,x );
+					catid[ n ] = i;
 				}
 			}
 			gw2.set_color( n, red );
@@ -1689,15 +2675,15 @@ void RUN_FFD_AGAIN2(  GRAPH<int,int> G,
 			      count++;
 			}
 			two_tuple<color,int> Tp = variations[ variations.get_item( increase / edgThicknessTher * count ) ] ;
-			gw2.set_thickness( e, 0.1 );
+			gw2.set_thickness( e, Tp.second() / edgThicknessTher * 5.0 );
 			gw2.set_color( e, Tp.first() );
 // 			cout << Tp << endl;
 		}
 
-		gw2.set_node_height(5,true);
+		gw2.set_node_height(50,true);
 // 		gw2.set_node_border_color( red, true );
 		gw2.set_node_border_thickness( 3, true );
-		gw2.set_node_width( 10, true );
+		gw2.set_node_width( 100, true );
 		gw2.set_node_shape( leda::ovalrect_node, true );
 		gw2.set_edge_label_type(leda::data_label , true);
 		gw2.set_edge_label_font(leda::roman_font, 10);
@@ -1708,9 +2694,10 @@ void RUN_FFD_AGAIN2(  GRAPH<int,int> G,
 		forall_nodes( s, G ){
 			temp_str = nodeNames[ it ];
 			gw2.set_label(s,temp_str.name);
+			G.assign( s, catid[ s ] );
 			it = nodeNames.succ( it );
 		}
-		gw2.place_into_box( 0, 0, 500, 500 );
+		gw2.update_graph();
 		gw2.set_layout( pos, bends );
 // 		gw2.set_edge_shape( leda::bezier_edge, true );
 		
@@ -1719,8 +2706,9 @@ void RUN_FFD_AGAIN2(  GRAPH<int,int> G,
 // 		gw2.display();
 // 		gw2.save_gml(filename);
 // 		gw2.zoom_graph();
-		char filename2[32] = "outputs/psfiles/img_";
+		char filename2[64] = "outputs/psfiles/img";
 		sprintf( filename2, "%s%d%s", filename2, graphNo, ".ps" );
 		gw2.save_ps( filename2 );
 // 		gw2.edit();
+	}
 }

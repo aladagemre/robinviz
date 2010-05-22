@@ -202,6 +202,210 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		return inputGenes;
 }
 
+/**
+* Function that produce data structure of entries
+* with size of the given input data.
+* Each substructure has three attribute,
+* GENENAME CATEGORY[] GO[]
+* These resulting array of substructure will
+* be processed by main program using leda::array<GENEONTO> variable
+**/
+array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes, char filePath[256], list<two_tuple<CATNAMES,int> > &categories ){
+		cout << "/**************************************************/" << endl;
+		cout << "\t" << " Parsing GO File as you wish" << endl;
+		cout << "/**************************************************/" << endl;
+		FILE *f;
+		char line[ 100000 ];
+		char *pc,*pend,*go,*cat;
+		const char *strDelim = "\t";
+		const char *strDelim2 = " ";
+
+		array<GENEONTO> inputGenes( dataGenes.size()+1 );
+		for( int i = 0; i < dataGenes.size(); i++ ){
+			inputGenes[ i ].index = 0;
+			inputGenes[ i ].categories.resize( 400 );
+			inputGenes[ i ].gos.resize( 400 );
+			sprintf( inputGenes[ i ].genename, "%s", dataGenes[ i ].GENE );			
+		}
+
+		if( (f = fopen( filePath, "r" )) == NULL){
+			FILE *erptr;
+#ifdef LINUX
+			erptr = fopen( "outputs/error.txt", "w" );
+#else
+			erptr = fopen( "outputs//error.txt", "w" );
+#endif
+			fprintf( erptr, "Error-id4: You did not specify GO based functional category file although you selected to use that file\n" );
+			fclose( erptr );
+			cout << "\nError-id4: You did not specify GO based functional category file although you selected to use that file\n"; 
+			exit(1);
+		}
+
+		int line_i = 0;
+		while( !feof( f ) ){
+			fgets( line, 100000, f );
+			line_i++;
+		}
+		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
+		rewind( f );
+		line_i = 0;
+		while( !feof( f ) ){
+			// count rows
+			two_tuple<CATNAMES,int> tup;
+			tup.second() = 0;
+			fgets( line, 100000, f );
+			pc = strtok( line, strDelim );
+			go = pc;
+			if( feof( f ) )
+				break;
+			int count = 0;
+			while( pc != NULL ){
+				if( count == 0 ){
+					pc = strtok( NULL, strDelim );
+					cat = pc;
+					sprintf( tup.first().catName, "%s", cat );
+// 					cout << cat << endl;
+				}
+				else{
+					pc = strtok( NULL, strDelim2 );
+					tup.second()++;
+					for( int i = 0; i < dataGenes.size(); i++ ){
+						if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 400 ){
+							sprintf( inputGenes[ i ].categories[ inputGenes[ i ].index ].catName, "%s", cat );
+							sprintf( inputGenes[ i ].gos[ inputGenes[ i ].index++ ].goName, "%s", go );
+							break;
+						}
+					}
+				}
+				//cout << pc << "\t";
+				pend=pc+strlen(pc)-1; /* check last char for newline terminator */
+				if (*pend=='\n') 
+					pc = NULL;
+				count++;
+			}
+			line_i++;
+			if( line_i % 500 == 0 )
+				cout << "\n Line " << line_i << " is parsed ";
+			categories.append( tup );
+		}
+		cout << "\n/**************************************************/" << endl;
+		cout << "\t" << " Parsing GO File ends " << endl;
+		cout << "/**************************************************/" << endl;
+		fclose( f );
+		return inputGenes;
+}
+
+array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCats, array<GENENAMES> &GenesNode,  list<two_tuple<CATNAMES,int> > &categories, list<list<GENES> > &categoryGenes ){
+		cout << "/**************************************************/" << endl;
+		cout << "\t" << " Parsing GO File as you wish" << endl;
+		cout << "/**************************************************/" << endl;
+		FILE *f;
+		list<GENES> tempGenes;
+		char line[ 100000 ];
+		char *pc,*pend,*go,cat[512];
+		const char *strDelim = "\t";
+		const char *strDelim2 = " ";
+
+		for( int i = 0; i < inputCats.size(); i++ ){
+			categoryGenes.append( tempGenes );
+		}
+
+		array<GENEONTO> inputGenes( GenesNode.size()+1 );
+		for( int i = 0; i < GenesNode.size(); i++ ){
+			inputGenes[ i ].index = 0;
+			inputGenes[ i ].categories.resize( 100 );
+			inputGenes[ i ].gos.resize( 100 );
+			sprintf( inputGenes[ i ].genename, "%s", GenesNode[ i ].GENE );
+		}
+
+		if( (f = fopen( gofile, "r" )) == NULL){
+			FILE *erptr;
+#ifdef LINUX
+			erptr = fopen( "outputs/error.txt", "w" );
+#else
+			erptr = fopen( "outputs//error.txt", "w" );
+#endif
+			fprintf( erptr, "Error-id4: You did not specify GO based functional category file although you selected to use that file\n" );
+			fclose( erptr );
+			cout << "\nError-id4: You did not specify GO based functional category file although you selected to use that file\n"; 
+			exit(1);
+		}
+
+		int line_i = 0;
+		while( !feof( f ) ){
+			fgets( line, 100000, f );
+			line_i++;
+		}
+		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n" << "\n";
+		rewind( f );
+		line_i = 0;
+		while( !feof( f ) ){
+			// count rows
+			two_tuple<CATNAMES,int> tup;
+			tup.second() = 0;
+			fgets( line, 100000, f );
+			pc = strtok( line, strDelim );
+			go = pc;
+			if( feof( f ) )
+				break;
+			int count = 0;
+			int foundedone = -1;
+			while( pc != NULL ){
+				if( count == 0 ){
+					pc = strtok( NULL, strDelim );
+					sprintf( tup.first().catName, "%s", pc );
+					
+					CATNAMES cats;
+					sprintf( cats.catName, "%s", pc );
+					list_item catit;
+					int count_cat = 0;
+					forall_items( catit, inputCats ){
+						int max = strlen( inputCats[ catit ].catName ) > strlen( cats.catName ) ? strlen( inputCats[ catit ].catName ) : strlen( cats.catName );
+						max = max - 1;
+						if( strncmp( inputCats[ catit ].catName, cats.catName, max ) == 0 ){
+// 							cout << "/**************************************************/" << endl;
+// 							cout << inputCats[ catit ].catName << "\n" << cats.catName << endl;
+// 							cout << "/**************************************************/" << endl;
+							foundedone = count_cat;
+						}
+						count_cat++;
+					}
+				}
+				else{
+					pc = strtok( NULL, strDelim2 );
+					tup.second()++;
+					for( int i = 0; i < inputGenes.size(); i++ ){
+						if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 100 ){
+							sprintf( inputGenes[ i ].categories[ inputGenes[ i ].index ].catName, "%s", cat );
+							sprintf( inputGenes[ i ].gos[ inputGenes[ i ].index++ ].goName, "%s", go );
+							break;
+						}
+					}
+					if( foundedone != -1 ){
+						GENES now;
+						sprintf( now.GENE, "%s", pc );
+						categoryGenes[ categoryGenes.get_item(foundedone) ].append( now );
+// 						cout << pc << "\t";
+					}
+				}
+				//cout << pc << "\t";
+				pend=pc+strlen(pc)-1; /* check last char for newline terminator */
+				if (*pend=='\n') 
+					pc = NULL;
+				count++;
+			}
+			line_i++;
+			if( line_i % 500 == 0 )
+				cout << "\n Line " << line_i << " is parsed ";
+			categories.append( tup );
+		}
+		cout << "\n/**************************************************/" << endl;
+		cout << "\t" << " Parsing GO File ends " << endl;
+		cout << "/**************************************************/" << endl;
+		fclose( f );
+		return inputGenes;
+}
+
 void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENEONTO> &inputGenes ){
 	list_item it,it2;
 	list<GENES> temp;
@@ -262,6 +466,55 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 	inputGenes.resize( 1 );
 }
 
+/**
+* goHandling is a function that handles the go input file
+* and responds to the main program by having modifying the passed
+* parameters.
+* @param INPUT (leda::matrix) input matrix obtained from the given input file sources/data_sources
+* @param biclusters (leda::list<list<GENES>>)filled with the GENE names provided by the data file
+* @param matrixBiclusters (leda::list<leda::matrix>)is used H-value calculation we need this param to obtain submatrices of biclusters
+* @param H-values (leda::list) are used in order to have a corresponding value obtained with the id of biclusters       
+* @param Hmax (double) Hmax is a value that stores max H-value
+* @param minBicSize to control bicluster sizes
+* @param maxBicSize to control bicluster sizes
+* @param biclustering (int) is for choosing different biclustering outputs, We have to do that since each alg. has different output from its tool.
+* @param dimension1(int) size of the data row dimension
+* @param dimension2(int) size of the data column dimension
+*/
+void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES> > &gocategories, list<int> &categ, list<leda::matrix> &matrixCategories, list<double> &H_values, double &Hmax, array<GENENAMES> &GenesNode ){
+	FILE *fptr;
+	char *pc;
+	list<two_tuple<CATNAMES,int> > categories;
+	list<CATNAMES> inputCats;
+
+	if( (fptr = fopen( inputGoFile, "r") ) == NULL ){
+		FILE *erptr;
+		#ifdef LINUX
+					erptr = fopen( "outputs/error.txt", "w" );
+		#else
+					erptr = fopen( "outputs//error.txt", "w" );
+		#endif
+		fprintf( erptr, "Error-id_1: You did not specify GO input file correctly\n" );
+		fclose( erptr );
+		cout << "\nError-id_1: You did not specify GO input file correctly\n"; 
+		exit(1);
+	}
+	else{
+		CATNAMES cats;
+		int count = 0;
+		while( !feof( fptr ) ){
+			fgets( cats.catName, 256, fptr );
+			pc = strtok( cats.catName, "\n" );
+			sprintf( cats.catName, "%s", pc );
+			cout << pc << endl;
+			inputCats.append( cats );
+			count++;
+		}
+	}	
+
+	array<GENEONTO> geneOntoForData = geneOntologyHandling2( defaultGoFile, inputCats, GenesNode, categories, gocategories );
+	geneOntologyToBiclusterHandling( gocategories, geneOntoForData );
+}
 /**
 * biclusterHandling is a function that handles the bicluster output
 * and responds to the main program by having modifying the passed
@@ -937,25 +1190,32 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 // 	wptr3 = fopen( "sources//graph_sources//graph_infos.txt", "w" );
 // #endif
 	for(int i = 0; i < biclusters.size(); i++ ){	
-		if( listOfGraphs[ i ].empty() != true ){
-			pos.init( listOfGraphs[ i ] );
-			bends.init( listOfGraphs[ i ] );   
-			array<int> nodePar( listOfGraphs[ i ].number_of_nodes()+1 );
-			int nPar = 0;
-			forall_nodes( n, listOfGraphs[ i ] ){
-			      nodePar[ nPar ] = listOfGraphs[ i ][ n ];
-    // 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
-			      nPar++;
+// 		if( listOfGraphs[ i ].empty() != true ){
+		    pos.init( listOfGraphs[ i ] );
+		    bends.init( listOfGraphs[ i ] );   
+		    array<int> nodePar( listOfGraphs[ i ].number_of_nodes()+1 );
+		    int nPar = 0;
+		    forall_nodes( n, listOfGraphs[ i ] ){
+			  nodePar[ nPar ] = listOfGraphs[ i ][ n ];
+// 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
+			  nPar++;
+		    }
+		    cout << " Graph " << i << " in process \n";
+			if( listOfGraphs[ i ].empty() != true ){
+				if( listOfGraphs[ i ].number_of_nodes() < 1500 ){
+					H = RUN_CIRCLEALONE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100 );
+					//H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100, 200.0 );
+				}
+				else
+					H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100, 2, 0.20 );
 			}
-
-			H = RUN_FFD( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories );
-		      
-			nPar = 0;
-			forall_nodes( n, listOfGraphs[ i ] ){
-			      listOfGraphs[ i ][ n ] = nodePar[ nPar ];
-    // 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
-			      nPar++;
-			}  
+		    cout << " Graph " << i << " in process \n";
+		    nPar = 0;
+		    forall_nodes( n, listOfGraphs[ i ] ){
+			  listOfGraphs[ i ][ n ] = nodePar[ nPar ];
+// 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
+			  nPar++;
+		    }  
 
 			GraphList.append( listOfGraphs[ i ] );
 // #ifdef LINUX
@@ -965,13 +1225,13 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 // #endif
 // 			ofstream GRAPHS( filename , ios::in | ios::trunc );
 		    
-		    
+		        
 // 			fprintf( wptr3, "%s\n", "_________________________________" );
 // 			fprintf( wptr3, "%s\t%s\n", "File Name      :", filename ); 
 // 			fprintf( wptr3, "%s\t%d\n", "Number of Graph:", i );
 // 			fprintf( wptr3, "%s\n", "_________________________________" );
 			projectNode = PROJECT.new_node();
-			char nameS[ 200 ][ 16 ];
+			char nameS[ 10000 ][ 16 ];
 			list<Strings> nameGraph;
 		    
 			int nn = 0;
@@ -1002,7 +1262,6 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 
 // 			fclose( wptr2 );
 
-
 			leda::string m = "";
 // 			listOfGraphs[ i ].write( GRAPHS );
 // 			GRAPHS.close();
@@ -1016,8 +1275,7 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 			int count = 0;
 			forall_nodes( n, listOfGraphs[ i ] ){
 				zzz = HAsString.new_node();
-				for( ; count < 16; count++ );
-					temp.insert( count, nameS[ INDEX[ n ] ][ count ] );
+				temp = leda::string( nameS[ INDEX[ n ] ][ count ] );
 				HAsString[ zzz ] = temp;
 			}
 			node_array<int> INDEX_S( HAsString, 0 );
@@ -1060,13 +1318,13 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 				}
 			    }
 			}
-			forall_edges( e1, HAsString ){
+			/*forall_edges( e1, HAsString ){
 			    forall_edges( e2, listOfGraphs[ i ] ){
 				if( INDEX_S[ HAsString.source( e1 ) ] == INDEX[ listOfGraphs[ i ].source( e2 ) ] &&
 				      INDEX_S[ HAsString.target( e1 ) ] == INDEX[ listOfGraphs[ i ].target( e2 )  ] )
 				      bends_S[ e1 ] = bends[ e2 ];
 			    }
-			}
+			}*/
 			int j;
 			for( j = 0; j < layers.size(); j++ ){
 			    list<node> layerTemp = layers[ j ];
@@ -1101,10 +1359,10 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 			GraphList_S.append( HAsString );
 			//cout << " Size 1 : " << HAsString.number_of_nodes() << " Size 2 : " << listOfGraphs[ i ].number_of_nodes() << " Size 3 : " << nameGraph.size() << endl;
 			HAsString.clear();
-	    }
-			/************************************************/
-			/* End of Copy Graph as leda::string type Graph */
-			/************************************************/			
+// 		}
+			    /************************************************/
+			    /* End of Copy Graph as leda::string type Graph */
+			    /************************************************/
 	}
 // 	fclose( wptr3 );
 }
@@ -1201,6 +1459,8 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 #else
 	char scoringFile[256] = "outputs//biclusters//scoring.txt";
 #endif
+
+	cout << " BEFORE SCORING\n";
 
 	reportScoring = fopen( scoringFile, "w" );
 	if( hvalueWeighting == true ){
@@ -1318,6 +1578,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 			}
 		}
 	}
+	cout << " AFTER SCORING\n";
 	fclose( reportScoring );
 // 	cout << " E1 -  " << PROJECT.number_of_edges() << endl;
 	it2 = namesForEachGraph.first_item();
@@ -1540,6 +1801,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 			}
 		}
 	}
+	cout << " FORM MAIN GRAPH\n";
 // 	cout << " E2 -  " << PROJECT.number_of_edges() << endl;
 	list<int> old_edges;
 	list<edge> old_edges_e;
@@ -1649,7 +1911,562 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	edgeNumbersForInt_ = edgeNumbersForInt;
 // 	cout << " E4 -  " << PROJECT2.number_of_edges() << endl;
 	i = 0;
+	cout << " RUN LAYOUT\n";
 	RUN_SELF2( PROJECT2, PARS, max_weight, width, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
+// 	cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
+	return PROJECT2;
+}
+
+
+/**
+* mainGraphHandling is a function that handles layout for GO categories
+* @param Categories (leda::array<char>) stores each categories for each genes
+* @param listOfGraphs (leda::array<GRAPH<int,int>>) stores all the graphs in this parameter
+* @param GenesNode (leda::array<GENENAMES>) is used with the graph parameter to obtain the specific Genes corresponding nodes
+* @param biclusters we do not lose the track of bicluster genes(GENES)
+* @param TEMPINT (leda::GRAPH<int,int>) is andother copy PPI graph used for processing
+* @param ppiFile (leda::string) is obtained from main menu
+* @param POS Positions of all graphs stored in leda list
+* @param BENDS Edge bends meanly the points where edge passes and for all graphs
+* @param pos INTERACTION graph node positions
+* @param bends INTERACTION graph edge bends
+* @param namesForEachGraph have the gene names(GENENAMES) for each bicluster
+* @param width (int) operational param 1; max width for layering
+* @param algorithmFlag (int) operational param 2; chooses x-coordinate alg.
+* @param space (int) operational param 3; space between nodes
+* @param xCoordFlag (bool) operational param 4; our preliminary method for runnin layering
+* @param increment operational param 5; space between layers
+* @param ledaPostFlag (bool) operational param 6; if you need some post-process after x-coordinate assignment
+* @param removeRat(double) operational param 7; removes edge weights when they are smaller than this ratio
+* @param sharedGenes(bool) operational param 8: options for having a methodology to use shared Genes options specifed in the paper
+* @param max_weight(int) largets weight
+* @param edgesBetween(bool) operational param 9: the second method rather than shared Genes expained in the paper
+* @param hvalueWeighting(bool) Main graph weighting scheme according to H-values
+* @param enrichmentWeighting_o(bool) Main graph weighting scheme according to defined categories
+* @param enrichmentWeighting_f(bool) Main graph weighting scheme according to funcassociate results
+* @param ppihitratioWeighting(bool) Main graph weighting scheme according to Hit Ratios
+*/
+GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
+				  node_array<int> &nodesOfProjectStr,
+				  array<node> &nodesOfProjectInt,
+				  list<GRAPH<int,int> > &GraphList,
+				  list<GRAPH<leda::string,int> > &GraphList_S, 
+				  list<list<Strings> > &namesForEachGraph,
+				  array<GENENAMES> &GenesNode,
+				  node_array<double> &HValues,
+				  list<double> &H_values,
+				  array<char> &abbv,
+				  int cat_num,
+				  node_array<double> &Xpos,
+				  node_array<double> &Ypos,		
+				  node_array<point> &pos,
+				  edge_array<list<point> > &bends,
+				  edge_array<int> &edgeNumbersForStr_,
+				  array<edge> &edgeNumbersForInt_,
+				  int algorithmFlag,
+				  bool brandFlag,
+				  bool brandFlag2,
+				  bool ourMethodFlag,
+				  double space,
+				  int increment,
+				  bool ledaPostFlag,
+				  double nodeSize,
+				  double edgeBendImp,
+				  double colorScale,
+				  double edgThicknessTher,
+				  GRAPH<leda::string,int> &G1,
+				  GRAPH<leda::string,int> &G2,
+				  GRAPH<int,int> &TEMPINT,
+				  GRAPH<int,int> &G,
+				  int simplify,
+				  double removeRat,
+				  bool sharedGenes,
+				  double Hmax,
+				  int max_weight,
+				  bool edgesBetween,
+				  bool hvalueWeighting,
+				  bool enrichmentWeighting_o,
+				  bool enrichmentWeighting_f,
+				  bool ppihitratioWeighting,
+				  list<int> &categ,
+				  int width
+				)
+{
+
+	node n,n1,n2,projectNode;
+	edge e,e1,e2;
+	list_item it,it1,it2,it3;
+	int count = 0,i;
+	int counter = 0;
+// 	forall_nodes( n, PROJECT ){
+// 		cout << counter << " - " << H_values[ H_values.get_item( counter )] << endl;
+// 		counter++;
+// 	}
+	FILE *reportScoring;
+#ifdef LINUX
+	char scoringFile[256] = "outputs/biclusters/scoring.txt";
+#else
+	char scoringFile[256] = "outputs//biclusters//scoring.txt";
+#endif
+
+	cout << " BEFORE SCORING\n";
+
+	reportScoring = fopen( scoringFile, "w" );
+	if( hvalueWeighting == true ){
+		counter = 0;
+		fprintf( reportScoring, "Scoring Scheme: H-value\n" );
+		forall_nodes( n, PROJECT ){
+			HValues[ n ] = H_values[ H_values.get_item( counter )];
+			//cout << counter << " - " << HValues[ n ] << endl;
+			if( H_values[ H_values.get_item( counter )] >= 0 ){
+				fprintf( reportScoring, "Bicluster %d %lf\n", counter, H_values[ H_values.get_item( counter )] );
+			}
+			else{
+				fprintf( reportScoring, "Bicluster %d %lf\n", counter, 0.0 );
+			}
+			counter++;
+		}
+	}
+	else{
+		if( ppihitratioWeighting == true ){
+			double max = 0;
+			fprintf( reportScoring, "Scoring Scheme: PPI-HitRatio\n" );
+			forall_items( it, GraphList_S){
+				if( (double)(GraphList_S[ it ].number_of_edges() / (double)(GraphList_S[ it ].number_of_nodes() * GraphList_S[ it ].number_of_nodes())) > max )
+					max = (double)((double)GraphList_S[ it ].number_of_edges() / (double)(GraphList_S[ it ].number_of_nodes() * GraphList_S[ it ].number_of_nodes()));
+			}
+			counter = 0;
+// 			Hmax = max;
+			forall_nodes( n, PROJECT ){
+				HValues[ n ] = (double)((double)( GraphList_S[ GraphList_S.get_item( counter )].number_of_edges() ) /
+							(double)( GraphList_S[ GraphList_S.get_item( counter )].number_of_nodes() * GraphList_S[ GraphList_S.get_item( counter )].number_of_nodes() ) ) /
+							max * Hmax;
+				H_values[ H_values.get_item( counter )] = HValues[ n ];
+				fprintf( reportScoring, "Bicluster %d %lf\n", counter, H_values[ H_values.get_item( counter )] );
+// 				cout << counter << " - " << HValues[ n ] << max;
+// 				cout << " - " << GraphList_S[ GraphList_S.get_item( counter )].number_of_nodes();
+// 				cout << " - "  << GraphList_S[ GraphList_S.get_item( counter )].number_of_edges() << endl;
+				counter++;
+			}
+		}
+		else{
+			if( enrichmentWeighting_o == true ){
+				// User defined categories produced
+				FILE *efptr;
+				if( ( efptr = fopen( "outputs/enrich/result.txt", "r" )) == NULL && ( efptr = fopen( "outputs//enrich//result.txt", "r" )) == NULL ){
+					FILE *erptr;
+#ifdef LINUX
+					erptr = fopen( "outputs/error.txt", "w" );
+#else
+					erptr = fopen( "outputs//error.txt", "w" );
+#endif
+					fprintf( erptr, "Error-id2: outputs/enrich/result.txt file does not exist\n" );
+					fclose( erptr );
+					cout << "\nError-id2: outputs/enrich/result.txt file does not exist\n"; 
+					exit(1);
+				}
+				else{
+					fprintf( reportScoring, "Scoring Scheme: Enrichment-Ratio\n" );
+					char readCatName[128];
+					for( int i = 0; i <= cat_num; i++ ){
+						fscanf( efptr, "%s", readCatName );
+					}
+					int numberOfBiclusters = GraphList_S.size();
+					array<int> categoryMaxGenes( cat_num );
+					array< list<int> > categoryPerGenes( numberOfBiclusters );
+					
+					int bic_id;
+					for( int i = 0; i <= cat_num; i++ ){
+						if( i == 0 ){
+							fscanf( efptr, "%d", &bic_id );
+						}else{
+							fscanf( efptr, "%d", &categoryMaxGenes[ i-1 ] );
+						}
+					}
+					for( int i = 0; i < numberOfBiclusters; i++ ){
+						for( int j = 0; j < cat_num; j++ )
+							categoryPerGenes[ i ].append( 0 );
+						for( int j = 0; j <= cat_num; j++ ){
+							if( j == 0 ){
+								fscanf( efptr, "%d", &bic_id );
+							}else{
+								fscanf( efptr, "%d", &categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j-1 )] );
+							}
+						}
+					}
+					double enrich = 0, max;
+					counter = 0;
+					forall_nodes( n, PROJECT ){
+						max = 0;
+// 						cout << endl;
+						for( int i = 0; i < cat_num; i++ ){
+							enrich = (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / (double)categoryMaxGenes[ i ];
+// 							cout << enrich << "\t";
+							if( max < enrich ){
+								max = enrich;
+								HValues[ n ] = max;
+							}
+						}
+// 						cout << endl;
+						counter++;
+					}
+					max = 0;
+					forall_nodes( n, PROJECT ){
+						if( max < HValues[ n ] )
+							max = HValues[ n ];
+					}
+					counter = 0;
+// 					cout << " Hmax - "<< Hmax << endl;
+					forall_nodes( n, PROJECT ){
+						HValues[ n ] = HValues[ n ] / max * Hmax;
+						H_values[ H_values.get_item( counter )] = HValues[ n ];
+						fprintf( reportScoring, "Bicluster %d %lf\n", counter, H_values[ H_values.get_item( counter )] );
+// 						cout << counter << " - " << HValues[ n ] << " - " << max << endl;
+						counter++;
+					}
+// 					forall_nodes( n, PROJECT ){
+// 						if( Hmax < HValues[ n ] )
+// 							Hmax = HValues[ n ];
+// 					}
+				}
+			}
+		}
+	}
+	cout << " AFTER SCORING\n";
+	fclose( reportScoring );
+// 	cout << " E1 -  " << PROJECT.number_of_edges() << endl;
+	it2 = namesForEachGraph.first_item();
+	forall_items( it, GraphList_S){
+		//cout << GraphList_S[ it ].number_of_nodes() << " --- " << namesForEachGraph[ it2 ].size() << endl;
+		it2 = namesForEachGraph.succ( it2 );
+	}
+
+	//cout << " Graphlist size " << GraphList_S.size() << endl;
+
+	int count1 = 0, count2 = 0, innerCount = 0, innerCount2 = 0;
+
+	int DEBUG_GIVING_NAMES = 0;
+	node f1,f2;
+	list_item it_n1,it_n2;
+	/*  To iterate over graph list for n^2 loop we need iterators */
+	list_item graph_item1,graph_item2;
+	/*  To iterate over graph list for n^2 loop we need two iterators and initialise first one*/
+	graph_item1 = namesForEachGraph.first_item();
+	int comparisonNumber = 0;
+	list<Strings> nameGraph1,nameGraph2;
+	forall_items( it1, GraphList_S){
+		nameGraph1 = namesForEachGraph[ graph_item1 ];
+		G1 = GraphList_S[ it1 ];
+		it_n1 = nameGraph1.first_item();
+		forall_nodes( n, G1 ){
+			G1[ n ] = nameGraph1[ it_n1 ].name;
+			//cout << G1[ n ] << endl; 
+			it_n1 = nameGraph1.succ( it_n1 );
+		}
+		GraphList_S[ it1 ] = G1;
+		graph_item1 = namesForEachGraph.succ( graph_item1 );
+
+	}
+
+
+  	int countIN = 0;
+	int countOUT = 0;
+	if( sharedGenes == true ){
+		/********************************************************************/
+		/*								    */
+		/* If you are doing the first model as it is mentioned in the paper */
+		/* The main graph composed with the idea using shared genes among   */
+                /*  biclusters     						    */
+		/*								    */
+		/********************************************************************/	
+		forall_items( it1, GraphList_S){
+			G1 = GraphList_S[ it1 ];
+			innerCount = 0;
+			forall_nodes( f1, PROJECT ){
+				if( innerCount == countOUT )
+					break;
+				innerCount++;
+			}
+			int flg = 0;
+			forall_items( it2, GraphList_S){
+					G2 = GraphList_S[ it2 ];
+					innerCount2 = 0;
+					forall_nodes( f2, PROJECT ){
+						if( innerCount2 == countIN )
+							break;
+						innerCount2++;
+					}
+					/*cout << endl << "--------------------------" << endl << "IN " << countIN << endl << "OUT" << countOUT << endl;
+					forall_nodes( n, G1 ){
+						cout << G1[ n ] << "  ";
+					}
+					cout << endl;
+					forall_nodes( n, G2 ){
+						cout << G2[ n ] << "  ";
+					}
+					cout << endl << "--------------------------" << endl;*/
+					
+					if( it1 != it2 ){
+						int countedges = 0;
+						forall_nodes( n1, G1 ){
+							forall_nodes( n2, G2 ){
+								if( strcmp( G1[ n1 ],G2[ n2 ] ) == 0 ){
+									
+									edge e1;
+// 									if( DEBUG_GIVING_NAMES )
+// 										cout << "\n 5 gecti" << endl;
+									countedges++;
+								}
+// 								mark2[ n2 ] = true;
+							}
+// 							mark[ n1 ] = true;
+						}
+						edge ee;
+						int flag_e = 0;
+						forall_edges( ee, PROJECT ){
+							if( (PROJECT.source( ee ) == f1 && PROJECT.target( ee ) == f2) || (PROJECT.source( ee ) == f2 && PROJECT.target( ee ) == f1)  ){
+								flag_e = 1;
+								e = ee;
+								break;
+							}
+						}
+						if( flag_e == 0 && f1 != NULL && f2 != NULL ){
+							e = PROJECT.new_edge( f1 ,f2 );
+							PROJECT[ e ] = countedges;
+						}
+						else{
+							if( e != NULL )
+								PROJECT[ e ] += countedges;
+						}
+					}
+					countIN++;
+					if( countIN == GraphList_S.size() )
+						break;
+			}
+			countIN = 0;
+			countOUT++;
+			if( countOUT == GraphList_S.size() + 1 )
+				break;
+		}
+// 		forall_edges( e, PROJECT ){
+// 			cout << " e[]\t" << PROJECT[ e ] << endl;
+// 		}
+	}
+	else{
+		if( edgesBetween == true ){
+		/********************************************************************/	
+		/*								    */
+		/* Else the second method that is visualized in the paper           */
+		/*								    */
+		/********************************************************************/	
+			node_array<list<node> > neighbors( TEMPINT );
+			forall_nodes( n, TEMPINT ){
+				list<edge> elist = TEMPINT.out_edges( n );
+				forall_items( it, elist ){
+					neighbors[ n ].append( TEMPINT.target( elist[ it ]  ) );
+				}
+			}
+			forall_items( it1, GraphList_S){
+				G1 = GraphList_S[ it1 ];
+				innerCount = 0;
+				forall_nodes( f1, PROJECT ){
+					if( innerCount == countOUT )
+						break;
+					innerCount++;
+				}
+				int flg = 0;
+				forall_items( it2, GraphList_S){
+						G2 = GraphList_S[ it2 ];
+						innerCount2 = 0;
+						forall_nodes( f2, PROJECT ){
+							if( innerCount2 == countIN )
+								break;
+							innerCount2++;
+						}			
+						if( it1 != it2 ){
+							int edgeCount = 0;
+							forall_nodes( n1, G1 ){
+								forall_nodes( n2, TEMPINT ){
+									if( strcmp( GenesNode[ TEMPINT[ n2 ] ].GENE, G1[ n1 ] ) == 0 ){
+										n = n2;
+										break;
+									}
+								}
+								list<node> between = neighbors[ n ]; 
+								forall_items( it3, between ){
+									forall_nodes( n2, G2 ){
+										if( strcmp( GenesNode[ TEMPINT[ between[ it3 ] ] ].GENE , G2[ n2 ] ) == 0 ){
+											edgeCount++;
+										}
+									}
+								}
+							}
+							e = PROJECT.new_edge( f1 ,f2 );
+							PROJECT[ e ] = edgeCount;
+						}	
+						countIN++;
+						if( countIN == GraphList_S.size() )
+							break;
+				}
+				countIN = 0;
+				countOUT++;
+				if( countOUT == GraphList_S.size() + 1 )
+					break;
+			}
+		}
+		else{
+			forall_items( it1, GraphList_S){
+				G1 = GraphList_S[ it1 ];
+				innerCount = 0;
+				forall_nodes( f1, PROJECT ){
+					if( innerCount == countOUT )
+						break;
+					innerCount++;
+				}
+				int flg = 0;
+				forall_items( it2, GraphList_S){
+						G2 = GraphList_S[ it2 ];
+						innerCount2 = 0;
+						forall_nodes( f2, PROJECT ){
+							if( innerCount2 == countIN )
+								break;
+							innerCount2++;
+						}			
+						if( it1 != it2 ){
+							int edgeCount = 0;
+							forall_nodes( n1, G1 ){
+								forall_nodes( n2, G2 ){
+									if( strcmp( G1[ n1 ],G2[ n2 ] ) == 0 ){
+										edgeCount++;
+									}
+								}
+							}
+							e = PROJECT.new_edge( f1 ,f2 );
+							PROJECT[ e ] = edgeCount;
+						}
+						countIN++;
+						if( countIN == GraphList_S.size() )
+							break;
+				}
+				countIN = 0;
+				countOUT++;
+				if( countOUT == GraphList_S.size() + 1 )
+					break;
+			}
+		}
+	}
+	cout << " FORM MAIN GRAPH\n";
+// 	cout << " E2 -  " << PROJECT.number_of_edges() << endl;
+	list<int> old_edges;
+	list<edge> old_edges_e;
+// 	old_edges_e = Make_Simple( PROJECT );
+// 	PROJECT.hide_edges( old_edges_e );
+	//cout << endl << " Comparison Number " << comparisonNumber << endl;
+	int max = 0;
+// 	forall_edges( e1, PROJECT ){
+// 		forall_edges( e2, PROJECT ){
+// 			if( e1 != e2 ){
+// 				if( PROJECT.source( e1 ) == PROJECT.source( e2 ) && PROJECT.target( e1 ) == PROJECT.target( e2 ) ){
+// 					PROJECT.del_edge( e1 );
+// 				}
+// 			}
+// 		}
+// 	}
+
+	forall_edges( e1, PROJECT ){
+// 		cout << "- " << PROJECT[ e1 ] << " - " <<  ( 1.0 / ( HValues[ PROJECT.source( e1 ) ] / Hmax * HValues[ PROJECT.target( e1 ) ] / Hmax  ) ) <<endl;
+// 		PROJECT[ e1 ] =  ( (int)( 1.0 / ( HValues[ PROJECT.source( e1 ) ] / Hmax * HValues[ PROJECT.target( e1 ) ] / Hmax  ) ) * PROJECT[ e1 ] );
+// 		cout << "- " << PROJECT[ e1 ] << endl;
+		if( PROJECT[ e1 ] > max )
+			max = PROJECT[ e1 ];
+	}
+	double multiply = 100.0 / (double)( max );
+	
+	node_array<int> indexsP( PROJECT, 0 );
+	count1 = 0;
+	forall_nodes( projectNode, PROJECT ){
+		indexsP[ projectNode ] = count1;
+		count1++;
+	}
+
+	/********************************************************************/
+	/*								    */
+	/*	Make some filtrations					    */
+	/*								    */
+	/********************************************************************/
+	forall_edges( e1, PROJECT ){
+// 		cout << PROJECT[ e1 ] << " - " << " old " << endl;	
+		n = PROJECT.source( e1 );
+		list<edge> edges_l = G.out_edges( n );
+		PROJECT[ e1 ] = (int)((double)PROJECT[ e1 ] * multiply);
+		if( PROJECT[ e1 ] < (int)(removeRat * 100.0) /*&& edges_l.size() > 2*/ ){
+// 			cout << multiply << " Deleted Since - " << PROJECT[ e1 ] << " < " << (removeRat * 100.0) << endl;
+			PROJECT.del_edge( e1 );
+		}
+		else{
+			old_edges.append( PROJECT[ e1 ] );			
+// 			cout << PROJECT[ e1 ] << " - " << " new " << endl;
+		}
+	}
+
+	list<node> hided;
+	if( simplify == 1 ){
+		forall_nodes( n, PROJECT ){
+			if( HValues[ n ] < 0.20 && PROJECT.outdeg(n) == 0 && PROJECT.indeg(n) == 0 )
+				PROJECT.del_node( n );
+				//hided.append( n );//PROJECT.del_node( n );
+		}
+	}
+// 	cout << " E3 -  " << PROJECT.number_of_edges() << endl;
+	nodesOfProjectStr.init( PROJECT );
+
+	GRAPH<int,int> PROJECT2;
+
+	count = 0;
+	array<node> Nodes( PROJECT.number_of_nodes() + 1);
+	forall_nodes( n1, PROJECT ){
+		n2 = PROJECT2.new_node();
+		Nodes[ count ] = n1;
+		nodesOfProjectStr[ n1 ] = count;
+		nodesOfProjectInt[ count ] = n2;
+		count++;
+	}	
+	node_array<double> HValues2( PROJECT2 );
+	count = 0;
+	node_array<int> PARS( PROJECT2 );
+	forall_nodes( n1, PROJECT2 ){
+		HValues2[ n1 ] = HValues[ Nodes[ count ] ];
+		PARS[ n1 ] = count;
+		count++;
+	}
+	count = 0;
+	edge_array<int> edgeNumbersForStr( PROJECT );
+	array<edge> edgeNumbersForInt( PROJECT2.number_of_edges() );
+	forall_edges( e1, PROJECT ){
+		e2 = PROJECT2.new_edge( nodesOfProjectInt[ nodesOfProjectStr[ PROJECT.source( e1 ) ] ], nodesOfProjectInt[ nodesOfProjectStr[ PROJECT.target( e1 ) ] ] );
+		PROJECT2[ e2 ]= PROJECT[ e1 ];
+		edgeNumbersForStr[ e1 ] = count;
+		edgeNumbersForInt.resize( PROJECT2.number_of_edges() );
+		edgeNumbersForInt[ count ] = e2;
+		count++;
+	}
+
+	/********************************************************************/
+	/*																	*/
+	/*	Run our force directed method								    */
+	/*	Settings are imported from main menu							*/
+	/*																	*/
+	/********************************************************************/
+	Xpos.init( PROJECT2 );
+	Ypos.init( PROJECT2 );
+	pos.init( PROJECT2 );
+	bends.init( PROJECT2 );
+	edgeNumbersForStr_ = edgeNumbersForStr;
+	edgeNumbersForInt_ = edgeNumbersForInt;
+// 	cout << " E4 -  " << PROJECT2.number_of_edges() << endl;
+	i = 0;
+	cout << " RUN LAYOUT\n";
+	RUN_FFD_SELF( PROJECT2, PARS, max_weight, width, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
 // 	cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
 	return PROJECT2;
 }
