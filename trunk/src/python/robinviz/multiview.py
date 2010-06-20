@@ -128,11 +128,7 @@ class MultiViewWindow(QMainWindow):
             except:
                 QMessageBox.information(self, 'Empty Bicluster',
                     "No interactions found in this bicluster")
-                radialGrad = QRadialGradient (QPointF(25, 25), 30)
-                radialGrad.setColorAt(0, Qt.black)
-                radialGrad.setColorAt(0.5, Qt.white)
-                radialGrad.setColorAt(1, Qt.black)
-                self.mainScene.nodeDict[id].color = radialGrad
+                self.mainScene.nodeDict[id].blowUp()
                 return
 
         for view in self.pViews:
