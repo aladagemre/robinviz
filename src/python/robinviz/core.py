@@ -226,6 +226,7 @@ class View(QGraphicsView):
             self.timer = QTimeLine(5000)
             self.timer.setFrameRange(0, 100)
             self.animations = []
+            print "view icinde"
             for node in newGraph.nodes:
                 item = self.scene().nodeDict[node.id]
                 #item.setPos(node.graphics.x, node.graphics.y)
@@ -393,6 +394,7 @@ class EdgeItem(QGraphicsItem):
         self.edge = edge
         self.arrowHead = QPolygonF()
         self.onlyUpMiddle = True
+        self.highlighted = False
         
         intersectionPoint = self.startPoint()
         path[0] = intersectionPoint
@@ -431,12 +433,19 @@ class EdgeItem(QGraphicsItem):
 
         self.update()
         
-
+    def toggle_highlight(self):
+        self.highlighted ^= 1
+        self.update()
         
     def paint(self, painter, option, widget):
         thickPen = QPen()
         #thickPen.setWidth(10*self.edge.graphics.width / self.edge.minWidth)
         #thickPen.setColor(QColor(self.edge.graphics.fill))
+        if self.highlighted:
+            thickPen.setColor(QColor(255,0,0))
+        else:
+            thickPen.setColor(QColor(0,0,0))
+            
         thicknessRange = 10
         if self.edge.maxWidth == self.edge.minWidth:
             newWidth = 10
@@ -463,27 +472,26 @@ class EdgeItem(QGraphicsItem):
         if not self.scene().directed:
             return
         
-        noArrow = True
         
-        if self.onlyUpMiddle and line.p2().y() < line.p1().y():
-            # If the line is going upwards, then draw the arrows.
+        if line.p2().y() < line.p1().y():
+            if self.scene().onlyUp:
+                # If the line is going upwards, then draw the arrows.
+                if len(self.path) > 3:
+                    # If more than 3 segments, better use 2nd from the end.
+                    arrowBase = lastLine
+                else:
+                    # If less than 3 segments, use the last segment.
+                    arrowBase = line
 
-            if len(self.path) > 3:
-                # If more than 3 segments, better use 2nd from the end.
-                arrowBase = lastLine
-            else:
-                # If less than 3 segments, use the last segment.
-                arrowBase = line
+                centerPoint = (arrowBase.p1() + arrowBase.p2()) / 2.0
 
-            centerPoint = (arrowBase.p1() + arrowBase.p2()) / 2.0
-
-            line = QLineF(arrowBase.p1(), centerPoint)
-            noArrow = False
+                line = QLineF(arrowBase.p1(), centerPoint)
 
 
-        # Now arrow
-        if not noArrow:
-            arrowSize = 40.0
+            # Now arrow
+
+        
+            arrowSize = 30.0
             myColor = QColor(Qt.black)
             painter.setBrush(myColor)
             angle = math.acos(line.dx() / line.length())
@@ -501,7 +509,6 @@ class EdgeItem(QGraphicsItem):
 
             #painter.drawLine(line)
             painter.drawPolygon(self.arrowHead)
-
         # Arrow drawing has finished.
         """
         if self.isSelected():
