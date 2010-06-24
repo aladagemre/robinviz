@@ -125,7 +125,7 @@ class Ui_AboutDialog(object):
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><img src=\":/pic/robin.jpg\" /></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
 
-import resources_rc
+import resources_rc # do not delete this. it's for icon.
 
 if __name__ == "__main__":
     import sys

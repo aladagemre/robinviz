@@ -1,4 +1,5 @@
-from extensions import *
+#from extensions import *
+from windows import SingleMainViewWindow
 
 def main():
     app = QApplication(sys.argv)
@@ -24,4 +25,3 @@ if __name__ == "__main__":
     import cProfile
     cProfile.run('main()')
 
-    

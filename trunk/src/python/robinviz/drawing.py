@@ -2,6 +2,11 @@
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from pygml import Graph
+from os.path import normcase
+import os
+from PyQt4 import QtWebKit
+from bicluster import BiclusterWindow
 import math
 
 
@@ -21,6 +26,218 @@ for line in colorFile:
     CATEGORY_COLORS[str(lineNum)] = name.replace("_", " ")
     lineNum+=1
     
+
+class Scene(QGraphicsScene):
+    def __init__(self, parent=None):
+        QGraphicsScene.__init__(self, parent)
+        
+        # Object Creation
+        # ---------------------
+
+        # Default Values
+        # ---------------------
+        self.directed = False
+        self.menu = None
+
+        # Setup Operations
+        # ---------------------
+        
+
+    #----------- Event Methods ------------------
+    def mouseMoveEvent(self, event):
+        QGraphicsScene.mouseMoveEvent(self, event)
+        self.emit(SIGNAL("sceneMouseMove"), QPointF(event.scenePos()))
+
+    #----------- Data Structural Methods ------------------
+
+    def loadGraph(self, filename):
+        self.nodeDict = {}
+        self.edgeDict = {}
+        self.filename = filename
+        self.constructGraph()
+        for view in self.views():
+            view.setDragMode(QGraphicsView.ScrollHandDrag)
+            view.update()
+
+    def reloadGraph(self, filename):
+        # First clear
+        self.clear()
+        self.setSceneRect(self.itemsBoundingRect())
+
+        # Then load the graph
+        self.loadGraph(filename)
+        self.setSceneRect(self.itemsBoundingRect())
+
+    def constructGraph(self):
+    	g = Graph()
+        #gp = GMLParser(self.filename, g)
+        g.read_gml(self.filename)
+        g.prepare()
+
+        for node in g.nodes:
+            self.addNode(node)
+
+        edgeWidthMin = g.edges[0].graphics.width
+        edgeWidthMax = g.edges[0].graphics.width
+        for edge in g.edges:
+            if edge.graphics.width < edgeWidthMin:
+                edgeWidthMin = edge.graphics.width
+            elif edge.graphics.width > edgeWidthMax:
+                edgeWidthMax = edge.graphics.width
+
+        for edge in g.edges:
+            edge.minWidth = edgeWidthMin
+            edge.maxWidth = edgeWidthMax
+            self.addEdge(edge)
+
+        self.g = g
+
+    def addEdge(self, edge):
+        source = edge.u
+        target = edge.v
+
+        path = []
+        # If has segments, add to path list.
+        if hasattr(edge.graphics, "Line"):
+            for Point in edge.graphics.Line:
+                path.append(QPointF(Point.x, Point.y))
+        else:
+            path = [QPointF(source.graphics.x, source.graphics.y), QPointF(target.graphics.x, target.graphics.y)]
+
+        startItem = self.nodeDict.get(source.id)
+        endItem = self.nodeDict.get(target.id)
+
+        #print startItem, endItem, path, edge
+        if startItem and endItem:
+            e = EdgeItem(startItem, endItem, path, edge)
+            self.addItem(e)
+            startItem.addEdge(e)
+            endItem.addEdge(e)
+        else:
+            pass
+            # TODO: Fix here
+            #print "start:",getattr(source, "id") or None
+            #print "end:", getattr(target, "id") or None
+
+    #----------- GUI / Geometric Methods ------------------
+    # Not yet
+    # ------------------------------
+    
+
+
+
+
+
+class MainScene(Scene):
+    def __init__(self, parent=None):
+        Scene.__init__(self, parent)
+        self.readSettings()
+
+        # By default, Scene is NOT directed.
+        # But main scene can be directed or undirected.
+        if self.parameters["edgesBetween"]:
+            self.directed = True
+            self.onlyUp = True
+        else:
+            self.directed = False
+
+
+    def loadGraph(self, filename):
+        Scene.loadGraph(self, filename)
+        self.determineScoring()
+
+    def addNode(self, node):
+        item = CircleNode(node)
+        self.addItem(item)
+        self.nodeDict[node] = item
+        self.nodeDict[node.id] = item
+
+    def readSettings(self):
+        """Read settings from the settings file(s)"""
+        self.parameters = {}
+        f = open("settings.ini")
+        # TODO: handle spaces!
+        for line in f:
+            (parameterName, parameterValue) = line.strip().split()
+            # Try to convert it to int or float
+            try:
+                parameterValue = int(parameterValue)
+            except:
+                try:
+                    parameterValue = float(parameterValue)
+                except:
+                    pass
+            self.parameters[parameterName] = parameterValue
+
+    def determineScoring(self):
+        """Assigns scoring name and value to the tooltips of the nodes."""
+        # Set scoring name
+
+        if self.parameters["hvalueWeighting"]:
+            self.scoringName = "H-Value"
+        elif self.parameters["enrichmentWeighting_o"]:
+            self.scoringName = "Enrichment Ratio"
+        elif self.parameters["enrichmentWeighting_f"]:
+            self.scoringName = "Enrichment Ratio"
+        elif self.parameters["ppihitratioWeighting"]:
+            self.scoringName = "PPI Hit Ratio"
+
+        f = open("outputs/biclusters/scoring.txt")
+        f.readline() # for the first line (scoring scheme : blabla)
+        for line in f:
+            ( biclusterstr, id, value ) = line.strip().split()
+            item = self.nodeDict[int(id)]
+            tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
+            item.setToolTip(tip)
+
+
+
+    def mouseDoubleClickEvent(self, event):
+        """When double clicked on a node, signals the node id so that
+        matching PPI graph can be displayed on pViews."""
+        clickedItem = self.itemAt(event.scenePos())
+        if not clickedItem or isinstance(clickedItem, EdgeItem):
+            return
+
+        if isinstance(clickedItem, QGraphicsTextItem):
+            clickedItem = clickedItem.root
+
+        if not isinstance(clickedItem, CircleNode):
+            return
+        nodeId = clickedItem.node.id
+        self.emit(SIGNAL("nodeDoubleClicked"), nodeId)
+
+    def mousePressEvent(self, event):
+        """When selected a node, signals the node id so that matching
+        pView catches focus"""
+        QGraphicsScene.mousePressEvent(self, event)
+        clickedItem = self.itemAt(event.scenePos())
+        if clickedItem:
+            if isinstance(clickedItem, QGraphicsTextItem):
+                clickedItem = clickedItem.root
+
+            if not isinstance(clickedItem, CircleNode):
+                return
+
+            clickedNode = clickedItem.node
+            nodeId = clickedNode.id
+
+            self.emit(SIGNAL("nodeSelected"), nodeId)
+
+class PeripheralScene(Scene):
+    def __init__(self, filename=None, parent=None):
+        Scene.__init__(self, parent)
+
+    def setId(self, id):
+        self.id = id
+
+    def addNode(self, node):
+        item = SquareNode(node)
+        self.addItem(item)
+        self.nodeDict[node] = item
+        self.nodeDict[node.id] = item
+        item.associateWithNode(node)
+
 
 class EdgeItem(QGraphicsItem):
     def __init__(self, start, end, path, edge):
@@ -192,7 +409,8 @@ class EdgeItem(QGraphicsItem):
 
 class NodeItem(QGraphicsItem):
     """Common methods for NodeItem of various shapes."""
-    
+
+    #----------- Event Methods ------------------
     def hoverEnterEvent(self, event):
         """When hovered on the node, we make the scene unable to be moved by dragging."""
         self.scene().views()[0].setDragMode(QGraphicsView.NoDrag)
@@ -201,10 +419,16 @@ class NodeItem(QGraphicsItem):
         """When hovering is off the node, we make the scene able to be moved by dragging."""
         self.scene().views()[0].setDragMode(QGraphicsView.ScrollHandDrag)
 
+    #----------- Data Structural Methods ------------------
     def addEdge(self, e):
         """Adds the EdgeItem e to edges list."""
         self.edges.append(e)
 
+    def updateEdges(self):
+        for edge in self.edges:
+            edge.updatePosition()
+
+    #----------- GUI / Geometric Methods ------------------
     def centerPos(self):
         """Returns the center coordinate of the item."""
         return QPointF(self.x() + self.w/2, self.y() + self.h/2)
@@ -380,11 +604,8 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         self.setBrush(self.current_color)
         
     #----------- Data Structural Methods ------------------
-    def updateEdges(self):
-        for edge in self.edges:
-            edge.updatePosition()   
 
-    #----------- GUI / Geometric Methods ------------------
+    #----------- GUI / Geometric Methods ------------------        
     def intersectionPoint(self, startPoint):
         """Gives the intersection point when a line is drawn into the center
         of the circle node from the given startPoint."""
