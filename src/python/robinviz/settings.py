@@ -1,10 +1,9 @@
-import os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import sys
 from config.biclustering import *
 from config.customwidgets import *
-from os.path import normcase, abspath, dirname
+from os.path import normcase, abspath
 
 
 class SettingsDialog(QDialog):

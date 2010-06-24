@@ -6,12 +6,10 @@ from bicluster import *
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from PyQt4 import QtWebKit
 
 from os.path import split
 from os.path import normcase
 import os
-import math
 
 GRAPH_LAYOUTS = {}
 layoutFile = open("layouts.ini")
@@ -39,7 +37,7 @@ class View(QGraphicsView):
         #self.printer.setFullPage(True)
         self.printer.setPageMargins(10, 10, 10, 10, QPrinter.Millimeter)
         self.useAnimation = True # TODO: Add this as an option
-        
+
     def wheelEvent(self, event):
         coords = self.mapToScene(event.pos())
 
@@ -58,7 +56,7 @@ class View(QGraphicsView):
             QGraphicsView.contextMenuEvent(self, event)
             return
 
-        menu = QMenu(self)
+        self.menu = menu = QMenu(self)
         newWindow = menu.addAction("Open in &new window")
 
         menu.addSeparator()
@@ -66,14 +64,17 @@ class View(QGraphicsView):
         saveAsImage = menu.addAction("Save as &Image")
         saveAsGML= menu.addAction("Save as &GML")
         printGraph = menu.addAction("&Print")
-
-        actionToFunction = {newWindow       : self.newWindow,
+        
+        self._actionToFunction = actionToFunction = {newWindow       : self.newWindow,
                             saveAsImage     : self.saveAsImage,
                             printGraph      : self.printGraph,
-                            saveAsGML       : self.saveAsGML
+                            saveAsGML       : self.saveAsGML,
                             }
 
-        if getattr(self, 'main', False):
+        # ==== CUSTOM MENU ITEMS START ====
+        self.addCustomMenuItems()
+
+        """if getattr(self, 'main', False):
             enrichmentTable = menu.addAction("Enrichment Table")
             actionToFunction[enrichmentTable] = self.showEnrichmentTable
         else:
@@ -86,8 +87,10 @@ class View(QGraphicsView):
             actionToFunction[goTable] = self.showGOTable
 
             propertiesAction = menu.addAction("Properties")
-            actionToFunction[propertiesAction] = self.peripheralProperties
+            actionToFunction[propertiesAction] = self.peripheralProperties"""
 
+        # ==== CUSTOM MENU ITEMS END ====
+        
         # Now switch to layout menu
         switchToLayoutMenu = menu.addMenu("Switch To &Layout")
         for graphLayout in sorted(GRAPH_LAYOUTS.keys()):
@@ -107,30 +110,15 @@ class View(QGraphicsView):
         else:
             actionToFunction[action]()
 
-    def peripheralProperties(self):
-        if not hasattr(self, 'biclusterWindow'):
-            self.biclusterWindow = BiclusterWindow(self.scene().id)
 
-        self.biclusterWindow.showMaximized()
             
-    def clearView(self):
-        self.setScene(None)
-        
-    def showGOTable(self):
-        path = normcase("outputs/go/gobicluster%d.html" % self.scene().id)
-        if os.path.exists(path):
-            self.GOTable= QtWebKit.QWebView()
-            self.GOTable.setUrl(QUrl(path))
-            self.GOTable.show()
-        else:
-            QMessageBox.information(self, 'GO Table not found.',
-     "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
-        
-    def showEnrichmentTable(self):
-        self.enrichmentTable= QtWebKit.QWebView()
-        self.enrichmentTable.setUrl(QUrl(normcase("outputs/enrich/result.html")))
-        self.enrichmentTable.showMaximized()
-        
+
+
+
+    def addCustomMenuItems(self):
+        """ABSTRACT METHOD: Needs to be implemented by each confirmation view type."""
+        pass
+    
     def restoreEdges(self):
         newGraph = self.newGraph
         # Add the edges
@@ -248,7 +236,7 @@ class View(QGraphicsView):
 
             self.timer.finished.connect(self.restoreEdges)
             return True
-            
+    
     def printGraph(self):
         dialog = QPrintDialog(self.printer)
         if dialog.exec_():
@@ -286,7 +274,7 @@ class View(QGraphicsView):
 
 
 
-class Scene(QGraphicsScene):
+'''class Scene(QGraphicsScene):
     def __init__(self, parent=None):
         QGraphicsScene.__init__(self, parent)
         self.gridActive = False
@@ -382,9 +370,9 @@ class Scene(QGraphicsScene):
             pass
             # TODO: Fix here
             #print "start:",getattr(source, "id") or None
-            #print "end:", getattr(target, "id") or None
-
-
+            #print "end:", getattr(target, "id") or None'''
+from drawing import *
+'''
 class EdgeItem(QGraphicsItem):
     def __init__(self, start, end, path, edge):
         QGraphicsItem.__init__(self, None, None)
@@ -537,36 +525,4 @@ class EdgeItem(QGraphicsItem):
                 max_y = point.y()
         return QRectF(min_x, min_y, max_x - min_x, max_y - min_y)
     def boundingRect(self):
-        return self.rect
-    
-class NodeItem(QGraphicsItem):
-    def __init__(self, w, parent=None, scene=None):
-        QGraphicsItem.__init__(self, parent, scene)
-        self.w = 50 # TODO: REMOVE THIS
-        self.setFlag(QGraphicsItem.ItemIsMovable, True)
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        self.arrows = []
-
-    def centerPos(self):
-        """Returns the center coordinate of the item."""
-        #return QPointF(self.x() + self.w/2, self.y() + self.w/2)
-        return QPointF(self.x() + self.w/2, self.y() + self.h/2)
-
-    def itemChange(self, change, value):
-        if change == QGraphicsItem.ItemPositionChange:
-            for arrow in self.arrows:
-                arrow.updatePosition()
-
-        return QVariant(value)
-
-    """def mouseDoubleClickEvent(self, event):
-        #print self.x(), self.y()
-        print self.centerPos()"""
-
-
-
-
-
-
-
-
+        return self.rect'''
