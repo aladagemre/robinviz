@@ -1563,12 +1563,53 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 	node_array<point> pos(G);
 	cout << " 2 " << G.number_of_edges() << " - " << G.number_of_nodes() <<endl;
 	SPRING_EMBEDDING2_( G, Xpos, Ypos, 0, 2000 + G.number_of_nodes()*20 ,0, 700 + G.number_of_nodes()*7, 500, PARS, Hvalues );
+
+	double xmin, xmax, ymin, ymax;
+	int ncount = 0;
+	forall_nodes( n, G ){
+		if( G.degree( n ) != 0 ){
+			if( ncount == 0 ){
+				xmin = Xpos[ n ];
+				xmax = Xpos[ n ];
+				ymin = Ypos[ n ];
+				ymax = Ypos[ n ];
+			}
+			else{
+			    if( Xpos[ n ] < xmin )
+				  xmin = Xpos[ n ];
+			    if( Xpos[ n ] > xmax )
+				  xmax = Xpos[ n ];
+			    if( Ypos[ n ] < ymin )
+				  ymin = Ypos[ n ];
+			    if( Ypos[ n ] > ymax )
+				  ymax = Ypos[ n ];
+			}
+			ncount++;
+		}
+	}
+	double xpos1 = xmin;
+	double ypos1 = ymax + 100.0;
+	forall_nodes( n, G ){
+		if( G.degree( n ) == 0 ){
+			if( xpos1 < xmax ){
+				Xpos[ n ] = xpos1;
+				Ypos[ n ] = ypos1;
+			}
+			else{
+				xpos1 = xmin;
+				ypos1 += 100.0;
+				Xpos[ n ] = xpos1;
+				Ypos[ n ] = ypos1;
+			}
+			xpos1 += 100.0;
+		}
+	}
 	cout << " 3 " << endl;
 	array<bool> colorChoose( 13 );
 	for( int c = 0; c < 13; c++ ){
 		colorChoose[ c ] = false;
 	}
-	colorChoose[ 7 ]  = true;
+	colorChoose[ 5 ]  = true;
 	list_item it;
 
 	GraphWin gw(G);	
@@ -1584,9 +1625,10 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 	// Make all of the node as orange
 	forall_nodes( n, G ){
 			G[ n ] = PARS[ n ];
-			G[ n ] = random_value;
-			color random( random_value );
+			G[ n ] = 11;
+			color random( 11 );
 			gw.set_color( n, random);
+			gw.set_border_color( n, random);
 	}
 
 	forall_nodes( n, G ){

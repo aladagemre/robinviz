@@ -395,8 +395,8 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 				count++;
 			}
 			line_i++;
-			if( line_i % 500 == 0 )
-				cout << "\n Line " << line_i << " is parsed ";
+			if( line_i % 5 == 0 )
+				cout << "\n Category " << line_i << " is parsed ";
 			categories.append( tup );
 		}
 		cout << "\n/**************************************************/" << endl;
@@ -511,8 +511,9 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
 			count++;
 		}
 	}	
-
+	cout << "\nWEDONE\n";
 	array<GENEONTO> geneOntoForData = geneOntologyHandling2( defaultGoFile, inputCats, GenesNode, categories, gocategories );
+	cout << "\nWEDONE\n";
 	geneOntologyToBiclusterHandling( gocategories, geneOntoForData );
 }
 /**
@@ -1203,8 +1204,8 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 		    cout << " Graph " << i << " in process \n";
 			if( listOfGraphs[ i ].empty() != true ){
 				if( listOfGraphs[ i ].number_of_nodes() < 1500 ){
-					H = RUN_CIRCLEALONE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100 );
-					//H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100, 200.0 );
+					//H = RUN_CIRCLEALONE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100 );
+					H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100, 200.0 );
 				}
 				else
 					H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100, 2, 0.20 );
