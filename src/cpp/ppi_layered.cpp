@@ -123,7 +123,7 @@
 	int width = 10;       // Layering max width
 	int space = 150;      // yspace between layers
 	int increment = 125;  // xspace between nodes
-    int colors[17][3] ={ {255,255,255},
+    int colors[18][3] ={ {255,255,255},
                          {0,0,0},
                          {255,0,0},
                          {0,255,0},
@@ -139,7 +139,9 @@
                          {220,220,220},
                          {175,175,175},
                          {128,128,128},
-                         {255,255,230}};
+                         {255,255,230},
+                         {75,75,75}};
+
 #endif ORDVARS
 
 #ifdef LEDAVARS
@@ -220,24 +222,24 @@ int main(){
   //      //cout << empty << " " << ppifilename << endl;
 
 
-                //int bool_i;
+                int bool_i;
 
-                //cout << empty << " " << ffd_layout << endl;
-                // 	go_info = 1
-                fscanf( fptr, "%s%d", empty, &bool_i );
-                go_info = ( bool_i == 0 ? 0 : 1 );
-                //cout << empty << " " << go_info << endl;
-                fscanf( fptr, "%s%s", empty, gofile );
-                //cout << empty << " " << ppifilename << endl;
-                // 	edgesBetween = 1
-                fscanf( fptr, "%s%d", empty, &bool_i );
-                edgesBetween = ( bool_i == 0 ? 0 : 1 );
-                //cout << empty << " " << edgesBetween << endl;
-                // 	sharedGenes = 0
-                fscanf( fptr, "%s%d", empty, &bool_i );
-                sharedGenes = ( bool_i == 0 ? 0 : 1 );
-                //cout << empty << " " << sharedGenes << endl;
-                fclose( fptr );
+//                //cout << empty << " " << ffd_layout << endl;
+//                // 	go_info = 1
+//                fscanf( fptr, "%s%d", empty, &bool_i );
+//                go_info = ( bool_i == 0 ? 0 : 1 );
+//                //cout << empty << " " << go_info << endl;
+//                fscanf( fptr, "%s%s", empty, gofile );
+//                //cout << empty << " " << ppifilename << endl;
+//                // 	edgesBetween = 1
+//                fscanf( fptr, "%s%d", empty, &bool_i );
+//                edgesBetween = ( bool_i == 0 ? 0 : 1 );
+//                //cout << empty << " " << edgesBetween << endl;
+//                // 	sharedGenes = 0
+//                fscanf( fptr, "%s%d", empty, &bool_i );
+//                sharedGenes = ( bool_i == 0 ? 0 : 1 );
+//                //cout << empty << " " << sharedGenes << endl;
+//                fclose( fptr );
 
         FILE *kfptr;
         if( (fptr = fopen( catfile , "r" )) !=NULL ){
@@ -323,6 +325,7 @@ int main(){
                 //printf( "%s %d %d %d\n",categoriesOfGenes[cit].categ, colors[colorCount][0], colors[colorCount][1], colors[colorCount][2] );
                 colorCount++;
             }
+            fprintf( cfptr, "%s %d %d %d\n","None", colors[colorCount][0], colors[colorCount][1], colors[colorCount][2] );
             fclose( cfptr );
         }
 
