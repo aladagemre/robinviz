@@ -7,6 +7,9 @@ import os
 from bicluster import *
 
 class CoRegulationMainView(MainView):
+    def __init__(self, parent=None):
+        MainView.__init__(self, parent)
+
     # ========= Abstract Methods =============
     def addCustomMenuItems(self):
         menu = self.menu

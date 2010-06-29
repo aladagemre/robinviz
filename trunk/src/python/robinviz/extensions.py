@@ -12,6 +12,7 @@ class MainView(View):
     def __init__(self, parent=None):
         View.__init__(self, parent)
         self.main = True
+        self.nodeClass = CircleNode
 
 
     def newWindow(self):

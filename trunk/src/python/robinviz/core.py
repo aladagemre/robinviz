@@ -2,7 +2,6 @@
 #from styles import *
 #import sys
 from pygml import Graph
-from bicluster import *
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
