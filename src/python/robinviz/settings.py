@@ -22,6 +22,8 @@ class SettingsDialog(QDialog):
         self.setLayout(self.layout)
 
         self.loadSettings()
+        self.loadYAMLSettings()
+        self.saveYAMLSettings()
         
         self.setupBiologicalTab()
         self.setupBiclusteringTab()
@@ -38,7 +40,19 @@ class SettingsDialog(QDialog):
         #self.connect(self.comboAlgorithm, SIGNAL("currentIndexChanged(QString)"), self.loadAlgorithmParameters)
 
         self.setMinimumSize(455,300)
-        
+
+    def loadYAMLSettings(self):
+        import yaml
+        stream = file('settings.yaml', 'r')    # 'document.yaml' contains a single YAML document.
+        self.params = yaml.load(stream)
+        #print self.params
+
+    def saveYAMLSettings(self):
+        import yaml
+        stream = file('settings-out.yaml', 'w')
+        yaml.dump(self.params, stream, default_flow_style=False, indent=4)    # Write a YAML representation of data to 'document.yaml'.
+        stream.close()
+
     def loadSettings(self):
         self.parameters = {}
         self.parameterWidgets = {}

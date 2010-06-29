@@ -311,9 +311,9 @@ class EdgeItem(QGraphicsItem):
 
         thicknessRange = 10
         if self.edge.maxWidth == self.edge.minWidth:
-            newWidth = 10
+            newWidth = 2
         else:
-            newWidth = 10 + (thicknessRange * (self.edge.graphics.width - self.edge.minWidth)) / (self.edge.maxWidth - self.edge.minWidth)
+            newWidth = 2 + (thicknessRange * (self.edge.graphics.width - self.edge.minWidth)) / (self.edge.maxWidth - self.edge.minWidth)
             #newRatio = ((self.edge.graphics.width - self.edge.minWidth)/(self.edge.maxWidth - self.edge.minWidth)) * newRange + 30
 
         thickPen.setWidthF(newWidth)
@@ -449,14 +449,35 @@ class SquareNode(QGraphicsPolygonItem, NodeItem):
         path.addRect(0, 0, 130, 40)
         polygon = path.toFillPolygon()
         self.setPolygon(polygon)
+        self.setOpacity(0.5)
+        self.color = Qt.blue
+
 
 
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        try:
+            # available only in Qt 4.6
+            #self.setFlag(QGraphicsItem.ItemSendsScenePositionChanges, True)
+            self.setFlag( QGraphicsItem.ItemSendsGeometryChanges)
+        except:
+            # no need to do this in Qt 4.5
+            pass
+        
         self.setAcceptsHoverEvents(True)
         self.edges = []
         self.associateWithNode(node)
 
+    def paint(self, painter, option,widget):
+        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setBrush(self.color)
+        painter.drawRoundedRect(0, 0, self.w, self.h, 5, 5)
+
+    """def mouseReleaseEvent(self, event):
+        # BUG: caused node to escape to its original position??!
+        self.updateEdges()
+        self.scene().update()"""
+    
     def intersectionPoint(self, startPoint):
         """Gives the intersection point when a line is drawn into the center
         of the node from the given startPoint."""
@@ -477,10 +498,8 @@ class SquareNode(QGraphicsPolygonItem, NodeItem):
 
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemPositionChange:
-            for edge in self.edges:
-                edge.updatePosition()
-            if self.scene():
-                self.scene().update()
+            self.updateEdges()
+            self.scene().update()
         return QVariant(value)
 
     def associateWithNode(self, node):
@@ -535,11 +554,21 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         # ---------------------
         #self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        try:
+            # available only in Qt 4.6
+            #self.setFlag(QGraphicsItem.ItemSendsScenePositionChanges, True)
+            self.setFlag( QGraphicsItem.ItemSendsGeometryChanges)
+        except:
+            # no need to do this in Qt 4.5
+            pass
+
+
         self.setAcceptsHoverEvents(True)
         self.edges = []
         self.color = QColor("#52C6FF")
         self.selectedColor = QColor("#E6FF23")
         self.current_color = self.color
+        self.setOpacity(0.5)
 
         # Setup Operations
         # ---------------------
@@ -571,12 +600,14 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
      "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
 
 
-    def itemChange(self, change, value):
-        if change == QGraphicsItem.ItemPositionChange:
+    def itemChange(self, change, value):        
+        if change == QGraphicsItem.ItemPositionChange or change == QGraphicsItem.ItemTransformHasChanged:
             for edge in self.edges:
                 edge.updatePosition()
+                self.scene().update()
 
         elif change == QGraphicsItem.ItemSelectedChange:
+            print "Item selected changed"
             if self.isSelected():
                 self.toggle_highlight()
                 for edge in self.edges:
