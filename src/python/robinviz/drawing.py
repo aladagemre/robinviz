@@ -232,7 +232,7 @@ class PeripheralScene(Scene):
         self.id = id
 
     def addNode(self, node):
-        item = SquareNode(node)
+        item = RectNode(node)
         self.addItem(item)
         self.nodeDict[node] = item
         self.nodeDict[node.id] = item
@@ -293,7 +293,7 @@ class EdgeItem(QGraphicsItem):
         self.__avoidCrossingNodeBorder()  # update path to avoid crossing node borders
         self.update()
 
-    def toggle_highlight(self):
+    def toggleHighlight(self):
         """Toggles the boolean if the highlight is selected."""
         self.highlighted ^= 1
         self.update()
@@ -414,11 +414,13 @@ class NodeItem(QGraphicsItem):
     def hoverEnterEvent(self, event):
         """When hovered on the node, we make the scene unable to be moved by dragging."""
         self.scene().views()[0].setDragMode(QGraphicsView.NoDrag)
+        self.toggleHighlight()
         
     def hoverLeaveEvent(self, event):
         """When hovering is off the node, we make the scene able to be moved by dragging."""
         self.scene().views()[0].setDragMode(QGraphicsView.ScrollHandDrag)
-
+        self.toggleHighlight()
+        
     #----------- Data Structural Methods ------------------
     def addEdge(self, e):
         """Adds the EdgeItem e to edges list."""
@@ -439,9 +441,16 @@ class NodeItem(QGraphicsItem):
         radialGrad.setColorAt(0, Qt.black)
         radialGrad.setColorAt(0.5, Qt.white)
         radialGrad.setColorAt(1, Qt.black)
-        self.color = radialGrad
+        self.defaultColor = radialGrad
+    def toggleHighlight(self):
+        if self.currentColor == self.defaultColor:
+            self.currentColor = self.highlightedColor
+        else:
+            self.currentColor = self.defaultColor
+        self.setBrush(self.currentColor)
+        
 
-class SquareNode(QGraphicsPolygonItem, NodeItem):
+class RectNode(QGraphicsPolygonItem, NodeItem):
     def __init__(self, node, parent=None, scene=None):
         QGraphicsPolygonItem.__init__(self, parent, scene)
         path = QPainterPath()
@@ -450,10 +459,10 @@ class SquareNode(QGraphicsPolygonItem, NodeItem):
         polygon = path.toFillPolygon()
         self.setPolygon(polygon)
         self.setOpacity(0.5)
-        self.color = Qt.blue
+        self.defaultColor = Qt.blue
 
 
-
+        self.setAcceptHoverEvents(True)
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         try:
@@ -470,13 +479,14 @@ class SquareNode(QGraphicsPolygonItem, NodeItem):
 
     def paint(self, painter, option,widget):
         painter.setRenderHint(QPainter.Antialiasing)
-        painter.setBrush(self.color)
+        painter.setBrush(self.currentColor)
         painter.drawRoundedRect(0, 0, self.w, self.h, 5, 5)
 
-    """def mouseReleaseEvent(self, event):
-        # BUG: caused node to escape to its original position??!
+    def mouseReleaseEvent(self, event):
+        """When released the button (stopped moving), update the edges/scene."""
+        QGraphicsItem.mouseReleaseEvent(self, event)
         self.updateEdges()
-        self.scene().update()"""
+        self.scene().update()
     
     def intersectionPoint(self, startPoint):
         """Gives the intersection point when a line is drawn into the center
@@ -496,15 +506,17 @@ class SquareNode(QGraphicsPolygonItem, NodeItem):
 
         return intersectPoint
 
+    #========= Events =====================        
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemPositionChange:
             self.updateEdges()
-            self.scene().update()
         return QVariant(value)
 
     def associateWithNode(self, node):
-        self.color = QColor(node.graphics.outline)
-        self.setBrush(self.color) # Give the category color.
+        self.defaultColor = QColor(node.graphics.outline)
+        self.highlightedColor = self.defaultColor.lighter(150)
+        self.currentColor = self.defaultColor
+        self.setBrush(self.currentColor) # Give the category color.
         margin = 2.0
         # Construct the text.
         self.text = QGraphicsTextItem(self)
@@ -565,17 +577,17 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
 
         self.setAcceptsHoverEvents(True)
         self.edges = []
-        self.color = QColor("#52C6FF")
-        self.selectedColor = QColor("#E6FF23")
-        self.current_color = self.color
+        self.defaultColor = QColor("#52C6FF")
+        self.highlightedColor = QColor("#E6FF23")
+        self.currentColor = self.defaultColor
         self.setOpacity(0.5)
 
         # Setup Operations
         # ---------------------
-        self.setBrush(self.color)
         self.associateWithNode(node)
+        self.setBrush(self.defaultColor)
 
-    #----------- Event Methods ------------------
+    #----------- Event Methods ------------------        
     def contextMenuEvent(self, event):
         menu = QMenu()
         goTable = menu.addAction("GO Table")
@@ -602,37 +614,26 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
 
     def itemChange(self, change, value):        
         if change == QGraphicsItem.ItemPositionChange or change == QGraphicsItem.ItemTransformHasChanged:
-            for edge in self.edges:
-                edge.updatePosition()
-                self.scene().update()
-
+            self.updateEdges()
         elif change == QGraphicsItem.ItemSelectedChange:
-            print "Item selected changed"
             if self.isSelected():
-                self.toggle_highlight()
+                self.toggleHighlight()
                 for edge in self.edges:
-                    edge.toggle_highlight()
-                    edge.end.toggle_highlight()
+                    edge.toggleHighlight()
+                    edge.end.toggleHighlight()
                 self.stopAnimation()
+                self.scene().update()
             else:
-                self.toggle_highlight()
+                self.toggleHighlight()
                 for edge in self.edges:
-                    edge.toggle_highlight()
-                    edge.end.toggle_highlight()
-                """if self.selectedColor == Qt.yellow:
+                    edge.toggleHighlight()
+                    edge.end.toggleHighlight()
+                """if self.highlightedColor == Qt.yellow:
                     self.text.setDefaultTextColor(QColor(Qt.black))"""
                 self.startAnimation()
 
         return QVariant(value)
 
-    def toggle_highlight(self):
-        if self.current_color == self.color:
-            #print "yakiyorum", self.node.id
-            self.current_color = self.selectedColor
-        else:
-            #print "sonduruyorum", self.node.id
-            self.current_color = self.color
-        self.setBrush(self.current_color)
         
     #----------- Data Structural Methods ------------------
 
@@ -665,9 +666,10 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         self.w = self.h = node.graphics.w
 
         # Set Color
-        self.color = QColor(node.graphics.outline)
-        self.selectedColor = self.color.lighter(150)
-        self.setBrush(self.color)
+        self.defaultColor = QColor(node.graphics.outline)
+        self.currentColor = self.defaultColor
+        self.highlightedColor = self.defaultColor.lighter(150)
+        self.setBrush(self.defaultColor)
 
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
@@ -681,7 +683,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         #textFont.setPointSize(20)
 	textFont.setPixelSize(self.w/2)
         self.text.setFont(textFont)
-        if self.color < 250 or self.color in (Qt.red, Qt.green, Qt.blue, Qt.black, QColor("#0000CD")):
+        if self.defaultColor < 250 or self.defaultColor in (Qt.red, Qt.green, Qt.blue, Qt.black, QColor("#0000CD")):
             self.text.setDefaultTextColor(QColor(Qt.white))
 
         # Set node id as text.
