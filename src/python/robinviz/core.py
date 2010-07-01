@@ -178,6 +178,7 @@ class View(QGraphicsView):
             self.scene().clear()
             # Switch back to original.
             self.scene().reloadGraph(self.originalFileName)
+            self.scene().update()
             #self.reselectItemsLayeredLayout()
             return False
         else:
