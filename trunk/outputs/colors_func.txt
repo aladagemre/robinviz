@@ -11,3 +11,4 @@ stress_and_defense 128 0 0
 genome_maintenance 255 0 255
 cellular_fate_/_organization 0 128 128
 uncharacterized 100 100 255
+None 220 220 220
