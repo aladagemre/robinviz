@@ -31,6 +31,7 @@ class View(QGraphicsView):
     def __init__(self, parent=None):
         QGraphicsView.__init__(self, parent)
         self.main = False
+        self.mainSceneClass = None # TO BE DEFINED BY CHILD CLASSES
         self.printer = QPrinter(QPrinter.HighResolution)
         self.printer.setPageSize(QPrinter.A4)
         #self.printer.setFullPage(True)

@@ -3,7 +3,8 @@ from PyQt4.QtCore import *
 
 import os.path
 #from extensions import *
-from core import MainScene, PeripheralScene
+#from core import MainScene, PeripheralScene
+from confirmation import CoRegulationMainView, CoRegulationMainScene
 from settings import SettingsDialog
 import os
 from os.path import normcase
@@ -13,6 +14,7 @@ class SingleMainViewWindow(QMainWindow):
     def __init__(self, scene=None):
         QMainWindow.__init__(self)
         self.mainViewType = CoRegulationMainView
+        self.mainSceneType = CoRegulationMainScene
 
         if scene:
             self.scene = scene
@@ -20,7 +22,7 @@ class SingleMainViewWindow(QMainWindow):
             self.setupGUI()
 
     def loadGraph(self, filename):
-        self.scene = MainScene()
+        self.scene = self.mainSceneType()
         self.scene.loadGraph(filename)
         self.view = self.mainViewType(self.scene)
 
@@ -107,6 +109,7 @@ class MultiViewWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.mainViewType = CoRegulationMainView
         self.peripheralViewType = CoRegulationPeripheralView
+        self.mainSceneType = CoRegulationMainScene
 
         self.setupGUI()
         #self.setWindowFlags(Qt.Window|Qt.FramelessWindowHint)
@@ -187,7 +190,7 @@ class MultiViewWindow(QMainWindow):
      "Results not found. Please report this issue.")
             return
         self.pScenes = {} # Peripheral scenes
-        self.mainScene = MainScene()
+        self.mainScene = self.mainSceneType()
         self.mainScene.loadGraph(normcase("outputs/graphs/maingraph.gml"))
         self.mainView.setScene(self.mainScene)
         self.mainView.setSceneRect(self.mainScene.sceneRect())
@@ -304,7 +307,7 @@ class MultiViewWindow(QMainWindow):
 
     ################## FILE MENU #######################
 
-    def run(self):
+    def runRegulation(self):
         self.clearViews()
 
         print "Starting operation"
@@ -328,6 +331,9 @@ class MultiViewWindow(QMainWindow):
             QMessageBox.information(self, 'Failed', message)
         self.unsetCursor()
         self.setWindowTitle("RobinViz")
+
+    def runFunctionality(self):
+        pass
 
     def loadSession(self):
         fileName = QFileDialog.getOpenFileName(self, "Load Session File",
@@ -410,10 +416,23 @@ class MultiViewWindow(QMainWindow):
     def createActions(self):
 
         # FILE MENU
-        run = QAction('Run', self)
-        run.setShortcut('Ctrl+R')
-        run.setStatusTip('&Run the program')
-        self.connect(run, SIGNAL('triggered()'), self.run)
+        runMenu = QMenu('Run', self.menuBar())
+        
+
+        runReg = QAction('Co-Regulation', self)
+        runReg.setShortcut('Ctrl+R')
+        runReg.setStatusTip('Confirmation by Co-Regulation')
+        self.connect(runReg, SIGNAL('triggered()'), self.runRegulation)
+
+
+        runFunc = QAction('Co-Functionality', self)
+        runFunc.setShortcut('Ctrl+F')
+        runFunc.setStatusTip('Confirmation by Co-Functionality')
+        self.connect(runFunc, SIGNAL('triggered()'), self.runFunctionality)
+
+
+        runMenu.addAction(runReg)
+        runMenu.addAction(runFunc)
 
         loadSession = QAction('L&oad Session', self)
         loadSession.setShortcut('Ctrl+O')
@@ -446,7 +465,7 @@ class MultiViewWindow(QMainWindow):
 
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
-        fileMenu.addAction(run)
+        fileMenu.addMenu(runMenu)
         fileMenu.addSeparator()
         fileMenu.addAction(loadSession)
         fileMenu.addAction(saveSession)
