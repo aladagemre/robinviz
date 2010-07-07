@@ -126,11 +126,45 @@ class Scene(QGraphicsScene):
 
 
 
-
-
 class MainScene(Scene):
     def __init__(self, parent=None):
         Scene.__init__(self, parent)
+
+    def mouseDoubleClickEvent(self, event):
+        """When double clicked on a node, signals the node id so that
+        matching PPI graph can be displayed on pViews."""
+        clickedItem = self.itemAt(event.scenePos())
+        if not clickedItem or isinstance(clickedItem, EdgeItem):
+            return
+
+        if isinstance(clickedItem, QGraphicsTextItem):
+            clickedItem = clickedItem.root
+
+        if not isinstance(clickedItem, CircleNode):
+            return
+        nodeId = clickedItem.node.id
+        self.emit(SIGNAL("nodeDoubleClicked"), nodeId)
+
+    def mousePressEvent(self, event):
+        """When selected a node, signals the node id so that matching
+        pView catches focus"""
+        QGraphicsScene.mousePressEvent(self, event)
+        clickedItem = self.itemAt(event.scenePos())
+        if clickedItem:
+            if isinstance(clickedItem, QGraphicsTextItem):
+                clickedItem = clickedItem.root
+
+            if not isinstance(clickedItem, CircleNode):
+                return
+
+            clickedNode = clickedItem.node
+            nodeId = clickedNode.id
+
+            self.emit(SIGNAL("nodeSelected"), nodeId)
+
+class CoRegMainScene(MainScene):
+    def __init__(self, parent=None):
+        MainScene.__init__(self, parent)
         self.readSettings()
 
         # By default, Scene is NOT directed.
@@ -140,7 +174,6 @@ class MainScene(Scene):
             self.onlyUp = True
         else:
             self.directed = False
-
 
     def loadGraph(self, filename):
         Scene.loadGraph(self, filename)
@@ -192,37 +225,9 @@ class MainScene(Scene):
 
 
 
-    def mouseDoubleClickEvent(self, event):
-        """When double clicked on a node, signals the node id so that
-        matching PPI graph can be displayed on pViews."""
-        clickedItem = self.itemAt(event.scenePos())
-        if not clickedItem or isinstance(clickedItem, EdgeItem):
-            return
 
-        if isinstance(clickedItem, QGraphicsTextItem):
-            clickedItem = clickedItem.root
 
-        if not isinstance(clickedItem, CircleNode):
-            return
-        nodeId = clickedItem.node.id
-        self.emit(SIGNAL("nodeDoubleClicked"), nodeId)
 
-    def mousePressEvent(self, event):
-        """When selected a node, signals the node id so that matching
-        pView catches focus"""
-        QGraphicsScene.mousePressEvent(self, event)
-        clickedItem = self.itemAt(event.scenePos())
-        if clickedItem:
-            if isinstance(clickedItem, QGraphicsTextItem):
-                clickedItem = clickedItem.root
-
-            if not isinstance(clickedItem, CircleNode):
-                return
-
-            clickedNode = clickedItem.node
-            nodeId = clickedNode.id
-
-            self.emit(SIGNAL("nodeSelected"), nodeId)
 
 class PeripheralScene(Scene):
     def __init__(self, filename=None, parent=None):
@@ -322,7 +327,7 @@ class EdgeItem(QGraphicsItem):
 
         # --------- Now draw the line(s) -----------
         
-
+        
         line = None
         for i in range(len(self.path) - 1): # take first n-1 line segments
             s = self.path[i]                # starting point of the segment.

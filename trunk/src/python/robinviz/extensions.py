@@ -1,12 +1,5 @@
 from core import *
-#from bicluster import *
 from drawing import *
-from windows import SingleMainViewWindow, SinglePeripheralViewWindow
-
-#TODO: Fix MainView to CoRegulationMainView, etc.
-
-
-
 
 class MainView(View):
     def __init__(self, parent=None):
@@ -17,6 +10,7 @@ class MainView(View):
 
     def newWindow(self):
         if not hasattr(self, 'specialWindow'):
+            from windows import SingleMainViewWindow
             self.specialWindow = SingleMainViewWindow(self.scene())
             #self.specialWindow.loadGraph(self.scene().filename)
         self.specialWindow.showMaximized()
@@ -37,6 +31,7 @@ class PeripheralView(View):
 
     def newWindow(self):
         if not hasattr(self, 'specialWindow'):
+            from windows import SinglePeripheralViewWindow
             self.specialWindow = SinglePeripheralViewWindow(self.scene())
             #self.specialWindow.loadGraph(self.scene().filename)
             #self.specialWindow.scene.setId(self.scene().id)
@@ -61,5 +56,3 @@ class PeripheralView(View):
         View.focusOutEvent(self, event)
         if self.preview:
             self.setBackgroundBrush(self.normalBackground)
-        
-
