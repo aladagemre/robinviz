@@ -110,7 +110,10 @@ class MultiViewWindow(QMainWindow):
         self.setConfirmationType("Co-Functionality")
         #self.setWindowFlags(Qt.Window|Qt.FramelessWindowHint)
 
-    def setConfirmationType(self, confirmationType):
+    def setConfirmationType(self, confirmationType=None):
+        if confirmationType is None:
+            confirmationType = str(self.coGroup.checkedAction().text())
+            
         if confirmationType == "Co-Regulation":
             self.mainViewType = CoRegulationMainView
             self.peripheralViewType = CoRegulationPeripheralView
@@ -124,6 +127,8 @@ class MultiViewWindow(QMainWindow):
         else:
             print "No such confirmation type:", confirmationType
             return
+
+        self.confirmationType = confirmationType
         self.setupGUI()
         
     def setupGUI(self):
@@ -319,18 +324,34 @@ class MultiViewWindow(QMainWindow):
 
     ################## FILE MENU #######################
 
-    def runRegulation(self):
-        self.clearViews()
+    def run(self):
+        """Runs the analysis operation."""
 
+        # ======= PREPARE ========
+        if not self.confirmationType:
+            print "No confirmation type specified, won't run."
+            return
+        self.clearViews()
+        
+        exe_files = {
+            'Co-Regulation' : './layered.exe',
+            'Co-Functionality' : './co_functional.exe',
+        }
         print "Starting operation"
         self.setWindowTitle("RobinViz - Please wait, window might not respond for a while...")
         self.setCursor(Qt.WaitCursor)
+
+        # ======= CLEANUP ==========
         errorFile = "outputs/error.txt"
         if os.path.exists(errorFile):
             os.remove(errorFile)
         import clean
         clean.clean()
-        failed = os.system(normcase("./layered.exe")) # returns 0 for success
+
+        # ======== RUN ==============
+        failed = os.system(normcase(exe_files[self.confirmationType])) # returns 0 for success
+
+        # ======== DISPLAY ==========
         if not failed:
             self.loadMainScene()
             self.connectSlots()
@@ -341,11 +362,11 @@ class MultiViewWindow(QMainWindow):
                 message = "Unknown error occured. Please report the debug messages on the console."
 
             QMessageBox.information(self, 'Failed', message)
+
+        # ======= POST-OPERATIONS ====
         self.unsetCursor()
         self.setWindowTitle("RobinViz")
 
-    def runFunctionality(self):
-        pass
 
     def loadSession(self):
         fileName = QFileDialog.getOpenFileName(self, "Load Session File",
@@ -428,23 +449,30 @@ class MultiViewWindow(QMainWindow):
     def createActions(self):
 
         # FILE MENU
-        runMenu = QMenu('Run', self.menuBar())
+        run = QAction('Run', self)
+        run.setShortcut('Ctrl+R')
+        run.setStatusTip('Confirmation by Co-Regulation')
+        self.connect(run, SIGNAL('triggered()'), self.run)
+
+
+        confirmationMenu = QMenu('Confirmation', self.menuBar())
+        self.coGroup = coGroup = QActionGroup(confirmationMenu)
+        coGroup.setExclusive(True)
         
-
-        runReg = QAction('Co-Regulation', self)
-        runReg.setShortcut('Ctrl+R')
-        runReg.setStatusTip('Confirmation by Co-Regulation')
-        self.connect(runReg, SIGNAL('triggered()'), self.runRegulation)
+        coRegulation = QAction('Co-Regulation', coGroup)
+        coFunctionality = QAction('Co-Functionality', coGroup)
+        coLocalization = QAction('Co-Localization', coGroup)
 
 
-        runFunc = QAction('Co-Functionality', self)
-        runFunc.setShortcut('Ctrl+F')
-        runFunc.setStatusTip('Confirmation by Co-Functionality')
-        self.connect(runFunc, SIGNAL('triggered()'), self.runFunctionality)
+        coActions = (coRegulation, coFunctionality, coLocalization)
+        # Add actions to confirmation menu.
+        map(confirmationMenu.addAction, coActions)
+        # Set checkable
+        map(lambda action: action.setCheckable(True), coActions)
+        # Connect signals (sets confirmation type)
+        map(lambda action: self.connect(action, SIGNAL('triggered()'), self.setConfirmationType) , coActions)
 
-
-        runMenu.addAction(runReg)
-        runMenu.addAction(runFunc)
+        coFunctionality.setChecked(True)
 
         loadSession = QAction('L&oad Session', self)
         loadSession.setShortcut('Ctrl+O')
@@ -477,12 +505,10 @@ class MultiViewWindow(QMainWindow):
 
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
-        fileMenu.addMenu(runMenu)
+        fileMenu.addAction(run)
+        fileMenu.addMenu(confirmationMenu)
         fileMenu.addSeparator()
-        fileMenu.addAction(loadSession)
-        fileMenu.addAction(saveSession)
-        fileMenu.addAction(displayLast)
-        fileMenu.addAction(settings)
+        map(fileMenu.addAction, (loadSession, saveSession, displayLast, settings))
         fileMenu.addSeparator()
         fileMenu.addAction(exit)
 
