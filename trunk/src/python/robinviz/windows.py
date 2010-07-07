@@ -107,13 +107,25 @@ class SinglePeripheralViewWindow(SingleMainViewWindow):
 class MultiViewWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.mainViewType = CoRegulationMainView
-        self.peripheralViewType = CoRegulationPeripheralView
-        self.mainSceneType = CoRegulationMainScene
-
-        self.setupGUI()
+        self.setConfirmationType("Co-Functionality")
         #self.setWindowFlags(Qt.Window|Qt.FramelessWindowHint)
 
+    def setConfirmationType(self, confirmationType):
+        if confirmationType == "Co-Regulation":
+            self.mainViewType = CoRegulationMainView
+            self.peripheralViewType = CoRegulationPeripheralView
+            self.mainSceneType = CoRegulationMainScene
+        elif confirmationType == "Co-Functionality":
+            self.mainViewType = CoFunctionalityMainView
+            self.peripheralViewType = CoFunctionalityPeripheralView
+            self.mainSceneType = CoFunctionalityMainScene
+        elif confirmationType == "Co-Localization":
+            pass
+        else:
+            print "No such confirmation type:", confirmationType
+            return
+        self.setupGUI()
+        
     def setupGUI(self):
         desktop = QDesktopWidget().availableGeometry()
         brPoint = desktop.bottomRight()
