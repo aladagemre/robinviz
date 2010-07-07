@@ -143,3 +143,138 @@ class CoRegulationPeripheralView(PeripheralView):
 
     # ========= Additional Methods =============
     # ========= ================== =============
+
+
+
+# ============================================================================
+# ================== CO-FUNCTIONALITY ========================================
+
+
+
+class CoFunctionalityMainScene(MainScene):
+    def __init__(self, parent=None):
+        MainScene.__init__(self, parent)
+        self.loadYAMLSettings()
+
+        # By default, Scene is NOT directed.
+        # But main scene can be directed or undirected.
+        if self.params["Algorithms"]["edgesBetween"]:
+            self.directed = True
+            self.onlyUp = True
+        else:
+            self.directed = False
+
+    def loadGraph(self, filename):
+        MainScene.loadGraph(self, filename)
+        #self.determineScoring()
+
+    def addNode(self, node):
+        item = CircleNode(node)
+        self.addItem(item)
+        self.nodeDict[node] = item
+        self.nodeDict[node.id] = item
+
+    def loadYAMLSettings(self):
+        import yaml
+        stream = file('settings.yaml', 'r')    # 'document.yaml' contains a single YAML document.
+        self.params = yaml.load(stream)["Confirmation"]["CoFunctionality"]
+        for section in self.params:
+            for key,value in self.params[section].iteritems():
+                try:
+                    value = int(value)
+                except:
+                    try:
+                        value = float(value)
+                    except:
+                        pass
+                self.params[section][key] = value
+
+
+    def determineScoring(self):
+        """Assigns scoring name and value to the tooltips of the nodes."""
+        # TODO: REWRITE THIS!
+        # Set scoring name
+
+        if self.parameters["hvalueWeighting"]:
+            self.scoringName = "H-Value"
+        elif self.parameters["enrichmentWeighting_o"]:
+            self.scoringName = "Enrichment Ratio"
+        elif self.parameters["enrichmentWeighting_f"]:
+            self.scoringName = "Enrichment Ratio"
+        elif self.parameters["ppihitratioWeighting"]:
+            self.scoringName = "PPI Hit Ratio"
+
+        f = open("outputs/biclusters/scoring.txt")
+        f.readline() # for the first line (scoring scheme : blabla)
+        for line in f:
+            ( biclusterstr, id, value ) = line.strip().split()
+            item = self.nodeDict[int(id)]
+            tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
+            item.setToolTip(tip)
+
+class CoFunctionalityMainView(MainView):
+    # TODO: Rewrite this!
+    def __init__(self, parent=None):
+        MainView.__init__(self, parent)
+        self.mainSceneClass = CoRegulationMainScene
+
+    # ========= Abstract Methods =============
+    def addCustomMenuItems(self):
+        menu = self.menu
+        actionToFunction = self._actionToFunction
+
+        enrichmentTable = menu.addAction("Enrichment Table")
+        actionToFunction[enrichmentTable] = self.showEnrichmentTable
+
+
+    # ========= Event Handlers =============
+
+    def showEnrichmentTable(self):
+        self.enrichmentTable= QtWebKit.QWebView()
+        self.enrichmentTable.setUrl(QUrl(normcase("outputs/enrich/result.html")))
+        self.enrichmentTable.showMaximized()
+
+     # ========= Additional Methods =============
+     # ========= ================== =============
+class CoFunctionalityPeripheralView(PeripheralView):
+    # TODO: Rewrite this!
+
+    # ========= Abstract Methods =============
+    def addCustomMenuItems(self):
+        menu = self.menu
+        actionToFunction = self._actionToFunction
+
+        clearAction = menu.addAction("Clear")
+        actionToFunction[clearAction] = self.clearView
+
+        menu.addSeparator()
+
+        goTable = menu.addAction("GO Table")
+        actionToFunction[goTable] = self.showGOTable
+
+        propertiesAction = menu.addAction("Properties")
+        actionToFunction[propertiesAction] = self.peripheralProperties
+
+
+    # ========= Event Handlers =============
+    def clearView(self):
+        self.setScene(None)
+
+    def showGOTable(self):
+        path = normcase("outputs/go/gobicluster%d.html" % self.scene().id)
+        if os.path.exists(path):
+            self.GOTable= QtWebKit.QWebView()
+            self.GOTable.setUrl(QUrl(path))
+            self.GOTable.show()
+        else:
+            QMessageBox.information(self, 'GO Table not found.',
+     "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
+
+    def peripheralProperties(self):
+        if not hasattr(self, 'biclusterWindow'):
+            self.biclusterWindow = BiclusterWindow(self.scene().id)
+
+        self.biclusterWindow.showMaximized()
+
+    # ========= Additional Methods =============
+    # ========= ================== =============

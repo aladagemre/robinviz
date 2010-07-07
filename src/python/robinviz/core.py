@@ -18,14 +18,7 @@ for line in layoutFile:
     name, filename = line.strip().split(":")
     GRAPH_LAYOUTS[name] = filename
 
-CATEGORY_COLORS = {}
-colorFile = open("outputs/colors_func.txt")
-lineNum = 0
-for line in colorFile:
-    name, r, g, b = line.strip().split()
-    CATEGORY_COLORS[str(lineNum)] = name.replace("_", " ")
-    lineNum+=1
-    
+
 
 class View(QGraphicsView):
     def __init__(self, parent=None):
