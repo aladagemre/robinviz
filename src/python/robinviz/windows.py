@@ -11,10 +11,10 @@ from os.path import normcase
 
 
 class SingleMainViewWindow(QMainWindow):
-    def __init__(self, scene=None):
+    def __init__(self, mainViewType, mainSceneType, scene=None):
         QMainWindow.__init__(self)
-        self.mainViewType = CoRegulationMainView
-        self.mainSceneType = CoRegulationMainScene
+        self.mainViewType = mainViewType
+        self.mainSceneType = mainSceneType
 
         if scene:
             self.scene = scene
@@ -88,19 +88,25 @@ class SingleMainViewWindow(QMainWindow):
 
 
 class SinglePeripheralViewWindow(SingleMainViewWindow):
-    def __init__(self, scene=None):
+    def __init__(self, peripheralViewType, scene=None):
         QMainWindow.__init__(self)
-        self.peripheralViewType = CoRegulationPeripheralView
-
+        self.peripheralViewType = peripheralViewType
         if scene:
             self.scene = scene
             self.view = self.peripheralViewType(self.scene)
+            self.view.setPreview(False)
             self.setupGUI()
 
+    def setPeripheralViewType(self, peripheralViewType):
+        """Sets the peripheral view type like:
+        CoRegulationPeripheralView, CoFunctionalityPeripheralView, etc."""
+        self.peripheralViewType = peripheralViewType
+        
     def loadGraph(self, filename):
         self.scene = PeripheralScene()
         self.scene.loadGraph(filename)
         self.view = self.peripheralViewType(self.scene)
+        self.view.setPreview(False)
         self.setupGUI()
 
 
@@ -129,6 +135,7 @@ class MultiViewWindow(QMainWindow):
             return
 
         self.confirmationType = confirmationType
+        self.menuBar().clear()
         self.setupGUI()
         
     def setupGUI(self):
@@ -236,27 +243,43 @@ class MultiViewWindow(QMainWindow):
                 view.setFocus()
 
     def nodeDoubleClicked(self, id):
+        """Defines what will happen when double clicked on a maingraph node"""
+        # Try to find the scene if it's constructed before.
         scene = self.pScenes.get(id)
+
+        # If there's no such scene created before, create a new one.
         if not scene:
             try:
                 scene = PeripheralScene()
                 scene.loadGraph(normcase('outputs/graphs/graph%d.gml' % id ))
                 scene.setId(id)
                 self.pScenes[id] = scene
-            except:
-                import traceback
-                traceback.print_stack()
-                traceback.print_exc()
+            except IOError:
+                # If we can't create the scene, means that there's no such graph file.
                 QMessageBox.information(self, 'Empty Bicluster',
                     "No interactions found in this bicluster")
                 self.mainScene.nodeDict[id].blowUp()
+                del scene
                 return
+            except:
+                # Some other error occured, display traceback.
+                import traceback
+                traceback.print_stack()
+                traceback.print_exc()
+                del scene
 
+        # Now try to place/unplace the scene in peripheral views.
         for view in self.pViews:
+            # Look in order,
+            # If current view has a scene and
+            # if we see the scene placed in that view,
             if view.scene() == scene:
+                # Unplace it.
                 view.setScene(None)
+                view.specialWindow = None
                 break
             elif not view.scene():
+                # If t
                 view.setScene(scene)
                 view.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
                 break
@@ -355,6 +378,12 @@ class MultiViewWindow(QMainWindow):
         if not failed:
             self.loadMainScene()
             self.connectSlots()
+
+            # Write the confirmation type so that we can recognize what type
+            # of confirmation has been applied.
+            with open("outputs/resultparams.txt", "w") as resultparams:
+                resultparams.write(self.confirmationType)
+            
         else:
             if os.path.exists(normcase(errorFile)):
                 message = open(normcase(errorFile)).read()
@@ -390,6 +419,9 @@ class MultiViewWindow(QMainWindow):
             QMessageBox.information(self, 'No recent results',
             "No recent results not found. Please run the program.")
         else:
+            with open("outputs/resultparams.txt") as resultparams:
+                confirmationType = resultparams.read().strip()
+                self.setConfirmationType(confirmationType)
             self.loadMainScene()
             self.connectSlots()
 

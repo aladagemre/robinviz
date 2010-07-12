@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-if __name__ == "__main__":
+def main():
     from multiview import *
 
     app = QApplication(sys.argv)
@@ -12,3 +12,8 @@ if __name__ == "__main__":
     #mainWindow.showFullScreen()
     sys.exit(app.exec_())
 
+if __name__ == "__main__":
+    import cProfile
+    cProfile.run('main()')
+    #main()
+    

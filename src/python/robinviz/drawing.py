@@ -46,7 +46,8 @@ class Scene(QGraphicsScene):
     #----------- Event Methods ------------------
     def mouseMoveEvent(self, event):
         QGraphicsScene.mouseMoveEvent(self, event)
-        self.emit(SIGNAL("sceneMouseMove"), QPointF(event.scenePos()))
+        # Commenting coordinate information for performance.
+        #self.emit(SIGNAL("sceneMouseMove"), QPointF(event.scenePos()))
 
     #----------- Data Structural Methods ------------------
 
