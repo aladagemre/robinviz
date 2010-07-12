@@ -108,9 +108,10 @@ class CoRegulationPeripheralView(PeripheralView):
     def addCustomMenuItems(self):
         menu = self.menu
         actionToFunction = self._actionToFunction
-        
-        clearAction = menu.addAction("Clear")
-        actionToFunction[clearAction] = self.clearView
+
+        if self.preview:
+            clearAction = menu.addAction("Clear")
+            actionToFunction[clearAction] = self.clearView
 
         menu.addSeparator()
 
@@ -124,6 +125,7 @@ class CoRegulationPeripheralView(PeripheralView):
     # ========= Event Handlers =============
     def clearView(self):
         self.setScene(None)
+        self.specialWindow = None
 
     def showGOTable(self):
         path = normcase("outputs/go/gobicluster%d.html" % self.scene().id)
@@ -212,11 +214,13 @@ class CoFunctionalityMainScene(MainScene):
             tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
             item.setToolTip(tip)
 
+# TODO: Rewrite this!
+
 class CoFunctionalityMainView(MainView):
     # TODO: Rewrite this!
     def __init__(self, parent=None):
         MainView.__init__(self, parent)
-        self.mainSceneClass = CoRegulationMainScene
+        self.mainSceneClass = CoFunctionalityMainScene
 
     # ========= Abstract Methods =============
     def addCustomMenuItems(self):
@@ -244,8 +248,9 @@ class CoFunctionalityPeripheralView(PeripheralView):
         menu = self.menu
         actionToFunction = self._actionToFunction
 
-        clearAction = menu.addAction("Clear")
-        actionToFunction[clearAction] = self.clearView
+        if self.preview:
+            clearAction = menu.addAction("Clear")
+            actionToFunction[clearAction] = self.clearView
 
         menu.addSeparator()
 
@@ -259,6 +264,7 @@ class CoFunctionalityPeripheralView(PeripheralView):
     # ========= Event Handlers =============
     def clearView(self):
         self.setScene(None)
+        self.specialWindow = None
 
     def showGOTable(self):
         path = normcase("outputs/go/gobicluster%d.html" % self.scene().id)

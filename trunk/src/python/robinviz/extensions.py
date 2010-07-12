@@ -11,7 +11,7 @@ class MainView(View):
     def newWindow(self):
         if not hasattr(self, 'specialWindow'):
             from windows import SingleMainViewWindow
-            self.specialWindow = SingleMainViewWindow(self.scene())
+            self.specialWindow = SingleMainViewWindow(self.__class__, self.mainSceneClass, self.scene())
             #self.specialWindow.loadGraph(self.scene().filename)
         self.specialWindow.showMaximized()
 
@@ -30,9 +30,10 @@ class PeripheralView(View):
             self.emit(SIGNAL("viewSelected"), self.scene().id)
 
     def newWindow(self):
-        if not hasattr(self, 'specialWindow'):
+        if not getattr(self, 'specialWindow', False):
             from windows import SinglePeripheralViewWindow
-            self.specialWindow = SinglePeripheralViewWindow(self.scene())
+            self.specialWindow = SinglePeripheralViewWindow(self.__class__, self.scene())
+            print self.specialWindow.peripheralViewType
             #self.specialWindow.loadGraph(self.scene().filename)
             #self.specialWindow.scene.setId(self.scene().id)
         if len(self.scene().items())>30:
