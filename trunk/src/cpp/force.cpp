@@ -43,8 +43,6 @@ int main(int argc, char** argv) {
 		      tmp -= min;   
 		}
 
-
-
                 int lower_bound=static_cast<int>(gw.get_xmin()+20.0);
                 int upper_bound=static_cast<int>(gw.get_xmax()-20.0);
                 random_source S2(lower_bound,upper_bound);
@@ -65,10 +63,100 @@ int main(int argc, char** argv) {
 
 // 		cout << gw.get_xmin() << "\t" << gw.get_xmax() << "\t" << gw.get_ymin() << "\t" << gw.get_ymax() << endl;
                 SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
+                node_array<int> comp( G, 0 );
+                COMPONENTS( G, comp );
+                int max = 0;
+                forall_nodes( n, G ){
+                    if( max < comp[ n ] )
+                        max = comp[ n ];
+                }
+                array<list<node> > COMPS( max + 1 );
+                count = 1;
+                forall_nodes( n, G ){
+                    COMPS[ comp[ n ] ].append( n );
+                }
+                list<int> notEnoughComponents;
+                int maxComp = 0;
+                for(int i = 0; i <= max; i++ ){
+                    if( COMPS[ i ].size() > maxComp ){
+                        maxComp = COMPS[ i ].size();
+                    }
+                }
+                int election = 10;
+                if( maxComp < election )
+                    election = maxComp;
+                for(int i = 0; i <= max; i++ ){
+                    if( COMPS[ i ].size() < election ){
+                        notEnoughComponents.append( i );
+                    }
+                }
+                //cout << " 1 \n";
+                double xmin, xmax, ymin, ymax;
+                int ncount = 0;
+                forall_nodes( n, G ){
+                        if( COMPS[ comp[ n ] ].size() > election ){
+                                if( ncount == 0 ){
+                                        xmin = xpos[ n ];
+                                        xmax = xpos[ n ];
+                                        ymin = ypos[ n ];
+                                        ymax = ypos[ n ];
+                                }
+                                else{
+                                    if( xpos[ n ] < xmin )
+                                          xmin = xpos[ n ];
+                                    if( xpos[ n ] > xmax )
+                                          xmax = xpos[ n ];
+                                    if( ypos[ n ] < ymin )
+                                          ymin = ypos[ n ];
+                                    if( ypos[ n ] > ymax )
+                                          ymax = ypos[ n ];
+                                }
+                                ncount++;
+                        }
+                }
+                //cout << " 2 \n";
+                double xpos1 = xmin;
+                double ypos1 = ymax + 70.0;
+                //cout << max << " - " << election << endl;
+                for(int i = 0; i <= max; i++ ){
+                        //cout << COMPS[ i ].size() << "\t";
+                        if( COMPS[ i ].size() < election ){
+                                if( xpos1 < xmax ){
+                                    circle C( xpos1 + 32, ypos1, 30 );
+                                    min = pi / (double)COMPS[ i ].size();
+                                    tmp = pi;
+                                    forall_items( it, COMPS[ i ] ){
+                                        pos[ COMPS[ i ][ it ]  ] = C.point_on_circle( tmp );
+
+                                        //cout << pos[ COMPS[ i ][ it ]  ] << "\t";
+                                        xpos[ COMPS[ i ][ it ] ] = pos[ COMPS[ i ][ it ] ].xcoord();
+                                        ypos[ COMPS[ i ][ it ] ] = pos[ COMPS[ i ][ it ] ].ycoord();
+                                        tmp -= min;
+                                    }
+                                }
+                                else{
+                                        xpos1 = xmin;
+                                        ypos1 += 100.0;
+                                        circle C( xpos1 + 32, ypos1, 30 );
+                                        min = pi / (double)COMPS[ i ].size();
+                                        tmp = pi;
+                                        forall_items( it, COMPS[ i ] ){
+                                            pos[ COMPS[ i ][ it ]  ] = C.point_on_circle( tmp );
+
+                                            //cout << pos[ COMPS[ i ][ it ]  ] << "\t";
+                                            xpos[ COMPS[ i ][ it ] ] = pos[ COMPS[ i ][ it ] ].xcoord();
+                                            ypos[ COMPS[ i ][ it ] ] = pos[ COMPS[ i ][ it ] ].ycoord();
+                                            tmp -= min;
+                                        }
+                                }
+                                xpos1 += 90;
+                        }
+                }
+                //cout << "\n 3 \n";
 		gw.remove_bends();
 		forall_nodes( n, G ){
-			xpos[ n ] = xpos[ n ]*5.0;
-			ypos[ n ] = ypos[ n ]*5.0;
+                        xpos[ n ] = xpos[ n ]*2.5;
+                        ypos[ n ] = ypos[ n ]*2.5;
 		}
 		gw.set_position( xpos, ypos );
 		gw.place_into_box(x0, y0, x1, y1);
