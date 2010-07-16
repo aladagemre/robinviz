@@ -244,7 +244,7 @@
 int main(){
 	
 	FILE *fptr;
-	if( (fptr = fopen( "settings.ini", "r" ) ) == NULL ){
+        if( (fptr = fopen( "settings.yaml", "r" ) ) == NULL ){
 		printf( "\n Ini file can not be found\n" );
 		return 0;
 	}
@@ -472,7 +472,7 @@ int main(){
                                          circular_layout,
                                          circular_ffd_layout,
                                          is_ppi_directed
-                );
+                );               
 cout << ppifilename << endl;
                 FILE *kfptr;
                 if( (fptr = fopen( catfile , "r" )) !=NULL ){
@@ -765,6 +765,65 @@ cout << ppifilename << endl;
 		cout << "\t" << " Building High Level Graph " << endl;
 		cout << "/**************************************************/" << endl;
 		cout << endl;
+
+                printf("%d\n", minBicSize);
+printf("%d\n", maxBicSize);
+printf("%d\n", width);
+printf("%d\n", space);
+printf("%d\n", increment);
+printf("%f\n", removeRat);
+printf("%f\n", nodeSize);
+printf("%f\n", edgeBendImp);
+printf("%f\n", colorScale);
+printf("%f\n", edgThicknessTher);
+printf("%s\n",dataName);
+printf("%s\n",dataName2);
+printf("%s\n",ppifilename);
+printf("%s\n",catfile);
+printf("%s\n",gofile);
+printf("%d\n", biclustering);
+printf("%d\n", bimax_low_dim1);
+printf("%d\n", bimax_low_dim2);
+printf("%f\n", ther_disc);
+printf("%d\n", bic_num_bimax);
+printf("%d\n", bic_num_cc);
+printf("%d\n", maxScore_);
+printf("%d\n", minHeight_);
+printf("%d\n", minWidth_);
+printf("%d\n", maxSizeSubMatrix_exp1_g);
+printf("%d\n", maxSizeSubMatrix_exp1_c);
+printf("%d\n", minSizeSubMatrix_exp1_g);
+printf("%d\n", minSizeSubMatrix_exp1_c);
+printf("%d\n", repeat);
+printf("%f\n", hvaluemin);
+printf("%d\n", increment_exp1_g);
+printf("%d\n", increment_exp1_c);
+printf(ownFlag ? "1\n":"0\n");
+printf(lebFlag ? "1\n":"0\n");
+printf(ccFlag ? "1\n":"0\n");
+printf(msbeFlag ? "1\n":"0\n");
+printf(bimaxFlag ? "1\n":"0\n");
+printf(rlebFlag ? "1\n":"0\n");
+printf(brandFlag ? "1\n":"0\n");
+printf(brandFlag2 ? "1\n":"0\n");
+printf(ourMethodFlag ? "1\n":"0\n");
+printf(ledaPostFlag ? "1\n":"0\n");
+printf(readOption ? "1\n":"0\n");
+printf(layered_layout ? "1\n":"0\n");
+printf(go_info ? "1\n":"0\n");
+printf(edgesBetween ? "1\n":"0\n");
+printf(sharedGenes ? "1\n":"0\n");
+printf(hvalueWeighting ? "1\n":"0\n");
+printf(enrichmentWeighting_o ? "1\n":"0\n");
+printf(enrichmentWeighting_f ? "1\n":"0\n");
+printf(ppihitratioWeighting ? "1\n":"0\n");
+printf(ffd_layout ? "1\n":"0\n");
+printf(circular_layout ? "1\n":"0\n");
+printf(circular_ffd_layout ? "1\n":"0\n");
+printf(is_ppi_directed ? "1\n":"0\n");
+
+
+
 		if( layered_layout ){
 			mainGraph( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
 				  increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,

@@ -1,5 +1,4 @@
 
-
 void _iniReadCoExpression(  int &minBicSize,
 			    int &maxBicSize,
 			    int &width,
@@ -59,7 +58,7 @@ void _iniReadCoExpression(  int &minBicSize,
 	char temp[512],empty[512];
 	int bool_i;
 	FILE *fptr;
-	if( (fptr = fopen( "settings.ini", "r" ) ) == NULL ){
+        if( (fptr = fopen( "settings.yaml", "r" ) ) == NULL ){
 		printf( "\n Ini file can not be found\n" );
                         FILE *erptr;
 #ifdef LINUX
@@ -243,7 +242,7 @@ void _iniReadCoFunctionality( double &removeRat,
 	char temp[512],empty[512];
 	int bool_i;
 	FILE *fptr;
-	if( (fptr = fopen( "settings.ini", "r" ) ) == NULL ){
+        if( (fptr = fopen( "settings.yaml", "r" ) ) == NULL ){
 		printf( "\n Ini file can not be found\n" );
                         FILE *erptr;
 #ifdef LINUX

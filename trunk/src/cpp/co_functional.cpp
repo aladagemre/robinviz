@@ -190,7 +190,7 @@
 int main(){
 	
 	FILE *fptr;
-        if( (fptr = fopen( "settings.ini", "r" ) ) == NULL ){
+        if( (fptr = fopen( "settings.yaml", "r" ) ) == NULL ){
                 printf( "\n Ini file can not be found\n" );
                 return 0;
         }
