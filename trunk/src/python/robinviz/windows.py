@@ -133,7 +133,9 @@ class MultiViewWindow(QMainWindow):
             pass
         else:
             print "No such confirmation type:", confirmationType
-            return
+            print "Setting Co-Regulation as default."
+            confirmationType = "Co-Regulation"
+            
 
         self.confirmationType = confirmationType
         self.menuBar().clear()
@@ -424,10 +426,13 @@ class MultiViewWindow(QMainWindow):
             os.system(normcase("./session.exe save %s %d" % ( fileName, len(self.mainView.scene().g.nodes) )))
 
     def detectLastConfirmationType(self):
-        with open("outputs/resultparams.txt") as resultparams:
-            confirmationType = resultparams.read().strip()
-            self.setConfirmationType(confirmationType)
-            
+        try:
+            with open("outputs/resultparams.txt") as resultparams:
+                confirmationType = resultparams.read().strip()
+                self.setConfirmationType(confirmationType)
+        except:
+            print "No confirmation type found, using Co-Regulation."
+            self.setConfirmationType("Co-Regulation")
 
     def displayLast(self):
         self.clearViews()
