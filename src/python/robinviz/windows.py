@@ -113,21 +113,22 @@ class SinglePeripheralViewWindow(SingleMainViewWindow):
 class MultiViewWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.setConfirmationType("Co-Functionality")
-        #self.setWindowFlags(Qt.Window|Qt.FramelessWindowHint)
+        self.detectLastConfirmationType()
 
     def setConfirmationType(self, confirmationType=None):
-        if confirmationType is None:
+        if not confirmationType:
             confirmationType = str(self.coGroup.checkedAction().text())
             
         if confirmationType == "Co-Regulation":
             self.mainViewType = CoRegulationMainView
             self.peripheralViewType = CoRegulationPeripheralView
             self.mainSceneType = CoRegulationMainScene
+            pass
         elif confirmationType == "Co-Functionality":
             self.mainViewType = CoFunctionalityMainView
             self.peripheralViewType = CoFunctionalityPeripheralView
             self.mainSceneType = CoFunctionalityMainScene
+            pass
         elif confirmationType == "Co-Localization":
             pass
         else:
@@ -137,6 +138,16 @@ class MultiViewWindow(QMainWindow):
         self.confirmationType = confirmationType
         self.menuBar().clear()
         self.setupGUI()
+
+        self.checkCurrentConfirmationType()
+
+    def checkCurrentConfirmationType(self):
+
+        actionDict = {"Co-Regulation": self.coRegulationAction,
+                      "Co-Functionality": self.coFunctionalityAction,
+                      "Co-Localization": self.coLocalizationAction,
+                      }
+        actionDict[self.confirmationType].setChecked(True)
         
     def setupGUI(self):
         desktop = QDesktopWidget().availableGeometry()
@@ -412,6 +423,12 @@ class MultiViewWindow(QMainWindow):
         if filename:
             os.system(normcase("./session.exe save %s %d" % ( fileName, len(self.mainView.scene().g.nodes) )))
 
+    def detectLastConfirmationType(self):
+        with open("outputs/resultparams.txt") as resultparams:
+            confirmationType = resultparams.read().strip()
+            self.setConfirmationType(confirmationType)
+            
+
     def displayLast(self):
         self.clearViews()
 
@@ -419,9 +436,7 @@ class MultiViewWindow(QMainWindow):
             QMessageBox.information(self, 'No recent results',
             "No recent results not found. Please run the program.")
         else:
-            with open("outputs/resultparams.txt") as resultparams:
-                confirmationType = resultparams.read().strip()
-                self.setConfirmationType(confirmationType)
+            self.detectLastConfirmationType()
             self.loadMainScene()
             self.connectSlots()
 
@@ -491,9 +506,9 @@ class MultiViewWindow(QMainWindow):
         self.coGroup = coGroup = QActionGroup(confirmationMenu)
         coGroup.setExclusive(True)
         
-        coRegulation = QAction('Co-Regulation', coGroup)
-        coFunctionality = QAction('Co-Functionality', coGroup)
-        coLocalization = QAction('Co-Localization', coGroup)
+        self.coRegulationAction = coRegulation = QAction('Co-Regulation', coGroup)
+        self.coFunctionalityAction = coFunctionality = QAction('Co-Functionality', coGroup)
+        self.coLocalizationAction = coLocalization = QAction('Co-Localization', coGroup)
 
 
         coActions = (coRegulation, coFunctionality, coLocalization)
@@ -504,7 +519,6 @@ class MultiViewWindow(QMainWindow):
         # Connect signals (sets confirmation type)
         map(lambda action: self.connect(action, SIGNAL('triggered()'), self.setConfirmationType) , coActions)
 
-        coFunctionality.setChecked(True)
 
         loadSession = QAction('L&oad Session', self)
         loadSession.setShortcut('Ctrl+O')
