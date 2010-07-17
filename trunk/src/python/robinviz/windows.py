@@ -58,6 +58,11 @@ class SingleMainViewWindow(QMainWindow):
         exit.setStatusTip('Exit application')
         self.connect(exit, SIGNAL('triggered()'), SLOT('close()'))
 
+        refresh = QAction('Refresh', self)
+        refresh.setShortcut('F5')
+        refresh.setStatusTip('Refresh the view')
+        self.connect(refresh, SIGNAL('triggered()'), self.view.refresh)
+
         aboutDialog = QAction('About', self)
         aboutDialog.setStatusTip('About RobinViz')
         self.connect(aboutDialog, SIGNAL('triggered()'), self.displayAboutDialog)
@@ -65,12 +70,16 @@ class SingleMainViewWindow(QMainWindow):
 
         self.statusBar()
 
+        # ====== File Menu ========
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(exit)
+        
+        # ====== View Menu ========
+        viewMenu = menubar.addMenu('&View')        
+        viewMenu.addAction(refresh)
 
-        #viewMenu = menubar.addMenu('&View')
-
+        # ====== Help Menu ========
         helpMenu = menubar.addMenu('&Help')
         #helpMenu.addAction(Manual)
         helpMenu.addAction(aboutDialog)
@@ -288,6 +297,7 @@ class MultiViewWindow(QMainWindow):
             # if we see the scene placed in that view,
             if view.scene() == scene:
                 # Unplace it.
+                del self.pScenes[id]
                 view.setScene(None)
                 view.specialWindow = None
                 break
@@ -450,6 +460,11 @@ class MultiViewWindow(QMainWindow):
         self.settingsDialog.show()
 
     ############### VIEW MENU ###################
+    def refreshAll(self):
+        for view in self.pViews:
+            view.refresh()
+        self.mainView.refresh()
+
     def clearViews(self):
         """Clears all the views in the window."""
         self.stopAllAnimations()
@@ -567,6 +582,11 @@ class MultiViewWindow(QMainWindow):
         # VIEW MENU
         self.statusBar()
 
+        refresh = QAction('Refresh', self)
+        refresh.setShortcut('F5')
+        refresh.setStatusTip('Refresh the view')
+        self.connect(refresh, SIGNAL('triggered()'), self.refreshAll)
+
         clearViews = QAction("C&lear Views", self)
         clearViews.setShortcut('Ctrl+L')
         clearViews.setStatusTip('Clear the views in the window.')
@@ -579,6 +599,7 @@ class MultiViewWindow(QMainWindow):
         self.connect(showFullscreen, SIGNAL('toggled(bool)'), self.setFullScreen)
 
         viewMenu = menubar.addMenu('&View')
+        viewMenu.addAction(refresh)
         viewMenu.addAction(clearViews)
         viewMenu.addAction(showFullscreen)
 
