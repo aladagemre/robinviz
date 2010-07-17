@@ -30,7 +30,7 @@ class View(QGraphicsView):
         #self.printer.setFullPage(True)
         self.printer.setPageMargins(10, 10, 10, 10, QPrinter.Millimeter)
         self.useAnimation = True # TODO: Add this as an option
-
+        
     def wheelEvent(self, event):
         coords = self.mapToScene(event.pos())
 
@@ -129,10 +129,12 @@ class View(QGraphicsView):
             self.scene().addEdge(edge)
 
         self.reselectItemsAfterLayoutChange()
+        self.refresh()
         
+    def refresh(self):
         self.scene().update()
-        self.fitInView(self.scene().sceneRect(), Qt.KeepAspectRatio)
-
+        self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
+        
     def reselectItemsAfterLayoutChange(self):
         """Re-selects previously selected items after layout changed."""
         for item in self.scene().items():
