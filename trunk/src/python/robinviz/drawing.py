@@ -47,7 +47,7 @@ class Scene(QGraphicsScene):
     def mouseMoveEvent(self, event):
         QGraphicsScene.mouseMoveEvent(self, event)
         # Commenting coordinate information for performance.
-        #self.emit(SIGNAL("sceneMouseMove"), QPointF(event.scenePos()))
+        self.emit(SIGNAL("sceneMouseMove"), QPointF(event.scenePos()))
 
     #----------- Data Structural Methods ------------------
 
@@ -431,6 +431,9 @@ class RectNode(QGraphicsPolygonItem, NodeItem):
         """Gives the intersection point when a line is drawn into the center
         of the node from the given startPoint."""
 
+        if self.polygon().containsPoint(startPoint - self.pos(), Qt.OddEvenFill):
+            return startPoint
+        
         centerLine = QLineF(startPoint, self.centerPos()) # The line
         p1 = self.polygon().first() + self.pos() # Take the first point
 
