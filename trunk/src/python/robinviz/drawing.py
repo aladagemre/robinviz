@@ -352,13 +352,24 @@ class NodeItem(QGraphicsItem):
     #----------- Event Methods ------------------
     def hoverEnterEvent(self, event):
         """When hovered on the node, we make the scene unable to be moved by dragging."""
-        self.scene().views()[0].setDragMode(QGraphicsView.NoDrag)
-        self.toggleHighlight()
+        for view in self.scene().views():
+            view.setDragMode(QGraphicsView.NoDrag)
+        print len(self.scene().items())
+        if len(self.scene().items()) > 1000:
+            
+            # If we have lots of items in the scene, do not apply highligting.
+            return
+        if not self.isSelected():
+            self.toggleHighlight()
         
     def hoverLeaveEvent(self, event):
         """When hovering is off the node, we make the scene able to be moved by dragging."""
-        self.scene().views()[0].setDragMode(QGraphicsView.ScrollHandDrag)
-        self.toggleHighlight()
+        for view in self.scene().views():
+            view.setDragMode(QGraphicsView.ScrollHandDrag)
+        if len(self.scene().items()) > 1000:
+            return
+        if not self.isSelected():
+            self.toggleHighlight()
         
     #----------- Data Structural Methods ------------------
     def addEdge(self, e):
@@ -420,12 +431,6 @@ class RectNode(QGraphicsPolygonItem, NodeItem):
         painter.setRenderHint(QPainter.Antialiasing)
         painter.setBrush(self.currentColor)
         painter.drawRoundedRect(0, 0, self.w, self.h, 5, 5)
-
-    def mouseReleaseEvent(self, event):
-        """When released the button (stopped moving), update the edges/scene."""
-        QGraphicsItem.mouseReleaseEvent(self, event)
-        self.updateEdges()
-        self.scene().update()
     
     def intersectionPoint(self, startPoint):
         """Gives the intersection point when a line is drawn into the center
@@ -448,7 +453,13 @@ class RectNode(QGraphicsPolygonItem, NodeItem):
 
         return intersectPoint
 
-    #========= Events =====================        
+    #========= Events =====================
+    def mouseReleaseEvent(self, event):
+        """When released the button (stopped moving), update the edges/scene."""
+        QGraphicsItem.mouseReleaseEvent(self, event)
+        self.updateEdges()
+        self.scene().update()
+
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemPositionChange:
             self.updateEdges()
@@ -566,7 +577,6 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
                 self.stopAnimation()
                 self.scene().update()
             else:
-                self.toggleHighlight()
                 for edge in self.edges:
                     edge.toggleHighlight()
                     edge.end.toggleHighlight()
