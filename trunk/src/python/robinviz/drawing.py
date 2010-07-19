@@ -354,9 +354,8 @@ class NodeItem(QGraphicsItem):
         """When hovered on the node, we make the scene unable to be moved by dragging."""
         for view in self.scene().views():
             view.setDragMode(QGraphicsView.NoDrag)
-        print len(self.scene().items())
+
         if len(self.scene().items()) > 1000:
-            
             # If we have lots of items in the scene, do not apply highligting.
             return
         if not self.isSelected():

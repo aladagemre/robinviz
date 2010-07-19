@@ -6,6 +6,7 @@ import os.path
 #from core import MainScene, PeripheralScene
 from confirmation import CoRegulationMainView, CoRegulationMainScene
 from settings import SettingsDialog
+from search import ComprehensiveSearchWidget
 import os
 from os.path import normcase
 
@@ -67,8 +68,6 @@ class SingleMainViewWindow(QMainWindow):
         aboutDialog.setStatusTip('About RobinViz')
         self.connect(aboutDialog, SIGNAL('triggered()'), self.displayAboutDialog)
 
-
-        self.statusBar()
 
         # ====== File Menu ========
         menubar = self.menuBar()
@@ -170,7 +169,9 @@ class MultiViewWindow(QMainWindow):
 	#self.setMaximumWidth(self.windowWidth)
 
         #self.loadMainScene()
+        
         layout = QVBoxLayout()
+
 
         self.pViews = []
         self.widgets = []
@@ -219,14 +220,30 @@ class MultiViewWindow(QMainWindow):
         layout.addLayout(bottomBand)
 
         self.widget = QWidget()
+
         self.widget.setLayout(layout)
 
         self.setCentralWidget(self.widget)
         self.setWindowTitle("RobinViz")
 
         self.createActions()
+        self.createDockWindows()
 
 
+
+    def createDockWindows(self):
+        if hasattr(self, 'dock'):
+            self.removeDockWidget(self.dock)
+            del self.dock
+
+        self.dock = dock = QDockWidget("Search", self)
+        dock.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea);
+        
+        self.searchPane = ComprehensiveSearchWidget(dock)
+        dock.setWidget(self.searchPane)
+        self.addDockWidget(Qt.RightDockWidgetArea, dock)
+        self.viewMenu.addAction(dock.toggleViewAction())
+        dock.toggleViewAction().setShortcut('F3')
 
 
     def loadMainScene(self):
@@ -246,12 +263,15 @@ class MultiViewWindow(QMainWindow):
         self.connect(self.mainScene, SIGNAL('nodeDoubleClicked'), self.nodeDoubleClicked)
         self.connect(self.mainScene, SIGNAL('nodeSelected'), self.nodeSelected)
         self.connect(self.mainScene, SIGNAL('sceneMouseMove'), self.displayCoordinate)
+        self.connect(self.searchPane, SIGNAL('graphClicked'), self.viewSelected)
+        self.connect(self.searchPane, SIGNAL('graphDoubleClicked'), self.nodeDoubleClicked)
         for view in self.pViews:
             self.connect(view, SIGNAL('viewSelected'), self.viewSelected)
 
     def viewSelected(self, id):
         self.mainScene.clearSelection()
         self.mainScene.nodeDict[id].setSelected(True)
+        self.nodeSelected(id)
 
     def displayCoordinate(self, point):
         self.statusBar().showMessage("(%s, %s)" % (point.x(), point.y()))
@@ -598,7 +618,7 @@ class MultiViewWindow(QMainWindow):
         showFullscreen.setStatusTip('Display the window in fullscreen')
         self.connect(showFullscreen, SIGNAL('toggled(bool)'), self.setFullScreen)
 
-        viewMenu = menubar.addMenu('&View')
+        self.viewMenu = viewMenu = menubar.addMenu('&View')
         viewMenu.addAction(refresh)
         viewMenu.addAction(clearViews)
         viewMenu.addAction(showFullscreen)

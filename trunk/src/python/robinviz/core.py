@@ -45,7 +45,7 @@ class View(QGraphicsView):
             return
         
         itemRightClicked = self.scene().itemAt(self.mapToScene(event.pos()))
-        if itemRightClicked:
+        if itemRightClicked and not isinstance(itemRightClicked , EdgeItem):
             QGraphicsView.contextMenuEvent(self, event)
             return
 
