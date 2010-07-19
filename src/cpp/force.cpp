@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
                 }
 
 // 		cout << gw.get_xmin() << "\t" << gw.get_xmax() << "\t" << gw.get_ymin() << "\t" << gw.get_ymax() << endl;
-                SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
+                //SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
                 node_array<int> comp( G, 0 );
                 COMPONENTS( G, comp );
                 int max = 0;
@@ -82,14 +82,20 @@ int main(int argc, char** argv) {
                         maxComp = COMPS[ i ].size();
                     }
                 }
+
                 int election = 10;
                 if( maxComp < election )
                     election = maxComp;
                 for(int i = 0; i <= max; i++ ){
                     if( COMPS[ i ].size() < election ){
                         notEnoughComponents.append( i );
+                        forall_items( it, COMPS[ i ] ){
+                            G.hide_node( COMPS[ i ][ it ] );
+                        }
                     }
                 }
+                SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
+                G.restore_all_nodes();
                 //cout << " 1 \n";
                 double xmin, xmax, ymin, ymax;
                 int ncount = 0;
@@ -142,21 +148,20 @@ int main(int argc, char** argv) {
                                         tmp = pi;
                                         forall_items( it, COMPS[ i ] ){
                                             pos[ COMPS[ i ][ it ]  ] = C.point_on_circle( tmp );
-
                                             //cout << pos[ COMPS[ i ][ it ]  ] << "\t";
                                             xpos[ COMPS[ i ][ it ] ] = pos[ COMPS[ i ][ it ] ].xcoord();
                                             ypos[ COMPS[ i ][ it ] ] = pos[ COMPS[ i ][ it ] ].ycoord();
                                             tmp -= min;
                                         }
                                 }
-                                xpos1 += 90;
+                                xpos1 += 105;
                         }
                 }
                 //cout << "\n 3 \n";
 		gw.remove_bends();
 		forall_nodes( n, G ){
-                        xpos[ n ] = xpos[ n ]*2.5;
-                        ypos[ n ] = ypos[ n ]*2.5;
+                        xpos[ n ] = xpos[ n ]*3.5;
+                        ypos[ n ] = ypos[ n ]*3.5;
 		}
 		gw.set_position( xpos, ypos );
 		gw.place_into_box(x0, y0, x1, y1);
