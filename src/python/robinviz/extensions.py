@@ -33,7 +33,6 @@ class PeripheralView(View):
         if not getattr(self, 'specialWindow', False):
             from windows import SinglePeripheralViewWindow
             self.specialWindow = SinglePeripheralViewWindow(self.__class__, self.scene())
-            print self.specialWindow.peripheralViewType
             #self.specialWindow.loadGraph(self.scene().filename)
             #self.specialWindow.scene.setId(self.scene().id)
         if len(self.scene().items())>30:

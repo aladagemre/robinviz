@@ -132,8 +132,9 @@ class View(QGraphicsView):
         self.refresh()
         
     def refresh(self):
-        self.scene().update()
-        self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
+        if self.scene():
+            self.scene().update()
+            self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
         
     def reselectItemsAfterLayoutChange(self):
         """Re-selects previously selected items after layout changed."""
