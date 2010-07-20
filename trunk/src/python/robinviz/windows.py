@@ -6,7 +6,7 @@ import os.path
 #from core import MainScene, PeripheralScene
 from confirmation import CoRegulationMainView, CoRegulationMainScene
 from settings import SettingsDialog
-from search import ComprehensiveSearchWidget
+from search import ComprehensiveSearchWidget, ProteinSearchWidget
 import os
 from os.path import normcase
 
@@ -75,7 +75,7 @@ class SingleMainViewWindow(QMainWindow):
         fileMenu.addAction(exit)
         
         # ====== View Menu ========
-        viewMenu = menubar.addMenu('&View')        
+        self.viewMenu = viewMenu = menubar.addMenu('&View')
         viewMenu.addAction(refresh)
 
         # ====== Help Menu ========
@@ -104,6 +104,7 @@ class SinglePeripheralViewWindow(SingleMainViewWindow):
             self.view = self.peripheralViewType(self.scene)
             self.view.setPreview(False)
             self.setupGUI()
+            self.createDockWindows()
 
     def setPeripheralViewType(self, peripheralViewType):
         """Sets the peripheral view type like:
@@ -116,6 +117,21 @@ class SinglePeripheralViewWindow(SingleMainViewWindow):
         self.view = self.peripheralViewType(self.scene)
         self.view.setPreview(False)
         self.setupGUI()
+        self.createDockWindows()
+
+    def createDockWindows(self):
+        if hasattr(self, 'dock'):
+            self.removeDockWidget(self.dock)
+            del self.dock
+
+        self.dock = dock = QDockWidget("Search", self)
+        dock.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea);
+
+        self.searchPane = ProteinSearchWidget(dock, singleWindow=self)
+        dock.setWidget(self.searchPane)
+        self.addDockWidget(Qt.RightDockWidgetArea, dock)
+        self.viewMenu.addAction(dock.toggleViewAction())
+        dock.toggleViewAction().setShortcut('F3')
 
 
 class MultiViewWindow(QMainWindow):

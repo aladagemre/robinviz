@@ -1,9 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from multiview import *
 
 def main():
-    from multiview import *
-
     app = QApplication(sys.argv)
     #style = open("src/python/robinviz/style.css").read()
     #app.setStyleSheet(style)

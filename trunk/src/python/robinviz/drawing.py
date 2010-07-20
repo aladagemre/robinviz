@@ -49,6 +49,11 @@ class Scene(QGraphicsScene):
         # Commenting coordinate information for performance.
         self.emit(SIGNAL("sceneMouseMove"), QPointF(event.scenePos()))
 
+    def focusOutEvent(self, event):
+        if hasattr(self, 'focusEllipse'):
+            if self.focusEllipse.scene() == self:
+                self.removeItem(self.focusEllipse)
+                self.update()
     #----------- Data Structural Methods ------------------
 
     def loadGraph(self, filename):
@@ -429,6 +434,15 @@ class RectNode(QGraphicsPolygonItem, NodeItem):
     def paint(self, painter, option,widget):
         painter.setRenderHint(QPainter.Antialiasing)
         painter.setBrush(self.currentColor)
+        if self.isSelected():
+            pen = QPen()
+            pen.setWidth(6)
+            color = QColor()
+            color.setRgb(255,255,0)
+            pen.setColor(color)
+            painter.setPen(pen)
+        else:
+            painter.setPen(QPen())
         painter.drawRoundedRect(0, 0, self.w, self.h, 5, 5)
     
     def intersectionPoint(self, startPoint):
