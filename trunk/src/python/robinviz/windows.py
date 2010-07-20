@@ -227,7 +227,6 @@ class MultiViewWindow(QMainWindow):
         self.setWindowTitle("RobinViz")
 
         self.createActions()
-        self.createDockWindows()
 
 
 
@@ -239,7 +238,7 @@ class MultiViewWindow(QMainWindow):
         self.dock = dock = QDockWidget("Search", self)
         dock.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea);
         
-        self.searchPane = ComprehensiveSearchWidget(dock)
+        self.searchPane = ComprehensiveSearchWidget(dock, multiView=self)
         dock.setWidget(self.searchPane)
         self.addDockWidget(Qt.RightDockWidgetArea, dock)
         self.viewMenu.addAction(dock.toggleViewAction())
@@ -258,6 +257,15 @@ class MultiViewWindow(QMainWindow):
         self.mainView.setScene(self.mainScene)
         self.mainView.setSceneRect(self.mainScene.sceneRect())
         self.mainView.fitInView(self.mainScene.sceneRect(),Qt.KeepAspectRatio)
+
+        if self.confirmationType == "Co-Regulation":
+            self.keyList = map(lambda d: "Bicluster %0d" % d, range(len(self.mainScene.g.nodes)))
+
+        elif self.confirmationType == "Co-Functionality":
+            self.keyList = map(lambda line: line.strip(), open(self.mainScene.params["Input"]["dataName_go"]).readlines())
+            
+
+        self.createDockWindows()
 
     def connectSlots(self):
         self.connect(self.mainScene, SIGNAL('nodeDoubleClicked'), self.nodeDoubleClicked)
