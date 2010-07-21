@@ -504,6 +504,12 @@ class MultiViewWindow(QMainWindow):
         self.settingsDialog.show()
 
     ############### VIEW MENU ###################
+    def goto(self):
+        value, ok = QInputDialog.getInt(self, "Go to bicluster/category",
+                                          "Number:", value=0, min=0, max=1000, step=1)
+        if ok:
+            self.searchPane.emit(SIGNAL("graphClicked"), value)
+
     def refreshAll(self):
         for view in self.pViews:
             view.refresh()
@@ -626,6 +632,12 @@ class MultiViewWindow(QMainWindow):
         # VIEW MENU
         self.statusBar()
 
+        goto = QAction('Go to', self)
+        goto.setShortcut('Ctrl+G')
+        goto.setStatusTip('Go to bicluster/category')
+        self.connect(goto, SIGNAL('triggered()'), self.goto)
+
+
         refresh = QAction('Refresh', self)
         refresh.setShortcut('F5')
         refresh.setStatusTip('Refresh the view')
@@ -643,6 +655,7 @@ class MultiViewWindow(QMainWindow):
         self.connect(showFullscreen, SIGNAL('toggled(bool)'), self.setFullScreen)
 
         self.viewMenu = viewMenu = menubar.addMenu('&View')
+        viewMenu.addAction(goto)
         viewMenu.addAction(refresh)
         viewMenu.addAction(clearViews)
         viewMenu.addAction(showFullscreen)
