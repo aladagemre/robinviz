@@ -547,17 +547,26 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         self.highlightedColor = QColor("#E6FF23")
         self.currentColor = self.defaultColor
         self.setOpacity(0.5)
+        self.noProperties = False
 
         # Setup Operations
         # ---------------------
         self.associateWithNode(node)
         self.setBrush(self.defaultColor)
 
-    #----------- Event Methods ------------------        
+
+    #----------- Event Methods ------------------
+    def setNoProperties(self):
+        self.noProperties = True
+        
     def contextMenuEvent(self, event):
+        # TODO: Workaround here. Fix it.
+        # We can setNoProperties to prevent properties action to be added.
         menu = QMenu()
         goTable = menu.addAction("GO Table")
-        propertiesAction = menu.addAction("Properties")
+        propertiesAction = None
+        if not self.noProperties:
+            propertiesAction = menu.addAction("Properties")
         action = menu.exec_(event.screenPos())
         if action == propertiesAction:
             if not hasattr(self, 'biclusterWindow'):

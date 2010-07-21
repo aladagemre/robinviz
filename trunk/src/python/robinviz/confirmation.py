@@ -172,6 +172,7 @@ class CoFunctionalityMainScene(MainScene):
 
     def addNode(self, node):
         item = CircleNode(node)
+        item.setNoProperties()
         self.addItem(item)
         self.nodeDict[node] = item
         self.nodeDict[node.id] = item
@@ -197,7 +198,7 @@ class CoFunctionalityMainScene(MainScene):
         # TODO: REWRITE THIS!
         # Set scoring name
 
-        if self.parameters["hvalueWeighting"]:
+        """if self.parameters["hvalueWeighting"]:
             self.scoringName = "H-Value"
         elif self.parameters["enrichmentWeighting_o"]:
             self.scoringName = "Enrichment Ratio"
@@ -205,7 +206,9 @@ class CoFunctionalityMainScene(MainScene):
             self.scoringName = "Enrichment Ratio"
         elif self.parameters["ppihitratioWeighting"]:
             self.scoringName = "PPI Hit Ratio"
+            """
 
+        self.scoringName = "Score"
         f = open("outputs/biclusters/scoring.txt")
         f.readline() # for the first line (scoring scheme : blabla)
         for line in f:
@@ -227,16 +230,16 @@ class CoFunctionalityMainView(MainView):
         menu = self.menu
         actionToFunction = self._actionToFunction
 
-        enrichmentTable = menu.addAction("Enrichment Table")
-        actionToFunction[enrichmentTable] = self.showEnrichmentTable
+        #enrichmentTable = menu.addAction("Enrichment Table")
+        #actionToFunction[enrichmentTable] = self.showEnrichmentTable
 
 
     # ========= Event Handlers =============
 
-    def showEnrichmentTable(self):
+    """def showEnrichmentTable(self):
         self.enrichmentTable= QtWebKit.QWebView()
         self.enrichmentTable.setUrl(QUrl(normcase("outputs/enrich/result.html")))
-        self.enrichmentTable.showMaximized()
+        self.enrichmentTable.showMaximized()"""
 
      # ========= Additional Methods =============
      # ========= ================== =============
@@ -257,8 +260,8 @@ class CoFunctionalityPeripheralView(PeripheralView):
         goTable = menu.addAction("GO Table")
         actionToFunction[goTable] = self.showGOTable
 
-        propertiesAction = menu.addAction("Properties")
-        actionToFunction[propertiesAction] = self.peripheralProperties
+        #propertiesAction = menu.addAction("Properties")
+        #actionToFunction[propertiesAction] = self.peripheralProperties
 
 
     # ========= Event Handlers =============
@@ -276,11 +279,11 @@ class CoFunctionalityPeripheralView(PeripheralView):
             QMessageBox.information(self, 'GO Table not found.',
      "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
 
-    def peripheralProperties(self):
+    """def peripheralProperties(self):
         if not hasattr(self, 'biclusterWindow'):
             self.biclusterWindow = BiclusterWindow(self.scene().id)
 
-        self.biclusterWindow.showMaximized()
+        self.biclusterWindow.showMaximized()"""
 
     # ========= Additional Methods =============
     # ========= ================== =============
