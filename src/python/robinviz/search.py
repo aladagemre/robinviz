@@ -77,6 +77,9 @@ class ProteinSearchWidget(QWidget):
         self.setMaximumWidth(150)
 
     def focusInNode(self, nodeItem):
+        if getattr(self, 'focusEllipse', None):
+            self.scene.removeItem(self.focusEllipse)
+            self.update()
         nodeItem.setSelected(True)
         position = nodeItem.centerPos()
         self.scene.focusEllipse = self.focusEllipse = HighlightEllipse(position.x(), position.y(), 100, 100, scene=self.scene)
@@ -86,6 +89,7 @@ class ProteinSearchWidget(QWidget):
         nodeItem.setSelected(False)
         if hasattr(self, 'focusEllipse'):
             if self.focusEllipse.scene() == self.scene:
+                self.listWidget.setCurrentItem(None)
                 self.scene.removeItem(self.focusEllipse)
                 self.scene.update()
         
@@ -160,8 +164,12 @@ class ComprehensiveSearchWidget(QWidget):
         QWidget.__init__(self, parent, flags)
         self.multiView = multiView
         self.index = None
+        self.setupVariables()
         self.setupGUI()
         self.setAutoCompletion()
+
+    def setupVariables(self):
+        self.proteinNamePattern = compile('^Y[A-Z]{2}\d{3}[A-Z]{1}-?[A-Z]?$')
     def setupGUI(self):
         # ========= Buttons ===========
         self.proteinButton = QPushButton("Pro")
@@ -192,7 +200,10 @@ class ComprehensiveSearchWidget(QWidget):
         layout.addWidget(self.listWidget)
         self.setLayout(layout)
         self.setMaximumWidth(200)
-    
+
+    def isProtein(self, text):
+        return self.proteinNamePattern.match(text)
+        
     # ========= BUTTON EVENTS ==================
     def listProteins(self):
         self.clearAll()
@@ -212,22 +223,24 @@ class ComprehensiveSearchWidget(QWidget):
             id = int(item.text())
         except:
             id = self.index.get(str(item.text()))[0]
-        self.emit(SIGNAL("graphClicked"), int(id))
+        if not self.isProtein(str(item.text())):
+            self.emit(SIGNAL("graphClicked"), int(id))
 
     def itemDoubleClicked(self, item):
+        itemText = item.text()
         try:
             # If double clicked on a number, emit signal
-            id = int(item.text())
+            id = int(itemText)
             self.emit(SIGNAL("graphDoubleClicked"), id)
         except:
             # If it's not a number, it means it's protein/category/bicluster
-            if str(item.text()).startswith("Y"):
+            if self.isProtein(str(itemText)):
                 # If double clicked on a protein, just search it.
-                self.lineEdit.setText(item.text())
+                self.lineEdit.setText(itemText)
                 self.search()
             else:
                 # If double clicked on a category/bicluster, just emit id signal
-                id = self.index.get(str(item.text()))[0]
+                id = self.index.get(str(itemText))[0]
                 self.emit(SIGNAL("graphDoubleClicked"), id)
                 
     # ========= LINE EDIT EVENTS ==================
