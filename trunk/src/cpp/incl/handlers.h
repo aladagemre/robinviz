@@ -31,28 +31,6 @@ Created
 
 18 October 2009, by Melih
 
-Modified
-
-18 October 2009, by Melih
-  Four main functions introduced, extracted from main executable file
-22 October 2009, by Melih
-  To obtain the results from our xcoordinate assignment using new identiftyXPositions
-  functions from graphUnion.h. We addedd input parameter "ourMethodFlag" to the
-  mainAlgHandlingForEachSubgraph function. RUN_SELF call is also changed since
-  the call of our method is inside RUN_SELF.
-23 October 2009, by Melih
-  interactionHandling function has a property to get different ppi networks
-  from main menu.
-30 October 2009, by Melih
-  mainGraphHandling function is created. It mainly does the layout of biclusters graphs,
-  and window layout for clicking in order to see peripheral graphs.
-08 December 2009 by Melih
- "interpretBiclusters.h" is added to this header. The results of other algorithms
- are interpreted with the functions of this header and then written to a conventional
- format of bicluster output. Then each result is interpreted using 
- getBiclustersFromFile2 function.
-15 December 2009 by Melih
- New Layout Force Directed Function is added
 *************************************************************************************/
 
 #include "layout/interpretbiclusters.h"
@@ -470,18 +448,14 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 * goHandling is a function that handles the go input file
 * and responds to the main program by having modifying the passed
 * parameters.
-* @param INPUT (leda::matrix) input matrix obtained from the given input file sources/data_sources
-* @param biclusters (leda::list<list<GENES>>)filled with the GENE names provided by the data file
-* @param matrixBiclusters (leda::list<leda::matrix>)is used H-value calculation we need this param to obtain submatrices of biclusters
-* @param H-values (leda::list) are used in order to have a corresponding value obtained with the id of biclusters       
+* @param inputGoFile (char[256]) Go Category file to read
+* @param defaultGoFile (char[256]) Go original file
+* @param gocategories (leda::list<list<GENES>>)filled with the GENE names provided by the data file
+* @param matrixCategories (leda::list<leda::matrix>)is used to score calculation we need this param to obtain
 * @param Hmax (double) Hmax is a value that stores max H-value
-* @param minBicSize to control bicluster sizes
-* @param maxBicSize to control bicluster sizes
-* @param biclustering (int) is for choosing different biclustering outputs, We have to do that since each alg. has different output from its tool.
-* @param dimension1(int) size of the data row dimension
-* @param dimension2(int) size of the data column dimension
 */
-void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES> > &gocategories, list<int> &categ, list<leda::matrix> &matrixCategories, list<double> &H_values, double &Hmax, array<GENENAMES> &GenesNode ){
+void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES> > &gocategories, list<int> &categ, 
+		 list<leda::matrix> &matrixCategories, list<double> &scores, double &Hmax, array<GENENAMES> &GenesNode ){
 	FILE *fptr;
 	char *pc;
 	list<two_tuple<CATNAMES,int> > categories;
@@ -506,16 +480,174 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
 			fgets( cats.catName, 256, fptr );
 			pc = strtok( cats.catName, "\n" );
 			sprintf( cats.catName, "%s", pc );
-			cout << pc << endl;
+// 			cout << pc << endl;
 			inputCats.append( cats );
 			count++;
 		}
 	}	
-	cout << "\nWEDONE\n";
+// 	cout << "\nWEDONE\n";
 	array<GENEONTO> geneOntoForData = geneOntologyHandling2( defaultGoFile, inputCats, GenesNode, categories, gocategories );
-	cout << "\nWEDONE\n";
+// 	cout << "\nWEDONE\n";
 	geneOntologyToBiclusterHandling( gocategories, geneOntoForData );
 }
+
+
+array<GENEONTO> cogFileHandling( char cogfile[256], char orgAbv[12], list<CATNAMES> &inputCats, array<GENENAMES> &GenesNode,  list<two_tuple<CATNAMES,int> > &categories, list<list<GENES> > &categoryGenes ){
+	cout << "/**************************************************/" << endl;
+	cout << "\t" << " Parsing COG File as you wish" << endl;
+	cout << "/**************************************************/" << endl;
+	FILE *f;
+	list<GENES> tempGenes;
+	char line[ 1000 ];
+	char read[ 256 ];
+	char *pc,*pend,*go,*cogid,*cogfunct,cat[512];
+	const char *strDelim = "\t";
+	const char *strDelim2 = " ";
+
+	for( int i = 0; i < inputCats.size(); i++ ){
+		categoryGenes.append( tempGenes );
+	}
+
+	array<GENEONTO> inputGenes( GenesNode.size()+1 );
+	for( int i = 0; i < GenesNode.size(); i++ ){
+		inputGenes[ i ].index = 0;
+		inputGenes[ i ].categories.resize( 100 );
+		inputGenes[ i ].gos.resize( 100 );
+		sprintf( inputGenes[ i ].genename, "%s", GenesNode[ i ].GENE );
+	}
+
+	if( (f = fopen( cogfile, "r" )) == NULL){
+		FILE *erptr;
+#ifdef LINUX
+		erptr = fopen( "outputs/error.txt", "w" );
+#else
+		erptr = fopen( "outputs//error.txt", "w" );
+#endif
+		fprintf( erptr, "Error-id4: You did not specify COG based functional category file although you selected to use that file\n" );
+		fclose( erptr );
+		cout << "\nError-id4: You did not specify COG based functional category file although you selected to use that file\n"; 
+		exit(1);
+	}
+
+	int line_i = 0;
+	while( !feof( f ) ){
+		fgets( line, 1000, f );
+		if( strcmp( line, "_______" ) == 0 )
+		  line_i++;
+	}
+	cout << "\t Will Parse " << line_i << " cog categories, Parsing begins...\n" << "\n";
+	rewind( f );
+	line_i = 0;
+	while( !feof( f ) ){
+		// count rows
+		two_tuple<CATNAMES,int> tup;
+		tup.second() = 0;
+		fgets( line, 1000, f );
+		pc = strtok( line, strDelim2 );
+		cogfunct = pc;
+		pc = strtok( line, strDelim2 );
+		cogid = pc;
+		pc = strtok( NULL, strDelim2 );
+		CATNAMES cats;
+		sprintf( cats.catName, "%s", pc );
+		list_item catit;
+
+		int count = 0;
+		int foundedone = -1;
+		int count_cat = 0;
+		forall_items( catit, inputCats ){
+			int max = strlen( inputCats[ catit ].catName ) > strlen( cats.catName ) ? strlen( inputCats[ catit ].catName ) : strlen( cats.catName );
+			max = max - 1;
+			if( strncmp( inputCats[ catit ].catName, cats.catName, max ) == 0 ){
+// 							cout << "/**************************************************/" << endl;
+// 							cout << inputCats[ catit ].catName << "\n" << cats.catName << endl;
+// 							cout << "/**************************************************/" << endl;
+				foundedone = count_cat;
+			}
+			count_cat++;
+		}
+		if( feof( f ) )
+			break;
+		fscanf( f, "%s", read );
+		while( strcmp( read, "_______" ) != 0 ){
+			fscanf( f, "%s", read );
+			if( strcmp( read, orgAbv ) == 0 ){
+				fscanf( f, "%s", read );
+				while( read[3] != ':' ){
+					for( int i = 0; i < inputGenes.size(); i++ ){
+						if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 100 ){
+							sprintf( inputGenes[ i ].categories[ inputGenes[ i ].index ].catName, "%s", cats.catName );
+							sprintf( inputGenes[ i ].gos[ inputGenes[ i ].index++ ].goName, "%s", cogid );
+							break;
+						}
+					}
+					if( foundedone != -1 ){
+						GENES now;
+						sprintf( now.GENE, "%s", read );
+						categoryGenes[ categoryGenes.get_item(foundedone) ].append( now );
+		// 						cout << pc << "\t";
+					}
+					fscanf( f, "%s", read );
+				}
+			}
+			count++;
+		}
+		categories.append( tup );
+	}
+	cout << "\n/**************************************************/" << endl;
+	cout << "\t" << " Parsing COG File ends " << endl;
+	cout << "/**************************************************/" << endl;
+	fclose( f );
+	return inputGenes;
+}
+
+/**
+* cogHandling is a function that handles the cog input file from COG's database
+* and responds to the main program by having modifying the passed
+* parameters.
+* @param inputGoFile (char[256]) Go Category file to read
+* @param defaultGoFile (char[256]) Go original file
+* @param gocategories (leda::list<list<GENES>>)filled with the GENE names provided by the data file
+* @param matrixCategories (leda::list<leda::matrix>)is used to score calculation we need this param to obtain
+* @param Hmax (double) Hmax is a value that stores max H-value
+*/
+void cogHandling( char inputCogFile[256], char defaultCogFile[256], list<list<GENES> > &cogcategories, list<int> &categ, 
+	list<leda::matrix> &matrixCategories, list<double> &scores, double &Hmax, array<GENENAMES> &GenesNode ){
+	FILE *fptr;
+	char *pc;
+	list<two_tuple<CATNAMES,int> > categories;
+	list<CATNAMES> inputCats;
+
+	if( (fptr = fopen( inputCogFile, "r") ) == NULL ){
+		FILE *erptr;
+		#ifdef LINUX
+					erptr = fopen( "outputs/error.txt", "w" );
+		#else
+					erptr = fopen( "outputs//error.txt", "w" );
+		#endif
+		fprintf( erptr, "Error-id_1: You did not specify COG input file correctly\n" );
+		fclose( erptr );
+		cout << "\nError-id_1: You did not specify COG input file correctly\n"; 
+		exit(1);
+	}
+	else{
+		CATNAMES cats;
+		int count = 0;
+		while( !feof( fptr ) ){
+			fgets( cats.catName, 256, fptr );
+			pc = strtok( cats.catName, "\n" );
+			sprintf( cats.catName, "%s", pc );
+// 			cout << pc << endl;
+			inputCats.append( cats );
+			count++;
+		}
+	}	
+// 	cout << "\nWEDONE\n";
+	array<GENEONTO> geneOntoForData = cogFileHandling( defaultCogFile, "src", inputCats, GenesNode, categories, cogcategories );
+// 	cout << "\nWEDONE\n";
+	geneOntologyToBiclusterHandling( cogcategories, geneOntoForData );
+}
+
 /**
 * biclusterHandling is a function that handles the bicluster output
 * and responds to the main program by having modifying the passed

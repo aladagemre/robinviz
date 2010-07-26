@@ -128,7 +128,14 @@ int main(int argc, char** argv) {
                         //cout << COMPS[ i ].size() << "\t";
                         if( COMPS[ i ].size() < election ){
                                 if( xpos1 < xmax ){
-                                    circle C( xpos1 + 32, ypos1, 30 );
+                                    int diam = 30;
+                                    if( COMPS[ i ].size() < 3 ){
+                                        diam = 10;
+                                    }
+                                    else{
+                                        diam = 10 + COMPS[ i ].size() * 2;
+                                    }
+                                    circle C( xpos1 + 32, ypos1, diam );
                                     min = pi / (double)COMPS[ i ].size();
                                     tmp = pi;
                                     forall_items( it, COMPS[ i ] ){
@@ -143,7 +150,14 @@ int main(int argc, char** argv) {
                                 else{
                                         xpos1 = xmin;
                                         ypos1 += 100.0;
-                                        circle C( xpos1 + 32, ypos1, 30 );
+                                        int diam = 30;
+                                        if( COMPS[ i ].size() < 3 ){
+                                            diam = 10;
+                                        }
+                                        else{
+                                            diam = 10 + COMPS[ i ].size() * 2;
+                                        }
+                                        circle C( xpos1 + 32, ypos1, diam );
                                         min = pi / (double)COMPS[ i ].size();
                                         tmp = pi;
                                         forall_items( it, COMPS[ i ] ){
@@ -154,7 +168,7 @@ int main(int argc, char** argv) {
                                             tmp -= min;
                                         }
                                 }
-                                xpos1 += 105;
+                                xpos1 += 65;
                         }
                 }
                 //cout << "\n 3 \n";
