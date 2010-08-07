@@ -51,7 +51,7 @@ class Window(QMainWindow):
 	    x.append( term.accession )
 	    x.append( term.name or "-" )
 	    item = QTreeWidgetItem(parentItem, x )
-	    item.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled| Qt.ItemIsTristate)
+	    item.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled)
 	    item.setCheckState(0, Qt.Unchecked)
 	    try:
 		parentItem.addChild(item)

@@ -73,7 +73,7 @@ class TermSelector(QMainWindow):
 		parent.addChild( item )
 		lastNodeAtLevel[numt] = item
  
-	    item.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled| Qt.ItemIsTristate)
+	    item.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled)
 	    item.setCheckState(0, Qt.Unchecked)
 	    
 if __name__ == "__main__":

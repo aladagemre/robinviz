@@ -180,13 +180,16 @@ class PeripheralScene(Scene):
         self.id = id
 
     def addNode(self, node):
-        item = TinyNode(node)
+        item = TinyNode(node, parent=None, scene=self)
         self.addItem(item)
         self.nodeDict[node] = item
         self.nodeDict[node.id] = item
-        item.associateWithNode(node)
+        #item.associateWithNode(node)
 
-
+    """def mousePressEvent(self, event):
+        print dir(event)
+        item = self.itemAt(event.scenePos())
+        print item"""
 class EdgeItem(QGraphicsItem):
     def __init__(self, start, end, path, edge):
         QGraphicsItem.__init__(self, None, None)
@@ -705,17 +708,18 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         self.timeline.stop()
 
 
-
 class TinyNode(QGraphicsEllipseItem, NodeItem):
+    """
+    NodeItem with circle shape
+    """
     def __init__(self, node, parent=None, scene=None):
         QGraphicsEllipseItem.__init__(self, parent, scene)
         NodeItem.__init__(self)
-        
-        self.setOpacity(0.5)
-        self.defaultColor = Qt.blue
-        self.width = 10
+        # Object Creation
+        # ---------------------
 
-        self.setAcceptHoverEvents(True)
+        # Default Values
+        # ---------------------
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         try:
@@ -726,24 +730,52 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
             # no need to do this in Qt 4.5
             pass
 
+        self._scene = scene
         self.setAcceptsHoverEvents(True)
         self.edges = []
+        self.defaultColor = QColor("#52C6FF")
+        self.highlightedColor = QColor("#E6FF23")
+        self.currentColor = self.defaultColor
+        self.setOpacity(0.5)
+
+        # Setup Operations
+        # ---------------------
         self.associateWithNode(node)
+        self.setBrush(self.defaultColor)
 
-    def paint(self, painter, option,widget):
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setBrush(self.currentColor)
-        if self.isSelected():
-            pen = QPen()
-            pen.setWidth(6)
-            color = QColor()
-            color.setRgb(255,255,0)
-            pen.setColor(color)
-            painter.setPen(pen)
-        else:
-            painter.setPen(QPen())
-        painter.drawEllipse(QPointF(0,0), 10, 10)
 
+    #----------- Event Methods ------------------
+    def mouseReleaseEvent(self, event):
+        """When released the button (stopped moving), update the edges/scene."""
+        QGraphicsItem.mouseReleaseEvent(self, event)
+        self.updateEdges()
+        self.updateLabel()
+        self.scene().update()
+        
+    def itemChange(self, change, value):
+        if change == QGraphicsItem.ItemPositionChange or change == QGraphicsItem.ItemTransformHasChanged:
+            self.updateEdges()
+        elif change == QGraphicsItem.ItemSelectedChange:
+            if self.isSelected():
+                self.toggleHighlight()
+                for edge in self.edges:
+                    edge.toggleHighlight()
+                    edge.end.toggleHighlight()
+                self.scene().update()
+            else:
+                for edge in self.edges:
+                    edge.toggleHighlight()
+                    edge.end.toggleHighlight()
+
+        return QVariant(value)
+
+
+    #----------- Data Structural Methods ------------------
+
+    #----------- GUI / Geometric Methods ------------------
+    def updateLabel(self):
+        self.text.setPos(self.pos().x() + self.w, self.pos().y() - self.w)
+        
     def intersectionPoint(self, startPoint):
         """Gives the intersection point when a line is drawn into the center
         of the circle node from the given startPoint."""
@@ -752,6 +784,7 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
         ydiff = self.centerPos().y() - startPoint.y()
 
         if ydiff == 0:
+            # inside it.
             return
 
         intersectPoint = QPointF()
@@ -759,58 +792,42 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
         # End point
         r = self.w/2
 
-        a = (r * ydiff) / (math.sqrt(ydiff**2 + xdiff**2))
-        c = (a * xdiff) / ydiff
+        r_over_h = r / (math.sqrt(ydiff**2 + xdiff**2))
 
-        intersectPoint = self.centerPos() + QPointF(-c,-a)
+        a = xdiff * r_over_h
+        c = ydiff * r_over_h
+
+        intersectPoint = self.centerPos() + QPointF(-a,-c)
 
         return intersectPoint
 
-    #========= Events =====================
-    def mouseReleaseEvent(self, event):
-        """When released the button (stopped moving), update the edges/scene."""
-        QGraphicsItem.mouseReleaseEvent(self, event)
-        self.updateEdges()
-        self.scene().update()
-
-    def itemChange(self, change, value):
-        if change == QGraphicsItem.ItemPositionChange:
-            self.updateEdges()
-        return QVariant(value)
-
     def associateWithNode(self, node):
-        self.defaultColor = QColor(node.graphics.outline)
-        self.highlightedColor = self.defaultColor.lighter(150)
-        self.currentColor = self.defaultColor
-        self.setBrush(self.currentColor) # Give the category color.
-        margin = 2.0
-        # Construct the text.
-        self.text = QGraphicsTextItem(None, self.scene())
-        self.text.root = self
-        
-        if node.graphics.outline == "#000000":
-            self.text.setDefaultTextColor(QColor(Qt.white))
-
-        textFont = QFont()
-        textFont.setPointSize(10)
-        self.text.setFont(textFont)
-
-        # Set node id as text.
-        #self.text.setPlainText("YNL199C")
-        self.text.setPlainText(node.label)
-
-        # TODO: Redefine!
-        # Define bounding rect
-        boundRect = self.text.boundingRect()
-        self.w = boundRect.width() + margin
-        self.h = boundRect.height() + margin
-
         # Store node data
         self.node = node
+        self.w = self.h = 20
+
+        # Set Color
+        self.defaultColor = QColor(node.graphics.outline)
+        self.currentColor = self.defaultColor
+        self.highlightedColor = self.defaultColor.lighter(150)
+        self.setBrush(self.defaultColor)
+
         # Set position of the node:
-        self.setPos(QPointF(node.graphics.x - self.width/2, node.graphics.y - self.width/2))
+        self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
+        self.setRect(0, 0, self.w, self.w)
+
+        # Construct the text.
+        self.text = QGraphicsTextItem(parent=None, scene=self._scene)
+        self.text.root = self
+
+        # Set node id as text.
+        self.text.setPlainText(node.label)
+        self.text.contextMenuEvent = self.contextMenuEvent
+        # Define bounding rect
+        
+        # Align text.
+        self.updateLabel()
+
+        # Set category information
         tip = "Category: %s" % CATEGORY_COLORS[node.parameter]
         self.setToolTip(tip)
-
-        # Leave some margin for the text.
-        self.text.setPos(node.graphics.x, node.graphics.y)
