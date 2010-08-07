@@ -80,6 +80,10 @@ class Scene(QGraphicsScene):
         g.read_gml(self.filename)
         g.prepare()
 
+        self.numNodes = len(g.nodes)
+        self.numEdges= len(g.edges)
+        self.numElements = self.numNodes + self.numEdges
+        
         for node in g.nodes:
             self.addNode(node)
 
@@ -541,7 +545,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
             # no need to do this in Qt 4.5
             pass
 
-
+        self._scene = scene
         self.setAcceptsHoverEvents(True)
         self.edges = []
         self.defaultColor = QColor("#52C6FF")
@@ -674,7 +678,8 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
     def setupAnimation(self):
         """Sets up how the animation shall be. Calculates positions."""
         self.originalPos = self.scenePos()
-        self.timeline = QTimeLine(1000)
+        animationPeriod = 1500 + (self._scene.numElements - 50) * 3
+        self.timeline = QTimeLine(animationPeriod)
         self.timeline.setCurveShape(QTimeLine.SineCurve)
         self.timeline.setFrameRange(0, 100)
         self.timeline.setLoopCount(0)

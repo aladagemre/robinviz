@@ -36,7 +36,7 @@ class CoRegulationMainScene(MainScene):
         self.determineScoring()
 
     def addNode(self, node):
-        item = CircleNode(node)
+        item = CircleNode(node, parent=None, scene=self)
         self.addItem(item)
         self.nodeDict[node] = item
         self.nodeDict[node.id] = item
@@ -171,7 +171,7 @@ class CoFunctionalityMainScene(MainScene):
         #self.determineScoring()
 
     def addNode(self, node):
-        item = CircleNode(node)
+        item = CircleNode(node, parent=None, scene=self)
         item.setNoProperties()
         self.addItem(item)
         self.nodeDict[node] = item

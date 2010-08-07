@@ -442,6 +442,9 @@ class Graph:
         of the corresponding nodes."""
         
         for edge in self.edges:
+            if not hasattr(edge.graphics, 'width'):
+                edge.graphics.width = 1.00
+
             edge.u = self.nodes[edge.source]	
             edge.v = self.nodes[edge.target]
 
