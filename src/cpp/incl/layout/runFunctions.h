@@ -46,6 +46,624 @@ struct Strings{
 };
 
 
+GRAPH<int,int> RUN_SELFGD(  GRAPH<int,int> &G,
+                          array<list<node> > &layers,
+                          int W,
+                          node_array<double> &Xpos,
+                          node_array<double> &Ypos,
+                          int graphNo,
+                          node_array<point> &posx,
+                          edge_array<list<point> > &bendsx,
+                          int algorithmFlag,
+                          int space,
+                          bool xCoordFlag,
+                          int increment,
+                          bool ledaPostFlag
+){
+
+        GRAPH<int,int> H;
+
+        edge e;
+        node n;
+        //random_graph( G, noden, edgen );
+        int random_walk;
+
+//*********************//
+// Give rank assignmen //
+//*********************//
+//        forall_edges( e, G )
+//        {
+//                        if( G.source( e ) == G.target( e ) )
+//                                        G.del_edge( e );
+//        }
+//        forall_edges( e, G )
+//        {
+//                        if( G.source( e ) == G.target( e ) )
+//                                        G.del_edge( e );
+//        }
+
+        list<edge> edgelist;
+        list_item it,it2;
+        node_array<bool> marked(G,false);
+
+/*
+        forall_edges( e1 ,G ){
+                forall_edges( e2, G ){
+                        if( G.target( e1 ) == G.target( e2 ) && G.source( e1 ) == G.source( e2 ) && e1 != e2 ){
+                                        cout << " " << G[ e1 ] << " - " << G[ e2 ] << endl;
+                                        G.del_edge( e2 );
+                        }
+                }
+        }
+*/
+
+        list<edge> paralells;
+        // Leda function to arrange Graph like removing parallel edges
+//        paralells = Make_Simple( G );
+//        G.del_edges( paralells );
+        list<node> A;
+        forall_nodes( n , G ){
+                        A.append( n );
+        }
+
+        node root;
+        forall_nodes( n , G ){
+                        root = n;
+                        break;
+        }
+
+        list<edge> feedback;
+        node_array<bool> visited( G, false );
+        list<edge> dfsEList;
+        list<edge> suspis;
+        list<node> Atemp;
+
+        dfs( root, G, visited, A, dfsEList );
+
+/****************************************************************/
+/*********************** ACYCLIC PHASE I ************************/
+/****************************************************************/
+
+        node_array<int> ord(G);
+        bool acyclicBool = TOPSORTG(G,ord);
+        list<edge> cycleFinder;
+        list<edge> reversedEdges;
+        H = G;
+
+        edge_array<int> prevEdgeList( G, 0 );
+        forall_edges( e, G ){
+                        prevEdgeList[ e ] = G[ e ];
+        }
+
+        // Catch the cycle and if you can you get the min weighted edge
+        // in cylce that removes the cycle when it is deleted.
+        while( !acyclicBool ){
+                        list_item it;
+                        Is_Acyclic( G, cycleEdges );
+
+                        forall_items( it, cycleEdges ){
+                                        e = cycleEdges[ it ];
+                                        node_array<bool> nvisit( G, false );
+                                        edge_array<bool> eonPath( G, false );
+                                        cycleFinder = cycleCatcher( G, e, G.source( e ), G.target( e ), eonPath, nvisit );
+
+                                        #ifdef DEBUG
+                                                        cycleFinder.print();
+                                        #endif
+
+                                                int max = 0;
+                                                edge etemp;
+                                                forall_items( it, cycleEdges ){
+                                                                e = cycleEdges[ it ];
+                                                                if( max <= H[ e ] ){
+                                                                                max = H[ e ];
+                                                                }
+                                                }
+                                                int min = max;
+
+                                                forall_items( it, cycleFinder ){
+                                                                e = cycleFinder[ it ];
+                                                                if( min >= H[ e ] ){
+                                                                                min = H[ e ];
+                                                                                etemp = e;
+                                                                }
+                                                                #ifdef DEBUG
+                                                                                cout << H[ e ] << " - ";
+                                                                #endif
+
+                                                }
+                                                int c = 0;
+                                                forall_items( it, cycleFinder ){
+                                                                e = cycleFinder[ it ];
+                                                                H[ e ] -= min;
+                                                                if( H[ e ] == 0 && inList( suspis , e ) == false ){
+                                                                                c = 1;
+                                                                                suspis += e;
+                                                                                G.hide_edge( e );
+                                                                }
+
+                                                                #ifdef DEBUG
+                                                                                cout << endl << " suspis - > ";
+                                                                                suspis.print();
+                                                                                cout << endl;
+                                                                #endif
+
+                                                }
+
+                        }
+                        #ifdef DEBUG
+                                        drawCycleEdges( G, visited, dfsEList, suspis );
+                        #endif
+                        cycleEdges.clear();
+                        acyclicBool = TOPSORTG(G,ord);
+        }
+
+/****************************************************************/
+/*********************** ACYCLIC PHASE II ***********************/
+/****************************************************************/
+
+//-> Restore All edges give the original value to suspicious edges
+            G.restore_all_edges();
+                forall_edges( e, G ){
+                                G[ e ] = prevEdgeList[ e ];
+                }
+                edge etemp;
+//-> Hide again to test that suspis are realy suspicious ones
+                G.hide_edges( suspis );
+
+
+#ifdef DEBUG
+                suspis.print();
+#endif
+
+                list<edge> popedList;
+
+                END:
+                                int max = 0;
+                                popedList.clear();
+                                int etempChanged = 0;
+                                while( !(suspis.empty()) ){
+                                                e = suspis.pop();
+                                                if( max <= G[ e ] ){
+                                                                max = G[ e ];
+                                                                etemp = e;
+                                                                etempChanged = 1;
+                                                }
+                                                popedList.append( e );
+                                }
+                                forall_items(it,popedList ){
+                                                e = popedList[ it ];
+                                                if( e == etemp )
+                                                                ;
+                                                else
+                                                        suspis.append( e );
+                                }
+                                if( etempChanged == 1  ){
+                                        G.restore_edge( etemp );
+                                        etemp = G.rev_edge( etemp );
+                                        reversedEdges.append( etemp );
+                                }
+                                if( Is_Acyclic( G ) != true ){
+                                                etemp = G.rev_edge( etemp );
+                                                forall_items( it, reversedEdges ){
+                                                            e = popedList[ it ];
+                                                                if( e == etemp )
+                                                                        reversedEdges.del_item( it );
+                                                }
+                                }
+                                if( suspis.empty() == false )
+                                                goto END;
+
+#ifdef DEBUG
+                cout << endl << "suspis";
+                suspis.print();
+                cout << endl;
+#endif
+
+        G.restore_all_edges();
+        cycleEdges.clear();
+        array<list<node> > sourceAndTargets( reversedEdges.size() );
+
+        random_walk = 0;
+        forall_items( it, reversedEdges ){
+                sourceAndTargets[ random_walk ].push_back( G.source( reversedEdges[ it ] ) );
+                sourceAndTargets[ random_walk ].push_back( G.target( reversedEdges[ it ] ) );
+                random_walk++;
+        }
+
+#ifdef DRAW
+                drawCycleEdges( G, visited, dfsEList, reversedEdges );
+#endif
+
+
+/*********************** END OF ACYLIC **************************/
+/****************************************************************/
+#ifdef DEBUG_ROBINVIZ
+cout << "\n Acyclic Done \n" ;
+#endif
+/****************************************************************/
+/******************** LAYER ASSIGNMENT **************************/
+
+        /****** Transitive Edges Removal **************/
+
+                list<edge> transitives;
+                //do_call( G, transitives );
+
+#ifdef TRANSITIVES
+                transitives.print();
+#endif
+
+                //G.hide_edges( transitives );
+                //drawCycleEdges( G, visited, dfsEList, suspis );
+
+        /****** End of Transitive Edges Removal *******/
+        /****** Coffman Graham Ranking Phase 1 ********/
+                node_array<int> ready( G,0 );
+
+                CGwithPromotionMinWidthW( G,ready, W );
+                //CGwithPromotionMinWidthW( G, ready, W );
+
+        /****** Coffman Graham Ranking Phase 1 End ****/
+        /****** Coffman Graham Ranking Phase 2 ********/
+                int count = 0;
+
+                max = 0;
+                forall_nodes( n , G ){
+
+#ifdef COUNT
+                        cout << endl << "- " << count << " :" << n << "  "<< ready[ n ] << endl;
+#endif
+                        count++;
+                        if( max < ready[ n ] )
+                                        max = ready[ n ];
+                }
+
+                array<list<node> > Layers( max + 1 );
+                array<list<node> > LayersTemp( max + 1 );
+
+                forall_nodes( n , G ){
+                                Layers[ max - ready[ n ] ].append( n );
+                }
+                //draw_new( G, Layers, max );
+                G.restore_all_edges();
+                //draw_new( G, Layers, max );
+                LayersTemp = Layers;
+
+        /****** Coffman Graham Ranking Phase 2 End ****/
+
+/******************** END OF LAYER ASSIGNMENT *******************/
+/****************************************************************/
+
+#ifdef DEBUG_ROBINVIZ
+cout << "\n Layering Done \n" ;
+#endif
+/****************************************************************/
+/******************** ADD DUMMY VERTICES ************************/
+                node target,source;
+                edge_array<bool> eMarked( G, false );
+                list<edge> allEdges;
+                list<node> dummyNodes;
+
+                allEdges = G.all_edges();
+                forall_items( it, allEdges ){
+                                e = allEdges[ it ];
+                                if( ( max - ready[ G.source( e ) ] ) - 1 > ( max - ready[ G.target( e ) ] ) && eMarked[ e ] == false ){
+
+                                                int sourceLayer = max - ready[ G.source( e ) ];
+                                                int targetLayer = max - ready[ G.target( e ) ];
+                                                target = G.source( e );
+                                                source = G.target( e );
+
+                                                int etempx = G[ e ];
+                                                G.del_edge( e );
+
+                                                int x = 0;
+                                                while( sourceLayer - 1 != targetLayer ){
+                                                                n = G.new_node();
+                                                                dummyNodes.append( n );
+                                                                e = G.new_edge( target, n );
+                                                                if( x % 2 == 0 )
+                                                                        Layers[ sourceLayer - 1 ].push_back( n );
+                                                                else
+                                                                        Layers[ sourceLayer - 1 ].push_front( n );
+
+                                                                sourceLayer--;
+                                                                G[ e ] = etempx;
+                                                                eMarked.init( G );
+                                                                eMarked[ e ] = true;
+                                                                target = n;
+                                                                x++;
+                                                }
+                                                e = G.new_edge( n, source );
+                                                G[ e ] = etempx;
+                                                eMarked.init( G );
+                                                eMarked[ e ] = true;
+                                }
+                                else{
+                                                eMarked[ e ] = true;
+                                }
+                }
+
+/******************** END OF ADDING DUMMY VERTICES **************/
+/****************************************************************/
+
+#ifdef DEBUG_ROBINVIZ
+cout << "\n Dummy Adding Done \n" ;
+#endif
+/****************************************************************/
+/********************* CROSSING REDUCTION ***********************/
+
+                array<list<node> > Layers2( max + 1 );
+                Layers2 = Layers;
+
+                integer cross_count = 0;
+                /*for( int i = max; i > 0; i-- ){
+                        cross_count += crossing_numberG( G, Layers[ i ], Layers[ i - 1 ] );
+                }*/
+                //cout << " Crossings  Before : " << cross_count << endl;
+                cross1 = cross_count;
+// 		G.rev_all_edges();
+// /*		//1st Way
+// 		for( int i = max; i > 0 && i - 2 > 0; i-=2 ){
+// 			wolf( G, Layers[ i - 1 ], Layers[ i ] );
+// 		}
+// */
+// 		//2nd Way
+// 		/*for( int i = max; i > 0; i-- ){
+// 			wolfBarycenter( G, Layers[ i - 1 ], Layers[ i ] );
+// 		}*/
+//
+// 		for( int i = max; i > 0; i-- ){
+// 			median_graph( G, Layers[ i - 1 ], Layers[ i ] );
+// 		}
+// 		/*for( int i = max; i > 0; i-- ){
+// 			median_graph( G, Layers2[ i - 1 ], Layers2[ i ] );
+// 		}*/
+//
+// /*		//3rd Way
+// 		for( int i = max; i > 0; i-- ){
+// 			wolf( G, Layers[ i ], Layers[ i - 1 ] );
+// 		}
+// */
+// /*		//4th Way
+// 		for( int i = max; i > 0 && i - 2 > 0; i-=2 ){
+// 			wolf( G, Layers[ i ], Layers[ i - 1 ] );
+// 		}
+// */
+// 		G.rev_all_edges();
+
+                for( int repeat_i = 0; repeat_i < 20 ; repeat_i++ ){
+                      G.rev_all_edges();
+                      //1st Way
+                      for( int i = Layers.size()-1; i > 0; i-- ){
+                          wolf( G, Layers[ i - 1 ], Layers[ i ] );
+                      }
+                      G.rev_all_edges();
+                      //2nd Way
+                      for( int i = 0; i < Layers.size()-1; i++ ){
+                          wolf( G, Layers[ i + 1 ], Layers[ i ] );
+                      }
+                      G.rev_all_edges();
+                      G.rev_all_edges();
+                }
+
+                cross_count = 0;
+// 		for( int i = max; i > 0; i-- ){
+// 			cross_count += crossing_numberG( G, Layers[ i ], Layers[ i - 1 ] );
+// 		}
+// // 		cout << " Crossings  After Wolf: " << cross_count << endl;
+// 		cross2 = cross_count;
+//
+// 		cross_count = 0;
+// 		for( int i = max; i > 0; i-- ){
+// 			cross_count += crossing_numberG( G, Layers2[ i ], Layers2[ i - 1 ] );
+// 		}
+// // 		cout << " Crossings  After Median: " << cross_count << endl;
+// 		cross3 = cross_count;
+// 		cout << endl;
+
+/********************* END OF CROSSING REDUCTION ****************/
+/****************************************************************/
+#ifdef DEBUG_ROBINVIZ
+        cout << "\n Crossing Done \n";
+#endif
+                GraphWin gw(G);
+
+                node_array<double> xpos(G);
+                node_array<double> ypos(G);
+// 		forall_nodes( n, G ){
+// 			cout << G[ n ] << " - " << xpos[ n ] << " - " << ypos[ n ] << endl;
+// 		}
+                node_array<int> pos_in_layer( G, 0 );
+                node_array<int> assigned_rank( G, 0 );
+                node_array<int> width( G, 10 );
+                node_array<bool> is_dummy( G, false );
+
+                forall_items( it, dummyNodes ){
+                    is_dummy[ dummyNodes[ it ] ] = true;
+                }
+                for( int i = 0; i < Layers.size(); i++ ){
+                    count = 0;
+                    forall_items( it, Layers[ i ] ){
+                        pos_in_layer[ Layers[ i ][ it ] ] = count;
+                        assigned_rank[ Layers[ i ][ it ] ] = i;
+                        count++;
+                    }
+                }
+
+        if( xCoordFlag == true ){
+                    identify_dummy_positionsOur( G, Layers, max, dummyNodes, xpos, ypos, algorithmFlag, space, increment, ledaPostFlag );
+                }
+                else{
+                    identify_dummy_positionsX( G, Layers, max, dummyNodes, xpos, ypos, algorithmFlag, space, increment, ledaPostFlag );
+                }
+// 		forall_nodes( n, G ){
+// 			cout << G[ n ] << " - " << xpos[ n ] << " - " << ypos[ n ] << endl;
+// 		}
+                node_array<bool> isDummy( G, false );
+                node_array<bool> isUsed( G, false );
+
+                node m,temp;
+                forall_nodes( n , G ){
+                                forall_items( it, dummyNodes ){
+                                                m = dummyNodes[ it ];
+                                                if( m == n )
+                                                        isDummy[ n ] = true;
+                                }
+// 				cout << xpos[ n ] << " - " << ypos[ n ] << endl;
+                }
+// 		cout << endl;
+
+                for( int i = 0; i < sourceAndTargets.size(); i++ ){
+                        forall_edges( e, G ){
+                                if( G.source( e ) == sourceAndTargets[ i ][ sourceAndTargets[ i ].first_item() ] &&
+                                    G.target( e ) == sourceAndTargets[ i ][ sourceAndTargets[ i ].last_item() ]){
+                                        e = G.rev_edge( e );
+// 					cout << " REVERSED \n";
+                                }
+                        }
+                }
+
+                edge_array<list<double> > edgePositionsX( G );
+                edge_array<list<double> > edgePositionsY( G );
+                edge_array<list<point> > bends(G);
+                list<point> tempPoints;
+
+                list<edge> inEdges;
+
+                forall_nodes( n , G ){
+                                node source;
+                                node target;
+                                int edgeValue;
+                                //IS dummy ancak ondan onceki node source olacakti
+
+
+                                if( isUsed[ n ] == false && isDummy[ n ] == true ){
+                                                list<double> eXpos;
+                                                list<double> eYpos;
+
+                                                temp = n;
+
+                                                eXpos.append( xpos[ temp ] );
+                                                eYpos.append( ypos[ temp ] );
+                                                point p( xpos[ temp ], ypos[ temp ] );
+                                                tempPoints.append( p );
+
+                                                inEdges = G.in_edges( temp );
+                                                forall_items( it, inEdges ){
+                                                                e = allEdges[ it ];
+                                                                n = G.source( e );
+                                                }
+                                                isUsed[ n ] = true;
+                                                source = n;
+
+                                                NEXTDUMMY:
+                                                allEdges = G.out_edges( temp );
+                                                edge etemp;
+                                                forall_items( it, allEdges ){
+                                                                e = allEdges[ it ];
+                                                                m = G.target( e );
+                                                                eXpos.append( xpos[ m ] );
+                                                                eYpos.append( ypos[ m ] );
+                                                                point p( xpos[ m ], ypos[ m ] );
+                                                                tempPoints.append( p );
+
+                                                                isUsed[ m ] = true;
+                                                                edgeValue = G[ e ];
+                                                                G.del_edge( e );
+                                                }
+                                                if( isDummy[ m ] == true ){
+                                                                temp = m;
+                                                                goto NEXTDUMMY;
+                                                }
+                                                else{
+                                                                target = m;
+                                                }
+                                                etemp = G.new_edge( source, target );
+                                                G[ etemp ] = edgeValue;
+                                                bends[ etemp ] = tempPoints;
+                                                edgePositionsX.init( G );
+                                                edgePositionsY.init( G );
+                                                edgePositionsX[ etemp ] = eXpos;
+                                                edgePositionsY[ etemp ] = eYpos;
+#ifdef POSITIONS
+                                                cout << endl << " X : ";
+                                                edgePositionsX[ etemp ].print();
+                                                cout << endl << " Y : ";
+                                                edgePositionsY[ etemp ].print();
+#endif
+                                                tempPoints.clear();
+                                }
+                                isUsed[ n ] = true;
+                }
+
+                G.del_nodes( dummyNodes );
+                node_array<point> pos(G);
+                forall_nodes( n, G ){
+// 			cout <<  xpos[ n ]<< "-" << ypos[ n ] << endl;
+                        point p( xpos[ n ], ypos[ n ] );
+                        pos[ n ] = p;
+                }
+
+                //runWithMenu( G );
+                layers = Layers;
+                if( xCoordFlag == true )
+                        pos = draw_final3( G, Layers, max, dummyNodes, edgePositionsX , edgePositionsY, bends, graphNo, xpos, ypos );
+                else
+                        draw_finalX( G, Layers, max, dummyNodes, edgePositionsX , edgePositionsY, bends, graphNo, pos );
+
+                posx = pos;
+                bendsx = bends;
+
+
+                //ofstream NodePositions("C://GraphUnion//GraphPositions.txt", ios::in | ios::trunc);
+                //ofstream EdgePositions("C://GraphUnion//EdgePositions.txt", ios::in | ios::trunc);
+                //ofstream FirstEdgePositions("C://GraphUnion//FirstEdgePositions.txt", ios::in | ios::trunc );
+
+                //forall_nodes( n, G ){
+                //		NodePositions << xpos[ n ] << "\n" << ypos[ n ] << "\n";
+                //}
+
+                //forall_edges( e, G ){
+                //		list<point> tempPoints = bends[ e ];
+                //		int counter = 0;
+                //		node s = G.source( e );
+                //		node t = G.target( e );
+                //		EdgePositions << xpos[ s ] << "\n" << ypos[ s ] << "\n";
+                //
+
+                //		int melcount = 0;
+                //		forall_items( it, tempPoints ){
+                //				if( it == tempPoints.first_item() ){
+                //						FirstEdgePositions << xpos[ s ] << "\n" << ypos[ s ] << "\n";
+                //						FirstEdgePositions << tempPoints[ it ].xcoord()<< "\n" << tempPoints[ it ].ycoord() << "\n";
+                //						melcount = 1;
+                //				}
+                //				EdgePositions << tempPoints[ it ].xcoord()<< "\n" << tempPoints[ it ].ycoord() << "\n";
+                //				/*if( tempPoints.succ( it ) != NULL ){
+                //					list_item it2 = tempPoints.succ( it );
+                //					angles = tempPoints[ it ].angle( tempPoints[ it ], tempPoints[ it2 ] );
+                //					length = tempPoints[ it ].( tempPoints[ it ], tempPoints[ it2 ] );
+                //				}*/
+                //				counter = 1;
+                //		}
+                //		//if( counter != 0 )
+                //				//EdgePositions << (double)100000 << endl;
+                //		//else{
+                //				EdgePositions << xpos[ t ] << "\n" << ypos[ t ] << "\n" << 100000 << endl;
+                //		//}
+                //
+                //}
+                //EdgePositions << (double) 200000 << endl;
+                //FirstEdgePositions << 200000 << endl << 200000 << endl << 200000 << endl << 200000;
+                //NodePositions.close();
+                //FirstEdgePositions.close();
+                //EdgePositions.close();
+                ////draw_planets( G, Layers, max, dummyNodes, edgePositionsX , edgePositionsY, bends );
+
+                return G;
+}
+
 
 /* Function is based for Weighted Layered Drawing, 
 proposed in ISB'10. Each step considers weight.
