@@ -122,7 +122,7 @@ int main(int argc, char** argv) {
                 }
                 //cout << " 2 \n";
                 double xpos1 = xmin;
-                double ypos1 = ymax + 70.0;
+                double ypos1 = ymax + 35.0;
                 //cout << max << " - " << election << endl;
                 for(int i = 0; i <= max; i++ ){
                         //cout << COMPS[ i ].size() << "\t";
@@ -135,7 +135,7 @@ int main(int argc, char** argv) {
                                     else{
                                         diam = 10 + COMPS[ i ].size() * 2;
                                     }
-                                    circle C( xpos1 + 32, ypos1, diam );
+                                    circle C( xpos1 + 16, ypos1, diam );
                                     min = pi / (double)COMPS[ i ].size();
                                     tmp = pi;
                                     forall_items( it, COMPS[ i ] ){
@@ -149,15 +149,15 @@ int main(int argc, char** argv) {
                                 }
                                 else{
                                         xpos1 = xmin;
-                                        ypos1 += 100.0;
+                                        ypos1 += 50.0;
                                         int diam = 30;
                                         if( COMPS[ i ].size() < 3 ){
                                             diam = 10;
                                         }
                                         else{
-                                            diam = 10 + COMPS[ i ].size() * 2;
+                                            diam = 10 + COMPS[ i ].size();
                                         }
-                                        circle C( xpos1 + 32, ypos1, diam );
+                                        circle C( xpos1 + 16, ypos1, diam );
                                         min = pi / (double)COMPS[ i ].size();
                                         tmp = pi;
                                         forall_items( it, COMPS[ i ] ){
@@ -168,14 +168,14 @@ int main(int argc, char** argv) {
                                             tmp -= min;
                                         }
                                 }
-                                xpos1 += 65;
+                                xpos1 += 66;
                         }
                 }
                 //cout << "\n 3 \n";
 		gw.remove_bends();
 		forall_nodes( n, G ){
-                        xpos[ n ] = xpos[ n ]*3.5;
-                        ypos[ n ] = ypos[ n ]*3.5;
+                        xpos[ n ] = xpos[ n ] * 5.0;
+                        ypos[ n ] = ypos[ n ] * 5.0;
 		}
 		gw.set_position( xpos, ypos );
 		gw.place_into_box(x0, y0, x1, y1);
