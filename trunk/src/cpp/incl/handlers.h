@@ -894,7 +894,7 @@ void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNo
 			entered.append( tempx );
 		}
 		e = INTERACTIONS.new_edge( sourceTemp, targetTemp );
-		INTERACTIONS[ e ] = fabs(log( value * 100000.0 ));
+		INTERACTIONS[ e ] = fabs(log( value * 10000.0 )*5.0);
 		numberOfReleations++;
 		/*cout << endl;*/			
 	}
