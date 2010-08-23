@@ -260,7 +260,7 @@ class EdgeItem(QGraphicsItem):
         else:
             thickPen.setColor(QColor(0,0,0))
 
-        thicknessRange = 10
+        thicknessRange = 5
         if self.edge.maxWidth == self.edge.minWidth:
             newWidth = 2
         else:
@@ -817,11 +817,8 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
         self.setRect(0, 0, self.w, self.w)
 
         # Construct the text.
-        self.text = QGraphicsTextItem(parent=None, scene=self._scene)
+        self.text = QGraphicsTextItem(node.label, None, self._scene)
         self.text.root = self
-
-        # Set node id as text.
-        self.text.setPlainText(node.label)
         self.text.contextMenuEvent = self.contextMenuEvent
         # Define bounding rect
         
