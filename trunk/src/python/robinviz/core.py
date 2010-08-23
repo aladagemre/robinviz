@@ -175,7 +175,7 @@ class View(QGraphicsView):
         if not hasattr(self, 'originalFileName'):
             self.originalFileName = filename
 
-        if layoutName == "Layered":
+        if None: # layoutName == "Layered":
             self.scene().clear()
             # Switch back to original.
             self.scene().reloadGraph(self.originalFileName)
