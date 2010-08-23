@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
             edge_array<list<point> > bends( G );
             array<list<node> > layers( 2 );
             
-            H = RUN_SELFGD( G, layers, 40, Xpos, Ypos, 1, pos, bends, 1, 50, 0, 50, 0 );
+            H = RUN_SELFGD( G, layers, 40, Xpos, Ypos, 1, pos, bends, 1, 150, 0, 300, 0 );
 
             gw.set_layout( pos, bends );
             forall_edges( e, G ){
