@@ -19,7 +19,6 @@ int main(int argc, char** argv) {
         gw.get_bounding_box(x0, y0, x1, y1);
     
         node_array<int> comp( G, 0 );
-        if( G.number_of_nodes() > 10 && G.number_of_edges() > 0 ){
             node_array<double> Ypos( G );
             node_array<double> Xpos( G );
             node_array<point> pos( G );
@@ -33,9 +32,8 @@ int main(int argc, char** argv) {
                     gw.set_thickness( e, G[ e ] );
             }
             gw.place_into_box(x0, y0, x1, y1);
-            fname = fname.replace( ".gml", "layered.gml" );
+            fname = fname.replace( ".gml", "self.gml" );
             gw.save_gml( fname );
-        }
     }
     return 0;
 }
