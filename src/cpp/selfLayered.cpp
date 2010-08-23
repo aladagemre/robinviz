@@ -15,9 +15,13 @@ int main(int argc, char** argv) {
         edge e;
         G.read_gml( fname );
         GraphWin gw(G);
+
+        GraphWin gw2;
+        gw2.read_gml( fname );
+        graph T = gw2.get_graph();
         double x0, y0, x1, y1;
-        gw.get_bounding_box(x0, y0, x1, y1);
-    
+        gw2.get_bounding_box(x0, y0, x1, y1);
+
         node_array<int> comp( G, 0 );
             node_array<double> Ypos( G );
             node_array<double> Xpos( G );
@@ -25,7 +29,7 @@ int main(int argc, char** argv) {
             edge_array<list<point> > bends( G );
             array<list<node> > layers( 2 );
             
-            H = RUN_SELFGD( G, layers, 40, Xpos, Ypos, 1, pos, bends, 1, 150, 0, 300, 0 );
+            H = RUN_SELFGD( G, layers, 40, Xpos, Ypos, 1, pos, bends, 1, 300, 0, 300, 0 );
 
             gw.set_layout( pos, bends );
             forall_edges( e, G ){
