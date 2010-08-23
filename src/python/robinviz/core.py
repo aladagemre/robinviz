@@ -128,6 +128,10 @@ class View(QGraphicsView):
             edge.maxWidth = edgeWidthMax
             self.scene().addEdge(edge)
 
+        for item in self.scene().items():
+            if isinstance(item, TinyNode):
+                item.updateLabel()
+            
         self.reselectItemsAfterLayoutChange()
         self.refresh()
         

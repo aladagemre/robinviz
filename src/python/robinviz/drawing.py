@@ -94,7 +94,7 @@ class Scene(QGraphicsScene):
                 edgeWidthMin = edge.graphics.width
             elif edge.graphics.width > edgeWidthMax:
                 edgeWidthMax = edge.graphics.width
-
+        
         for edge in g.edges:
             edge.minWidth = edgeWidthMin
             edge.maxWidth = edgeWidthMax
@@ -264,7 +264,7 @@ class EdgeItem(QGraphicsItem):
         if self.edge.maxWidth == self.edge.minWidth:
             newWidth = 2
         else:
-            newWidth = 2 + (thicknessRange * (self.edge.graphics.width - self.edge.minWidth)) / (self.edge.maxWidth - self.edge.minWidth)
+            newWidth = 2 + thicknessRange*( (self.edge.graphics.width - self.edge.minWidth) / (self.edge.maxWidth - self.edge.minWidth) )
             #newRatio = ((self.edge.graphics.width - self.edge.minWidth)/(self.edge.maxWidth - self.edge.minWidth)) * newRange + 30
 
         thickPen.setWidthF(newWidth)
@@ -751,7 +751,9 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
         self.updateEdges()
         self.updateLabel()
         self.scene().update()
-        
+    def setupAnimation(self):
+        pass
+    
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemPositionChange or change == QGraphicsItem.ItemTransformHasChanged:
             self.updateEdges()
