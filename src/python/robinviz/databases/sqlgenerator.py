@@ -49,7 +49,11 @@ CREATE TABLE "translation" (
 """)
 
 curs.execute('CREATE INDEX "biogrid_index" on translation (biogrid_id ASC);')
-curs.execute('CREATE UNIQUE INDEX "identifier_index" on translation (identifier_value ASC)')
+curs.execute('CREATE INDEX "identifier_index" on translation (identifier_value ASC)')
+
+# identifier_value is not UNIQUE!
+# INSERT INTO translation VALUES (1, '26556996', 'GENBANK_GENOMIC_DNA_GI');
+# INSERT INTO translation VALUES (2, '26556996', 'GENBANK_GENOMIC_DNA_GI');
 
 input_stream = open(filename)
 #output_stream = open("sqlstatements.txt","w")
@@ -57,11 +61,14 @@ input_stream = open(filename)
 for line in input_stream: 
     try:
 	l = line.strip().split("\t")
-	#output_stream.write("INSERT INTO translation VALUES (%d, '%s', '%s');\n" % (int(l[0]), l[1], l[2]) )
-	curs.execute("INSERT INTO translation VALUES (%d, '%s', '%s');\n" % (int(l[0]), l[1], l[2]) )
-	
+	biogrid_id = int(l[0])
     except:
 	continue
+    else:
+	#output_stream.write("INSERT INTO translation VALUES (%d, '%s', '%s');\n" % (int(l[0]), l[1], l[2]) )
+	statement = 'INSERT INTO translation VALUES (%d, "%s", "%s");\n' % (biogrid_id, l[1], l[2]) 
+	curs.execute(statement)
+	
 conn.commit()
 
 #output_stream.close()
