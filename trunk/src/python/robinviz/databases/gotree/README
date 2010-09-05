@@ -1,0 +1,18 @@
+What to do here?
+
+* Run termdbparser.py, it will generate goinfo.sqlite3.
+* Run gotree.py, select GO terms and press the button. It will generate selected_terms.txt and go_mapping.txt for selected GO terms.
+
+===============
+
+termdbparser.py: parses the go_daily-termdb.rdf-xml file and generates a goinfo.sqlite3 file. This file contains a table with GOAccession, name and children fields. 
+
+===============
+
+gotree.py: allows you to select gene ontologies, report the selected ones and provide term-gene mapping for them.
+
+===============
+
+gene2goparser.py: allows you to parse gene2go file for given GO terms to produce a term-gene mapping. (Called by gotree.py)
+
+================

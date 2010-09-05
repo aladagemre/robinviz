@@ -87,5 +87,6 @@ def download_organism(organism_name):
 	
     tabify(files)
 
-organism = "Saccharomyces_cerevisiae"
-download_organism(organism)
+if __name__ == "__main__":
+    organism = "Saccharomyces_cerevisiae"
+    download_organism(organism)
