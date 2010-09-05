@@ -5,9 +5,14 @@ from xml.dom.minidom import parse
 import shelve
 import sqlite3
 import os
+from gene2goparser import download_file, ungz
 
 
-input_file = "go_daily-termdb.rdf-xml/go_daily-termdb.rdf-xml"
+input_file = "go_daily-termdb"
+if not os.path.exists(input_file):
+    download_file("http://archive.geneontology.org/latest-termdb/go_daily-termdb.rdf-xml.gz")
+    ungz("go_daily-termdb.rdf-xml.gz")
+    
 # "go_daily-termdb.rdf-xml/slim.xml"
 output_file = "goinfo.sqlite3"
 
@@ -53,7 +58,8 @@ def generateTermDict():
 		    try:
 			term_id = int(term_accession.split("GO:")[1])
 		    except IndexError:
-			print "Index error:", term_accession
+			if term_accesion != "all":
+			    print "Index error:", term_accession
 			continue
 		elif  "is_a" in element.nodeName:
 		    is_a_info =element.getAttribute("rdf:resource")
