@@ -5,7 +5,7 @@ What to do here?
 
 ===============
 
-termdbparser.py: parses the go_daily-termdb.rdf-xml file and generates a goinfo.sqlite3 file. This file contains a table with GOAccession, name and children fields. 
+termdbparser.py: parses the go_daily-termdb file and generates a goinfo.sqlite3 file. This file contains a table with GOAccession, name and children fields. 
 
 ===============
 
