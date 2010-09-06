@@ -34,6 +34,7 @@
 *                                                                               			*
 ********************************************************************************************************/
 
+#include <LEDA/graphics/graphwin.h>
 #include "incl/handlers.h"
 #include "incl/handlers/_dataread.h"
 #include "incl/handlers/_bicread.h"
@@ -320,10 +321,10 @@ int main(){
 
                 list<leda::matrix> matrixCategories;
                 list<GENES> ppiGenes;
-                        cout << ppifilename << "\n";
+
                 interactionRead( temp, GenesNode, INTERACTIONS, TEMPINT, ppifilename );
                 goCatRead( inputGoFile, defaultGoFile, categories, categ, matrixCategories, H_values, Hmax, GenesNode );
-                        cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
+                cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
 
                 FILE *cfptr;
                 if( (cfptr =fopen("outputs/colors_func.txt", "w"))==NULL && (cfptr=fopen("outputs//colors_func.txt", "w")) ==NULL ){

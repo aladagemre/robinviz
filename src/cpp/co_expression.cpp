@@ -473,7 +473,7 @@ int main(){
                                          circular_ffd_layout,
                                          is_ppi_directed
                 );               
-cout << ppifilename << endl;
+                
                 FILE *kfptr;
                 if( (fptr = fopen( catfile , "r" )) !=NULL ){
                     if( (kfptr = fopen( "sources/usr_sources/visualization_data/functions.txt", "w" )) != NULL || (kfptr = fopen( "sources//usr_sources//visualization_data//functions.txt", "w" )) != NULL ){

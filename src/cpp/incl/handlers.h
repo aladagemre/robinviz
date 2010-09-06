@@ -35,6 +35,7 @@ Created
 
 #include "layout/interpretbiclusters.h"
 #include "layout/runFunctions.h"
+#include "layout/proteinscreen.h"
 // #include "kmeans.h"
 #include "layout/misc/graphToMatrix.h"
 #include "layout/misc/saveGraph.h"
@@ -901,7 +902,8 @@ void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNo
 	cout << endl;
 // 	forall_edges( e, INTERACTIONS )
 // 		cout << GenesNode[ INTERACTIONS[ INTERACTIONS.source( e ) ] ].GENE << " " << GenesNode[ INTERACTIONS[ INTERACTIONS.target( e )] ].GENE << endl;
-// 	
+// 	  
+	gwSave( GenesNode, INTERACTIONS );
 	fclose( interactionsPtr );
 }
 
