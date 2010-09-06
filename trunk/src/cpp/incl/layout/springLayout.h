@@ -179,13 +179,13 @@ cout << "\n-----\n";
 
 //i.   without fixed nodes for main graph
 void SPRING_EMBEDDING2_(	GRAPH<int,int>& G, 
-							node_array<double>& xpos,
+			    node_array<double>& xpos,
                             node_array<double>& ypos,
                             double xleft, double xright,
                             double ybottom, double ytop,
                             int iterations,
-							node_array<int> &nodeIds,
-							node_array<double> &Hvalues )
+			    node_array<int> &nodeIds,
+			    node_array<double> &Hvalues )
 { 
 	list<node> L;
 	SPRING_EMBEDDING_our2(G,L,xpos,ypos,xleft,xright,ybottom,ytop,iterations,nodeIds); 
