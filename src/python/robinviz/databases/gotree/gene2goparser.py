@@ -5,7 +5,7 @@
 import os
 import gzip
 import urllib
-
+import sqlite3
 
 def injectArguments(inFunction):
     def outFunction(*args,**kwargs):
@@ -41,6 +41,7 @@ class Gene2GOParser:
 	self.f = open(self.input_file)
 	self.lines = self.f.readlines()
 	self.go_mapping = {}
+	self.names = {}
 	
 	self.parse()
 	self.write()
@@ -56,14 +57,27 @@ class Gene2GOParser:
 	    cols = line.split("\t")
 	    biogrid_id = cols[1]
 	    go_id = cols[2]
+	    name = cols[5]
 
+	    conn = sqlite3.connect("../identifier.db")
+	    cursor = conn.cursor()
+
+	    statement = "select identifier_value from translation where biogrid_id=%s and identifier_type='SYSTEMATIC_NAME';" % biogrid_id
+	    cursor.execute(statement)
+	    result = cursor.fetchone()
+	    if result:
+		biogrid_id = result[0]
+		
 	    l = self.go_mapping.get(go_id)
-	    if l:
-		l.append(biogrid_id)
-		self.go_mapping[go_id] = l
-	    else:
-		l = [biogrid_id]
-		self.go_mapping[go_id] = l
+	    if not l:
+		l = []
+	    
+	    l.append(biogrid_id)
+	    self.go_mapping[go_id] = l	    
+	    
+	    n = self.names.get(go_id)
+	    if not n:
+		self.names[go_id] = name
 
     def write(self):
 	output = open(self.output_file,"w")
@@ -73,7 +87,11 @@ class Gene2GOParser:
 	    keys = self.go_mapping.keys()
 	
 	for key in sorted(keys):
-	    output.write("%s\t%s\n" % (key, "\t".join(self.go_mapping[key])) )
+	    try:
+		output.write("%s\t%s\t%s\n" % (key, self.names[key], "\t".join(self.go_mapping[key])) )
+	    except:
+		print "key = ", key
+		print "go_mapping[key] = ",self.go_mapping[key]
 	output.close()
 
 
