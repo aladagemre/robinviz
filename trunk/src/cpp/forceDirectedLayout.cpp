@@ -113,33 +113,35 @@ int main(int argc, char** argv) {
                     SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
                 }
                 else{
-                    GRAPH<int,int> H;
-                    H.read_gml( fname );
-                    node_array<double> xpos2( H );
-                    node_array<double> ypos2( H );
-                    node_array<int> indexs2( H );
-                    node_array<int> nodeId( H, 3 );
-                    int cnt = 0;
-                    forall_nodes( n, H ){
-                        indexs2[ n ] = cnt;
-                        cnt++;
-                    }
-
-                    forall_nodes( n, H ){
-                        bool isHided = false;
-                        forall_items( it, hidedIndexs ){
-                            if( indexs2[ n ] == hidedIndexs[ it ] ){
-                                isHided = true;
-                            }
+                    if( strcmp( flag1, "OUR" ) == 0 ){
+                        GRAPH<int,int> H;
+                        H.read_gml( fname );
+                        node_array<double> xpos2( H );
+                        node_array<double> ypos2( H );
+                        node_array<int> indexs2( H );
+                        node_array<int> nodeId( H, 3 );
+                        int cnt = 0;
+                        forall_nodes( n, H ){
+                            indexs2[ n ] = cnt;
+                            cnt++;
                         }
-                        if( isHided == true )
-                            H.hide_node( n );
-                    }
-                    list<node> fixedNodes2;
-                    SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500, nodeId );
-                    forall_nodes( n, H ){
-                        xpos[ nodes[ indexs2[ n ] ] ] = xpos2[ n ];
-                        ypos[ nodes[ indexs2[ n ] ] ] = ypos2[ n ];
+
+                        forall_nodes( n, H ){
+                            bool isHided = false;
+                            forall_items( it, hidedIndexs ){
+                                if( indexs2[ n ] == hidedIndexs[ it ] ){
+                                    isHided = true;
+                                }
+                            }
+                            if( isHided == true )
+                                H.hide_node( n );
+                        }
+                        list<node> fixedNodes2;
+                        SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500, nodeId );
+                        forall_nodes( n, H ){
+                            xpos[ nodes[ indexs2[ n ] ] ] = xpos2[ n ];
+                            ypos[ nodes[ indexs2[ n ] ] ] = ypos2[ n ];
+                        }
                     }
                 }
                 G.restore_all_nodes();
