@@ -25,20 +25,37 @@ void gwSave( array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS ){
 		fptr = fopen( "outputs//graphs/ppigraph.txt", "w" ); 
 #endif
                 forall_nodes( n, INTERACTIONS ){
-			if( INTERACTIONS.outdeg( n ) > 0 )
-				fprintf( fptr, "%s\t%d\t", GenesNode[ INTERACTIONS[ n ] ].GENE, INTERACTIONS.outdeg( n ) );
-			forall_out_edges( e, n ){
-				fprintf( fptr, "%s\t", GenesNode[ INTERACTIONS[ INTERACTIONS.target( e ) ] ].GENE );
-			}
-			int count = 0;
-			forall_out_edges( e, n ){
-				if( count != INTERACTIONS.outdeg( n ) - 1 ){
-					fprintf( fptr, "%d\t", INTERACTIONS[ e ] );
+			if( INTERACTIONS.degree( n ) > 0 ){
+				fprintf( fptr, "%s\t%d\t", GenesNode[ INTERACTIONS[ n ] ].GENE, INTERACTIONS.degree( n ) );
+				forall_out_edges( e, n ){
+					fprintf( fptr, "%s\t", GenesNode[ INTERACTIONS[ INTERACTIONS.target( e ) ] ].GENE );
 				}
-				else{
-					fprintf( fptr, "%d\n", INTERACTIONS[ e ] );
+				forall_in_edges( e, n ){
+					fprintf( fptr, "%s\t", GenesNode[ INTERACTIONS[ INTERACTIONS.source( e ) ] ].GENE );
 				}
-				count++;
+				int count = 0;
+				forall_out_edges( e, n ){
+					if( count != INTERACTIONS.outdeg( n ) - 1 ){
+						fprintf( fptr, "%d\t", INTERACTIONS[ e ] );
+					}
+					else{
+						if( INTERACTIONS.indeg( n ) == 0 )
+							fprintf( fptr, "%d\n", INTERACTIONS[ e ] );
+						else
+							fprintf( fptr, "%d\t", INTERACTIONS[ e ] );
+					}
+					count++;
+				}
+				count = 0;
+				forall_in_edges( e, n ){
+					if( count != INTERACTIONS.indeg( n ) - 1 ){
+						fprintf( fptr, "%d\t", INTERACTIONS[ e ] );
+					}
+					else{
+						fprintf( fptr, "%d\n", INTERACTIONS[ e ] );
+					}
+					count++;
+				}
 			}
                 }  
 		fclose( fptr );
