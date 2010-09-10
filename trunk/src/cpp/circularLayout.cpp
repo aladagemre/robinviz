@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 		gw.remove_bends();
 		gw.set_position( xpos, ypos );
 		gw.place_into_box(x0, y0, x1, y1);
-		fname = fname.replace( ".gml", "circular.gml" );
+                fname = fname.replace( ".gml", "circularLayout.gml" );
 		gw.save_gml( fname );
 	}
 	return 0;

@@ -9,7 +9,8 @@ int main(int argc, char** argv) {
 		list_item it;
 		leda::string fname = argv[1];
                 char flag1[16];
-                sprintf( flag1, "%s", argv[2] );
+//                sprintf( flag1, "%s", argv[2] );
+                sprintf( flag1, "OUR" );
 		double pi = 2.0 * 3.147;
 		double tmp = pi;
 		int count = 0,maxLayerIdNow;
@@ -228,7 +229,7 @@ int main(int argc, char** argv) {
 		}
 		gw.set_position( xpos, ypos );
 		gw.place_into_box(x0, y0, x1, y1);
-		fname = fname.replace( ".gml", "force.gml" );
+                fname = fname.replace( ".gml", "forceDirectedLayoutW.gml" );
 		gw.save_gml( fname );
 	}
 	return 0;
