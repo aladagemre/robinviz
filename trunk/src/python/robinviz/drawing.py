@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # encoding: utf-8
 
 from PyQt4.QtCore import *
@@ -275,7 +276,7 @@ class EdgeItem(QGraphicsItem):
         
         
         line = None
-        for i in range(len(self.path) - 1): # take first n-1 line segments
+        for i in range( len(self.path) - 1 ): # take first n-1 line segments
             s = self.path[i]                # starting point of the segment.
             e = self.path[i+1]              # end point of the segment
             lastLine = line                 # keeping the last line for placing arrow head
@@ -381,6 +382,19 @@ class NodeItem(QGraphicsItem):
             return
         if not self.isSelected():
             self.toggleHighlight()
+        
+    def contextMenuEvent(self, event):
+        menu = QMenu()
+        displayNeighborsAction = menu.addAction("Display Neighbors in the whole PPI")
+        action = menu.exec_(event.screenPos())
+        if action == displayNeighborsAction:
+	    from windows import SinglePeripheralViewWindow
+	    self.specialWindow = SinglePeripheralViewWindow(self.scene().views()[0].__class__ , scene=None)
+	    neihgboringFilename = "outputs/graphs/%s.gml" % self.node.label
+	    if not os.path.exists(neihgboringFilename):
+		os.system("./proteinScreen.exe %s TXT" % self.node.label)
+	    self.specialWindow.loadGraph(neihgboringFilename)
+            self.specialWindow.showMaximized()
         
     #----------- Data Structural Methods ------------------
     def addEdge(self, e):
