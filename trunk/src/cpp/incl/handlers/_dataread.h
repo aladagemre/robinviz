@@ -311,14 +311,14 @@ York "  "New York "
 !Sample_data_row_count  "22283" "22283" "22283" "22283" "22283" "22283" "22283" "22283" "22283" "22283" "22283"
 !series_matrix_table_begin*/
 matrix dataReadGEO( char filename[256], array<GENES> &geneArray,  array<CONDS> &condArray  ){
-	leda::matrix INPUT;
+// 	leda::matrix INPUT;
 	int dimension1, dimension2;
 	char filename2[256];
 	sprintf( filename2, "%s", filename );
 	FILE *fptr = fopen( filename2, "r" );
-	char readData1[1024],readData2[1024],title[1024],platformId[32],platformTaxId[32],seriesType[512],seriesSampleId[1024];
-
+	
 	// Reading Series Header
+	char readData1[1024],readData2[1024],title[1024],platformId[32],platformTaxId[32],seriesType[512],seriesSampleId[1024];
 	while( !feof( fptr ) ){
 		fscanf( fptr, "%s", readData1 );
 		if( strcmp( "!Series_title", readData1 ) == 0 ){
@@ -355,6 +355,7 @@ matrix dataReadGEO( char filename[256], array<GENES> &geneArray,  array<CONDS> &
 	// Reading Samples Header
 	list<S128> sampleTitle, sampleOrganism;
 	list<S1024> sampleGeo, sampleDescription;
+	int samples,genes;
 	while( !feof( fptr ) ){
 		fscanf( fptr, "%s", readData1 );
 		if( strcmp( "!Sample_title", readData1 ) == 0 ){
@@ -362,41 +363,130 @@ matrix dataReadGEO( char filename[256], array<GENES> &geneArray,  array<CONDS> &
 			int count = 0;
 			while( strcmp( "!Sample_geo_accession", readData2 ) != 0 ){
 				fscanf( fptr, "%s", readData2 );
+				if( strcmp( "!Sample_geo_accession", readData2 ) == 0 )
+					break;
 				S128 tmp;
 				sprintf( tmp.store, "%s", readData2 );
 				sampleTitle.append( tmp );
 				count++;
 			}
+			samples = count;
+			list_item it;
+			forall_items( it ,sampleTitle ){
+				cout << sampleTitle[ it ].store << "\t";
+			}
+			cout << "\n________________________\n";
 			while( strcmp( "!Sample_status", readData2 ) != 0 ){
 				fscanf( fptr, "%s", readData2 );
+				if( strcmp( "!Sample_status", readData2 ) == 0 )
+					break;
 				S1024 tmp;
 				sprintf( tmp.store, "%s", readData2 );
 				sampleGeo.append( tmp );
+// 				cout << readData2 << "\t";
 			}
-			while( strcmp( "!Sample_organsim_ch1", readData2 ) != 0 ){
+
+			cout << endl;
+			forall_items( it ,sampleGeo ){
+				cout << sampleGeo[ it ].store << "\t";
+			}
+			cout << "\n________________________\n";
+
+			while( strcmp( "!Sample_organism_ch1", readData2 ) != 0 ){
 				fscanf( fptr, "%s", readData2 );
+//  				cout << readData2 << "\t";
 			}
 			int count2 = 0;
-			while( count2 != count ){
+			while( true ){
 				fscanf( fptr, "%s", readData2 );
+				if( strcmp( "!Sample_characteristics_ch1", readData2 ) == 0 || strcmp( "!Sample_molecule_ch1", readData2 ) == 0 )
+					break;
 				S128 tmp;
 				sprintf( tmp.store, "%s", readData2 );
 				sampleOrganism.append( tmp );
+				cout << readData2 << "\t";
 				count2++;
 			}
+
+			cout << endl;
+			forall_items( it ,sampleOrganism ){
+				cout << sampleOrganism[ it ].store << "\t";
+			}
+			cout << "\n________________________\n";
+
 			while( strcmp( "!Sample_description", readData2 ) != 0 ){
 				fscanf( fptr, "%s", readData2 );
 			}
 			count2 = 0;
-			while( count2 != count ){
+			while( count2 != count - 1){
 				fscanf( fptr, "%s", readData2 );
 				S1024 tmp;
 				sprintf( tmp.store, "%s", readData2 );
 				sampleDescription.append( tmp );
 				count2++;
 			}
+	
+			cout << endl;
+			forall_items( it ,sampleDescription ){
+				cout << sampleDescription[ it ].store << "\t";
+			}
+
+			while( strcmp( "!series_matrix_table_begin", readData2 ) != 0 ){
+				fscanf( fptr, "%s", readData2 );
+			}
+			break;
+		}
+		else{
+			FILE *erptr;
+#ifdef LINUX
+			erptr = fopen( "outputs/error.txt", "w" );
+#else
+			erptr = fopen( "outputs//error.txt", "w" );
+#endif
+			fprintf( erptr, "GEO File read error(series matrix) while reading Samples Header \n" );
+			fclose( erptr );
+			cout << "\nGEO File read error(series matrix) while reading Samples Header\n";
+			exit(1);
 		}
 	}
+	fscanf( fptr, "%s", readData2 ); // "ID_REF"
+	list<list<double> > rows;
+	list<S512> geneAnnot;
+	double value;
+	for( int i = 0; i < samples; i++ ){
+		  fscanf( fptr, "%s", readData2 );
+// 		  cout << readData2 << "\t";
+	}
+	cout << "\n________________________\n";
+	while( true ){
+		fscanf( fptr, "%s", readData1 );
+		if( strcmp( "!series_matrix_table_end", readData1 ) == 0 )
+			break;
+		S512 tmp;
+		sprintf( tmp.store, "%s", readData1 );
+		geneAnnot.append( tmp );
+// 		cout << "\n" << readData1 << "\t";
+		list<double> values;
+		for( int i = 0; i < samples; i++ ){
+			fscanf( fptr, "%lf", &value );
+// 			cout << value << "\t";
+			values.append( value );
+		}
+		rows.append( values );
+	}
+	genes = rows.size();
+
+	geneArray.resize( genes );
+	condArray.resize( samples );
+	leda::matrix INPUT( genes, samples );
+// 	cout << genes << endl << samples << endl;
+	for( int i = 0; i < genes; i++ ){
+		list<double> values = rows[ rows.get_item( i ) ];
+		for( int j = 0; j < samples; j++ ){
+			INPUT( i, j ) = values[ values.get_item( j ) ];
+		}
+	}	
+// 	INPUT.print();
 	return INPUT;
 }
 
