@@ -277,7 +277,7 @@ class EdgeItem(QGraphicsItem):
         
         line = None
         for i in range( len(self.path) - 1 ): # take first n-1 line segments
-            s = self.path[i]                # starting point of the segment.
+            s = self.path[i]                # starting point of the segment.	    
             e = self.path[i+1]              # end point of the segment
             lastLine = line                 # keeping the last line for placing arrow head
             line = QLineF(s.x(), s.y(), e.x(), e.y())
@@ -382,19 +382,6 @@ class NodeItem(QGraphicsItem):
             return
         if not self.isSelected():
             self.toggleHighlight()
-        
-    def contextMenuEvent(self, event):
-        menu = QMenu()
-        displayNeighborsAction = menu.addAction("Display Neighbors in the whole PPI")
-        action = menu.exec_(event.screenPos())
-        if action == displayNeighborsAction:
-	    from windows import SinglePeripheralViewWindow
-	    self.specialWindow = SinglePeripheralViewWindow(self.scene().views()[0].__class__ , scene=None)
-	    neihgboringFilename = "outputs/graphs/%s.gml" % self.node.label
-	    if not os.path.exists(neihgboringFilename):
-		os.system("./proteinScreen.exe %s TXT" % self.node.label)
-	    self.specialWindow.loadGraph(neihgboringFilename)
-            self.specialWindow.showMaximized()
         
     #----------- Data Structural Methods ------------------
     def addEdge(self, e):
@@ -785,7 +772,19 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
 
         return QVariant(value)
 
-
+    def contextMenuEvent(self, event):
+        menu = QMenu()
+        displayNeighborsAction = menu.addAction("Display Neighbors in the whole PPI")
+        action = menu.exec_(event.screenPos())
+        if action == displayNeighborsAction:
+	    from windows import SinglePeripheralViewWindow
+	    self.specialWindow = SinglePeripheralViewWindow(self.scene().views()[0].__class__ , scene=None)
+	    neihgboringFilename = "outputs/graphs/%s.gml" % self.node.label
+	    if not os.path.exists(neihgboringFilename):
+		os.system("./proteinScreen.exe %s TXT" % self.node.label)
+	    self.specialWindow.loadGraph(neihgboringFilename)
+            self.specialWindow.showMaximized()
+            
     #----------- Data Structural Methods ------------------
 
     #----------- GUI / Geometric Methods ------------------
@@ -820,7 +819,13 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
     def associateWithNode(self, node):
         # Store node data
         self.node = node
-        self.w = self.h = 20
+    
+	self.setSize(20)
+	try:
+	    self.setCategoryInformation()
+	except:
+	    pass # do nothing if category information shall not be provided.	
+	    
 
         # Set Color
         self.defaultColor = QColor(node.graphics.outline)
@@ -840,7 +845,11 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
         
         # Align text.
         self.updateLabel()
-
-        # Set category information
-        tip = "Category: %s" % CATEGORY_COLORS[node.parameter]
+        
+    def setSize(self, width=20):
+	self.w = self.h = width
+	
+    def setCategoryInformation(self):
+        """Sets category information to the node as tooltip."""
+        tip = "Category: %s" % CATEGORY_COLORS[self.node.parameter]
         self.setToolTip(tip)
