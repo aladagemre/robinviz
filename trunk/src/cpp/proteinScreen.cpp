@@ -149,20 +149,24 @@ int main(int argc, char** argv) {
                             bool found = false;
                             forall_items( it, added ){
                                 if( G[ added[ it ] ].contains( protName1 ) == true ){
-                                    forall_nodes( m, G ){
-                                        if( G[ m ].contains( protName1 ) == true ){
-                                            query = m;
-                                            break;
-                                        }
-                                    }
+//                                    forall_nodes( m, G ){
+//                                        if( G[ m ].contains( protName1 ) == true ){
+//                                            query = m;
+//                                            break;
+//                                        }
+//                                    }
+                                    query = added[ it ];
                                     found = true;
+                                    break;
     //                                cout << " Neighbour " <<  G[ added[ it ] ] << "\t" <<  protName1 << " is found \n";
                                 }
                             }
                             fscanf( fptr, "%d", &edgeNumber );
                             int count = 0;
-                            if( edgeNumber < 25 ){
+                            if( edgeNumber > 10 ){
                                 list<edge> elist;
+                                list<int> weights;
+                                list<int> indexs;
                                 while( count != edgeNumber ){
                                     fscanf( fptr, "%s", protName2 );
                                     if( found ){
@@ -177,24 +181,33 @@ int main(int argc, char** argv) {
                                         if( found2 == false )
                                             n = G.new_node();
                                         G[ n ] = protName2;
-                                        e = G.new_edge(query,n);
+                                        e = G.new_edge( query,n );
                                         elist.push_back( e );
-                                        added.append( n );
+                                        indexs.push_back( count );
                                     }
                                     count++;
                                 }
                                 count = 0;
                                 while( count != edgeNumber ){
                                     fscanf( fptr, "%d", &weight );
-                                    if( found ){
-                                        e = elist.pop();
-                                        G[ e ] = weight;
+                                    if( found ){                                        
+                                        weights.append( weight );
                                     }
                                     count++;
                                 }
+                                if( found ){
+                                    count = 0;
+//                                    cout << " i: " << indexs.size() << " e " << elist.size() << endl;
+                                    while( count != indexs.size() ){
+                                         e = elist.pop();
+                                         G[ e ] = weights[ indexs.get_item( count ) ];
+                                         count++;
+                                    }
+                                }
                             }
-                            else
+                            else{
                                 stricts.append( query );
+                            }
                         }
 //                        G.print();
 //                        cout << endl;
