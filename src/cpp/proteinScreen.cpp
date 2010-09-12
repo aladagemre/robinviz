@@ -178,9 +178,10 @@ int main(int argc, char** argv) {
                                                 break;
                                             }
                                         }
-                                        if( found2 == false )
+                                        if( found2 == false ){
                                             n = G.new_node();
-                                        G[ n ] = protName2;
+                                            G[ n ] = protName2;
+                                        }
                                         e = G.new_edge( query,n );
                                         elist.push_back( e );
                                         indexs.push_back( count );
@@ -327,7 +328,7 @@ int main(int argc, char** argv) {
                             gw.set_label( n, G[ n ] );
                         }
                         forall_items( it, stricts ){
-                            gw.set_color( stricts[ it ], red );
+                            gw.set_border_color( stricts[ it ], red );
                         }
 
                         gw.set_position( xpos, ypos );
