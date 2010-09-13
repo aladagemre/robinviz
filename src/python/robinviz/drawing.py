@@ -775,6 +775,7 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
     def contextMenuEvent(self, event):
         menu = QMenu()
         displayNeighborsAction = menu.addAction("Display Neighbors in the whole PPI")
+        detailedInformation = menu.addAction("Detailed Information (Online)")
         action = menu.exec_(event.screenPos())
         if action == displayNeighborsAction:
 	    from windows import SinglePeripheralViewWindow
@@ -784,6 +785,11 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
 		os.system("./proteinScreen.exe %s TXT" % self.node.label)
 	    self.specialWindow.loadGraph(neihgboringFilename)
             self.specialWindow.showMaximized()
+	elif action == detailedInformation:
+	    url = "http://thebiogrid.org/search.php?search=%s&organism=all" % self.node.label
+	    self.detailBrowser = QtWebKit.QWebView()
+            self.detailBrowser.setUrl(QUrl(url))
+            self.detailBrowser.showMaximized()
             
     #----------- Data Structural Methods ------------------
 
