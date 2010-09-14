@@ -8,8 +8,10 @@ import os
 class PPISelector(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.biogridVersion = "3.0.67"
-        self.osprey_dir = "BIOGRID-OSPREY_DATASETS-%s.osprey" % self.biogridVersion
+        dir_prefix = "BIOGRID-OSPREY_DATASETS"
+        biogrid_dirname = filter(lambda filename: filename.startswith(dir_prefix), os.listdir(".") )[0]
+        self.biogridVersion = biogrid_dirname[len(dir_prefix)+1:-7]
+        self.osprey_dir = "%s-%s.osprey" % (dir_prefix, self.biogridVersion)
         self.setupGUI()
         
     def setupGUI(self):	
