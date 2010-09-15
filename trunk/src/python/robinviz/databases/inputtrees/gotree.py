@@ -2,12 +2,17 @@
 
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-import sys
+import sys, os, re
 import sqlite3
 import gene2goparser
 
-class TermSelector(QMainWindow):
-    def __init__(self, filename):
+def grep(string,list):
+    expr = re.compile(string)
+    return [elem for elem in list if expr.match(elem)]
+
+
+class GOSelector(QMainWindow):
+    def __init__(self, filename="godata/goinfo.sqlite3"):
         QMainWindow.__init__(self)
         self.filename = filename
         self.connectDB()
@@ -18,7 +23,7 @@ class TermSelector(QMainWindow):
 	self.curs = self.conn.cursor()
 	
     def setupGUI(self):
-	layout = QHBoxLayout()
+	layout = QVBoxLayout()
 	
 	self.treeWidget = treeWidget = QTreeWidget()
 	treeWidget.setColumnCount(2)
@@ -29,12 +34,8 @@ class TermSelector(QMainWindow):
 	
 	self.loadTopLevelGO() # Load first level
 	self.resizeFirstColumn()
-	
-	button = QPushButton("Report Ontologies")
-	button.clicked.connect(self.getCheckedItems)
-	
+
         layout.addWidget(treeWidget)
-        layout.addWidget(button)
 
         self.widget = QWidget()
         self.widget.setLayout(layout)
@@ -99,12 +100,28 @@ class TermSelector(QMainWindow):
 	    traverse(topLevelItem)
 	
 	checkedItems = sorted(checkedItems)
-	f = open("selected_terms.txt", "w")
+	f = open("godata/selected_terms.txt", "w")
 	f.write("\n".join( checkedItems ) )
 	f.close()
         
-        # Now create go mapping
-        ggp = gene2goparser.Gene2GOParser(input_file="gene2go",output_file="go_mapping.txt", terms=checkedItems)
+        # Now use complete go mapping to produce a sub-go mapping
+        if not os.path.exists("godata/go_mapping.txt"):
+	    # if go mapping has not been created yet, do it.
+	    ggp = gene2goparser.Gene2GOParser(input_file="godata/gene2go",output_file="godata/go_mapping.txt", terms=None)
+	
+	# filter complete go mapping.
+	go_term_list = open("godata/go_mapping.txt").readlines()
+	output = open("godata/sub_go_mapping.txt","w")
+	for checkedItem in checkedItems:
+	    x = grep(checkedItem, go_term_list)
+	    #print checkedItem, x
+	    if x:
+		output.write(x[0])
+	    else:
+		output.write(checkedItem+"\tNULL\n")
+		
+	output.close()
+	    
         
         
     def getRecord(self, record_id):
@@ -137,6 +154,6 @@ class TermSelector(QMainWindow):
 	    
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    mainWindow = TermSelector("goinfo.sqlite3")
+    mainWindow = GOSelector()
     mainWindow.showMaximized()
     sys.exit(app.exec_())
