@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 		leda::string fname = argv[1];
                 char flag1[16];
 //                sprintf( flag1, "%s", argv[2] );
-                sprintf( flag1, "OUR" );
+                sprintf( flag1, "LEDA" );
 		double pi = 2.0 * 3.147;
 		double tmp = pi;
 		int count = 0,maxLayerIdNow;
@@ -146,11 +146,12 @@ int main(int argc, char** argv) {
                     }
                 }
                 G.restore_all_nodes();
+                G.restore_all_edges();
                 //cout << " 1 \n";
                 double xmin, xmax, ymin, ymax;
                 int ncount = 0;
                 forall_nodes( n, G ){
-                        if( COMPS[ comp[ n ] ].size() > election ){
+                        if( COMPS[ comp[ n ] ].size() >= election ){
                                 if( ncount == 0 ){
                                         xmin = xpos[ n ];
                                         xmax = xpos[ n ];
@@ -173,10 +174,11 @@ int main(int argc, char** argv) {
                 //cout << " 2 \n";
                 double xpos1 = xmin;
                 double ypos1 = ymax + 35.0;
+                list<node> justOnes;
                 //cout << max << " - " << election << endl;
                 for(int i = 0; i <= max; i++ ){
                         //cout << COMPS[ i ].size() << "\t";
-                        if( COMPS[ i ].size() < election ){
+                        if( COMPS[ i ].size() < election && COMPS[ i ].size() != 1 ){
                                 if( xpos1 < xmax ){
                                     int diam = 30;
                                     if( COMPS[ i ].size() < 3 ){
@@ -221,6 +223,31 @@ int main(int argc, char** argv) {
                                 xpos1 += 66;
                         }
                 }
+
+                forall_nodes( n, G ){
+                    if( G.degree( n ) == 0 ){
+                        justOnes.append( n );
+                    }
+                }
+                xpos1 = xmin;
+                cout << endl << xmin << " | " << xmax << endl;
+//                if( xmax - xmin < 400 )
+//                    xmax = xmin + 400;
+                ypos1 = ymin - 50.0;
+                forall_items( it, justOnes ){
+                    if( xpos1 < xmax ){
+                        xpos[ justOnes[ it ] ] = xpos1;
+                        ypos[ justOnes[ it ] ] = ypos1;
+                    }
+                    else{
+                        xpos1 = xmin;
+                        ypos1 -= 30.0;
+                        xpos[ justOnes[ it ] ] = xpos1;
+                        ypos[ justOnes[ it ] ] = ypos1;
+                    }
+                    xpos1 += 22;
+                }
+
                 //cout << "\n 3 \n";
 		gw.remove_bends();
 		forall_nodes( n, G ){
