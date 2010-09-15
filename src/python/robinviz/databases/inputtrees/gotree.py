@@ -5,6 +5,9 @@ from PyQt4.QtCore import *
 import sys, os, re
 import sqlite3
 import gene2goparser
+#from termdbparser import generateTermDict
+from utils.file.ungz import *
+import shutil
 
 def grep(string,list):
     expr = re.compile(string)
@@ -15,6 +18,12 @@ class GOSelector(QMainWindow):
     def __init__(self, filename="godata/goinfo.sqlite3"):
         QMainWindow.__init__(self)
         self.filename = filename
+        if not os.path.exists(self.filename):
+	    print self.filename, "does not exist. Downloading it..."
+	    #generateTermDict()
+	    download_file("http://www.emrealadag.com/dosyalar/goinfo.sqlite3")
+	    shutil.move("goinfo.sqlite3", self.filename)
+	    
         self.connectDB()
         self.setupGUI()
         

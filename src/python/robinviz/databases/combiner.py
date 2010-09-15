@@ -4,7 +4,6 @@ Downloads HitPredict data for a given organism. Uses hitpredict module to combin
 """
 import urllib
 import os
-import zipfile
 import tarfile
 from hp2tab import *
 

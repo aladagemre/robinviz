@@ -8,15 +8,6 @@ import os
 from gene2goparser import download_file, ungz
 
 
-input_file = "go_daily-termdb"
-if not os.path.exists(input_file):
-    download_file("http://archive.geneontology.org/latest-termdb/go_daily-termdb.rdf-xml.gz")
-    ungz("go_daily-termdb.rdf-xml.gz")
-    
-# "go_daily-termdb.rdf-xml/slim.xml"
-output_file = "goinfo.sqlite3"
-
-
 def createTable(curs):
     try:
 	curs.execute('''
@@ -31,6 +22,17 @@ def createTable(curs):
 	
 
 def generateTermDict():
+    # DOWNLOAD DATABASE TXT HERE
+    input_file = "go_daily-termdb"
+    if not os.path.exists(input_file):
+	download_file("http://archive.geneontology.org/latest-termdb/go_daily-termdb.rdf-xml.gz")
+	ungz("go_daily-termdb.rdf-xml.gz")
+	
+    # "go_daily-termdb.rdf-xml/slim.xml"
+    output_file = "goinfo.sqlite3"
+
+
+    # GO ON
     dom1 = parse(input_file)
     
     terms = dom1.childNodes[1].childNodes[1].childNodes
