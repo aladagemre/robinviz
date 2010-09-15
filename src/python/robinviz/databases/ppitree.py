@@ -4,14 +4,16 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
 import os
+from utils.file.ungz import *
 
-class PPISelector(QMainWindow):
+class PPISelector(QWidget):
     def __init__(self):
-        QMainWindow.__init__(self)
+        QWidget.__init__(self)
         dir_prefix = "BIOGRID-OSPREY_DATASETS"
-        biogrid_dirname = filter(lambda filename: filename.startswith(dir_prefix), os.listdir(".") )[0]
+        biogrid_dirname = filter(lambda filename: filename.startswith(dir_prefix), os.listdir("ppidata") )[0]
+        
         self.biogridVersion = biogrid_dirname[len(dir_prefix)+1:-7]
-        self.osprey_dir = "%s-%s.osprey" % (dir_prefix, self.biogridVersion)
+        self.osprey_dir = "ppidata/%s-%s.osprey" % (dir_prefix, self.biogridVersion)
         self.setupGUI()
         
     def setupGUI(self):	
@@ -20,17 +22,9 @@ class PPISelector(QMainWindow):
 	treeWidget.setColumnCount(1)
 	treeWidget.setHeaderLabels(("PPI",))
 	
-	button = QPushButton("Report Selected PPIs")
-	button.clicked.connect(self.getCheckedItems)
-	
         layout.addWidget(treeWidget)
-        layout.addWidget(button)
-
-        self.widget = QWidget()
-        self.widget.setLayout(layout)
-
-        self.setCentralWidget(self.widget)
-        self.setWindowTitle("PPI Selection Tree")
+	
+	self.setLayout(layout)
         self.setMinimumSize(400,600)
         
         self.readPPIData()
@@ -70,7 +64,7 @@ class PPISelector(QMainWindow):
 		child = topLevelItem.child(c)
 		traverse(child)
 	
-	f = open("selected_ppis.txt", "w")
+	f = open("ppidata/selected_ppis.txt", "w")
 	f.write("\n".join( sorted(checkedItems) ) )
 	f.close()
 	
@@ -89,8 +83,11 @@ class PPISelector(QMainWindow):
 	    parentItem.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsTristate)
 	    parentItem.setCheckState(0, Qt.Unchecked)
 	    
-if __name__ == "__main__":
+def main():
     app = QApplication(sys.argv)
     mainWindow = PPISelector()
     mainWindow.show()
     sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()

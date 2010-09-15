@@ -53,18 +53,20 @@ class Gene2GOParser:
 	    self.input_file = "gene2go"
 	    
     def parse(self):
+	"""parses gene2go file."""
+	conn = sqlite3.connect("../identifier.db")
+	cursor = conn.cursor()
+	
 	for line in self.lines[1:]:
 	    cols = line.split("\t")
 	    biogrid_id = cols[1]
 	    go_id = cols[2]
 	    name = cols[5]
 
-	    conn = sqlite3.connect("../identifier.db")
-	    cursor = conn.cursor()
-
 	    statement = "select identifier_value from translation where biogrid_id=%s and identifier_type='SYSTEMATIC_NAME';" % biogrid_id
 	    cursor.execute(statement)
 	    result = cursor.fetchone()
+	    
 	    if result:
 		biogrid_id = result[0]
 		
@@ -96,5 +98,5 @@ class Gene2GOParser:
 
 
 if __name__ == "__main__":
-    ggp = Gene2GOParser(input_file="gene2go",output_file="go_mapping.txt", terms=None)
+    ggp = Gene2GOParser(input_file="godata/gene2go",output_file="godata/go_mapping.txt", terms=None)
     #ggp = Gene2GOParser(input_file="gene2go",output_file="go_mapping.txt", terms=["GO:2000033","GO:2000037"])
