@@ -83,19 +83,25 @@ matrix dataRead( char filename[256], array<GENES> &geneArray,  array<CONDS> &con
 
 void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 	FILE *fptr;
+// 	cout << " READING\n";
 	if( (fptr = fopen( filename, "r" )) != NULL ){
-		char lineBuffer[10000];
+		char lineBuffer[10000],line[256];
 		while( !feof( fptr ) ){
-			fgets( lineBuffer, 10000, fptr );
-			if( strcmp( lineBuffer, "!platform_table_begin" ) == 0 ){
+			fscanf( fptr, "%s", line );
+// 			cout << line << endl;
+			if( strcmp( line, "!platform_table_begin" ) == 0 ){
 				break;
 			}
 		}
+// 		cout << " READING\n";
 		list<two_tuple<store512,store512> > annotationList;
 		fgets( lineBuffer, 10000, fptr );
+// 		cout << lineBuffer << endl;
 		while( !feof( fptr ) ){
 			fgets( lineBuffer, 10000, fptr );
-			char * pch;
+			if( strcmp( "!platform_table_end", lineBuffer ) == 0 )
+				break;
+// 			cout << lineBuffer << endl;
 // 		// 	#ID = ID from Platform data table
 // 			char id[128];
 // 		// 	#Gene title = Entrez Gene name
@@ -138,27 +144,37 @@ void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 // 			char procGO[1024];
 // 		// 	#GO:Component = Gene Ontology Component identifier
 // 			char compGO[1024];
+			char * pch;
 			two_tuple<store512,store512> annotation;
 			pch = strtok( lineBuffer, "\t" );
-			sprintf( annotation.first().store, "%s", pch );
+			sprintf( annotation.first().store, "\"%s\"", pch );
+// 			cout << annotation.first().store << "\t";
 			int tabCount = 1;
 			while ( pch != NULL ){
 				pch = strtok( NULL, "\t" );
-				if( tabCount == 3 )
-					sprintf( annotation.second().store, "%s", pch );
+				if( tabCount == 3 ){
+					if( pch == NULL ){
+						sprintf( annotation.second().store, "%s", "NULL" );
+					}
+					else{
+						sprintf( annotation.second().store, "%s", pch );
+					}
+					break;
+				}
 				tabCount++;
 			}
+// 			cout << annotation.second().store << endl;
 			annotationList.append( annotation );
 		}
 		fclose( fptr );
-		for( int j = 0; j < annotationList.size(); j++ ){
-			cout << annotationList[ annotationList.get_item( j ) ].first().store << "\t" << annotationList[ annotationList.get_item( j ) ].second().store << endl;
-		}
+// 		for( int j = 0; j < annotationList.size(); j++ ){
+// 			cout << annotationList[ annotationList.get_item( j ) ].first().store << "\t" << annotationList[ annotationList.get_item( j ) ].second().store << endl;
+// 		}
 		for( int i = 0; i < geneArray.size(); i++ ){
+			cout << geneArray[ i ].GENE << endl;
 			for( int j = i; j < annotationList.size(); j++ ){
 				if( strcmp( geneArray[ i ].GENE , annotationList[ annotationList.get_item( j ) ].first().store ) == 0 ){
 					sprintf( geneArray[ i ].GENE, "%s", annotationList[ annotationList.get_item( j ) ].second().store );
-					cout << geneArray[ i ].GENE << endl;
 					break;
 				}
 			}

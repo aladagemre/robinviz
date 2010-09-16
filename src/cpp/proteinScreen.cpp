@@ -163,7 +163,7 @@ int main(int argc, char** argv) {
                             }
                             fscanf( fptr, "%d", &edgeNumber );
                             int count = 0;
-                            if( edgeNumber > 10 ){
+                            if( found && edgeNumber > 10 ){
                                 list<edge> elist;
                                 list<int> weights;
                                 list<int> indexs;
@@ -205,9 +205,21 @@ int main(int argc, char** argv) {
                                          count++;
                                     }
                                 }
+                                else{
+                                    stricts.append( query );
+                                }
                             }
                             else{
-                                stricts.append( query );
+                                count = 0;
+                                while( count != edgeNumber ){
+                                    fscanf( fptr, "%s", protName2 );
+                                    count++;
+                                }
+                                count = 0;
+                                while( count != edgeNumber ){
+                                    fscanf( fptr, "%d", &weight );
+                                    count++;
+                                }
                             }
                         }
 //                        G.print();
@@ -237,7 +249,7 @@ int main(int argc, char** argv) {
                             if( marked[ n ] == false )
                                 circle2.append( n );
                         }
-                        double node_width = 100.0;
+                        double node_width = 50.0;
                         double length = node_width * circle1.size();
                         double pi = 2.0 * 3.147;
                         double tmp = pi;
@@ -251,6 +263,7 @@ int main(int argc, char** argv) {
                             tmp -= min;
                         }
 
+                        node_width = 30.0;
                         length = node_width * circle2.size();
                         double radius2 = length / pi;
                         tmp = pi;
