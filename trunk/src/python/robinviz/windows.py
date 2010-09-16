@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
@@ -9,7 +10,7 @@ from settings import SettingsDialog
 from search import ComprehensiveSearchWidget, ProteinSearchWidget
 import os
 from os.path import normcase
-
+from wizards import InputWizard
 
 class SingleMainViewWindow(QMainWindow):
     def __init__(self, mainViewType, mainSceneType, scene=None):
@@ -438,6 +439,8 @@ class MultiViewWindow(QMainWindow):
         import clean
         clean.clean()
 
+	# ======= INPUT SELECTION ===
+
         # ======== RUN ==============
         failed = os.system(normcase(exe_files[self.confirmationType])) # returns 0 for success
 
@@ -503,6 +506,12 @@ class MultiViewWindow(QMainWindow):
         self.settingsDialog = SettingsDialog()
         self.settingsDialog.show()
 
+    def selectInputs(self):
+	#os.chdir("src/python/robinviz/databases/inputtrees")
+	self.inputWizard = InputWizard()
+	self.inputWizard.show()
+	#os.chdir("../../../../..")
+	
     ############### VIEW MENU ###################
     def goto(self):
         value, ok = QInputDialog.getInt(self, "Go to bicluster/category",
@@ -613,6 +622,11 @@ class MultiViewWindow(QMainWindow):
         self.connect(settings, SIGNAL('triggered()'), self.displaySettings)
 
 
+	selectInput = QAction('&Input', self)
+	selectInput.setShortcut('Ctrl+I')
+	settings.setStatusTip('Input Selection Wizard')
+	self.connect(selectInput, SIGNAL('triggered()'), self.selectInputs)
+	
         exit = QAction('E&xit', self)
         exit.setShortcut('Ctrl+Q')
         exit.setStatusTip('Exit application')
@@ -624,7 +638,7 @@ class MultiViewWindow(QMainWindow):
         fileMenu.addAction(run)
         fileMenu.addMenu(confirmationMenu)
         fileMenu.addSeparator()
-        map(fileMenu.addAction, (loadSession, saveSession, displayLast, settings))
+        map(fileMenu.addAction, (loadSession, saveSession, displayLast, settings, selectInput))
         fileMenu.addSeparator()
         fileMenu.addAction(exit)
 
