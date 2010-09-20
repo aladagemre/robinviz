@@ -3,36 +3,14 @@
 """Parses gene2go file and outputs the GO: genes mapping for given or all GO Terms."""
 
 import os
-import gzip
-import urllib
-import sqlite3
+import sys
+import shutil
 
-def injectArguments(inFunction):
-    def outFunction(*args,**kwargs):
-        _self = args[0]
-        _self.__dict__.update(kwargs)
-        inFunction(*args,**kwargs)
-    return outFunction
-
-def download_file(url):
-    filename = url.split('/')[-1]
-    print "Downloading", url
-    webFile = urllib.urlopen(url)
-    
-    localFile = open(filename, 'w')
-    localFile.write(webFile.read())
-    webFile.close()
-    localFile.close()
-    return filename
-
-
-def ungz(filename):
-    print "Extracting",filename
-    f_in = gzip.open(filename, 'rb')
-    f_out = open(filename.split('.')[0], 'wb')
-    f_out.writelines(f_in)
-    f_out.close()
-    f_in.close()
+sys.path.append("../..")
+from databases.genequery import GeneDB
+from utils.info import ap
+from utils.compression import download_file, ungz
+from utils.decorators import injectArguments
 
 class Gene2GOParser:
     @injectArguments
@@ -50,12 +28,11 @@ class Gene2GOParser:
 	if not os.path.exists(self.input_file):
 	    download_file("ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2go.gz")
 	    ungz("gene2go.gz")
-	    self.input_file = "gene2go"
+	    shutil.move("gene2go", self.input_file)
 	    
-    def parse(self):
-	"""parses gene2go file."""
-	conn = sqlite3.connect("../identifier.db")
-	cursor = conn.cursor()
+	    
+    def parse(self):	
+	db = GeneDB()
 	
 	for line in self.lines[1:]:
 	    cols = line.split("\t")
@@ -63,12 +40,10 @@ class Gene2GOParser:
 	    go_id = cols[2]
 	    name = cols[5]
 
-	    statement = "select identifier_value from translation where biogrid_id=%s and identifier_type='SYSTEMATIC_NAME';" % biogrid_id
-	    cursor.execute(statement)
-	    result = cursor.fetchone()
+	    result = db.biogrid2value(biogrid_id, "SYSTEMATIC_NAME")
 	    
 	    if result:
-		biogrid_id = result[0]
+		biogrid_id = result
 		
 	    l = self.go_mapping.get(go_id)
 	    if not l:
@@ -98,5 +73,5 @@ class Gene2GOParser:
 
 
 if __name__ == "__main__":
-    ggp = Gene2GOParser(input_file="godata/gene2go",output_file="godata/go_mapping.txt", terms=None)
-    #ggp = Gene2GOParser(input_file="gene2go",output_file="go_mapping.txt", terms=["GO:2000033","GO:2000037"])
+    ggp = Gene2GOParser(input_file=ap("/godata/gene2go"),output_file=ap("/godata/go_mapping.txt"), terms=None)
+    #ggp = Gene2GOParser(input_file="godata/gene2go",output_file="godata/go_mapping.txt", terms=["GO:2000033","GO:2000037"])

@@ -7,10 +7,13 @@ Biogrid ID -> Specific Identifier ID
 Specific Identifier ID -> Biogrid ID
 """
 import sqlite3
+import sys
+sys.path.append("..")
+from utils.info import *
 
 class GeneDB:
     def __init__(self):
-	self.conn = sqlite3.connect("identifier.db")
+	self.conn = sqlite3.connect(config.get("Paths","databases") + "/identifier.db")
 	self.cursor = self.conn.cursor()
 	
     def value2biogrids(self, value):
@@ -71,12 +74,13 @@ class GeneDB:
 	
 	return x - y
 	
-	
+
+
 # Some example runs and their outputs:
 
 """
 db = GeneDB()
-print db.value2biogrid("YCR011C")
+print db.value2biogrids("YCR011C")
 # ['30990']
 
 print db.biogrid2values("30990")
@@ -85,6 +89,3 @@ print db.biogrid2values("30990")
 print db.biogrid2value("30990", "SYSTEMATIC_NAME")
 # YCR011C
 """
-
-db = GeneDB()
-print db.checkUniqueValues()

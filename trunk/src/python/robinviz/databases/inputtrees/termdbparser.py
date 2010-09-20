@@ -5,8 +5,8 @@ from xml.dom.minidom import parse
 import shelve
 import sqlite3
 import os
-from gene2goparser import download_file, ungz
-
+from gene2goparser import download_file, ungz, root
+import shutil
 
 def createTable(curs):
     try:
@@ -23,16 +23,19 @@ def createTable(curs):
 
 def generateTermDict():
     # DOWNLOAD DATABASE TXT HERE
-    input_file = "go_daily-termdb"
+    input_file = os.path.join(root, "godata/go_daily-termdb.rdf-xml")
+    print "Input: %s" % input_file
     if not os.path.exists(input_file):
 	download_file("http://archive.geneontology.org/latest-termdb/go_daily-termdb.rdf-xml.gz")
 	ungz("go_daily-termdb.rdf-xml.gz")
-	
+	shutil.move("go_daily-termdb.rdf-xml", input_file)
     # "go_daily-termdb.rdf-xml/slim.xml"
-    output_file = "goinfo.sqlite3"
+    output_file = os.path.join(root, "godata/goinfo.sqlite3")
+    print "Output: %s" % output_file
 
 
     # GO ON
+    print "Parsing..."
     dom1 = parse(input_file)
     
     terms = dom1.childNodes[1].childNodes[1].childNodes
@@ -42,6 +45,8 @@ def generateTermDict():
     except:
 	pass
     
+    if os.path.exists(output_file):
+	os.remove(output_file)
     conn = sqlite3.connect(output_file)
     curs = conn.cursor()
     createTable(curs)
@@ -60,7 +65,7 @@ def generateTermDict():
 		    try:
 			term_id = int(term_accession.split("GO:")[1])
 		    except IndexError:
-			if term_accesion != "all":
+			if term_accession != "all":
 			    print "Index error:", term_accession
 			continue
 		elif  "is_a" in element.nodeName:
