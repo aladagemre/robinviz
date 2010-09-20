@@ -4,18 +4,22 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys, os, re
 import sqlite3
-import gene2goparser
-#from termdbparser import generateTermDict
-from utils.file.ungz import *
 import shutil
+
+if not "utils" in sys.path:
+    sys.path.append("../..")
+    
+from utils.info import ap
+from utils.compression import *
+from gene2goparser import Gene2GOParser
+#from termdbparser import generateTermDict
 
 def grep(string,list):
     expr = re.compile(string)
     return [elem for elem in list if expr.match(elem)]
 
-
 class GOSelector(QMainWindow):
-    def __init__(self, filename="godata/goinfo.sqlite3"):
+    def __init__(self, filename=ap("godata/goinfo.sqlite3")):
         QMainWindow.__init__(self)
         self.filename = filename
         if not os.path.exists(self.filename):
@@ -109,18 +113,18 @@ class GOSelector(QMainWindow):
 	    traverse(topLevelItem)
 	
 	checkedItems = sorted(checkedItems)
-	f = open("godata/selected_terms.txt", "w")
+	f = open(ap("godata/selected_terms.txt"), "w")
 	f.write("\n".join( checkedItems ) )
 	f.close()
         
         # Now use complete go mapping to produce a sub-go mapping
-        if not os.path.exists("godata/go_mapping.txt"):
+        if not os.path.exists(ap("godata/go_mapping.txt")):
 	    # if go mapping has not been created yet, do it.
-	    ggp = gene2goparser.Gene2GOParser(input_file="godata/gene2go",output_file="godata/go_mapping.txt", terms=None)
+	    ggp = Gene2GOParser(input_file=ap("godata/gene2go"),output_file=ap("godata/go_mapping.txt"), terms=None)
 	
 	# filter complete go mapping.
-	go_term_list = open("godata/go_mapping.txt").readlines()
-	output = open("godata/sub_go_mapping.txt","w")
+	go_term_list = open(ap("godata/go_mapping.txt")).readlines()
+	output = open(ap("godata/sub_go_mapping.txt"),"w")
 	for checkedItem in checkedItems:
 	    x = grep(checkedItem, go_term_list)
 	    #print checkedItem, x

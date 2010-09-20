@@ -1,7 +1,7 @@
 What to do here?
 
 * Run termdbparser.py, it will generate goinfo.sqlite3.
-* Run gotree.py, select GO terms and press the button. It will generate selected_terms.txt and go_mapping.txt for selected GO terms.
+* Run gotree.py, select GO terms and press the button. It will generate selected_terms.txt and sub_go_mapping.txt for selected GO terms.
 
 ===============
 
@@ -13,6 +13,6 @@ gotree.py: allows you to select gene ontologies, report the selected ones and pr
 
 ===============
 
-gene2goparser.py: allows you to parse gene2go file for given GO terms to produce a term-gene mapping. (Called by gotree.py)
+gene2goparser.py: allows you to parse gene2go file for given GO terms to produce a term-gene mapping. Produces complete go_mapping.txt (Called by gotree.py)
 
 ================
