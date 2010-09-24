@@ -26,12 +26,12 @@
 
 struct genes{
     leda::string gene;
-    char GENE[ 20 ];
+    char GENE[ 512 ];
     int index;
 };
 
 struct conds{
-    char COND[ 20 ];
+    char COND[ 512 ];
     int index;
 };
 

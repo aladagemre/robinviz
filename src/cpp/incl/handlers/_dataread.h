@@ -1,5 +1,5 @@
 // #include "declerations.h"
-
+#include <ctype.h>
 
 // ALL tab formatted inputs have the same order for annotation. We limit id, gene names with 128 chars
 struct annotation{
@@ -63,6 +63,16 @@ typedef struct store128 S128;
 typedef struct store512 S512;
 typedef struct store1024 S1024;
 
+bool isNumericChecker( char *query ){
+	for( int i = 0; i < strlen( query ); i++ ){
+		if( isalnum( *(query + i) ) == false ){
+			if( *(query + i)  != '/')
+				return false;
+		}
+	}
+	return true;
+}
+
 matrix dataRead( char filename[256] ){
 	leda::matrix INPUT;
 	int dimension1, dimension2;
@@ -86,6 +96,7 @@ void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 // 	cout << " READING\n";
 	if( (fptr = fopen( filename, "r" )) != NULL ){
 		char lineBuffer[10000],line[256];
+		char * pch;
 		while( !feof( fptr ) ){
 			fscanf( fptr, "%s", line );
 // 			cout << line << endl;
@@ -96,10 +107,12 @@ void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 // 		cout << " READING\n";
 		list<two_tuple<store512,store512> > annotationList;
 		fgets( lineBuffer, 10000, fptr );
+		fgets( lineBuffer, 10000, fptr );
 // 		cout << lineBuffer << endl;
+		int nonAnnotated = 1;
 		while( !feof( fptr ) ){
 			fgets( lineBuffer, 10000, fptr );
-			if( strcmp( "!platform_table_end", lineBuffer ) == 0 )
+			if( lineBuffer[0] == '!' )
 				break;
 // 			cout << lineBuffer << endl;
 // 		// 	#ID = ID from Platform data table
@@ -130,7 +143,7 @@ void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 // 			char spotId[128];
 // 		// 	#Chromosome location = Entrez gene chromosome and location
 // 			char chromosomeLocation[128];
-// 		// 	#Chromosome annotation = Entrez gene chromosome annotation
+// 		// 	#Chromosome annotation yse= Entrez gene chromosome annotation
 // 			char chromosomeAnnotation[128];
 // 		// 	#GO:Function = Gene Ontology Function term
 // 			char functermGO[1024];
@@ -144,41 +157,86 @@ void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 // 			char procGO[1024];
 // 		// 	#GO:Component = Gene Ontology Component identifier
 // 			char compGO[1024];
-			char * pch;
 			two_tuple<store512,store512> annotation;
-			pch = strtok( lineBuffer, "\t" );
-			sprintf( annotation.first().store, "\"%s\"", pch );
-// 			cout << annotation.first().store << "\t";
+// 			pch = strtok( lineBuffer, "\t" );
 			int tabCount = 1;
-			while ( pch != NULL ){
-				pch = strtok( NULL, "\t" );
+// 			while ( pch != NULL ){
+// 				pch = strtok( NULL, "\t" );
+// 				if( tabCount == 3 ){
+// 					if( pch == NULL ){
+// 						strcpy( annotation.second().store, "NONE" );
+// 					}
+// 					else{
+// 						strcpy( annotation.second().store, pch );
+// 					}
+// 					break;
+// 				}
+// 				tabCount++;
+// 			}
+
+			tabCount = 0;
+			int index = 0;
+// 			cout << "\n_______________________\n";
+			while(1){
+				leda::string begin;
+				int inIndex = 0;
+				while( lineBuffer[ index ] != '\t' ){
+					if( lineBuffer[ index ] == '\0' )
+						break;
+					begin += lineBuffer[ index ];
+					index++;
+					inIndex++;
+// 					cout << lineBuffer[ index ];
+				}
+				index++;
+//  				cout << endl << "*" << begin << endl;
+				if( tabCount == 0 ){
+					sprintf( annotation.first().store, "\"%s\"", begin.c_str() );
+				}
 				if( tabCount == 3 ){
-					if( pch == NULL ){
-						sprintf( annotation.second().store, "%s", "NULL" );
+					if( inIndex != 0 ){
+						sprintf( annotation.second().store, "%s", begin.c_str() );
 					}
 					else{
-						sprintf( annotation.second().store, "%s", pch );
+						sprintf( annotation.second().store, "\"%s\"", "NONE" );
 					}
 					break;
 				}
+				if( lineBuffer[ index + 1 ] == '\0')
+					break;
 				tabCount++;
 			}
+			if( isNumericChecker( annotation.second().store ) != true ){
+				sprintf( annotation.second().store, "%s%d", "NONE", nonAnnotated );
+				nonAnnotated++;
+			}
+// 			cout << "\n_______________________\n";
+// 			cout << annotation.first().store << "\t";
 // 			cout << annotation.second().store << endl;
+// 			cout << "\n_______________________\n";
 			annotationList.append( annotation );
+			free( pch );
 		}
 		fclose( fptr );
 // 		for( int j = 0; j < annotationList.size(); j++ ){
 // 			cout << annotationList[ annotationList.get_item( j ) ].first().store << "\t" << annotationList[ annotationList.get_item( j ) ].second().store << endl;
 // 		}
+// 		free( lineBuffer );
+// 		free( pch );
+
+		cout << "Annotation File Parsed\n";
 		for( int i = 0; i < geneArray.size(); i++ ){
-			cout << geneArray[ i ].GENE << endl;
+			if( i % 1000 == 0 )
+				  cout << "|";
 			for( int j = i; j < annotationList.size(); j++ ){
 				if( strcmp( geneArray[ i ].GENE , annotationList[ annotationList.get_item( j ) ].first().store ) == 0 ){
+// 					cout << annotationList[ annotationList.get_item( j ) ].first().store<< "\t" << annotationList[ annotationList.get_item( j ) ].second().store << endl;
 					sprintf( geneArray[ i ].GENE, "%s", annotationList[ annotationList.get_item( j ) ].second().store );
 					break;
 				}
 			}
 		}
+		cout << "\nDONE\n";
 	}
 	else{
 		FILE *erptr;
@@ -195,7 +253,7 @@ void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 }
 
 // GEO file parser, according to time series format of GEO
-matrix dataReadGEO( char filename[256], char annotName[256], array<GENES> &geneArray, array<CONDS> &condArray, int option  ){
+void dataReadGEO( matrix INPUT, char filename[256], char annotName[256], array<GENES> &geneArray, array<CONDS> &condArray, int option  ){
 // 	leda::matrix INPUT;
 	int dimension1, dimension2;
 	char filename2[256];
@@ -203,6 +261,7 @@ matrix dataReadGEO( char filename[256], char annotName[256], array<GENES> &geneA
 	FILE *fptr = fopen( filename2, "r" );
 	
 	// Reading Series Header
+	cout << "Reading Series Header" << endl;
 	char readData1[1024],readData2[1024],title[1024],platformId[32],platformTaxId[32],seriesType[512],seriesSampleId[1024];
 	while( !feof( fptr ) ){
 		fscanf( fptr, "%s", readData1 );
@@ -238,11 +297,17 @@ matrix dataReadGEO( char filename[256], char annotName[256], array<GENES> &geneA
 	}
 
 	// Reading Samples Header
+	cout << "Reading Samples Header" << endl;
 	list<S512> sampleTitle, sampleOrganism;
 	list<S1024> sampleGeo, sampleDescription;
 	int samples,genes;
+	
+	fscanf( fptr, "%s", readData1 );
+	while( strcmp( readData1, "!Sample_title" ) != 0 ){
+	      fscanf( fptr, "%s", readData1 );
+	}
+
 	while( !feof( fptr ) ){
-		fscanf( fptr, "%s", readData1 );
 		if( strcmp( "!Sample_title", readData1 ) == 0 ){
 			sprintf( readData2, "%s", readData1 );
 			int count = 0;
@@ -260,7 +325,7 @@ matrix dataReadGEO( char filename[256], char annotName[256], array<GENES> &geneA
 // 			forall_items( it ,sampleTitle ){
 // 				cout << sampleTitle[ it ].store << "\t";
 // 			}
-// 			cout << "\n________________________\n";
+			cout << "\n________________________\n";
 			while( strcmp( "!Sample_status", readData2 ) != 0 ){
 				fscanf( fptr, "%s", readData2 );
 				if( strcmp( "!Sample_status", readData2 ) == 0 )
@@ -275,7 +340,7 @@ matrix dataReadGEO( char filename[256], char annotName[256], array<GENES> &geneA
 // 			forall_items( it ,sampleGeo ){
 // 				cout << sampleGeo[ it ].store << "\t";
 // 			}
-// 			cout << "\n________________________\n";
+			cout << "\n________________________\n";
 
 			while( strcmp( "!Sample_organism_ch1", readData2 ) != 0 ){
 				fscanf( fptr, "%s", readData2 );
@@ -297,7 +362,7 @@ matrix dataReadGEO( char filename[256], char annotName[256], array<GENES> &geneA
 // 			forall_items( it ,sampleOrganism ){
 // 				cout << sampleOrganism[ it ].store << "\t";
 // 			}
-// 			cout << "\n________________________\n";
+			cout << "\n________________________\n";
 
 			while( strcmp( "!Sample_description", readData2 ) != 0 ){
 				fscanf( fptr, "%s", readData2 );
@@ -343,6 +408,7 @@ matrix dataReadGEO( char filename[256], char annotName[256], array<GENES> &geneA
 // 		  cout << readData2 << "\t";
 	}
 // 	cout << "\n________________________\n";
+	cout << "Reading Matrix" << endl;
 	while( true ){
 // 		cout << readData1;
 		fscanf( fptr, "%s", readData1 );
@@ -363,22 +429,25 @@ matrix dataReadGEO( char filename[256], char annotName[256], array<GENES> &geneA
 	}
 // 	cout << "\n________________________\n";
 	genes = rows.size();
+	fclose( fptr );
 
 	geneArray.resize( genes );
 	condArray.resize( samples );
-	leda::matrix INPUT( genes, samples );
-// 	cout << genes << endl << samples << endl;
-	for( int j = 0; j < samples; j++ ){
-		sprintf( condArray[ j ].COND, "%s", sampleTitle[ sampleTitle.get_item( j ) ].store );
-	}
+	matrix INPUT2( genes, samples );
+	INPUT = INPUT2;
+	cout << genes << endl << samples << endl;
+// 	for( int j = 0; j < samples; j++ ){
+// 		sprintf( condArray[ j ].COND, "%s", sampleTitle[ sampleTitle.get_item( j ) ].store );
+// 	}
 	for( int i = 0; i < genes; i++ ){
 		sprintf( geneArray[ i ].GENE, "%s", geneAnnot[ geneAnnot.get_item( i ) ].store );
 		list<double> values = rows[ rows.get_item( i ) ];
 		for( int j = 0; j < samples; j++ ){
-			INPUT( i, j ) = values[ values.get_item( j ) ];
+			INPUT( i, j ) = (double)values[ values.get_item( j ) ];
 		}
 	}	
-// 	INPUT.print();
+// // 	INPUT.print();
+	cout << "Reading Annotation" << endl;
 	if( option == 1 ){
 		dataReadGEOAnnotation( annotName, geneArray );
 	}
@@ -387,7 +456,16 @@ matrix dataReadGEO( char filename[256], char annotName[256], array<GENES> &geneA
 			;
 		}
 	}
-	return INPUT;
+	cout << "Saving Annotation" << endl;
+
+	sprintf( filename2, "%s.txt", filename );
+	fptr = fopen( filename2, "w" );
+	for( int i = 0; i < geneArray.size(); i++ ){
+		fprintf( fptr, "%s\n", geneArray[ i ].GENE );
+	}
+	fclose( fptr );
+	cout << "END" << endl;
+// 	return INPUT;
 }
 
 void dataWriteBimax( matrix &M, int low_dim1, int low_dim2, double ther ){
