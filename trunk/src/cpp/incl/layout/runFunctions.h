@@ -61,6 +61,7 @@ GRAPH<int,int> RUN_SELFGD(  GRAPH<int,int> &G,
                           bool ledaPostFlag
 ){
 
+	cout << " We are in now\n";
         GRAPH<int,int> H;
 
         edge e;
@@ -123,7 +124,7 @@ GRAPH<int,int> RUN_SELFGD(  GRAPH<int,int> &G,
 /****************************************************************/
 /*********************** ACYCLIC PHASE I ************************/
 /****************************************************************/
-
+	cout << " We are in now acyclic\n";
         node_array<int> ord(G);
         bool acyclicBool = TOPSORTG(G,ord);
         list<edge> cycleFinder;
@@ -283,7 +284,7 @@ cout << "\n Acyclic Done \n" ;
 #endif
 /****************************************************************/
 /******************** LAYER ASSIGNMENT **************************/
-
+	cout << " We are in now Layering\n";
         /****** Transitive Edges Removal **************/
 
                 list<edge> transitives;
@@ -339,6 +340,7 @@ cout << "\n Layering Done \n" ;
 #endif
 /****************************************************************/
 /******************** ADD DUMMY VERTICES ************************/
+		cout << " We are in now dummy\n";
                 node target,source;
                 edge_array<bool> eMarked( G, false );
                 list<edge> allEdges;
@@ -392,7 +394,7 @@ cout << "\n Dummy Adding Done \n" ;
 #endif
 /****************************************************************/
 /********************* CROSSING REDUCTION ***********************/
-
+		cout << " We are in now crossing\n";
                 array<list<node> > Layers2( max + 1 );
                 Layers2 = Layers;
 
@@ -605,6 +607,7 @@ cout << "\n Dummy Adding Done \n" ;
                         pos[ n ] = p;
                 }
 
+		cout << " We are in now final process\n";
                 //runWithMenu( G );
                 layers = Layers;
                 if( xCoordFlag == true )
@@ -1492,6 +1495,140 @@ GRAPH<int,int> RUN_FFDANDCIRCLE(  GRAPH<int,int> &G,
 	return G;
 }
 
+GRAPH<int,int> RUN_FFDANDCIRCLE(  GRAPH<int,int> &G, 
+			  node_array<double> &Xpos, 
+			  node_array<double> &Ypos, 
+			  node_array<point> &posx,
+			  edge_array<list<point> > &bendsx, 
+			  GraphWin &gw,
+			  int node_width,
+			  int minRadius
+){	
+	edge e;
+	node n;
+	int random_walk;
+	node_array<double> xpos( G, 0 );
+	node_array<double> ypos( G, 0 );
+//*********************//
+// Give rank assignmen //
+//*********************//
+// 	forall_edges( e, G )
+// 	{
+// 		if( G.source( e ) == G.target( e ) )
+// 			G.del_edge( e );
+// 	}
+// 	forall_edges( e, G )
+// 	{
+// 		if( G.source( e ) == G.target( e ) )
+// 			G.del_edge( e );
+// 	}
+	node_array<int> nodeid( G, 3 );
+	list<node> fixedNodes2;
+// 	cout << " BEFORE FORCE\n";
+// 	cout << gw.get_xmin() << "\t" << gw.get_xmax() << "\t" << gw.get_ymin() << "\t" << gw.get_ymax() << endl;
+	SPRING_EMBEDDING_our2( G, fixedNodes2, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500, nodeid );
+// 	cout << " AFTER FORCE\n";
+	Xpos = xpos;
+	Ypos = ypos;
+
+	forall_nodes( n, G ){
+		point p( Xpos[ n ], Ypos[ n ] );
+		posx[ n ] = p;
+	}
+	
+	double xmean=0,ymean=0;
+	double xmax=xpos[G.first_node()],ymax=ypos[G.first_node()],xmin=xpos[G.first_node()],ymin=ypos[G.first_node()];
+	forall_nodes( n, G ){
+		xmean += xpos[ n ];
+		ymean += ypos[ n ];
+		if( xmax < xpos[ n ])
+			xmax = xpos[ n ];
+		if( xmin > xpos[ n ] )
+			xmin = xpos[ n ];
+		if( ymax < ypos[ n ])
+			ymax = ypos[ n ];
+		if( ymin > ypos[ n ] )
+			ymin = ypos[ n ];
+	}
+	double maxRadius = ( xmax - xmin ) / 2.0 > ( ymax - ymin ) / 2.0 ? ( xmax - xmin ) / 2.0 : ( ymax - ymin ) / 2.0;
+	xmean = xmean / (double)G.number_of_nodes();
+	ymean = ymean / (double)G.number_of_nodes();
+
+	list<circle> Circles;
+	double radius = minRadius,radBefore=0;
+	node_array<bool> marked( G, false );
+	int loopCount = 0;
+	while( allLabeled( G, marked ) != true ){
+		int count = 0;		
+		circle C( xmean, ymean, radius );
+		list<node> inCircles;
+		forall_nodes( n, G ){
+			if( marked[ n ] != true && C.inside( posx[ n ] ) ){
+				count++;
+				inCircles.append( n );
+				marked[ n ] = true;
+			}
+		}
+		if( count != 0 ){
+			array<bool> circlePosition( count + 1 );
+			array<double> radianPositions( count + 1 );
+			for( int a = 0; a < inCircles.size(); a++ ){
+				circlePosition[ a ] = false;
+			}
+			double length = node_width * count;		
+			double tmp = 2.0 * 3.147;
+			double radiusC = length / tmp;
+			circle C2;
+			if( loopCount == 0 ){
+				circle C3( xmean, ymean, radiusC );
+				C2 = C3;
+			}
+			else{
+				if( radiusC < radBefore + node_width * 2 ){
+					radiusC = radBefore + node_width * 2;
+					circle C3( xmean, ymean, radiusC );
+					C2 = C3;
+				}
+				else{
+					circle C3( xmean, ymean, radiusC );
+					C2 = C3;
+				}
+			}
+			double min = tmp / (double)count;
+			for( int a = 0; a < inCircles.size(); a++ ){
+				radianPositions[ a ] = tmp;
+				tmp -= min; 
+			}		
+			forall( n, inCircles ){
+				double minR = radiusC + 10000;
+				int storeA = 0;
+				for( int a = 0; a < inCircles.size(); a++ ){
+					point target = C2.point_on_circle( radianPositions[ a ] );
+					point source( xpos[ n ], ypos[ n ] );				
+					if( minR > abs( target.distance( source ) ) && circlePosition[ a ] == false ){
+						minR = abs( target.distance( source ) );
+						storeA = a;
+					}
+				}
+				circlePosition[ storeA ] = true;
+				xpos[ n ] = C2.point_on_circle( radianPositions[ storeA ] ).xcoord();
+				ypos[ n ] = C2.point_on_circle( radianPositions[ storeA ] ).ycoord();
+			}
+			radBefore = radiusC;	
+			loopCount++;
+		}
+		radius += radius;		
+	}
+// 	cout << loopCount << endl;
+	Xpos = xpos;
+	Ypos = ypos;
+	forall_nodes( n, G ){
+		point p( Xpos[ n ], Ypos[ n ] );
+		posx[ n ] = p;
+	}
+// 	cout << " BEFORE RETURN\n";
+	return G;
+}
 
 
 /* Function is based for Force Directed Layout 

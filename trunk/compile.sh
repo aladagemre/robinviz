@@ -1,4 +1,5 @@
 g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/circularLayout.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o circularLayout.exe
+g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/circularForceLayout.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o circularForceLayout.exe
 g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/circularDualRingInside.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o circularDualRingInside.exe
 g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/circularDualRingOutside.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o circularDualRingOutside.exe
 g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/forceDirectedLayoutUW.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o forceDirectedLayoutUW.exe 
