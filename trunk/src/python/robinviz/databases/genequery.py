@@ -8,12 +8,13 @@ Specific Identifier ID -> Biogrid ID
 """
 import sqlite3
 import sys
+import os
 sys.path.append("..")
-from utils.info import *
+from utils.info import database_root
 
 class GeneDB:
     def __init__(self):
-	self.conn = sqlite3.connect(config.get("Paths","databases") + "/identifier.db")
+	self.conn = sqlite3.connect(os.path.join(database_root, "identifier.db"))
 	self.cursor = self.conn.cursor()
 	
     def value2biogrids(self, value):

@@ -4,7 +4,8 @@ import os
 # Should find a consistent solution like Environment variables
 result = os.path.abspath(__file__).split("src")
 root = result[0][:-1]
-tree_root = os.path.join(root, "src/python/robinviz/databases/inputtrees")
+database_root = os.path.join(root, "src/python/robinviz/databases")
+tree_root = os.path.join(database_root, "inputtrees")
 ap = lambda x: os.path.join(tree_root, x)
 
 #import ConfigParser

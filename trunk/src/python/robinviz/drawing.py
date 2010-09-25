@@ -76,7 +76,7 @@ class Scene(QGraphicsScene):
         self.setSceneRect(self.itemsBoundingRect())
 
     def constructGraph(self):
-    	g = Graph()
+    	self.g = g = Graph()
         #gp = GMLParser(self.filename, g)
         g.read_gml(self.filename)
         g.prepare()
@@ -88,7 +88,10 @@ class Scene(QGraphicsScene):
         for node in g.nodes:
             self.addNode(node)
 
-        edgeWidthMin = g.edges[0].graphics.width
+	if not g.edges:
+	    return
+	    
+	edgeWidthMin = g.edges[0].graphics.width
         edgeWidthMax = g.edges[0].graphics.width
         for edge in g.edges:
             if edge.graphics.width < edgeWidthMin:
@@ -101,7 +104,7 @@ class Scene(QGraphicsScene):
             edge.maxWidth = edgeWidthMax
             self.addEdge(edge)
 
-        self.g = g
+        
 
     def addEdge(self, edge):
         source = edge.u

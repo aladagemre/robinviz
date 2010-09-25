@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #from parser import GMLParser
 #from styles import *
 #import sys
@@ -175,7 +176,8 @@ class View(QGraphicsView):
         if not hasattr(self, 'originalFileName'):
             self.originalFileName = filename
 
-        if None: # layoutName == "Layered":
+	if layoutName == "Layered" and open("outputs/resultparams.txt").read().strip() == "Co-Regulation":
+        #if layoutName == "Layered":
             self.scene().clear()
             # Switch back to original.
             self.scene().reloadGraph(self.originalFileName)
@@ -186,13 +188,13 @@ class View(QGraphicsView):
             # Find the exe
             exename = GRAPH_LAYOUTS[str(layoutName)]
             # Run the exe
-            command = "%s %s" % (exename, filename)
+            command = "%s %s" % (exename, self.originalFileName)
             if os.name == "posix":
                 command = "./" + command
             os.system(normcase(command))
 
             if not self.useAnimation:
-                self.scene().reloadGraph("%s%s.gml" % (filename.split(".")[0], exename.split(".")[0]) )
+                self.scene().reloadGraph("%s%s.gml" % (self.originalFileName.split(".")[0], exename.split(".")[0]) )
                 return False
             
             # Load the graph
@@ -200,7 +202,7 @@ class View(QGraphicsView):
             """if str(layoutName) == "Layered":
                 newFileName = filename
             else:""" # this part is for animation to layered in the future.
-            newFileName = "%s%s.gml" % (filename.split(".")[0], exename.split(".")[0])
+            newFileName = "%s%s.gml" % (self.originalFileName.split(".")[0], exename.split(".")[0])
             self.newGraph.read_gml(newFileName)
             newGraph.prepare()
             self.scene().filename = newFileName
@@ -215,7 +217,7 @@ class View(QGraphicsView):
             self.timer = QTimeLine(5000)
             self.timer.setFrameRange(0, 100)
             self.animations = []
-            print "view icinde"
+            
             for node in newGraph.nodes:
                 item = self.scene().nodeDict[node.id]
                 #item.setPos(node.graphics.x, node.graphics.y)
