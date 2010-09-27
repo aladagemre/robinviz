@@ -245,7 +245,6 @@ void mainGraph2( GRAPH<leda::string,int> &PROJECT,
 			array<list<node> > layers_ = LAYERS[ LAYERS.get_item( count )];
 			node_array<point> pos_ = POS[ POS.get_item( count )];
 			edge_array<list<point> > bends_ = BENDS[ BENDS.get_item( count )];
-			cout << " DUMMY\n";
 			G = GraphList[ GraphList.get_item( count ) ];
 			RUN_FFD_AGAIN2( G, width, Xpos, Ypos, filename, count, namesForEachGraph, pos_, bends_, abbv, cat_num, Categories, edgeBendImp, colorScale, edgThicknessTher  ); 
 		}

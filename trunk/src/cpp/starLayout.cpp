@@ -137,7 +137,7 @@ int main(int argc, char** argv) {
                                 }
                                 else{
                                         xpos1 = xmin;
-                                        ypos1 += 150 + maxC * 20;
+                                        ypos1 += 300 + maxC * 50;
                                         maxC = 0;
                                         int diam = 30;
                                         if( COMPS[ i ].size() < 3 ){

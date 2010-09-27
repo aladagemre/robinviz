@@ -2316,7 +2316,7 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 	color blue( 4 );
 	color orange( 7 );
 	node_array<point> pos(G);
-	cout << " 2 " << G.number_of_edges() << " - " << G.number_of_nodes() <<endl;
+// 	cout << " 2 " << G.number_of_edges() << " - " << G.number_of_nodes() <<endl;
 	SPRING_EMBEDDING2_( G, Xpos, Ypos, 0, 2000 + G.number_of_nodes()*20 ,0, 700 + G.number_of_nodes()*7, 500, PARS, Hvalues );
 
 	double xmin, xmax, ymin, ymax;
@@ -2427,11 +2427,11 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 		}
 		list<two_tuple<color,int> > variations;
 		list<int> edgeWeights;
-		cout << " 4 " << endl;
+// 		cout << " 4 " << endl;
 		// Store Edge weights
 		forall_edges( e, G ){
 			int flag = 0;
-			cout << " 2.2 " << endl;
+// 			cout << " 2.2 " << endl;
 			forall_items( it, edgeWeights ){
 				if( edgeWeights[ it ] == G[ e ] ){
 					flag = 1;
@@ -2441,7 +2441,7 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 			if( flag == 0 ){
 				edgeWeights.push_back( G[ e ] );
 			}
-			cout << " 4.1 " << endl;
+// 			cout << " 4.1 " << endl;
 		}
 		edgeWeights.sort();
 		count = 0;
@@ -2453,9 +2453,9 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 				variations.push_back( Tp );
 			}
 			count++;
-			cout << " 4.2 " << endl;
+// 			cout << " 4.2 " << endl;
 		}
-		cout << " 5 " << endl;
+// 		cout << " 5 " << endl;
 	// 	int increase = (int) ((double)variations.size() / (double)edgeWeights.size() );
 		int increase = (int) ((double)variations.size() / (double)color_l.size() );
 
