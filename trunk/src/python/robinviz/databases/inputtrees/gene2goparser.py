@@ -43,18 +43,16 @@ class Gene2GOParser:
 	    result = db.biogrid2value(biogrid_id, "SYSTEMATIC_NAME")
 	    
 	    if result:
-		biogrid_id = result
-		
-	    l = self.go_mapping.get(go_id)
-	    if not l:
-		l = []
+		l = self.go_mapping.get(go_id)
+		if not l:
+		    l = []
 	    
-	    l.append(biogrid_id)
-	    self.go_mapping[go_id] = l	    
+		l.append(result)
+		self.go_mapping[go_id] = l	    
 	    
-	    n = self.names.get(go_id)
-	    if not n:
-		self.names[go_id] = name
+		n = self.names.get(go_id)
+		if not n:
+		    self.names[go_id] = name
 
     def write(self):
 	output = open(self.output_file,"w")
@@ -77,5 +75,6 @@ class Gene2GOParser:
 
 if __name__ == "__main__":
     #ggp = Gene2GOParser(input_file=ap("/godata/gene2go"),output_file=ap("/godata/go_mapping.txt"), terms=None)
-    ggp = Gene2GOParser(input_file=ap("godata/gene2go"),output_file=ap("godata/sub_go_mapping.txt"), terms=["GO:0000001","GO:0000003","GO:0003674","GO:0003676","GO:0003677","GO:0005737","GO:0005739","GO:0016020","GO:0016021","GO:0016070","GO:0048518", "GO:0048519", "GO:0048522","GO:0048523","GO:0000096","GO:0000097","GO:0000287","GO:0000278","GO:0000279","GO:0000280","GO:0000007","GO:0000322","GO:0000323","GO:0000324","GO:0000375","GO:0000376","GO:0000377"])
+    ggp = Gene2GOParser(input_file=ap("godata/gene2go"),output_file=ap("godata/sub_go_mapping.txt"), terms=['GO:0000001', 'GO:0000003', 'GO:0003674', 'GO:0003676', 'GO:0003677', 'GO:0005737', 'GO:0005739', 'GO:0016020', 'GO:0016021', 'GO:0016070', 'GO:0048518', 'GO:0048519', 'GO:0048522', 'GO:0048523', 'GO:0000096', 'GO:0000097', 'GO:0000287', 'GO:0000278', 'GO:0000279', 'GO:0000280', 'GO:0000007', 'GO:0000322', 'GO:0000323', 'GO:0000324', 'GO:0000375', 'GO:0000376', 'GO:0000377'])
+
     #ggp = Gene2GOParser(input_file="godata/gene2go",output_file="godata/go_mapping.txt", terms=["GO:2000033","GO:2000037"])
