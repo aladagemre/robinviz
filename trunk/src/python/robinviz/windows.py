@@ -5,7 +5,7 @@ from PyQt4.QtCore import *
 import os.path
 #from extensions import *
 #from core import MainScene, PeripheralScene
-from confirmation import CoRegulationMainView, CoRegulationMainScene
+from confirmation import CoExpressionMainView, CoExpressionMainScene
 from settings import SettingsDialog
 from search import ComprehensiveSearchWidget, ProteinSearchWidget
 import os
@@ -109,7 +109,7 @@ class SinglePeripheralViewWindow(SingleMainViewWindow):
 
     def setPeripheralViewType(self, peripheralViewType):
         """Sets the peripheral view type like:
-        CoRegulationPeripheralView, CoFunctionalityPeripheralView, etc."""
+        CoExpressionPeripheralView, CoFunctionalityPeripheralView, etc."""
         self.peripheralViewType = peripheralViewType
         
     def loadGraph(self, filename):
@@ -144,10 +144,10 @@ class MultiViewWindow(QMainWindow):
         if not confirmationType:
             confirmationType = str(self.coGroup.checkedAction().text())
             
-        if confirmationType == "Co-Regulation":
-            self.mainViewType = CoRegulationMainView
-            self.peripheralViewType = CoRegulationPeripheralView
-            self.mainSceneType = CoRegulationMainScene
+        if confirmationType == "Co-Expression":
+            self.mainViewType = CoExpressionMainView
+            self.peripheralViewType = CoExpressionPeripheralView
+            self.mainSceneType = CoExpressionMainScene
             pass
         elif confirmationType == "Co-Functionality":
             self.mainViewType = CoFunctionalityMainView
@@ -158,8 +158,8 @@ class MultiViewWindow(QMainWindow):
             pass
         else:
             print "No such confirmation type:", confirmationType
-            print "Setting Co-Regulation as default."
-            confirmationType = "Co-Regulation"
+            print "Setting Co-Expression as default."
+            confirmationType = "Co-Expression"
             
 
         self.confirmationType = confirmationType
@@ -170,7 +170,7 @@ class MultiViewWindow(QMainWindow):
 
     def checkCurrentConfirmationType(self):
 
-        actionDict = {"Co-Regulation": self.coRegulationAction,
+        actionDict = {"Co-Expression": self.coExpressionAction,
                       "Co-Functionality": self.coFunctionalityAction,
                       "Co-Localization": self.coLocalizationAction,
                       }
@@ -275,7 +275,7 @@ class MultiViewWindow(QMainWindow):
         self.mainView.setSceneRect(self.mainScene.sceneRect())
         self.mainView.fitInView(self.mainScene.sceneRect(),Qt.KeepAspectRatio)
 
-        if self.confirmationType == "Co-Regulation":
+        if self.confirmationType == "Co-Expression":
             self.keyList = map(lambda d: "Bicluster %0d" % d, range(len(self.mainScene.g.nodes)))
 
         elif self.confirmationType == "Co-Functionality":
@@ -425,7 +425,7 @@ class MultiViewWindow(QMainWindow):
         self.clearViews()
         
         exe_files = {
-            'Co-Regulation' : './layered.exe',
+            'Co-Expression' : './co_expression.exe',
             'Co-Functionality' : './co_functional.exe',
         }
         print "Starting operation"
@@ -488,8 +488,8 @@ class MultiViewWindow(QMainWindow):
                 confirmationType = resultparams.read().strip()
                 self.setConfirmationType(confirmationType)
         except:
-            print "No confirmation type found, using Co-Regulation."
-            self.setConfirmationType("Co-Regulation")
+            print "No confirmation type found, using Co-Expression."
+            self.setConfirmationType("Co-Expression")
 
     def displayLast(self):
         self.clearViews()
@@ -577,7 +577,7 @@ class MultiViewWindow(QMainWindow):
         # FILE MENU
         run = QAction('Run', self)
         run.setShortcut('Ctrl+R')
-        run.setStatusTip('Confirmation by Co-Regulation')
+        run.setStatusTip('Confirmation by Co-Expression')
         self.connect(run, SIGNAL('triggered()'), self.run)
 
 
@@ -585,12 +585,12 @@ class MultiViewWindow(QMainWindow):
         self.coGroup = coGroup = QActionGroup(confirmationMenu)
         coGroup.setExclusive(True)
         
-        self.coRegulationAction = coRegulation = QAction('Co-Regulation', coGroup)
+        self.coExpressionAction = coExpression = QAction('Co-Expression', coGroup)
         self.coFunctionalityAction = coFunctionality = QAction('Co-Functionality', coGroup)
         self.coLocalizationAction = coLocalization = QAction('Co-Localization', coGroup)
 
 
-        coActions = (coRegulation, coFunctionality, coLocalization)
+        coActions = (coExpression, coFunctionality, coLocalization)
         # Add actions to confirmation menu.
         map(confirmationMenu.addAction, coActions)
         # Set checkable
