@@ -11,12 +11,8 @@ from utils.compression import download_targz
 
 
 def shorten_organism(long_name):
-    """Converts Arabidopsis_thaliana to A. thaliana
-    if "_" in long_name:
-	names = long_name.split("_")
-	return names[0][0] + ". " + names[1]"""
     """Converts Arabidopsis_thaliana to A_thaliana"""
-    n1, n2 = long_name.split("_")
+    n1, n2 = long_name.split("_")[0:2]    
     return "%s_%s" % (n1[0], n2)
     
 def get_ss_url(organism_name):
