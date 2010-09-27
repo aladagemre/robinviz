@@ -323,7 +323,7 @@ int main(){
                 list<GENES> ppiGenes;
 
                 interactionRead( temp, GenesNode, INTERACTIONS, TEMPINT, ppifilename );
-		INTERACTIONS.print();
+// 		INTERACTIONS.print();
                 goCatRead( inputGoFile, defaultGoFile, categories, categ, matrixCategories, H_values, Hmax, GenesNode );
                 cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
 
