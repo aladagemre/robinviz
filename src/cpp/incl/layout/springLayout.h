@@ -96,7 +96,7 @@ void SPRING_EMBEDDING_(GRAPH<int,int>& G, node_array<double>& xpos,
 	}
 #endif SPRING_COLOR
 
-cout << "\n------------------------\n";
+// cout << "\n------------------------\n";
 
 	gw.set_edge_thickness( 3, true );
 	forall_nodes( n, G ){
@@ -127,7 +127,7 @@ cout << "\n------------------------\n";
 			edgeWeights.push_back( G[ e ] );
 		}
 	}
-cout << "\n-------------------\n";
+// cout << "\n-------------------\n";
 	edgeWeights.sort();
 	int tm_c = (double)(220.0 / (double)edgeWeights.size() );
 	count = 20 + edgeWeights.size() * tm_c;
@@ -140,12 +140,12 @@ cout << "\n-------------------\n";
 	for( int x = edgeWeights[edgeWeights.first()]; x <= edgeWeights[edgeWeights.last()]; x++ ){	
 		for( int j = 0; j < color_l.size(); j++ ){
 			two_tuple<color,int> Tp( color_l[ j ], x );
-			cout << Tp << endl;
+// 			cout << Tp << endl;
 			variations.push_back( Tp );
 		}
 		count++;
 	}
-cout << "\n--------\n";
+// cout << "\n--------\n";
 	int increase = (int) ((double)variations.size() / (double)edgeWeights.size());
 // 	cout << " increase : " << increase << endl;
 	forall_edges( e, G ){		           

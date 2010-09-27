@@ -313,6 +313,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 		int line_i = 0;
 		while( !feof( f ) ){
 			fgets( line, 100000, f );
+// 			cout << line << endl;
 			line_i++;
 		}
 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n" << "\n";
@@ -323,6 +324,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 			two_tuple<CATNAMES,int> tup;
 			tup.second() = 0;
 			fgets( line, 100000, f );
+// 			cout << line << endl;
 			pc = strtok( line, strDelim );
 			go = pc;
 			if( feof( f ) )
@@ -374,7 +376,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 				count++;
 			}
 			line_i++;
-			if( line_i % 5 == 0 )
+			if( line_i % 1 == 0 )
 				cout << "\n Category " << line_i << " is parsed ";
 			categories.append( tup );
 		}
