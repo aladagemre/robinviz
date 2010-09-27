@@ -55,14 +55,24 @@ class PPISelector(QWidget):
 
         #self.setCentralWidget(self.widget)
         #self.setWindowTitle("PPI Selection Tree")
-        self.setMinimumSize(400,600)
+        self.setMinimumSize(300,400)
         
         self.readPPIData()
 	self.useDictionary(self.organism_experiments)
         
     def readPPIData(self):
 	
-	organisms = filter(lambda filename: filename[0]!=".", os.listdir(self.osprey_dir))
+	#organisms = filter(lambda filename: filename[0]!=".", os.listdir(self.osprey_dir))
+	organisms = ["Arabidopsis_thaliana",
+	"Caenorhabditis_elegans",
+	"Drosophila_melanogaster",
+	"Escherichia_coli_K12_MG1655",
+	"Homo_sapiens",
+	"Mus_musculus",
+	"Rattus_norvegicus",
+	"Saccharomyces_cerevisiae",
+	"Schizosaccharomyces_pombe"]
+	
 	self.organism_experiments = {} # organism_name : experiments...
 
 	for organism in organisms:
