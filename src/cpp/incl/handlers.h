@@ -897,10 +897,14 @@ void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNo
 			entered.append( tempx );
 		}
 		e = INTERACTIONS.new_edge( sourceTemp, targetTemp );
-		INTERACTIONS[ e ] = fabs(log( value * 10000.0 )*5.0);
+		INTERACTIONS[ e ] = (int)(value * 100.0);
+		if( INTERACTIONS[ e ] == 0 )
+			INTERACTIONS[ e ] = 1;
+// 		cout << GenesNode[ INTERACTIONS[ sourceTemp ] ].GENE << " - " << GenesNode[ INTERACTIONS[ targetTemp ] ].GENE << " : " << INTERACTIONS[ e ] << endl;
 		numberOfReleations++;
 		/*cout << endl;*/			
 	}
+// 	exit(1);
 	cout << endl;
 // 	forall_edges( e, INTERACTIONS )
 // 		cout << GenesNode[ INTERACTIONS[ INTERACTIONS.source( e ) ] ].GENE << " " << GenesNode[ INTERACTIONS[ INTERACTIONS.target( e )] ].GENE << endl;
