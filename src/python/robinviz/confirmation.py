@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from extensions import MainView, PeripheralView
@@ -6,7 +7,7 @@ from PyQt4 import QtWebKit
 from os.path import normcase
 import os
 from bicluster import *
-
+import yaml
 
 CATEGORY_COLORS = {}
 colorFile = open("outputs/colors_func.txt")
@@ -18,14 +19,14 @@ for line in colorFile:
 
 
 
-class CoRegulationMainScene(MainScene):
+class CoExpressionMainScene(MainScene):
     def __init__(self, parent=None):
         MainScene.__init__(self, parent)
-        self.readSettings()
+        self.loadYAMLSettings()
 
         # By default, Scene is NOT directed.
         # But main scene can be directed or undirected.
-        if self.parameters["edgesBetween"]:
+        if self.params["Algorithms"]["edgesBetween"]:
             self.directed = True
             self.onlyUp = True
         else:
@@ -40,35 +41,32 @@ class CoRegulationMainScene(MainScene):
         self.addItem(item)
         self.nodeDict[node] = item
         self.nodeDict[node.id] = item
-
-    def readSettings(self):
-        """Read settings from the settings file(s)"""
-        self.parameters = {}
-        f = open("settings.ini")
-        # TODO: handle spaces!
-        for line in f:
-            (parameterName, parameterValue) = line.strip().split()
-            # Try to convert it to int or float
-            try:
-                parameterValue = int(parameterValue)
-            except:
+        
+    def loadYAMLSettings(self):
+        stream = file('settings.yaml', 'r')
+        self.params = yaml.load(stream)["Confirmation"]["CoExpression"]
+        for section in self.params:
+            for key,value in self.params[section].iteritems():
                 try:
-                    parameterValue = float(parameterValue)
+                    value = int(value)
                 except:
-                    pass
-            self.parameters[parameterName] = parameterValue
+                    try:
+                        value = float(value)
+                    except:
+                        pass
+                self.params[section][key] = value
 
     def determineScoring(self):
         """Assigns scoring name and value to the tooltips of the nodes."""
         # Set scoring name
 
-        if self.parameters["hvalueWeighting"]:
+        if self.params["Algorithms"]["hvalueWeighting"]:
             self.scoringName = "H-Value"
-        elif self.parameters["enrichmentWeighting_o"]:
+        elif self.params["Algorithms"]["enrichmentWeighting_o"]:
             self.scoringName = "Enrichment Ratio"
-        elif self.parameters["enrichmentWeighting_f"]:
+        elif self.params["Algorithms"]["enrichmentWeighting_f"]:
             self.scoringName = "Enrichment Ratio"
-        elif self.parameters["ppihitratioWeighting"]:
+        elif self.params["Algorithms"]["ppihitratioWeighting"]:
             self.scoringName = "PPI Hit Ratio"
 
         f = open("outputs/biclusters/scoring.txt")
@@ -79,10 +77,10 @@ class CoRegulationMainScene(MainScene):
             tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
             item.setToolTip(tip)
 
-class CoRegulationMainView(MainView):
+class CoExpressionMainView(MainView):
     def __init__(self, parent=None):
         MainView.__init__(self, parent)
-        self.mainSceneClass = CoRegulationMainScene
+        self.mainSceneClass = CoExpressionMainScene
 
     # ========= Abstract Methods =============
     def addCustomMenuItems(self):
@@ -102,7 +100,7 @@ class CoRegulationMainView(MainView):
 
      # ========= Additional Methods =============
      # ========= ================== =============
-class CoRegulationPeripheralView(PeripheralView):
+class CoExpressionPeripheralView(PeripheralView):
 
     # ========= Abstract Methods =============
     def addCustomMenuItems(self):
@@ -178,7 +176,6 @@ class CoFunctionalityMainScene(MainScene):
         self.nodeDict[node.id] = item
 
     def loadYAMLSettings(self):
-        import yaml
         stream = file('settings.yaml', 'r')    # 'document.yaml' contains a single YAML document.
         self.params = yaml.load(stream)["Confirmation"]["CoFunctionality"]
         for section in self.params:
