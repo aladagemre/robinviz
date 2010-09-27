@@ -101,6 +101,9 @@ void _iniReadCoExpression(  int &minBicSize,
 	      fscanf( fptr, "%s%d", temp, &space );
 	//5             increment: 300
 	      fscanf( fptr, "%s%d", temp, &increment );
+// 	      cout << "0______________________\n";
+// 	      cout << increment << endl;
+// 	      cout << "0______________________\n";
 	//6             removeRat: 0.15 *
 	      fscanf( fptr, "%s%lf", temp, &removeRat );
 	//7             nodeSize: 50.0 *
@@ -120,7 +123,7 @@ void _iniReadCoExpression(  int &minBicSize,
 	//5             bimax_low_dim2: 10
 	      fscanf( fptr, "%s%d", temp, &bimax_low_dim2 );
 	//6             ther_disc: 0.481600
-	      fscanf( fptr, "%s%lf", temp, &increment );
+	      fscanf( fptr, "%s%lf", temp, &ther_disc );
 	//7             bic_num_bimax: 25
 	      fscanf( fptr, "%s%d", temp, &bic_num_bimax );
 	//8             bic_num_cc: 100
@@ -142,7 +145,7 @@ void _iniReadCoExpression(  int &minBicSize,
 	//7             repeat: 50
 	      fscanf( fptr, "%s%d", temp, &repeat );
 	//8             hvaluemin: 1500.00
-	      fscanf( fptr, "%s%lf", temp, &increment );
+	      fscanf( fptr, "%s%lf", temp, &ther_disc );
 	//9             increment_exp1_g: 10
 	      fscanf( fptr, "%s%d", temp, &increment_exp1_g );
 	//1             increment_exp1_c: 10

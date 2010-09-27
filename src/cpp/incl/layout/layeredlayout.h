@@ -1518,7 +1518,7 @@ void identify_dummy_positionsY( GRAPH<int,int> &G , array<list<node> > &AB, int 
 	sprintf( command, "src//python//xcoord//gmls//pyt_inp.gml" );
 #endif
 	gw.save_gml( command );
-
+// 	cout << increment << " - BEFORE CALL\n";
 	if( algorithmFlag == 1 ){
 #ifdef LINUX
 // 		  cout << " Comm 1 \n";
@@ -1529,6 +1529,7 @@ void identify_dummy_positionsY( GRAPH<int,int> &G , array<list<node> > &AB, int 
 #endif
 		  system( command );
 	}
+// 	cout << " - END CALL\n";
 	if( algorithmFlag == 3 ){
 #ifdef LINUX
 		  sprintf( command, "python src/python/xcoord/fastklevel.py src/python/xcoord/gmls/pyt_inp.gml src/python/xcoord/gmls/pyt_out.gml %d positions", increment );
