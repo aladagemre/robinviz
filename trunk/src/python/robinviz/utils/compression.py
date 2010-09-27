@@ -36,28 +36,25 @@ def untar(filename):
     new_filename = ".".join(filename.split('.')[:-2])
     
     tar = tarfile.open(filename, 'r:gz')
+    names = tar.getnames()
     
     for item in tar:
 	tar.extract(item)
     print 'Extracted.'
     
-    return new_filename
+    return names
 
 
 def download_targz(url):
-    filename = url.split('/')[-1]
-    extracted_filename = without_targz(filename) 
     
-    if not os.path.exists(extracted_filename):
-	# File does not exist, so download it.
-	filename = download_file(url)
-	if filename:
-	    untar(filename)
+    filename = download_file(url)
+    if filename:
+	extracted_files = untar(filename)
     else:
-	print "File already exists, skipping."
+	print "Could not download"
     
-    # Filename without targz extension.
-    return extracted_filename
+    # The file extracted
+    return extracted_files
     
 def without_targz(filename):
     return ".".join(filename.split(".")[:-2])
