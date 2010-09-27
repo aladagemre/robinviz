@@ -10,6 +10,7 @@ import sqlite3
 import sys
 import os
 sys.path.append("..")
+sys.path.append("../..")
 from utils.info import database_root
 
 class GeneDB:
@@ -19,7 +20,7 @@ class GeneDB:
 	
     def value2biogrids(self, value):
 	"""Converts a given value to corresponding biogrid ids."""
-	self.cursor.execute("SELECT biogrid_id FROM translation WHERE identifier_value='%s';" % value )
+	self.cursor.execute("SELECT biogrid_id FROM translation WHERE identifier_value=?;",  (value,) )
 	result = self.cursor.fetchall()
 	
 	biogrid_ids = list(set([str(row[0]) for row in result]))	    
@@ -28,10 +29,13 @@ class GeneDB:
     
     def value2biogrid(self, identifier_value, identifier_type):
 	"""Converts a given value to corresponding biogrid ids."""
-	self.cursor.execute("SELECT biogrid_id FROM translation WHERE identifier_value='%s' AND identifier_type='%s';" % (identifier_value , identifier_type))
+	self.cursor.execute("SELECT biogrid_id FROM translation WHERE identifier_value=? AND identifier_type=?;" , (identifier_value , identifier_type) )
 	result = self.cursor.fetchone()
+	if not result:
+	    return None
 	
-	biogrid_id = result[0][0]
+	assert len(result) == 1
+	biogrid_id = result[0]
 	return biogrid_id
 	
     def biogrid2values(self, biogrid_id):
@@ -39,9 +43,7 @@ class GeneDB:
 	Result is a list in the format:
 	[  (value1, type1), (value2, type2), ... ]
 	"""
-	statement = "SELECT identifier_value, identifier_type FROM translation WHERE biogrid_id='%s';" % biogrid_id 
-	#print statement
-	self.cursor.execute(statement)
+	self.cursor.execute( "SELECT identifier_value, identifier_type FROM translation WHERE biogrid_id=?;", (biogrid_id,) )
 	result = self.cursor.fetchall()
 	return result
 	
@@ -49,7 +51,7 @@ class GeneDB:
 	"""Converts a given biogrid_id to the specified identifier type's value.
 	Result is a single string like: ETG814974
 	"""
-	self.cursor.execute("SELECT identifier_value FROM translation WHERE biogrid_id='%s' and identifier_type='%s';" % (biogrid_id, identifier_type)  )
+	self.cursor.execute("SELECT identifier_value FROM translation WHERE biogrid_id=? and identifier_type=?;" , (biogrid_id, identifier_type)  )
 	result = self.cursor.fetchone()
 	if not result:
 	    return None
@@ -59,10 +61,10 @@ class GeneDB:
     def value2value(self, value, identifier_type):
 	"""Converts a given value to a specific type of value."""
 	# Find corresponding biogrid IDs. There might be more than one.
-	bids = db.value2biogrid(value)
-	    
+	bids = self.value2biogrids(value)
 	# Convert biogrid ids in the list to specified identifier type and return the resulting list.
-	return [db.biogrid2value(bid, identifier_type) for bid in bids]
+	return [self.biogrid2value(bid, identifier_type) for bid in bids]
+	
     def checkUniqueValues(self):
 	"""Checks if identifier values are unique so that no problem would arise when value2biogrid is called.
 	Returns True if all values are unique, else False."""

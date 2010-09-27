@@ -11,6 +11,7 @@ if not "utils" in sys.path:
 from utils.info import ap
 from utils.compression import *
 
+from ppi_downloader import download_organism
 
 class PPISelector(QWidget):
     def __init__(self):
@@ -97,6 +98,8 @@ class PPISelector(QWidget):
 	f.write("\n".join( sorted(checkedItems) ) )
 	f.close()
 	
+	self.mergePPIFiles(checkedItems)
+
     def useDictionary(self, dictionary):
 	topLevelItems = sorted(dictionary.keys())
 	for topLevelItem in topLevelItems:
@@ -111,6 +114,72 @@ class PPISelector(QWidget):
 	    
 	    parentItem.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsTristate)
 	    parentItem.setCheckState(0, Qt.Unchecked)
+
+    def convert_path_to_organism_name(self, path):
+	if os.name == "posix":
+	    seperator = "/"
+	else:
+	    seperator = "\\"
+	# TODO: could be better
+	return path.split(seperator)[-2]
+	
+    def findSelectedOrganisms(self, checkedPaths):
+	organisms = set()
+	for path in checkedPaths:
+	    organismName = self.convert_path_to_organism_name(path)
+	    organisms.add(organismName)
+	    
+	return list(organisms)
+
+    def mergePPIFiles(self, files):
+	"""Merges given PPI files."""
+	confidence_dicts = {}
+	
+	organisms = self.findSelectedOrganisms(files)
+	map(download_organism, organisms) # Download HitPredict data and generate (p1 p2 confidence) file.
+	for organism in organisms:
+	    """For each organism, create a dictionary holding (p1,p2)=>confidence
+	    and store them in confidence_dicts"""
+	    d = {}
+	    for line in open(ap("ppidata/hitpredict/%s.txt" % organism )):
+		cols = line.split("\t\t")
+		d[cols[0], cols[1]] = cols[2]
+	    confidence_dicts[organism] = d
+	
+	interactions = {}
+	for filename in files:
+	    organism = self.convert_path_to_organism_name(filename)
+	    
+	    for line in open(filename).readlines()[1:]:
+		cols = line.split("\t")
+		if cols[0] == cols[1]:
+		    continue
+		
+		interaction = cols[0], cols[1]
+		confidence = confidence_dicts[organism].get(interaction)
+		if not confidence:
+		    continue
+		
+		i = interactions.get( interaction )
+		if not i:
+		    i = []
+		i.append( float(confidence) )
+		interactions[ interaction ] = i
+	
+	# Now we have an interactions dict, containing (p1,p2) => [conf1, conf2, ...]
+	# I'll take average of them. But I don't know if this is a good idea.
+	
+	single_ppi_file = open(ap("ppidata/ppi.txt"), "w")
+	
+	for key in interactions.keys():
+	    p1, p2 = key
+	    confidence_values = interactions[key]
+	    confidence = sum(confidence_values) / len(confidence_values)
+	    single_ppi_file.write("\t\t".join( (p1, p2, str(confidence)) ) + "\n")
+	single_ppi_file.close()
+		
+		
+		
 	    
 def main():
     app = QApplication(sys.argv)

@@ -43,6 +43,25 @@ def untar(filename):
     
     return new_filename
 
+
+def download_targz(url):
+    filename = url.split('/')[-1]
+    extracted_filename = without_targz(filename) 
+    
+    if not os.path.exists(extracted_filename):
+	# File does not exist, so download it.
+	filename = download_file(url)
+	if filename:
+	    untar(filename)
+    else:
+	print "File already exists, skipping."
+    
+    # Filename without targz extension.
+    return extracted_filename
+    
+def without_targz(filename):
+    return ".".join(filename.split(".")[:-2])
+    
 #download_file("http://www.google.com/test.tar.gz")
 #untar("test.tar.gz")
 #ungz("test.gz")

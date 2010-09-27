@@ -2,7 +2,8 @@
 """
 Given Hitpredict filenames, extracts the confidence values, normalizes and combines them into a single tab-seperated PPI file.
 """
-from genequery import GeneDB
+import sys
+from databases.genequery import GeneDB
 
 def normalize(data):
     match = {}
@@ -17,12 +18,13 @@ def normalize(data):
         match[value] = new_val
     return data, match
     
-def tabify(files):
+def tabify(files, organism_name):
+    hitpredict_combined_ppi = "ppidata/hitpredict/%s.txt" % organism_name
     lines = []
     for filename in files:
 	lines.extend( open(filename).readlines() )
     
-    output = open("%s_tabbed.txt" % filename.split("_")[0], "w")
+    output = open(hitpredict_combined_ppi, "w")
     confs = set()
     max_confidence = 0
     for line in lines:
@@ -57,7 +59,10 @@ def tabify(files):
 		protein1 = fields[2]
 		value = db.value2value(protein1, "SYSTEMATIC_NAME")
 		if isinstance(value, list):
+		    """if len(value)>1:
+			print protein1, value"""
 		    value = "/".join(value)
+		    
 		if value:
 		    protein1 = value
 		else:
@@ -75,12 +80,14 @@ def tabify(files):
 		    confidence = float(fields[-4])
 		except ValueError:
 		    confidence = 1.0 # FIX THIS! LIKELIHOOD IS NOT PROBABILITY
-		
-		t = (protein1, protein2, str(match[confidence]))
-		output.write("\t".join(t) + "\n")
+		for proteinx in protein1.split("/"):
+		    for proteiny in protein2.split("/"):
+			t = (proteinx, proteiny, str(match[confidence]))
+			output.write("\t\t".join(t) + "\n")
+		#t = (protein1, protein2, str(match[confidence]))
+		#output.write("\t".join(t) + "\n")
 
     print "These genes have no corresponding names in BIOGRID_IDENTIFIERS:"
-    for gene in sorted(no_correspondance):
-	print gene
+    print sorted(no_correspondance)	
     #print confs
     output.close()
