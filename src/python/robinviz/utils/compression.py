@@ -19,7 +19,10 @@ def download_file(url):
     localFile.close()
     return filename
 
-
+def download_file_to(url, path):
+    filename = download_file(url)
+    shutil.move(filename, path)
+    
 def ungz(filename):
     new_filename = ".".join(filename.split('.')[:-1])
     print "Extracting",filename, "as", new_filename    
