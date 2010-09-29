@@ -63,7 +63,7 @@ class GeneDB:
 	# Find corresponding biogrid IDs. There might be more than one.
 	bids = self.value2biogrids(value)
 	# Convert biogrid ids in the list to specified identifier type and return the resulting list.
-	return [self.biogrid2value(bid, identifier_type) for bid in bids]
+	return filter(lambda x: x, [self.biogrid2value(bid, identifier_type) for bid in bids])
 	
     def checkUniqueValues(self):
 	"""Checks if identifier values are unique so that no problem would arise when value2biogrid is called.
