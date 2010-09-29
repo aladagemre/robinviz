@@ -23,9 +23,7 @@ class GEOSelector(QWidget):
 	if os.path.exists(self.filename):
 	    return
 	url = "http://robinviz.googlecode.com/svn/data/expressions/geoTreeView.txt"
-	txt = urllib.urlopen(url).read()
-	with open(self.filename, "w") as f:
-	    f.write(txt)
+	download_file_to(url, self.filename)
 		
     def setupGUI(self):
 	layout = QHBoxLayout()
@@ -33,9 +31,12 @@ class GEOSelector(QWidget):
 	self.treeWidget = treeWidget = QTreeWidget()
 	treeWidget.setColumnCount(3)
 	treeWidget.setHeaderLabels(("Accession", "Series Platform ID","Description",))
+	treeWidget.setSortingEnabled(True)
 	
 	self.parseFile()
-	layout.addWidget(treeWidget)	
+	self.resizeColumns()
+	    
+	layout.addWidget(treeWidget)
 	#button = QPushButton("Report Selected")
 	#button.clicked.connect(self.getCheckedItems)        
         #layout.addWidget(button)
@@ -43,6 +44,11 @@ class GEOSelector(QWidget):
         self.setLayout(layout)
         self.setWindowTitle("GEO Tree")
         
+    def resizeColumns(self):
+	"""Resizes columns appropriately to content size."""
+	for i in range(3):
+	    self.treeWidget.resizeColumnToContents(i)
+	    
     def getCheckedItems(self):
 	checkedItems = set()
 	
