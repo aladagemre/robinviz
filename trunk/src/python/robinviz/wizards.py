@@ -72,7 +72,7 @@ class GEOSelectionPage(QWizardPage):
 	self.setLayout(layout)
     
     def validatePage(self):
-	self.selector.getCheckedItems()
+	self.selector.downloadCheckedGEOs()
 	return True
 	
 def runWizard():
