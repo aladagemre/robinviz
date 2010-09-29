@@ -2,7 +2,6 @@
 """
 Downloads HitPredict data for a given organism. Uses hitpredict module to combine Small Scale, High Confidence, Low Confidence datas.
 """
-import urllib
 import os
 import tarfile
 from hp_to_tabbedppi import *
