@@ -493,7 +493,7 @@ cout << "\n Dummy Adding Done \n" ;
                     }
                 }
 
-        if( xCoordFlag == true ){
+		if( xCoordFlag == true ){
                     identify_dummy_positionsOur( G, Layers, max, dummyNodes, xpos, ypos, algorithmFlag, space, increment, ledaPostFlag );
                 }
                 else{

@@ -29,13 +29,13 @@ int main(int argc, char** argv) {
             edge_array<list<point> > bends( G );
             array<list<node> > layers( 2 );
             
-            H = RUN_SELFGD( G, layers, 40, Xpos, Ypos, 1, pos, bends, 1, 300, 0, 300, 0 );
+            H = RUN_SELFGD( G, layers, 40, Xpos, Ypos, 1, pos, bends, 1, 200, true, 300, 0 );
 
             gw.set_layout( pos, bends );
             forall_edges( e, G ){
                     gw.set_thickness( e, G[ e ] );
             }
-            gw.place_into_box(x0, y0, x1, y1);
+            gw.place_into_box(x0 - 500.0, y0, x1+500.0, y1);
             fname = fname.replace( ".gml", "layeredLayout.gml" );
             gw.save_gml( fname );
     }
