@@ -3,7 +3,7 @@ Confirmation:
         Input:
             dataName_bic: sources/usr_sources/microarray_data/inputLabel.txt
             dataName2_bic: sources/organisms/Yeast2993x173/expression_matrix.txt
-            ppifilename_bic: src/python/robinviz/databases/inputtrees/ppidata/ppi.txt
+            ppifilename_bic: sources/organisms/Yeast2993x173/ppi.txt
             catfile_bic: sources/organisms/Yeast2993x173/category.txt
             gofile_bic: sources/organisms/Yeast2993x173/go.txt
         Drawing:
@@ -62,7 +62,7 @@ Confirmation:
             
     CoFunctionality:
         Input:
-            ppifilename_go: src/python/robinviz/databases/inputtrees/ppidata/ppi.txt
+            ppifilename_go: sources/organisms/Yeast2993x173/ppi.txt
             catfile_go: sources/organisms/Yeast2993x173/category.txt
             gofile_go: sources/organisms/Yeast2993x173/go_slim.txt
             dataName_go: sources/organisms/Yeast2993x173/input_go.txt

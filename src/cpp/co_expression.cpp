@@ -245,7 +245,7 @@ int main(){
 	
 	FILE *fptr;
         if( (fptr = fopen( "settings.yaml", "r" ) ) == NULL ){
-		printf( "\n Ini file can not be found\n" );
+		printf( "\n settings.yaml file can not be found\n" );
 		return 0;
 	}
 	else{
