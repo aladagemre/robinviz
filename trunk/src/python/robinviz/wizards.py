@@ -4,6 +4,7 @@ from PyQt4.QtGui import QWizard, QWizardPage, QApplication, QLabel, QVBoxLayout,
 #from PyQt4.QtCore import 
 from databases.inputtrees.ppitree import PPISelector
 from databases.inputtrees.gotree import GOSelector
+from databases.inputtrees.geotree import GEOSelector
 import os
 
 
@@ -15,9 +16,11 @@ class InputWizard(QWizard):
 
 	self.PPISelectionPage = PPISelectionPage()
 	self.GOSelectionPage = GOSelectionPage()
+	self.GEOSelectionPage = GEOSelectionPage()
 	
 	self.setPage(0, self.PPISelectionPage )
 	self.setPage(1, self.GOSelectionPage )
+	self.setPage(2, self.GEOSelectionPage )
 	
 	self.setStartId(0)
 	#self.setWindowModality(QWidget.modal)
@@ -56,14 +59,26 @@ class PPISelectionPage(QWizardPage):
     def validatePage(self):
 	self.selector.getCheckedItems()
 	return True
-
+	
+class GEOSelectionPage(QWizardPage):
+    def __init__(self, parent=None):
+	QWizardPage.__init__(self, parent)
+	self.setTitle("GEO data selection")
+	topLabel = QLabel("In this page, you need to select the Gene Expression sources you'd like to use for biclustering")
+	topLabel.setWordWrap(True)
+	layout = QVBoxLayout()
+	self.selector = GEOSelector()
+	layout.addWidget(self.selector)
+	self.setLayout(layout)
+    
+    def validatePage(self):
+	self.selector.getCheckedItems()
+	return True
 	
 def runWizard():
     app = QApplication(sys.argv)
     mainWindow = InputWizard()
-    #mainWindow = QWizard()
-    #mainWindow.addPage(PPISelectionPage())
-    mainWindow.show()
+    mainWindow.showMaximized()
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
