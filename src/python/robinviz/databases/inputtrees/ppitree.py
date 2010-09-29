@@ -40,21 +40,14 @@ class PPISelector(QWidget):
 	self.treeWidget = treeWidget = QTreeWidget()
 	treeWidget.setColumnCount(1)
 	treeWidget.setHeaderLabels(("PPI",))
+	layout.addWidget(treeWidget)
 	
 	#button = QPushButton("Report Selected PPIs")
 	#button.clicked.connect(self.getCheckedItems)
-	
-        layout.addWidget(treeWidget)
-        #layout.addWidget(button)
-	
-	self.setLayout(layout)
-
-        #self.widget = QWidget()
-        #self.widget.setLayout(layout)
+	#layout.addWidget(button)
         
-
-        #self.setCentralWidget(self.widget)
-        #self.setWindowTitle("PPI Selection Tree")
+	self.setLayout(layout)
+        self.setWindowTitle("PPI Selection Tree")
         self.setMinimumSize(300,400)
         
         self.readPPIData()
