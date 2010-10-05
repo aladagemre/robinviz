@@ -507,10 +507,8 @@ class MultiViewWindow(QMainWindow):
         self.settingsDialog.show()
 
     def selectInputs(self):
-	#os.chdir("src/python/robinviz/databases/inputtrees")
 	self.inputWizard = InputWizard()
-	self.inputWizard.show()
-	#os.chdir("../../../../..")
+	self.inputWizard.showMaximized()
 	
     ############### VIEW MENU ###################
     def goto(self):

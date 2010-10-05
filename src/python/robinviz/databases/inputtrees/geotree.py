@@ -75,7 +75,6 @@ class GEOSelector(QWidget):
 		local_gz = "%s.gz" % local_path
 		download_file_to(remote_gz, local_gz)
 		ungz(local_gz)
-		os.remove(local_gz)
 	
     def parseFile(self):
 	lastNodeAtLevel = {}

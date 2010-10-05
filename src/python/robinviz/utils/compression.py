@@ -22,6 +22,7 @@ def download_file(url):
 def download_file_to(url, path):
     filename = download_file(url)
     shutil.move(filename, path)
+    return filename
     
 def ungz(filename):
     new_filename = ".".join(filename.split('.')[:-1])
@@ -32,6 +33,7 @@ def ungz(filename):
     f_out.writelines(f_in)
     f_out.close()
     f_in.close()
+    os.remove(filename)
     return new_filename
     
 def untar(filename):
