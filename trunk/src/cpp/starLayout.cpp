@@ -10,6 +10,7 @@ int main(int argc, char** argv) {
 		int count = 0;
 		gw.read_gml( fname );
 		graph G = gw.get_graph();
+                list<node> justOnes;
 		node_array<point> pos( G );
 		double x0, y0, x1, y1;
                 list_item it;
@@ -44,7 +45,7 @@ int main(int argc, char** argv) {
                 if( maxComp < election )
                     election = maxComp;
                 for(int i = 0; i <= max; i++ ){
-                    if( COMPS[ i ].size() < election ){
+                    if( COMPS[ i ].size() > 1 && COMPS[ i ].size() < election ){
                         notEnoughComponents.append( i );
                         forall_items( it, COMPS[ i ] ){
                             G.hide_node( COMPS[ i ][ it ] );
@@ -106,6 +107,7 @@ int main(int argc, char** argv) {
                         }
                 }
                 G.restore_all_nodes();
+                G.restore_all_edges();
                 //cout << " 2 \n";
                 double xpos1 = xmin;
                 double ypos1 = ymax + 6 * G.number_of_nodes();
@@ -113,7 +115,7 @@ int main(int argc, char** argv) {
                 int maxC = 0;
                 for(int i = 0; i <= max; i++ ){
                         //cout << COMPS[ i ].size() << "\t";
-                        if( COMPS[ i ].size() < election ){
+                        if(  COMPS[ i ].size() > 1 && COMPS[ i ].size() < election ){
                                 if( COMPS[ i ].size() > maxC )
                                 maxC = COMPS[ i ].size();
                                 if( xpos1 < xmax ){
@@ -163,14 +165,14 @@ int main(int argc, char** argv) {
                                     xpos1 += 300 + G.number_of_nodes() * 3;
                         }
                 }
-                //cout << "\n 3 \n";
-                gw.remove_bends();
 
-		forall_nodes( n, G ){
-			xpos[ n ] = pos[ n ].xcoord();
-			ypos[ n ] = pos[ n ].ycoord();
-		}
-		gw.remove_bends();
+                forall_nodes( n, G ){
+                    if( G.degree( n ) == 0 ){
+                        justOnes.append( n );
+                    }
+                }
+
+                gw.remove_bends();
 		gw.set_position( xpos, ypos );
 		gw.place_into_box(x0, y0, x1, y1);
                 fname = fname.replace( ".gml", "starLayout.gml" );
