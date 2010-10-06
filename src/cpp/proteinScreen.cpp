@@ -109,10 +109,11 @@ int main(int argc, char** argv) {
                             bool found = false;
                             if( strcmp( queryGeneName, protName1 ) == 0 ){
                                 query = G.new_node();
+//                                cout << protName1 << " :-: ";
                                 G[ query ] = protName1;
                                 center = query;
                                 found = true;
-    //                            cout << " FOUND " << protName1 << endl;
+    //                             cout << " FOUND " << protName1 << endl;
                             }
                             fscanf( fptr, "%d", &edgeNumber );
                             int count = 0;
@@ -122,6 +123,7 @@ int main(int argc, char** argv) {
                                 if( found ){
                                     n = G.new_node();
                                     G[ n ] = protName2;
+//                                    cout << protName2 << " - ";
                                     e = G.new_edge(query,n);
                                     elist.push_back( e );
                                     added.append( n );
@@ -129,6 +131,7 @@ int main(int argc, char** argv) {
                                 }
                                 count++;
                             }
+//                            cout << endl;
                             count = 0;
                             while( count != edgeNumber ){
                                 fscanf( fptr, "%d", &weight );
@@ -148,7 +151,7 @@ int main(int argc, char** argv) {
                             fscanf( fptr, "%s", protName1 );
                             bool found = false;
                             forall_items( it, added ){
-                                if( G[ added[ it ] ].contains( protName1 ) == true ){
+                                if( G[ added[ it ] ].contains( protName1 ) == true &&  added[ it ] != center ){
 //                                    forall_nodes( m, G ){
 //                                        if( G[ m ].contains( protName1 ) == true ){
 //                                            query = m;
@@ -164,6 +167,7 @@ int main(int argc, char** argv) {
                             fscanf( fptr, "%d", &edgeNumber );
                             int count = 0;
                             if( found && edgeNumber > 10 ){
+                                cout << edgeNumber << endl;
                                 list<edge> elist;
                                 list<int> weights;
                                 list<int> indexs;
@@ -172,7 +176,7 @@ int main(int argc, char** argv) {
                                     if( found ){
                                         bool found2 = false;
                                         forall_nodes( m, G ){
-                                            if( G[ m ].contains( protName2 ) == true ){
+                                            if( G[ m ].contains( protName2 ) == true && m != center ){
                                                 n = m;
                                                 found2 = true;
                                                 break;
@@ -250,10 +254,15 @@ int main(int argc, char** argv) {
                                 circle2.append( n );
                         }
                         double node_width = 50.0;
+
                         double length = node_width * circle1.size();
                         double pi = 2.0 * 3.147;
                         double tmp = pi;
                         double radius1 = length / pi;
+                        if( G.number_of_nodes() < 6 )
+                            radius1 *= G.number_of_nodes() / 2;
+                        if( G.number_of_nodes() <= 3 )
+                            radius1 *= G.number_of_nodes();
                         circle C1( 0, 0, radius1 );
                         double min = pi / (double)circle1.size();
                         forall_items( it, circle1 ){
@@ -263,12 +272,12 @@ int main(int argc, char** argv) {
                             tmp -= min;
                         }
 
-                        node_width = 30.0;
+                        node_width = 50.0;
                         length = node_width * circle2.size();
                         double radius2 = length / pi;
                         tmp = pi;
-                        if( radius1  >= radius2 + 200 )
-                            radius2 += 300;
+                        if( radius1  >= radius2 )
+                            radius2 = radius1 + 200;
                         circle C2( 0, 0, radius2 );
 
                         array<double> slotsD( circle2.size() + 1 );
@@ -346,6 +355,9 @@ int main(int argc, char** argv) {
 
                         gw.set_position( xpos, ypos );
                         gw.save_gml( fname );
+//                        char command[ 512 ];
+//                        sprintf( command, "%s %s", "forceDirectedLayoutW.exe", queryGeneName );
+//                        system( command );
                     }
                     else{
                         FILE *erptr;

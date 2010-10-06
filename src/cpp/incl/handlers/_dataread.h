@@ -97,6 +97,7 @@ void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 	if( (fptr = fopen( filename, "r" )) != NULL ){
 		char lineBuffer[10000],line[256];
 		char * pch;
+		cout << " Reading Header\n";
 		while( !feof( fptr ) ){
 			fscanf( fptr, "%s", line );
 // 			cout << line << endl;
@@ -104,13 +105,18 @@ void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 				break;
 			}
 		}
+		cout << " End Reading Header\n";
 // 		cout << " READING\n";
 		list<two_tuple<store512,store512> > annotationList;
 		fgets( lineBuffer, 10000, fptr );
-		fgets( lineBuffer, 10000, fptr );
+// 		fgets( lineBuffer, 10000, fptr );
 // 		cout << lineBuffer << endl;
 		int nonAnnotated = 1;
+		int i = 0;
 		while( !feof( fptr ) ){
+			if( i % 1000 == 0 )
+				  cout << "|";
+			i++;
 			fgets( lineBuffer, 10000, fptr );
 			if( lineBuffer[0] == '!' )
 				break;
@@ -224,9 +230,10 @@ void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 // 		free( lineBuffer );
 // 		free( pch );
 
-		cout << "Annotation File Parsed\n";
+		cout << "\nAnnotation File Parsed\n" << geneArray.size() << endl;
 		for( int i = 0; i < geneArray.size(); i++ ){
-			if( i % 1000 == 0 )
+// 			cout << "-";
+			if( i % 1000 == 0 || i == 0 )
 				  cout << "|";
 			for( int j = i; j < annotationList.size(); j++ ){
 				if( strcmp( geneArray[ i ].GENE , annotationList[ annotationList.get_item( j ) ].first().store ) == 0 ){
@@ -253,7 +260,7 @@ void dataReadGEOAnnotation( char filename[256], array<GENES> &geneArray ){
 }
 
 // GEO file parser, according to time series format of GEO
-void dataReadGEO( matrix INPUT, char filename[256], char annotName[256], array<GENES> &geneArray, array<CONDS> &condArray, int option  ){
+void dataReadGEO( matrix INPUT, char filename[256], char annotName[256], char filename3[256], array<GENES> &geneArray, array<CONDS> &condArray, int option  ){
 // 	leda::matrix INPUT;
 	int dimension1, dimension2;
 	char filename2[256];
@@ -316,8 +323,18 @@ void dataReadGEO( matrix INPUT, char filename[256], char annotName[256], array<G
 				if( strcmp( "!Sample_geo_accession", readData2 ) == 0 )
 					break;
 				S512 tmp;
-				sprintf( tmp.store, "%s", readData2 );
+				sprintf( tmp.store, "" );
+				if( readData2[ 0 ] == '"' ){
+					strcat( tmp.store, readData2 );
+					strcat( tmp.store, " " );
+					while( readData2[ strlen( readData2 ) - 1 ] != '"' ){
+						fscanf( fptr, "%s", readData2 );
+						strcat( tmp.store, readData2 );
+						strcat( tmp.store, " " );
+					}
+				}
 				sampleTitle.append( tmp );
+				sprintf( tmp.store, "" );
 				count++;
 			}
 			samples = count;
@@ -364,18 +381,26 @@ void dataReadGEO( matrix INPUT, char filename[256], char annotName[256], array<G
 // 			}
 			cout << "\n________________________\n";
 
+			bool description = true;
 			while( strcmp( "!Sample_description", readData2 ) != 0 ){
+				if( strcmp( "!series_matrix_table_begin", readData2 ) == 0 ){
+					description = false;
+					break;
+				}
 				fscanf( fptr, "%s", readData2 );
 			}
-			count2 = 0;
-			while( count2 != count - 1){
-				fscanf( fptr, "%s", readData2 );
-				S1024 tmp;
-				sprintf( tmp.store, "%s", readData2 );
-				sampleDescription.append( tmp );
-				count2++;
+			if( description == true ){
+				count2 = 0;
+				while( count2 != count - 1){
+					fscanf( fptr, "%s", readData2 );
+					S1024 tmp;
+					sprintf( tmp.store, "%s", readData2 );
+					sampleDescription.append( tmp );
+					count2++;
+				}
 			}
-	
+			else
+				break;
 // 			cout << endl;
 // 			forall_items( it ,sampleDescription ){
 // 				cout << sampleDescription[ it ].store << "\t";
@@ -405,7 +430,7 @@ void dataReadGEO( matrix INPUT, char filename[256], char annotName[256], array<G
 	double value;
 	for( int i = 0; i < samples; i++ ){
 		  fscanf( fptr, "%s", readData2 );
-// 		  cout << readData2 << "\t";
+		  cout << readData2 << "\t";
 	}
 // 	cout << "\n________________________\n";
 	cout << "Reading Matrix" << endl;
@@ -435,19 +460,30 @@ void dataReadGEO( matrix INPUT, char filename[256], char annotName[256], array<G
 	condArray.resize( samples );
 	matrix INPUT2( genes, samples );
 	INPUT = INPUT2;
+	cout << "\n________________________\n";
 	cout << genes << endl << samples << endl;
+	cout << "________________________\n";
 // 	for( int j = 0; j < samples; j++ ){
 // 		sprintf( condArray[ j ].COND, "%s", sampleTitle[ sampleTitle.get_item( j ) ].store );
 // 	}
+	sprintf( filename2, "trunk/src/python/robinviz/databases/%s.matrix", filename3 );
+	fptr = fopen( filename2, "w" );
+	fprintf( fptr, "%d %d\n", genes, samples );
 	for( int i = 0; i < genes; i++ ){
 		sprintf( geneArray[ i ].GENE, "%s", geneAnnot[ geneAnnot.get_item( i ) ].store );
+// 		cout << geneArray[ i ].GENE << "|";
 		list<double> values = rows[ rows.get_item( i ) ];
 		for( int j = 0; j < samples; j++ ){
 			INPUT( i, j ) = (double)values[ values.get_item( j ) ];
+			fprintf( fptr, "%lf\t", INPUT( i, j ) );
+// 			cout << INPUT( i, j ) << "\t";
 		}
+		fprintf( fptr, "\n" );
+// 		cout << endl;
 	}	
+	fclose( fptr );
 // // 	INPUT.print();
-	cout << "Reading Annotation" << endl;
+	cout << endl << "Reading Annotation" << endl;
 	if( option == 1 ){
 		dataReadGEOAnnotation( annotName, geneArray );
 	}
@@ -458,13 +494,29 @@ void dataReadGEO( matrix INPUT, char filename[256], char annotName[256], array<G
 	}
 	cout << "Saving Annotation" << endl;
 
-	sprintf( filename2, "%s.txt", filename );
+	sprintf( filename2, "trunk/src/python/robinviz/databases/%s.txt", filename3 );
 	fptr = fopen( filename2, "w" );
 	for( int i = 0; i < geneArray.size(); i++ ){
 		fprintf( fptr, "%s\n", geneArray[ i ].GENE );
 	}
 	fclose( fptr );
 	cout << "END" << endl;
+
+	char command[256];
+	char filename4[256];
+// 	sprintf( filename2, "%s", filename3 );
+	sprintf( filename4, "%s.gene", filename3 );
+	fptr = fopen( "trunk/src/python/robinviz/databases/run.sh", "a" );
+	fprintf( fptr, "%s %s %s\n", "python entrez_to_biogrid.py", filename3, filename4 );
+	fclose( fptr );
+	sprintf( filename2, "trunk/src/python/robinviz/databases/%s.cond", filename3 );
+	fptr = fopen( filename2, "w" );
+	for( int i = 0; i < sampleTitle.size(); i++ ){
+		fprintf( fptr, "%s\n", sampleTitle[ sampleTitle.get_item( i ) ].store );
+	}
+	fclose( fptr );
+// 	system( command );
+	
 // 	return INPUT;
 }
 

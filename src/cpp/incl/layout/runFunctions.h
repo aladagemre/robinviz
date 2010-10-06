@@ -434,7 +434,7 @@ cout << "\n Dummy Adding Done \n" ;
 // */
 // 		G.rev_all_edges();
 
-                for( int repeat_i = 0; repeat_i < 20 ; repeat_i++ ){
+                for( int repeat_i = 0; repeat_i < 40 ; repeat_i++ ){
                       G.rev_all_edges();
                       //1st Way
                       for( int i = Layers.size()-1; i > 0; i-- ){
