@@ -5,6 +5,9 @@ A gene name conversion utility. Can do conversions
 Biogrid ID -> Other Identifier IDs
 Biogrid ID -> Specific Identifier ID
 Specific Identifier ID -> Biogrid ID
+
+>>> from genequery import *
+>>> db = GeneDB()
 """
 import sqlite3
 import sys
@@ -19,29 +22,42 @@ class GeneDB:
 	self.cursor = self.conn.cursor()
 	
     def value2biogrids(self, value):
-	"""Converts a given value to corresponding biogrid ids."""
-	self.cursor.execute("SELECT biogrid_id FROM translation WHERE identifier_value=?;",  (value,) )
+	"""Converts a given value of an UNKNOWN TYPE to corresponding biogrid ids.
+	>>> db.value2biogrids("30990")
+	[('57562', 'ENTREZ_GENE'), ('127342', 'HGNC'), ('30990', 'BIOGRID')]
+	"""
+	self.cursor.execute("SELECT biogrid_id, identifier_type FROM translation WHERE identifier_value=?;",  (value,) )
 	result = self.cursor.fetchall()
 	
-	biogrid_ids = list(set([str(row[0]) for row in result]))	    
+	biogrid_ids = list(set([(str(row[0]), str(row[1])) for row in result]))	    
+	
 	return biogrid_ids
     
     
     def value2biogrid(self, identifier_value, identifier_type):
-	"""Converts a given value to corresponding biogrid ids."""
+	"""Converts a given value in a SPECIFIC TYPE to corresponding biogrid id.
+	>>> db.value2biogrid("30990", "ENTREZ_GENE")
+	57562
+	"""
 	self.cursor.execute("SELECT biogrid_id FROM translation WHERE identifier_value=? AND identifier_type=?;" , (identifier_value , identifier_type) )
-	result = self.cursor.fetchone()
+	result = self.cursor.fetchall()
+	#print result
 	if not result:
 	    return None
-	
-	assert len(result) == 1
-	biogrid_id = result[0]
+	"""if len(result) > 1:
+	    print identifier_value, identifier_type, result
+	assert len(result) == 1, "Length is not 1 but %d" % len(result)"""
+	biogrid_id = result[0][0]
 	return biogrid_id
 	
     def biogrid2values(self, biogrid_id):
 	"""Converts a given biogrid_id to the other identifier values.
 	Result is a list in the format:
 	[  (value1, type1), (value2, type2), ... ]
+	
+	>>> db.biogrid2values("30994")
+	[(u'850374', u'ENTREZ_GENE'), (u'ETG850374', u'ENTREZ_GENE_ETG'), (u'SUF16', u'OFFICIAL_SYMBOL'), (u'TG(GCC)C', u'SYSTEMATIC_NAME'), (u'85666111', u'GENBANK_GENOMIC_DNA_GI'), (u'NC_001135', u'REFSEQ_GENOMIC_DNA_ACCESSION'), (u'S000006575', u'SGD'), (u'30994', u'BIOGRID')]
+
 	"""
 	self.cursor.execute( "SELECT identifier_value, identifier_type FROM translation WHERE biogrid_id=?;", (biogrid_id,) )
 	result = self.cursor.fetchall()
@@ -50,6 +66,9 @@ class GeneDB:
     def biogrid2value(self, biogrid_id, identifier_type):
 	"""Converts a given biogrid_id to the specified identifier type's value.
 	Result is a single string like: ETG814974
+	
+	>>> db.biogrid2value(35247, "SYSTEMATIC_NAME")
+	'YMR072W'
 	"""
 	self.cursor.execute("SELECT identifier_value FROM translation WHERE biogrid_id=? and identifier_type=?;" , (biogrid_id, identifier_type)  )
 	result = self.cursor.fetchone()
@@ -64,7 +83,18 @@ class GeneDB:
 	bids = self.value2biogrids(value)
 	# Convert biogrid ids in the list to specified identifier type and return the resulting list.
 	return filter(lambda x: x, [self.biogrid2value(bid, identifier_type) for bid in bids])
-	
+
+    def svalue2svalue(self, from_value, from_type, to_type):
+	"""Converts a given value of a specific type to the given specific type.
+	Example:
+	>>> db.svalue2svalue("YMR072W", "SYSTEMATIC_NAME", "OFFICIAL_SYMBOL")
+	'ABF2'
+	"""
+
+	bid = self.value2biogrid(from_value, from_type)
+	result = self.biogrid2value(bid, to_type)
+	return result
+    
     def checkUniqueValues(self):
 	"""Checks if identifier values are unique so that no problem would arise when value2biogrid is called.
 	Returns True if all values are unique, else False."""
@@ -77,6 +107,7 @@ class GeneDB:
 	
 	return x - y
 	
+
 
 
 # Some example runs and their outputs:
@@ -92,3 +123,8 @@ print db.biogrid2values("30990")
 print db.biogrid2value("30990", "SYSTEMATIC_NAME")
 # YCR011C
 """
+
+if __name__ == "__main__":
+    db = GeneDB()
+    import doctest
+    doctest.testmod()

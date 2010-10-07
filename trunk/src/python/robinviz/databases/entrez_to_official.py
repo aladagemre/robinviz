@@ -9,7 +9,7 @@ def main(infile,outfile):
     for line in f:
 	cols = line.strip().split("///")
 	#print cols
-	txt = "///".join(map(lambda e: str(db.value2biogrid(e, "ENTREZ_GENE")), cols))
+	txt = "///".join(map(lambda e: str(db.svalue2svalue(e, "ENTREZ_GENE", "OFFICIAL_SYMBOL")), cols))
 	o.write(txt+"\n")
     o.close()
     

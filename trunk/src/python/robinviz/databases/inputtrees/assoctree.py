@@ -82,15 +82,23 @@ class AssociationSelector(QWidget):
 	    return i
 	    
 	
-	for line in open(self.filename):
+	for line in open(self.filename):	    
+	    # Count the number of preceding tabs to define depth.
+	    numt = tcount(line)
 	    cols = line.strip().split("\t")
-	    data = tuple(cols[:-1])
-	    item = QTreeWidgetItem(self.treeWidget, data)
-	    item.url = cols[-1]
-	    
-	    self.treeWidget.insertTopLevelItem(0, item)
+	    if numt == 0: # If top level,
+		item = QTreeWidgetItem(self.treeWidget, (cols[0],) )
+		lastNodeAtLevel[0] = item # save the last root
+		self.treeWidget.insertTopLevelItem(0, item)
+	    else: # If inner level
+		parent = lastNodeAtLevel[numt-1] # find who the parent is.
+		data = tuple(cols[0:2])
+		item = QTreeWidgetItem(parent, data )
+		item.url = cols[2]
+		parent.addChild( item )
+		lastNodeAtLevel[numt] = item	# assign itself as the last root at its level
  
-	    item.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+	    item.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsTristate)
 	    item.setCheckState(0, Qt.Unchecked)
 	    
 if __name__ == "__main__":
