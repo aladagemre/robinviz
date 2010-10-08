@@ -12,6 +12,8 @@ if not "utils" in sys.path:
 from utils.info import ap
 from utils.compression import download_file_to, ungz
 
+from complete_goa import generate_index
+
 class AssociationSelector(QWidget):
     def __init__(self):
         QWidget.__init__(self)
@@ -22,20 +24,20 @@ class AssociationSelector(QWidget):
     def checkIndex(self):
 	if os.path.exists(self.filename):
 	    return
-	from complete_goa import *
+	generate_index()
 	
     def setupGUI(self):
 	layout = QHBoxLayout()
 	
 	self.treeWidget = treeWidget = QTreeWidget()
-	treeWidget.setColumnCount(2)
-	treeWidget.setHeaderLabels(("Organism", "Source"))
-	treeWidget.setSortingEnabled(True)
+	treeWidget.setColumnCount(3)
+	treeWidget.setHeaderLabels(("Organism", "Source DB", "Gene #",))
+	treeWidget.itemExpanded.connect(self.resizeColumns)
+	#treeWidget.setSortingEnabled(True)
 	
-	self.parseFile()
-	self.resizeColumns()
-	    
+	self.parseFile()	    
 	layout.addWidget(treeWidget)
+	
 	button = QPushButton("Report Selected")
 	button.clicked.connect(self.downloadCheckedAssociation)        
         layout.addWidget(button)
@@ -43,23 +45,37 @@ class AssociationSelector(QWidget):
         self.setLayout(layout)
         self.setWindowTitle("Gene Association Sources")
         
+        self.resizeColumns()
+        
     def resizeColumns(self):
 	"""Resizes columns appropriately to content size."""
 	for i in range(2):
 	    self.treeWidget.resizeColumnToContents(i)
 	    
+        
     def getCheckedItems(self):
 	checkedItems = set()
 	
+	def traverse(item):
+	    # Add the term into checked items list if it's checked.
+	    if item.checkState(0) == Qt.Checked:
+		checkedItems.add(str(item.url))
+	    # For all children, traverse them too.
+	    for c in range( item.childCount() ):
+		child = item.child(c)
+		traverse(child)
+		
+	    
 	for i in range( self.treeWidget.topLevelItemCount() ):
 	    topLevelItem = self.treeWidget.topLevelItem(i)
-	    if topLevelItem.checkState(0) == Qt.Checked:
-		checkedItems.add(str(topLevelItem.url))
+	    traverse(topLevelItem)
 	
+	checkedItems = sorted(checkedItems)
 	f = open(ap("assocdata/selected_assoc.txt"), "w")
-	f.write("\n".join( sorted(checkedItems) ) )
+	f.write("\n".join( checkedItems ) )
 	f.close()
-        return checkedItems
+	return checkedItems
+	
         
     def downloadCheckedAssociation(self):
 	urls = self.getCheckedItems()
@@ -92,9 +108,12 @@ class AssociationSelector(QWidget):
 		self.treeWidget.insertTopLevelItem(0, item)
 	    else: # If inner level
 		parent = lastNodeAtLevel[numt-1] # find who the parent is.
-		data = tuple(cols[0:2])
+		data = tuple(cols[0:3])
 		item = QTreeWidgetItem(parent, data )
-		item.url = cols[2]
+		try:
+		    item.url = cols[3]
+		except:
+		    print cols
 		parent.addChild( item )
 		lastNodeAtLevel[numt] = item	# assign itself as the last root at its level
  
