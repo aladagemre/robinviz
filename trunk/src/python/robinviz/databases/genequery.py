@@ -20,7 +20,7 @@ class GeneDB:
     def __init__(self):
 	self.conn = sqlite3.connect(os.path.join(database_root, "identifier.db"))
 	self.cursor = self.conn.cursor()
-	
+
     def value2biogrids(self, value):
 	"""Converts a given value of an UNKNOWN TYPE to corresponding biogrid ids.
 	>>> db.value2biogrids("30990")
@@ -78,11 +78,17 @@ class GeneDB:
 	return str(result[0])
 	
     def value2value(self, value, identifier_type):
-	"""Converts a given value to a specific type of value."""
+	"""Converts a given value to a specific type of value. This gives possible outputs as
+	input protein's type is unknown.
+	
+	>>> db.value2value("30990", "SYSTEMATIC_NAME")
+	['Dmel_CG3176', 'YCR011C']
+	"""
 	# Find corresponding biogrid IDs. There might be more than one.
 	bids = self.value2biogrids(value)
+	#print bids
 	# Convert biogrid ids in the list to specified identifier type and return the resulting list.
-	return filter(lambda x: x, [self.biogrid2value(bid, identifier_type) for bid in bids])
+	return list(set(filter(lambda x: x, [self.biogrid2value(bid[0], identifier_type) for bid in bids])))
 
     def svalue2svalue(self, from_value, from_type, to_type):
 	"""Converts a given value of a specific type to the given specific type.

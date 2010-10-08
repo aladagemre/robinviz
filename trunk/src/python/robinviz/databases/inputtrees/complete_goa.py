@@ -45,6 +45,8 @@ def generate_index():
 	#annotations = children[4].getText()
 	#submission_date = children[6].getText()
 	
+	if not url.startswith("http"):
+	    url = "http://www.geneontology.org/" + url
 	record = (organism_name, source_db, gene_products_annotated, url)
 	
 	if "?rev=HEAD" in url:
