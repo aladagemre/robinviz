@@ -162,7 +162,7 @@
         /**
         *	Color Method for journal paper
         **/
-                bool hasColor = true;
+                bool hasColor = false;
 	/**
 	*	GO file read or not, please specify if it is true at sources/usr_sources/vis...
 	**/
@@ -190,7 +190,7 @@
 	double Hmax;
 	bool wolfFlag = true, baryFlag = false, medianFlag = false, pmFlag = false, greFlag = false;
 	char empty[32];
-        int colors[17][3] ={ {255,255,255},
+        int colors[18][3] ={ {255,255,255},
                              {0,0,0},
                              {255,0,0},
                              {0,255,0},
@@ -206,7 +206,8 @@
                              {220,220,220},
                              {175,175,175},
                              {128,128,128},
-                             {255,255,230}};
+                             {255,255,230},
+                             {75,75,75}};
 #endif ORDVARS
 
 #ifdef LEDAVARS

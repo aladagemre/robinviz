@@ -106,6 +106,10 @@
                 char inputGoFile[256] = "sources//usr_sources//visualization_data//cat_input.txt";
 #endif
         /**
+        *	Color Method for journal paper
+        **/
+                bool hasColor = false;
+        /**
         *	Category File
         **/
 #ifdef LINUX
@@ -169,6 +173,7 @@
 	GRAPH<int,int> G;
 	array<GRAPH<int,int> > listOfGraphs; 
 	array<char> Categories;
+        array<list<char> > CategoriesXL;
 	GRAPH<leda::string,int> PROJECT,G1,G2;
 	GRAPH<int,int> H;
 	node_array<double> Xpos;
@@ -196,51 +201,7 @@ int main(){
                 return 0;
         }
         else{
-                // 	//RobinVizInitializationFile
-// 		fscanf( fptr, "%s", empty );
-// 		//cout << empty << endl;
-
-                //// 	removeRat = .35
-                //fscanf( fptr, "%s%lf", empty, &removeRat );
-                ////cout << empty << " " << removeRat << endl;
-                //// 	nodeSize = 50.0
-                //fscanf( fptr, "%s%lf", empty, &nodeSize );
-                ////cout << empty << " " << nodeSize << endl;
-                //// 	edgeBendImp = 35.0
-                //fscanf( fptr, "%s%lf", empty, &edgeBendImp );
-                ////cout << empty << " " << edgeBendImp << endl;
-                //// 	colorScale = 130.0
-                //fscanf( fptr, "%s%lf", empty, &edgeBendImp );
-                ////cout << empty << " " << edgeBendImp << endl;
-                //// 	edgThicknessTher = 4.0
-                //fscanf( fptr, "%s%lf", empty, &edgThicknessTher );
-                ////cout << empty << " " << edgThicknessTher << endl;
-                //// 	dataName = "sources/usr_sources/microarray_data/input.txt"
-  //      fscanf( fptr, "%s%s", empty, ppifilename );
-  //      //cout << empty << " " << ppifilename << endl;
-  //      fscanf( fptr, "%s%s", empty, catfile );
-  //      //cout << empty << " " << ppifilename << endl;
-                //fscanf( fptr, "%s%s", empty, defaultCatFile );
-  //      //cout << empty << " " << ppifilename << endl;
-
-
                 int bool_i;
-
-//                //cout << empty << " " << ffd_layout << endl;
-//                // 	go_info = 1
-//                fscanf( fptr, "%s%d", empty, &bool_i );
-//                go_info = ( bool_i == 0 ? 0 : 1 );
-//                //cout << empty << " " << go_info << endl;
-//                fscanf( fptr, "%s%s", empty, gofile );
-//                //cout << empty << " " << ppifilename << endl;
-//                // 	edgesBetween = 1
-//                fscanf( fptr, "%s%d", empty, &bool_i );
-//                edgesBetween = ( bool_i == 0 ? 0 : 1 );
-//                //cout << empty << " " << edgesBetween << endl;
-//                // 	sharedGenes = 0
-//                fscanf( fptr, "%s%d", empty, &bool_i );
-//                sharedGenes = ( bool_i == 0 ? 0 : 1 );
-//                //cout << empty << " " << sharedGenes << endl;
                 fclose( fptr );
                 _iniReadCoFunctionality( removeRat,
                                          nodeSize,
@@ -256,6 +217,12 @@ int main(){
                                          defaultGoFile );
 
                 FILE *kfptr;
+                if( hasColor == true ){
+                    cout << "/**************************************************/" << endl;
+                    cout << "\t" << " Color Processing" << endl;
+                    cout << "/**************************************************/" << endl;
+                    colorHandling( catfile, defaultGoFile );
+                }
                 if( (fptr = fopen( catfile , "r" )) !=NULL ){
                     if( (kfptr = fopen( "sources/usr_sources/visualization_data/functions.txt", "w" )) != NULL || (kfptr = fopen( "sources//usr_sources//visualization_data//functions.txt", "w" )) != NULL ){
                         int number_of_category;
@@ -273,8 +240,15 @@ int main(){
                         if( (kfptr = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "w" )) != NULL || (kfptr = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "w" )) != NULL ){
                                char cat_c;
                                while( !feof( fptr ) ){
-                                   fscanf( fptr, "%s%c", tc_array, &cat_c );
-                                   fprintf( kfptr, "%s\t%c\n", tc_array, cat_c );
+                                   if( hasColor != true ){
+                                       fscanf( fptr, "%s%c", tc_array, &cat_c );
+                                       fprintf( kfptr, "%s\t%c\n", tc_array, cat_c );
+                                   }
+                                   else{
+                                       char cat_c_a[64];
+                                       fscanf( fptr, "%s%s", tc_array, cat_c_a );
+                                       fprintf( kfptr, "%s\t%s\n", tc_array, cat_c_a );
+                                   }
                                }
                                fclose(kfptr);
                                fclose(fptr);
@@ -347,12 +321,38 @@ int main(){
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " Produce Bicluster Graphs" << endl;
                 cout << "/**************************************************/" << endl;
-                Categories.resize( INTERACTIONS.number_of_nodes() );
-                node n;
-                for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
-                    Categories[ i ] = 'X';
+//                Categories.resize( INTERACTIONS.number_of_nodes() );
+//                node n;
+//                for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
+//                    Categories[ i ] = 'X';
                 listOfGraphs.resize( 0, categories.size() );
-                inpGraphProdHandling( G, listOfGraphs, abbv, Categories, temp, GenesNode, INTERACTIONS, TEMPINT, categories, cat_num );
+                if( hasColor == false ){
+                    Categories.resize( INTERACTIONS.number_of_nodes() );
+                    node n;
+                    for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
+                        Categories[ i ] = 'X';
+                }
+                else{
+                    CategoriesXL.resize( INTERACTIONS.number_of_nodes() );
+                    node n;
+                    for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
+                        CategoriesXL[ i ].append('X');
+                }
+                listOfGraphs.resize( 0, categories.size() );
+                if( hasColor == false ){
+                    inpGraphProdHandling( G, listOfGraphs, abbv, Categories, temp, GenesNode, INTERACTIONS, TEMPINT, categories, cat_num );
+                }
+                else{
+                    inpGraphProdHandling( G, listOfGraphs, abbv, CategoriesXL, temp, GenesNode, INTERACTIONS, TEMPINT, categories, cat_num );
+                    list_item it;
+//                    for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ ){
+//                        forall_items( it, CategoriesXL[ i ] ){
+//                            cout << CategoriesXL[ i ][ it ] << "-";
+//                        }
+//                        cout << endl;
+//                    }
+                }
+//                inpGraphProdHandling( G, listOfGraphs, abbv, Categories, temp, GenesNode, INTERACTIONS, TEMPINT, categories, cat_num );
 
 
                 for( int i = 0; i < categories.size(); i++ ){
@@ -399,7 +399,7 @@ int main(){
                 cout << "\t" << " Running Layering Algorithm" << endl;
                 cout << "/**************************************************/" << endl;
 
-                mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, categories, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num, Categories );
+                mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, categories, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num );
 
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " End Running Layering Algorithm" << endl;
@@ -409,10 +409,14 @@ int main(){
                 cout << "/**************************************************/" << endl;
                 cout << endl;
 
-                mainGraph2( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
+                if( hasColor == false )
+                    mainGraph2( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
                                         increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
                     POS, BENDS, LAYERS, abbv, cat_num, Categories, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
-
+                else
+                    mainGraph2( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
+                                        increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
+                    POS, BENDS, LAYERS, abbv, cat_num, CategoriesXL, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " End Building High Level Graph " << endl;
                 cout << "/**************************************************/" << endl;
