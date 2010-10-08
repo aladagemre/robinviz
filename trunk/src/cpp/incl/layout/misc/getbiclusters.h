@@ -595,7 +595,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
     
 //     	cout << " Gecti3 " << endl;
 #ifdef LINUX
-    resultPtr = fopen( "outputs/enrich/result.txt", "w" );
+        resultPtr = fopen( "outputs/enrich/result.txt", "w" );
 #else
 	resultPtr = fopen( "outputs//enrich//result.txt", "w" );
 #endif
@@ -640,6 +640,329 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 						for( int k = 0; k < cat_num; k++ ){
 							if( gx[ j ].geneType[ 0 ] == abbv[ k ] )
 								countAbbv[ k ] = countAbbv[ k ] + 1;
+						}
+					}
+				}
+			}
+			for( int j = -1; j < cat_num; j++ ){
+				if( j == -1 )
+					fprintf( resultPtr, "%20d\t", i+1 );
+				else{
+					if( j != cat_num - 1 )
+						fprintf( resultPtr, "%20d\t", countAbbv[ j ] );
+					else
+						fprintf( resultPtr, "%20d\n", countAbbv[ j ] );
+				}
+			}
+// 			fclose( fptr );
+		}
+    }
+
+//  	cout << " Gecti4 " << endl;
+    fclose( resultPtr );
+
+    FILE *efptr;
+    if( ( efptr = fopen( "outputs/enrich/result.txt", "r" )) == NULL && ( efptr = fopen( "outputs/enrich//result.txt", "r" )) == NULL ){
+	    FILE *erptr;
+#ifdef LINUX
+	    erptr = fopen( "outputs/error.txt", "w" );
+#else
+		erptr = fopen( "outputs//error.txt", "w" );
+#endif
+	    fprintf( erptr, "Error-id2: outputs/enrich/result.txt file does not exist\n" );
+	    fclose( erptr );
+	    cout << "\nError-id2: outputs/enrich/result.txt file does not exist\n"; 
+	    exit(1);
+    }
+    else{
+	    char readCatName[128];
+	    for( int i = 0; i <= cat_num; i++ ){
+		    fscanf( efptr, "%s", readCatName );
+	    }
+	    int numberOfBiclusters = biNumber;
+	    array<int> categoryMaxGenes( cat_num );
+	    array< list<int> > categoryPerGenes( numberOfBiclusters );
+	    array< list<double> > categoryPerGenesRatio( numberOfBiclusters );
+	    int bic_id;
+// 	    cout << " Beginning to read first row of enrichments\n" << endl;
+	    for( int i = 0; i <= cat_num; i++ ){
+		    if( i == 0 ){
+			    fscanf( efptr, "%d", &bic_id );
+		    }else{
+			    fscanf( efptr, "%d", &categoryMaxGenes[ i-1 ] );
+		    }
+	    }
+// 	    cout << " Beginning to read enrichments\n" << endl;
+	    for( int i = 0; i < numberOfBiclusters; i++ ){
+		    for( int j = 0; j < cat_num; j++ )
+			    categoryPerGenes[ i ].append( 0 );
+		    for( int j = 0; j <= cat_num; j++ ){
+			    if( j == 0 ){
+				    fscanf( efptr, "%d", &bic_id );
+			    }else{
+				    fscanf( efptr, "%d", &categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j-1 )] );
+			    }
+		    }
+	    }
+// 	    cout << " Beginning to Calculate Ratio\n" << endl;
+	    for( int counter = 0; counter < numberOfBiclusters; counter++ ){
+		    for( int i = 0; i < cat_num; i++ )
+			    categoryPerGenesRatio[ counter ].append( 0.0 );
+		    int maxCategId = 0; 
+		    double gene_sum = 0;
+		    for( int k = 0; k < cat_num; k++ ){
+			    gene_sum += categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( k )];
+		    }
+		    double maxValue = 0;
+		    for( int i = 0; i < cat_num; i++ ){
+			    categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )] = (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / (double)categoryMaxGenes[ i ];
+			    if( maxValue <  (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / gene_sum ){
+				maxValue = (double)categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] / gene_sum;
+				maxCategId = i;
+			    }
+		    }
+		    categoriesBicluster.append( maxCategId ); 
+	    }
+
+	    fclose( efptr );
+	    char c;
+// 	    cout << " Beginning to html file\n" << endl;
+#ifdef LINUX
+	    efptr = fopen( "outputs/enrich/result.html", "w" );
+	    resultPtr = fopen( "outputs/enrich/src/header.txt", "r" );
+#else
+		efptr = fopen( "outputs//enrich//result.html", "w" );
+	    resultPtr = fopen( "outputs//enrich//src//header.txt", "r" );
+#endif
+	    while( !feof( resultPtr ) ){
+		    fscanf( resultPtr, "%c", &c );
+		    fprintf( efptr, "%c", c );
+	    }
+	    fclose( resultPtr );
+
+	    fprintf( efptr, "\n\t<th scope=\"col\">Bicluster Id</th>\n" );
+	    list<CAT> categoriesOfGenes2 = categoriesOfGenes;
+	    for( int i = 0; i < cat_num; i++ ){
+			for( int j = 0; j < 64; j++ ){
+				if( categoriesOfGenes2[ categoriesOfGenes2.get_item( i ) ].categ[ j ] == '_' )
+					categoriesOfGenes2[ categoriesOfGenes2.get_item( i ) ].categ[ j ] = ' ';
+			}
+	    }
+		FILE *oneResultPtr;
+#ifdef LINUX
+		resultPtr = fopen( "outputs/enrich/src/header.txt", "r" );
+		for( int i = 0; i < numberOfBiclusters; i++ ){
+			char outputFile[256];
+			sprintf( outputFile, "%s%d%s", "outputs/enrich/resultbic", i, ".html" );
+			oneResultPtr = fopen( outputFile, "w" );
+			while( !feof( resultPtr ) ){
+				fscanf( resultPtr, "%c", &c );
+				fprintf( oneResultPtr, "%c", c );
+			}
+			rewind( resultPtr );
+			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Categories" );
+			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Number of Genes" );
+			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Ratio Respect to All Category Genes" );
+			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Ratio Respect to Bicluster Gene Space" );
+			fprintf( oneResultPtr, "\n\t</tr>\n\t</thead>\n\t<tfoot>\n\t<tr>\n\t\t<td colspan=\"%d\">Table shows the enrichment results for Bicluster %d</td>\n\t<tr>\n\t</tfoot>\n<tbody>\n", 3, i );
+			for( int j = 0; j < cat_num; j++ ){
+				fprintf( oneResultPtr, "\t<tr>\n" );
+				fprintf( oneResultPtr, "\t\t<td>%s</td>\n", categoriesOfGenes2[ categoriesOfGenes2.get_item( j ) ].categ );
+				fprintf( oneResultPtr, "\t\t<td>%d</td>\n", categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] );
+				fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", categoryPerGenesRatio[ i ][ categoryPerGenesRatio[ i ].get_item( j )] );
+				double gene_sum = 0;
+				for( int k = 0; k < cat_num; k++ ){
+					gene_sum += categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( k )];
+				}
+				fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum );
+				fprintf( oneResultPtr, "\t</tr>\n" );
+			}
+			fprintf( oneResultPtr, "\t</tbody>\n</table>\n</body>\n</html>" );
+			fclose( oneResultPtr );
+		}
+		fclose( resultPtr );
+#else
+		resultPtr = fopen( "outputs//enrich//src//header.txt", "r" );
+		for( int i = 0; i < numberOfBiclusters; i++ ){
+			char outputFile[256];
+			sprintf( outputFile, "%s%d%s", "outputs//enrich//resultbic", i, ".html" );
+			oneResultPtr = fopen( outputFile, "w" );
+			while( !feof( resultPtr ) ){
+				fscanf( resultPtr, "%c", &c );
+				fprintf( oneResultPtr, "%c", c );
+			}
+			rewind( resultPtr );
+			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Categories" );
+			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Number of Genes" );
+			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Ratio Respect to All Category Genes" );
+			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Ratio Respect to Bicluster Gene Space" );
+			fprintf( oneResultPtr, "\n\t</tr>\n\t</thead>\n\t<tfoot>\n\t<tr>\n\t\t<td colspan=\"%d\">Table shows the enrichment results for Bicluster %d</td>\n\t<tr>\n\t</tfoot>\n<tbody>\n", 3, i );
+			for( int j = 0; j < cat_num; j++ ){
+				fprintf( oneResultPtr, "\t<tr>\n" );
+				fprintf( oneResultPtr, "\t\t<td>%s</td>\n", categoriesOfGenes2[ categoriesOfGenes2.get_item( j ) ].categ );
+				fprintf( oneResultPtr, "\t\t<td>%d</td>\n", categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] );
+				fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", categoryPerGenesRatio[ i ][ categoryPerGenesRatio[ i ].get_item( j )] );
+				double gene_sum = 0;
+				for( int k = 0; k < cat_num; k++ ){
+					gene_sum += categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( k )];
+				}
+				fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum );
+				fprintf( oneResultPtr, "\t</tr>\n" );
+			}
+			fprintf( oneResultPtr, "\t</tbody>\n</table>\n</body>\n</html>" );
+			fclose( oneResultPtr );
+		}
+		fclose( resultPtr );
+#endif
+	    for( int i = 0; i < cat_num; i++ ){
+		    fprintf( efptr, "\n\t<th scope=\"col\"> %s </th>\n", categoriesOfGenes2[ categoriesOfGenes2.get_item( i ) ].categ );
+	    }
+//     </tr>
+//     </thead>
+//     <tfoot>
+//     	<tr>
+//         	<td colspan="4"> Table shows the enrichment results for the specified file</td>
+//         </tr>
+//     </tfoot>
+//     <tbody>
+	    fprintf( efptr, "\n\t</tr>\n\t</thead>\n\t<tfoot>\n\t<tr>\n\t\t<td colspan=\"%d\">Table shows the enrichment results for the specified file</td>\n\t<tr>\n\t</tfoot>\n<tbody>\n", cat_num+1 );
+// 	<tr>
+// 	    <td rowspan="2">Stephen C. Cox</td>
+// 	    <td>Marketing</td>
+// 	    <td>Make discount offers</td>
+// 	    <td>3/10</td>
+// 	</tr>
+// 	<tr>
+// 	    <td>Marketing</td>
+// 	    <td>Make discount offers</td>
+// 	    <td>3/10</td>
+// 	</tr>
+	    for( int counter = 0; counter < numberOfBiclusters-1; counter++ ){
+		  fprintf( efptr, "\t<tr>\n" );
+		  fprintf( efptr, "\t\t<td rowspan=\"2\">Bicluster %d</td>\n", counter+1 );
+		  for( int i = 0; i < cat_num; i++ ){
+			  fprintf( efptr, "\t\t<td>%d</td>\n", categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] );
+		  }
+		  fprintf( efptr, "\t</tr>\n" );
+		  fprintf( efptr, "\t<tr>\n" );
+		  for( int i = 0; i < cat_num; i++ ){
+			  fprintf( efptr, "\t\t<td>%lf</td>\n", categoryPerGenesRatio[ counter ][ categoryPerGenesRatio[ counter ].get_item( i )] );
+		  }
+		  fprintf( efptr, "\t</tr>\n");
+	    }
+// 	      </tbody>
+// 	  </table>
+// 
+// 	  </body>
+// 	  </html>
+	    fprintf( efptr, "\t</tbody>\n</table>\n</body>\n</html>" );
+	    fclose( efptr );
+	      
+    }
+}
+
+void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumber, char algName[], int dimension1, int dimension, bool hasColor ){
+
+    list<CAT> categoriesOfGenes;
+    FILE *fptr,*resultPtr;
+    GNDATA2 *allGenes = (GNDATA2*)malloc( sizeof( GNDATA2 ) * dimension1 );
+    char fileName2[ 1024 ];
+    int count = 0, cat_num;
+    char geneTemp[ 1024 ];
+    array<char> abbv(64); 
+    cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
+    array<int> inCategory( cat_num );
+    for( int i = 0; i < cat_num; i++ ){
+	  inCategory[ i ] = 0;
+    } 
+    int fileCount = 0;
+
+// 	cout << " Gecti1 " << endl;
+#ifdef LINUX
+    FILE *gptr = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "r");
+#else
+	FILE *gptr = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "r");
+#endif
+    while( !feof( gptr )){
+        fscanf( gptr, "%s%s", gx[count].gene, gx[count].geneType );       
+        count++;
+    }
+    fclose( gptr );
+// 	cout << " Gecti2 " << endl;
+#ifdef LINUX
+    FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "r" );
+#else
+	FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "r" );
+#endif
+
+    while( !feof( yFptr ) ){
+        fscanf( yFptr, "%s", allGenes[ fileCount ].GENE );
+        for( int j = 0; j < 10000; j++ ){
+            if( strcmp( allGenes[ fileCount ].GENE, gx[ j ].gene ) == 0 ){
+                for( int k = 0; k < cat_num; k++ ){
+		    int ii = 0;
+		    while( gx[ j ].geneType[ ii ] != '\0' ){
+			if( gx[ j ].geneType[ ii ] == abbv[ k ] )
+			    inCategory[ k ]++;
+			ii++;
+		    }
+                }
+            }
+        }
+    }
+    fclose( yFptr );
+    
+//     	cout << " Gecti3 " << endl;
+#ifdef LINUX
+        resultPtr = fopen( "outputs/enrich/result.txt", "w" );
+#else
+	resultPtr = fopen( "outputs//enrich//result.txt", "w" );
+#endif
+    for( int i = -1; i < cat_num; i++ ){
+	    if( i == -1 )
+		    fprintf( resultPtr, "%20s\t", "categories" );
+	    else{
+		    if( i != cat_num - 1 )
+			    fprintf( resultPtr, "%20s\t", categoriesOfGenes[ categoriesOfGenes.get_item( i ) ].categ );
+		    else
+			    fprintf( resultPtr, "%20s\n", categoriesOfGenes[ categoriesOfGenes.get_item( i ) ].categ );
+	    }
+    }
+    
+    for( int i = -1; i < cat_num; i++ ){
+	    if( i == -1 )
+		    fprintf( resultPtr, "%20d\t", 0 );
+	    else{
+		    if( i != cat_num - 1 )
+			    fprintf( resultPtr, "%20d\t", inCategory[ i ] );
+		    else
+			    fprintf( resultPtr, "%20d\n", inCategory[ i ] );
+	    }
+    }
+    for( int i = 0; i < biNumber - 1; i++ ){
+#ifdef LINUX
+        sprintf( fileName2, "outputs/bicgenes/%s%s%d%s", fileName, algName, i+1, ".txt" );
+#else
+	sprintf( fileName2, "outputs//bicgenes//%s%s%d%s", fileName, algName, i+1, ".txt" );
+#endif
+		if( (fptr = fopen( fileName2, "r" )) == NULL ){
+			cout << "FILE NOT FOUND";
+		}
+		else{
+			array<int> countAbbv( 64 );
+			for( int j = 0; j < cat_num; j++ )
+				countAbbv[ j ] = 0;
+			while( !feof( fptr ) ){
+				fscanf( fptr, "%s", geneTemp );
+				for( int j = 0; j < 10000; j++ ){
+					if( strcmp( geneTemp, gx[ j ].gene ) == 0 ){
+						for( int k = 0; k < cat_num; k++ ){
+							int ii = 0;
+							while( gx[ j ].geneType[ ii ] != '\0' ){
+							    if( gx[ j ].geneType[ ii ] == abbv[ k ] )
+								countAbbv[ k ] = countAbbv[ k ] + 1;
+							    ii++;
+							}	
 						}
 					}
 				}

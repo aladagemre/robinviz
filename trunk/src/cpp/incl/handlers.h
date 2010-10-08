@@ -65,6 +65,7 @@ struct geneonto{
 
 typedef struct geneonto GENEONTO;
 
+
 /**
 * Function that produce data structure of entries
 * with size of the given input data.
@@ -1601,7 +1602,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	char scoringFile[256] = "outputs//biclusters//scoring.txt";
 #endif
 
-	cout << " BEFORE SCORING\n";
+// 	cout << " BEFORE SCORING\n";
 
 	reportScoring = fopen( scoringFile, "w" );
 	if( hvalueWeighting == true ){
@@ -1719,7 +1720,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 			}
 		}
 	}
-	cout << " AFTER SCORING\n";
+// 	cout << " AFTER SCORING\n";
 	fclose( reportScoring );
 // 	cout << " E1 -  " << PROJECT.number_of_edges() << endl;
 	it2 = namesForEachGraph.first_item();
@@ -1942,7 +1943,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 			}
 		}
 	}
-	cout << " FORM MAIN GRAPH\n";
+// 	cout << " FORM MAIN GRAPH\n";
 // 	cout << " E2 -  " << PROJECT.number_of_edges() << endl;
 	list<int> old_edges;
 	list<edge> old_edges_e;
@@ -2052,7 +2053,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	edgeNumbersForInt_ = edgeNumbersForInt;
 // 	cout << " E4 -  " << PROJECT2.number_of_edges() << endl;
 	i = 0;
-	cout << " RUN LAYOUT\n";
+// 	cout << " RUN LAYOUT\n";
 	RUN_SELF2( PROJECT2, PARS, max_weight, width, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
 // 	cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
 	return PROJECT2;
@@ -2610,4 +2611,429 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 	RUN_FFD_SELF( PROJECT2, PARS, max_weight, width, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
 // 	cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
 	return PROJECT2;
+}
+
+/**
+    Does handling of obtaining colors via first level of Molecular Function Reads from gofile and
+    finds protein to list of categories for each proteins and write into catfile where robinbiz main
+    reads from main file.
+**/
+void colorHandling( char catfile[256], char gofile[256] ){
+	int GOSIZE = 18;
+	char abbrv[19] = "ABCDEFGHIJKLMNOPRS";
+	char molecularF[18][128] = {
+		    "antioxidant activity",
+		    "binding",
+		    "catalytic activity",
+		    "channel regulator activity",
+		    "chemoattractant activity",
+		    "chemorepellent activity",
+		    "electron carrier activity",
+		    "enzyme regulator activity",
+		    "metallochaperone activity",
+		    "molecular transducer activity",
+		    "nutrient reservoir activity",
+		    "protein binding transcription factor activity",
+		    "protein tag",
+		    "sequence-specific DNA binding transcription factor activity",
+		    "structural molecule activity",
+		    "transcription regulator activity",
+		    "translation regulator activity",
+		    "transporter activity"
+	};
+	array<list<GENES> > molecularFunction( GOSIZE );
+	list<GENES> allGenes;
+
+	FILE *f;
+	list_item it,it2;
+	char line[ 100000 ];
+	char *pc,*pend,*go,*cat;
+	const char *strDelim = "\t\n";
+	const char *strDelim2 = " ";
+
+	if( (f = fopen( gofile, "r" )) == NULL){
+		FILE *erptr;
+#ifdef LINUX
+		erptr = fopen( "outputs/error.txt", "w" );
+#else
+		erptr = fopen( "outputs//error.txt", "w" );
+#endif
+		fprintf( erptr, "Error-id4: You did not specify GO based functional category file although you selected to use that file\n" );
+		fclose( erptr );
+		cout << "\nError-id4: You did not specify GO based functional category file although you selected to use that file\n"; 
+		exit(1);
+	}
+
+	int line_i = 0;
+	while( !feof( f ) ){
+		fgets( line, 100000, f );
+		line_i++;
+	}
+// 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
+	rewind( f );
+	line_i = 0;
+	while( !feof( f ) ){
+		// count rows
+// 		two_tuple<CATNAMES,int> tup;
+// 		tup.second() = 0;
+		fgets( line, 100000, f );
+		pc = strtok( line, strDelim );
+		go = pc;
+		if( feof( f ) )
+			break;
+		int count = 0;
+		int categIndex = -1;
+		while( pc != NULL ){
+			if( count == 0 ){
+				pc = strtok( NULL, strDelim );
+				cat = pc;
+// 				sprintf( tup.first().catName, "%s", cat );
+				for( int i = 0; i < GOSIZE; i++ ){
+					if( strcmp( molecularF[ i ], cat ) == 0 ){
+						categIndex = i;
+// 						cout <<  molecularF[ i ] << " is found\n";
+					}
+				}
+			}
+			else{
+				if( categIndex != -1 ){
+					pc = strtok( NULL, strDelim2 );
+// 					cout << pc << " - ";
+					GENES temporary;
+					sprintf( temporary.GENE, "%s", pc );
+					molecularFunction[ categIndex ].append( temporary );
+					allGenes.append( temporary );
+				}
+				else
+					break;
+			}
+			pend=pc+strlen(pc)-1; /* check last char for newline terminator */
+			if (*pend=='\n') 
+				pc = NULL;
+			count++;
+		}
+		line_i++;
+// 		if( line_i % 10 == 0 )
+// 			cout << "\t Parsed " << line_i << " ...\n";
+	}
+	fclose( f );
+	forall_items( it, allGenes ){
+		forall_items( it2, allGenes ){
+			if( it != it2 ){
+				if( strcmp( allGenes[ it ].GENE, allGenes[ it2 ].GENE ) == 0 ){
+					allGenes.del_item( it2 );
+				}
+			}
+		}
+	}
+	f = fopen( catfile, "w" );
+	fprintf( f, "%d\n", GOSIZE );
+	for( int i = 0; i < GOSIZE; i++ ){
+		for( int j = 0; molecularF[ i ][ j ] != '\0'; j++ ){
+			if( molecularF[ i ][ j ] == ' ' ){
+				  molecularF[ i ][ j ] = '_';
+			}
+		}
+		fprintf( f, "\"%c\"\t%s\n", abbrv[ i ], molecularF[ i ] );
+	}
+	forall_items( it, allGenes ){
+		bool one = false;
+		char funcCateg[18]="",funcCateg2[18]="";
+		for( int i = 0; i < GOSIZE; i++ ){
+			forall_items( it2, molecularFunction[ i ] ){
+				if( strcmp( allGenes[ it ].GENE, molecularFunction[ i ][ it2 ].GENE ) == 0 ){
+					one = true;
+					sprintf( funcCateg2, "%c", abbrv[ i ] );
+					strcat( funcCateg, funcCateg2 );
+					break;
+				}
+			}
+		}
+		if( one == false ){
+// 			fprintf( f, "X\n" );
+		}
+		else{
+			int j = 0;
+			while( allGenes[ it ].GENE[ j ] != '\0' ){
+				if( allGenes[ it ].GENE[ j ] == '\n' ){
+					allGenes[ it ].GENE[ j ] = '\0';
+				}
+				j++;
+			}
+			fprintf( f, "%s\t%s\n", allGenes[ it ].GENE, funcCateg );
+		}
+	}
+	fclose( f );
+}
+
+/**
+* biclusterHandling is a function that handles the bicluster output
+* and responds to the main program by having modifying the passed
+* parameters.
+* @param INPUT (leda::matrix) input matrix obtained from the given input file sources/data_sources
+* @param biclusters (leda::list<list<GENES>>)filled with the GENE names provided by the data file
+* @param matrixBiclusters (leda::list<leda::matrix>)is used H-value calculation we need this param to obtain submatrices of biclusters
+* @param H-values (leda::list) are used in order to have a corresponding value obtained with the id of biclusters       
+* @param Hmax (double) Hmax is a value that stores max H-value
+* @param minBicSize to control bicluster sizes
+* @param maxBicSize to control bicluster sizes
+* @param biclustering (int) is for choosing different biclustering outputs, We have to do that since each alg. has different output from its tool.
+* @param dimension1(int) size of the data row dimension
+* @param dimension2(int) size of the data column dimension
+* @param hasColor(bool) reimplementation when the new coloring methodology is used.
+*/
+void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES> > &biclusters, list<int> &categ, list<leda::matrix> &matrixBiclusters, list<double> &H_values, double &Hmax, int minBicSize, int maxBicSize, int biclustering, int dimension1, int dimension2, bool hasColor  ){
+        list_item it;
+	leda::matrix inverseINPUT = INPUT.trans();
+	list<list<CONDS> > conditions;
+	if( biclustering == 1 ){
+		getBiclustersFromFile( inverseINPUT, defaultBicFile, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 ); 
+                analyseGenes2( "geneResult", categ, biclusters.size(), "", dimension1, dimension2, hasColor  );
+	}
+	if( biclustering == 2 ){ 
+		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "BIMAX", dimension1, dimension2 );
+                analyseGenes2( "geneResult", categ, biclusters.size(), "BIMAX", dimension1, dimension2, hasColor  );
+	}
+	if( biclustering == 3 ){
+		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "CC", dimension1, dimension2 ); 
+                analyseGenes2( "geneResult", categ, biclusters.size(), "CC", dimension1, dimension2, hasColor  );
+	}
+	if( biclustering == 4 ){
+		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "RLEB", dimension1, dimension2 ); 
+                analyseGenes2( "geneResult", categ, biclusters.size(), "RLEB" , dimension1, dimension2, hasColor );
+	}
+// 	if( biclustering == 5 ){
+// 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "SAMBA", dimension1, dimension2 ); 
+// 		analyseGenes2( "geneResult", biclusters.size(), "SAMBA" , dimension1, dimension2, hasColor );
+// 	}
+// 	if( biclustering == 6 ){
+// 		getBiclustersFromFile5( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, "MSBE", 1, dimension1, dimension2 ); 
+// 		analyseGenes2( "geneResult", biclusters.size(), "MSBE" , dimension1, dimension2, hasColor );
+// 	}
+	if( biclusters.size() == 0 ) { 
+		FILE *erptr;
+		erptr = fopen( "outputs/error.txt", "w" );
+		fprintf( erptr, "Error-id1: No bicluster candidate to draw, make sure that you use correct parameters\n" );
+		fclose( erptr );
+		cout << "\nError-id1: No bicluster candidate to draw, make sure that you use correct parameters\n"; 
+		exit(1);
+	}
+// 	cout << " GENE LIST size : " << biclusters.size() << endl;
+// 	cout << " COND LIST size : " << conditions.size() << endl;
+// 	cout << " MATRIX LIST size : " << matrixBiclusters.size() << endl;
+
+	for( int i=0; i < biclusters.size(); i++ ){
+#ifdef LINUX
+		char out[ 64 ] = "outputs/heatmap/out";
+#else
+		char out[ 64 ] = "outputs//heatmap//out";
+#endif
+		sprintf( out, "%s%d.html", out, i );
+		drawHeatmap( matrixBiclusters[ matrixBiclusters.get_item( i )], biclusters[ biclusters.get_item( i ) ], conditions[ conditions.get_item( i ) ], out );
+#ifdef LINUX
+		char out2[ 64 ] = "outputs/parallel/out";
+#else
+		char out2[ 64 ] = "outputs//parallel//out";
+#endif
+		sprintf( out2, "%s%d.html", out2, i );
+		drawParallelCoordinate( matrixBiclusters[ matrixBiclusters.get_item( i )], biclusters[ biclusters.get_item( i ) ], conditions[ conditions.get_item( i ) ], out2 );
+#ifdef LINUX
+		char out3[ 64 ] = "outputs/heatmap/out";
+#else
+		char out3[ 64 ] = "outputs//heatmap//out";
+#endif
+		sprintf( out3, "%s%d.txt", out3, i );
+		produceHeatmapInput( matrixBiclusters[ matrixBiclusters.get_item( i )], biclusters[ biclusters.get_item( i ) ], conditions[ conditions.get_item( i ) ], out3 );
+	}
+
+	matrix newI2;
+	int k = 1;
+	bool loopflg = false;
+	forall_items( it , matrixBiclusters ){
+		char filename2[1024] = "";
+		int count_i = 0;
+		newI2 = matrixBiclusters[ it ];
+		double rs_value;
+		double bagMean = 0;
+		for( int bag1_int = 0; bag1_int <  newI2.dim1(); bag1_int++ ){
+			for( int bag2_int = 0; bag2_int <  newI2.dim2(); bag2_int++ ){
+			    bagMean += newI2( bag1_int, bag2_int );
+			}
+		}
+		bagMean = bagMean / (double)( newI2.dim1() * newI2.dim2() );
+		double rowMean = 0;
+		double colMean = 0;
+		double residueScore = 0;
+		double residueScoreWhole = 0;
+		/*cout << endl;
+		for( int bag1_int = i_int; bag1_int < i_int + bagDim1_int; bag1_int++ ){
+			for( int bag2_int = j_int; bag2_int < j_int + bagDim2_int; bag2_int++ ){
+				cout << extract_mx( bag1_int, bag2_int ) << " ";
+			}
+			cout << endl;
+		}*/
+		/*****************************************************************************/
+		for( int bag1_int = 0; bag1_int <  newI2.dim1(); bag1_int++ ){
+			for( int bag2_int = 0; bag2_int <  newI2.dim2(); bag2_int++ ){
+			    /* For each value inside the sub matrix calculate row mean, col mean, and bicluster mean*/
+			    /* Calculate row mean */
+			    for( int bag2_int2 = 0; bag2_int2 < newI2.dim2(); bag2_int2++ ){
+				    rowMean += newI2( bag1_int, bag2_int2 );
+			    }
+			    rowMean = rowMean / newI2.dim2();
+			    /* Calculate col mean */
+			    for( int bag1_int2 = 0; bag1_int2 < newI2.dim1(); bag1_int2++ ){
+				    colMean += newI2( bag1_int2, bag2_int );
+			    }
+			    colMean = colMean / newI2.dim1();
+			    residueScore += (double)newI2( bag1_int, bag2_int ) + - rowMean - colMean + bagMean;
+			    residueScore *= residueScore;
+			    residueScoreWhole += residueScore;
+
+		
+			    residueScore = 0;
+			    colMean = 0;
+			    rowMean = 0;
+			}
+		}
+		/*****************************************************************************/
+		double rs_Value = residueScoreWhole / (double)( newI2.dim1() * newI2.dim2() ) ;
+		H_values.append( rs_Value );
+// 		cout << rs_Value << endl;
+// 		if( loopflg == false ){
+// 			Hmax = rs_Value;
+// 			loopflg = true;
+// 		}
+// 		else{
+// 			if( rs_Value > Hmax ){
+// 				Hmax = rs_Value;
+// 			}
+// 		}
+		Hmax = rs_Value;
+	}
+}
+
+/**
+* inpGraphProdHandling is a function that handles the production of
+* peripheral graphs
+* @param abbv (char []) we need a categories for each organism. It may be too general as we did having n categories. abbv stores just a capital letter of categories.
+* @param Categories (leda::array<list<char> >) stores each categorie(s) for each genes rather than other inpGraphProdHandling several categs may be owned by each genes
+* @param listOfGraphs (leda::array<GRAPH<int,int>>) stores all the graphs in this parameter
+* @param GenesNode (leda::array<GENENAMES>) is used with the graph parameter to obtain the specific Genes corresponding nodes
+* @param INTERACTIONS (leda::GRAPH<int,int>) is PPI graph extracted from sources/ppi_sources/<ppiFile> it is original graph obtained with interactionHandling
+* @param biclusters we do not lose the track of bicluster genes
+* @param TEMPINT (leda::GRAPH<int,int>) is andother copy PPI graph used for processing
+* @param ppiFile (leda::string) is obtained from main menu
+
+*/
+void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGraphs, array<char> &abbv,  array<list<char> > &Categories, node_array<GENENAMES> &temp, array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, GRAPH<int,int> &TEMPINT, list<list<GENES> > &biclusters, int cat_num ){
+        FILE *categoryOfGenes;
+        node n,m1,m2;
+        list_item it;
+#ifdef LINUX
+        categoryOfGenes = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "r" );
+#else
+        categoryOfGenes = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "r" );
+#endif
+        if( categoryOfGenes == NULL ){
+                cout << "\n Error id3: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n";
+                FILE *erptr;
+#ifdef LINUX
+                erptr = fopen( "outputs/error.txt", "w" );
+#else
+                erptr = fopen( "outputs//error.txt", "w" );
+#endif
+                fprintf( erptr, "\n Error id3: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n" );
+                fclose( erptr );
+        }
+        int geneCount = 0;
+        while( !feof( categoryOfGenes ) ){
+            fscanf( categoryOfGenes, "%s%s", g[ geneCount ].gene, g[ geneCount ].geneType );
+            forall_nodes( n, INTERACTIONS ){
+                if( strcmp( GenesNode[ INTERACTIONS[ n ] ].GENE , g[ geneCount ].gene) == 0 ){
+                    for( int i = 0; i < cat_num; i++ ){
+                        int ii = 0;
+                        while( g[ geneCount ].geneType[ ii ] != '\0' ){
+                            if( g[ geneCount ].geneType[ ii ] == abbv[ i ] ){
+                                Categories[ INTERACTIONS[n] ].append( abbv[ i ] );
+                            }
+                            ii++;
+                        }
+                    }
+                }
+            }
+            //cout << geneCount << " ";
+            geneCount++;
+        }
+        /*forall_nodes( n, INTERACTIONS ){
+              cout << Categories[ INTERACTIONS[n] ] << " ";
+        }*/
+        fclose( categoryOfGenes );
+#ifdef DEBUG_ROBINVIZ
+        cout << endl << " * Gene File is loaded from ppi_sources" << endl;
+
+        cout << endl << " * Loading biclusters to form their ppi graphs " << endl;
+#endif
+                    TEMPINT = INTERACTIONS;
+        array<int> nodePar( INTERACTIONS.number_of_nodes()+1 );
+        int nPar = 0;
+        forall_nodes( n, INTERACTIONS ){
+                nodePar[ nPar ] = INTERACTIONS[ n ];
+                nPar++;
+        }
+        for( int i = 0; i < biclusters.size(); i++ ){
+                listOfGraphs[ i ] = INTERACTIONS;
+                nPar = 0;
+                forall_nodes( n,listOfGraphs[ i ] ){
+                        listOfGraphs[ i ][ n ] = nodePar[ nPar ];
+                        nPar++;
+                }
+        }
+
+        list<edge> list_E;
+        list_item it_b1 = biclusters.first_item(),it_b2;
+        for( int i = 0; i < biclusters.size(); i++ ){
+                G = listOfGraphs[ i ];
+                list<GENES> tmp1 = biclusters[ it_b1 ];
+#ifdef DEBUG_ROBINVIZ
+                cout << " GRAPH " << i << " WITH SIZE " << tmp1.size() << " || ";
+#endif
+                forall_nodes( m1, G ){
+                        if( tmp1.size() == 0 ){
+                                G.clear();
+                                break;
+                        }
+                        bool isEnter = false;
+                        forall_items( it_b2, tmp1 ){
+                                if( strcmp( GenesNode[  G[ m1 ] ].GENE, tmp1[ it_b2 ].GENE ) == 0 ){
+                                        isEnter = true;
+                                        break;
+                                }
+                        }
+                        if( isEnter == false ){
+                                G.del_node( m1 );
+                        }
+                }
+#ifdef DEBUG_ROBINVIZ
+                cout << " GRAPH IS PRODUCED ||";
+#endif
+                forall_nodes( m1, G ){
+                    list<edge> inedges = G.in_edges( m1 );
+                    list<edge> outedges = G.out_edges( m1 );
+                    if( (inedges.size() + outedges.size() ) == 0 )
+                        G.del_node( m1 );
+                }
+#ifdef DEBUG_ROBINVIZ
+                cout << endl;
+                forall_nodes( m1, G ){
+                        cout <<  GenesNode[  G[ m1 ] ].GENE << "-";
+                }
+                cout << endl;
+#endif
+                listOfGraphs[ i ] = G;
+                it_b1 = biclusters.succ( it_b1 );
+#ifdef DEBUG_ROBINVIZ
+                cout << " GRAPH IS CLEANED " << endl;
+#endif
+        }
 }

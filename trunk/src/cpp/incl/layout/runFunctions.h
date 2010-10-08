@@ -41,7 +41,7 @@ Created
 #include "algorithmwolf_m.h"
 
 struct Strings{
-	char name[ 16 ];
+	char name[ 128 ];
 	int nodeNumber;
 };
 
@@ -3379,6 +3379,143 @@ void RUN_AGAIN2(  GRAPH<int,int> G,
 	}
 }
 
+void RUN_AGAIN2_COLOR(  GRAPH<int,int> G, 
+		  int W, 
+		  node_array<double> &Xpos,
+		  node_array<double> &Ypos, 
+		  char filename[ 1024 ], 
+		  int graphNo, 
+		  list<list<struct Strings> > namesForEachGraph, 
+		  node_array<point> pos ,
+		  edge_array<list<point> > bends, 
+		  array<char> &abbv,
+		  int cat_num,
+		  array<list<char> > &Categories,
+		  double edgeBendImp, 
+		  double colorScale, 
+		  double edgThicknessTher
+ ){
+// 	cout << " WE ARE IN : " << graphNo << endl;
+	if( G.number_of_nodes() != 0 ){
+		node n;
+		GraphWin gw2(G,300,300);	
+
+		list<struct Strings> nodeNames;
+		//list<list<Strings>> namesForEachGraph
+		int counter = 0;
+		list_item it,it2;
+		forall_items( it, namesForEachGraph ){
+			nodeNames = namesForEachGraph[ it ];
+			if( counter == graphNo )
+				break;
+			counter++;
+		}
+		node_array<list<char> > catid( G );
+		gw2.set_edge_thickness( 3, true );
+		forall_nodes( n, G ){
+			for( int i = 0; i < cat_num; i++ ){
+				forall_items( it, Categories[ G[ n ] ] ){
+					if( Categories[ G[ n ] ][ it ] == abbv[ i ] ){
+						catid[ n ].append( abbv[ i ] );
+					}
+				}
+			}
+			gw2.set_color( n, red );
+		}
+// 		cout << " COLOR SELECTION IS DONE\n";
+		edge e;
+		array<color> color_l( 5 );
+
+		list<int> weights;
+		forall_edges( e, G ){
+
+		}
+		list<two_tuple<color,int> > variations;
+		list<int> edgeWeights;
+
+		forall_edges( e, G ){
+			int flag = 0;
+			forall_items( it, edgeWeights ){
+				if( edgeWeights[ it ] == G[ e ] ){
+					flag = 1;
+					break;
+				}
+			}
+			if( flag == 0 ){
+				edgeWeights.push_back( G[ e ] );
+			}
+		}
+		edgeWeights.sort();
+		int tm_c = (double)(220.0 / (double)edgeWeights.size() );
+		int count = 20 + edgeWeights.size() * tm_c;
+		for( int j = 0; j < color_l.size(); j++ ){
+			color el( count, count, count );
+			color_l[ j ] = el;
+			count -= tm_c;
+		}		
+		count = 0;
+		for( int x = edgeWeights[edgeWeights.first()]; x <= edgeWeights[edgeWeights.last()]; x++ ){	
+			for( int j = 0; j < color_l.size(); j++ ){
+				two_tuple<color,int> Tp( color_l[ j ], x );
+// 				cout << Tp << endl;
+				variations.push_back( Tp );
+			}
+			count++;
+		}
+		int increase = (int) ((double)variations.size() / (double)edgeWeights.size());
+// 		cout << " increase : " << increase << endl;
+		forall_edges( e, G ){              
+			count = 0;
+			forall_items( it, edgeWeights ){
+			      if( edgeWeights[ it ] == G[ e ] ){
+				    break;
+			      }
+			      count++;
+			}
+			two_tuple<color,int> Tp = variations[ variations.get_item( increase / edgThicknessTher * count ) ] ;
+			gw2.set_thickness( e, Tp.second() / edgThicknessTher * 5.0 );
+			gw2.set_color( e, Tp.first() );
+// 			cout << Tp << endl;
+		}
+
+		gw2.set_node_height(50,true);
+// 		gw2.set_node_border_color( red, true );
+		gw2.set_node_border_thickness( 3, true );
+		gw2.set_node_width( 100, true );
+		gw2.set_node_shape( leda::ovalrect_node, true );
+		gw2.set_edge_label_type(leda::data_label , true);
+		gw2.set_edge_label_font(leda::roman_font, 10);
+		gw2.set_edge_shape( leda::poly_edge, true );
+		node s;
+		it = nodeNames.first_item();
+		struct Strings temp_str;
+		forall_nodes( s, G ){
+			temp_str = nodeNames[ it ];
+			strcat( temp_str.name, "_" );
+			forall_items( it2, catid[ s ] ){
+				char number[4];
+				sprintf( number, "%c:", catid[ s ][ it2 ] );
+				strcat( temp_str.name, number );
+			}
+			gw2.set_label(s,temp_str.name);
+// 			G.assign( s, catid[ s ] );
+			it = nodeNames.succ( it );
+		}
+		gw2.update_graph();
+		gw2.set_layout( pos, bends );
+// 		gw2.set_edge_shape( leda::bezier_edge, true );
+		
+// 		gw2.set_animation_steps(5);
+		gw2.save_gml(filename);
+// 		gw2.display();
+// 		gw2.save_gml(filename);
+// 		gw2.zoom_graph();
+		char filename2[64] = "outputs/psfiles/img";
+		sprintf( filename2, "%s%d%s", filename2, graphNo, ".ps" );
+		gw2.save_ps( filename2 );
+// 		gw2.edit();
+	}
+}
 
 void RUN_FFD_AGAIN2(  GRAPH<int,int> G, 
 		  int W, 
@@ -3506,6 +3643,141 @@ void RUN_FFD_AGAIN2(  GRAPH<int,int> G,
 		char filename2[64] = "outputs/psfiles/img";
 		sprintf( filename2, "%s%d%s", filename2, graphNo, ".ps" );
 		gw2.save_ps( filename2 );
+// 		gw2.edit();
+	}
+}
+
+void RUN_FFD_AGAIN_COLOR(  GRAPH<int,int> G, 
+		  int W, 
+		  node_array<double> &Xpos,
+		  node_array<double> &Ypos, 
+		  char filename[ 1024 ], 
+		  int graphNo, 
+		  list<list<struct Strings> > namesForEachGraph, 
+		  node_array<point> pos ,
+		  edge_array<list<point> > bends, 
+		  array<char> &abbv,
+		  int cat_num,
+		  array<list<char> > &Categories,
+		  double edgeBendImp, 
+		  double colorScale, 
+		  double edgThicknessTher
+ ){
+	if( G.number_of_nodes() != 0 ){
+		node n;
+		GraphWin gw2(G,300,300);	
+
+		list<struct Strings> nodeNames;
+		//list<list<Strings>> namesForEachGraph
+		int counter = 0;
+		list_item it,it2;
+		forall_items( it, namesForEachGraph ){
+			nodeNames = namesForEachGraph[ it ];
+			if( counter == graphNo )
+				break;
+			counter++;
+		}
+		node_array<list<int> > catid( G );
+		gw2.set_edge_thickness( 3, true );
+		forall_nodes( n, G ){
+			for( int i = 0; i < cat_num; i++ ){
+				forall_items( it, Categories[ G[ n ] ] ){
+					if( Categories[ G[ n ] ][ it ] == abbv[ i ] ){
+						catid[ n ].append( i );
+					}
+				}
+			}
+			gw2.set_color( n, red );
+		}
+		edge e;
+		array<color> color_l( 5 );
+
+		list<int> weights;
+		forall_edges( e, G ){
+
+		}
+		list<two_tuple<color,int> > variations;
+		list<int> edgeWeights;
+
+		forall_edges( e, G ){
+			int flag = 0;
+			forall_items( it, edgeWeights ){
+				if( edgeWeights[ it ] == G[ e ] ){
+					flag = 1;
+					break;
+				}
+			}
+			if( flag == 0 ){
+				edgeWeights.push_back( G[ e ] );
+			}
+		}
+		edgeWeights.sort();
+		int tm_c = (double)(220.0 / (double)edgeWeights.size() );
+		int count = 20 + edgeWeights.size() * tm_c;
+		for( int j = 0; j < color_l.size(); j++ ){
+			color el( count, count, count );
+			color_l[ j ] = el;
+			count -= tm_c;
+		}		
+		count = 0;
+		for( int x = edgeWeights[edgeWeights.first()]; x <= edgeWeights[edgeWeights.last()]; x++ ){	
+			for( int j = 0; j < color_l.size(); j++ ){
+				two_tuple<color,int> Tp( color_l[ j ], x );
+// 				cout << Tp << endl;
+				variations.push_back( Tp );
+			}
+			count++;
+		}
+		int increase = (int) ((double)variations.size() / (double)edgeWeights.size());
+// 		cout << " increase : " << increase << endl;
+		forall_edges( e, G ){              
+			count = 0;
+			forall_items( it, edgeWeights ){
+			      if( edgeWeights[ it ] == G[ e ] ){
+				    break;
+			      }
+			      count++;
+			}
+			two_tuple<color,int> Tp = variations[ variations.get_item( increase / edgThicknessTher * count ) ] ;
+			gw2.set_thickness( e, Tp.second() / edgThicknessTher * 5.0 );
+			gw2.set_color( e, Tp.first() );
+// 			cout << Tp << endl;
+		}
+
+		gw2.set_node_height(50,true);
+// 		gw2.set_node_border_color( red, true );
+		gw2.set_node_border_thickness( 3, true );
+		gw2.set_node_width( 100, true );
+		gw2.set_node_shape( leda::ovalrect_node, true );
+		gw2.set_edge_label_type(leda::data_label , true);
+		gw2.set_edge_label_font(leda::roman_font, 10);
+		gw2.set_edge_shape( leda::poly_edge, true );
+		node s;
+		it = nodeNames.first_item();
+		struct Strings temp_str;
+		forall_nodes( s, G ){
+			temp_str = nodeNames[ it ];
+			strcat( temp_str.name, "_" );
+			forall_items( it2, catid[ s ] ){
+				char number[4];
+				sprintf( number, "%d:", catid[ s ][ it2 ] );
+				strcat( temp_str.name, number );
+			}
+			gw2.set_label(s,temp_str.name);
+// 			G.assign( s, catid[ s ] );
+			it = nodeNames.succ( it );
+		}
+		gw2.update_graph();
+		gw2.set_layout( pos, bends );
+// 		gw2.set_edge_shape( leda::bezier_edge, true );
+// 		gw2.set_animation_steps(5);
+		gw2.save_gml(filename);
+// 		gw2.display();
+// 		gw2.save_gml(filename);
+// 		gw2.zoom_graph();
+// 		char filename2[64] = "outputs/psfiles/img";
+// 		sprintf( filename2, "%s%d%s", filename2, graphNo, ".ps" );
+// 		gw2.save_ps( filename2 );
 // 		gw2.edit();
 	}
 }

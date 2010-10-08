@@ -47,7 +47,9 @@
 #define ORDVARS
 #define LEDAVARS
 
+
 #ifdef ORDVARS
+
 	/**
 	* bool sharedGenes First option for the main graph layout, when it is true, edgesBetween must be false
 	**/
@@ -157,6 +159,10 @@
 		double hvaluemin = 10.0;
 		int increment_exp1_g = 10;
 		int increment_exp1_c = 5;
+        /**
+        *	Color Method for journal paper
+        **/
+                bool hasColor = true;
 	/**
 	*	GO file read or not, please specify if it is true at sources/usr_sources/vis...
 	**/
@@ -222,6 +228,7 @@
 	GRAPH<int,int> G;
 	array<GRAPH<int,int> > listOfGraphs; 
 	array<char> Categories;
+        array<list<char> > CategoriesXL;
 	GRAPH<leda::string,int> PROJECT,G1,G2;
 	GRAPH<int,int> H;
 	node_array<double> Xpos;
@@ -249,173 +256,7 @@ int main(){
 		return 0;
 	}
 	else{
-//		// 	//RobinVizInitializationFile
-//// 		fscanf( fptr, "%s", empty );
-//// 		//cout << empty << endl;
-//		// 	minBicSize = 150
-//		fscanf( fptr, "%s%d", empty, &minBicSize );
-//		//cout << empty << " " << minBicSize << endl;
-//		// 	maxBicSize = 160
-//		fscanf( fptr, "%s%d", empty, &maxBicSize );
-//		//cout << empty << " " << maxBicSize << endl;
-//		// 	width = 10
-//		fscanf( fptr, "%s%d", empty, &width );
-//		//cout << empty << " " << width << endl;
-//		// 	space = 150
-//		fscanf( fptr, "%s%d", empty, &space );
-//		//cout << empty << " " << space << endl;
-//		// 	increment = 225
-//		fscanf( fptr, "%s%d", empty, &increment );
-//		//cout << empty << " " << increment << endl;
-//		// 	removeRat = 0.35
-//		fscanf( fptr, "%s%lf", empty, &removeRat );
-//		//cout << empty << " " << removeRat << endl;
-//		// 	nodeSize = 50.0
-//		fscanf( fptr, "%s%lf", empty, &nodeSize );
-//		//cout << empty << " " << nodeSize << endl;
-//		// 	edgeBendImp = 35.0
-//		fscanf( fptr, "%s%lf", empty, &edgeBendImp );
-//		//cout << empty << " " << edgeBendImp << endl;
-//		// 	colorScale = 130.0
-//		fscanf( fptr, "%s%lf", empty, &edgeBendImp );
-//		//cout << empty << " " << edgeBendImp << endl;
-//		// 	edgThicknessTher = 4.0
-//		fscanf( fptr, "%s%lf", empty, &edgThicknessTher );
-//		//cout << empty << " " << edgThicknessTher << endl;
-//		// 	dataName = "sources/usr_sources/microarray_data/input.txt"
-//		fscanf( fptr, "%s%s", empty, dataName );
-//		//cout << empty << " " << dataName << endl;
-//		// 	dataName2 = "sources/usr_sources/microarray_data/inputLabel.txt"
-//		fscanf( fptr, "%s%s", empty, dataName2 );
-//                //cout << empty << " " << dataName2 << endl;
-//                fscanf( fptr, "%s%s", empty, ppifilename );
-//                //cout << empty << " " << ppifilename << endl;
-//                fscanf( fptr, "%s%s", empty, catfile );
-//                //cout << empty << " " << ppifilename << endl;
-//		// 	biclustering = 1
-//		fscanf( fptr, "%s%d", empty, &biclustering );
-//		//cout << empty << " " << biclustering << endl;
-//		// 	bimax_low_dim1 = 10
-//		fscanf( fptr, "%s%d", empty, &bimax_low_dim1 );
-//		//cout << empty << " " << bimax_low_dim1 << endl;
-//		// 	bimax_low_dim2 = 10
-//		fscanf( fptr, "%s%d", empty, &bimax_low_dim2 );
-//		//cout << empty << " " << bimax_low_dim2 << endl;
-//		// 	ther_disc = 0.5
-//		fscanf( fptr, "%s%lf", empty, &ther_disc );
-//		//cout << empty << " " << ther_disc << endl;
-//		// 	bic_num_bimax = 50
-//		fscanf( fptr, "%s%d", empty, &bic_num_bimax );
-//		//cout << empty << " " << bic_num_bimax << endl;
-//		// 	bic_num_cc = 100
-//		fscanf( fptr, "%s%d", empty, &bic_num_cc );
-//		//cout << empty << " " << bic_num_cc << endl;
-//		// 	maxScore_ = 10
-//		fscanf( fptr, "%s%d", empty, &maxScore_ );
-//		//cout << empty << " " << maxScore_ << endl;
-//		// 	minHeight_ = 5
-//		fscanf( fptr, "%s%d", empty, &minHeight_ );
-//		//cout << empty << " " << minHeight_ << endl;
-//		// 	minWidth_ = 10
-//		fscanf( fptr, "%s%d", empty, &minWidth_ );
-//		//cout << empty << " " << minWidth_ << endl;
-// 		fscanf( fptr, "%s%d", empty, &maxSizeSubMatrix_exp1_g );
-//		//cout << empty << " " << maxSizeSubMatrix_exp1_g << endl;
-//		fscanf( fptr, "%s%d", empty, &maxSizeSubMatrix_exp1_c );
-//		//cout << empty << " " << maxSizeSubMatrix_exp1_c << endl;
-//		fscanf( fptr, "%s%d", empty, &minSizeSubMatrix_exp1_g );
-//		//cout << empty << " " << minSizeSubMatrix_exp1_g << endl;
-//		fscanf( fptr, "%s%d", empty, &minSizeSubMatrix_exp1_c );
-//		//cout << empty << " " << minSizeSubMatrix_exp1_c << endl;
-//		fscanf( fptr, "%s%d", empty, &repeat );
-//		//cout << empty << " " << repeat << endl;
-//		fscanf( fptr, "%s%lf", empty, &hvaluemin );
-//		//cout << empty << " " << hvaluemin << endl;
-//		fscanf( fptr, "%s%d", empty, &increment_exp1_g );
-//		//cout << empty << " " << increment_exp1_g << endl;
-//		fscanf( fptr, "%s%d", empty, &increment_exp1_c );
-//		//cout << empty << " " << increment_exp1_c << endl;
-//
-//		int bool_i;
-//		// 	ownFlag = 0
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		ownFlag = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << ownFlag << endl;
-//		// 	lebFlag = 1
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		lebFlag = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << lebFlag << endl;
-//		// 	ccFlag = 0
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		ccFlag = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << ccFlag << endl;
-//		// 	msbeFlag = 0
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		msbeFlag = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << msbeFlag << endl;
-//		// 	bimaxFlag = 1
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		bimaxFlag = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << bimaxFlag << endl;
-//		// 	rlebFlag = 0
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		rlebFlag = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << rlebFlag << endl;
-//		// 	brandFlag = 1
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		brandFlag = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << brandFlag << endl;
-//		// 	brandFlag2 = 0
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		brandFlag2 = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << brandFlag2 << endl;
-//		// 	ourMethodFlag = 0
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		ourMethodFlag = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << ourMethodFlag << endl;
-//		// 	ledaPostFlag = 0
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		ledaPostFlag = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << ledaPostFlag << endl;
-//		// 	readOption = 1
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		readOption = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << readOption << endl;
-//		// 	ffd_layout = 0
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		ffd_layout = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << ffd_layout << endl;
-//		// 	layered_layout = 1
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		layered_layout = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << layered_layout << endl;
-//		// 	go_info = 1
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		go_info = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << go_info << endl;
-//                fscanf( fptr, "%s%s", empty, gofile );
-//                //cout << empty << " " << ppifilename << endl;
-//		// 	edgesBetween = 1
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		edgesBetween = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << edgesBetween << endl;
-//		// 	sharedGenes = 0
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		sharedGenes = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << sharedGenes << endl;
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		hvalueWeighting = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << hvalueWeighting << endl;
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		enrichmentWeighting_o = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << enrichmentWeighting_o << endl;
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		enrichmentWeighting_f = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << enrichmentWeighting_f << endl;
-//		fscanf( fptr, "%s%d", empty, &bool_i );
-//		ppihitratioWeighting = ( bool_i == 0 ? 0 : 1 );
-//		//cout << empty << " " << ppihitratioWeighting << endl;
-		fclose( fptr );
+                fclose( fptr );
 
                 _iniReadCoExpression(    minBicSize,
                                          maxBicSize,
@@ -473,7 +314,12 @@ int main(){
                                          circular_ffd_layout,
                                          is_ppi_directed
                 );               
-
+                if( hasColor == true ){
+                    cout << "/**************************************************/" << endl;
+                    cout << "\t" << " Color Processing" << endl;
+                    cout << "/**************************************************/" << endl;
+                    colorHandling( catfile, gofile );
+                }
                 FILE *kfptr;
                 if( (fptr = fopen( catfile , "r" )) !=NULL ){
                     if( (kfptr = fopen( "sources/usr_sources/visualization_data/functions.txt", "w" )) != NULL || (kfptr = fopen( "sources//usr_sources//visualization_data//functions.txt", "w" )) != NULL ){
@@ -492,8 +338,15 @@ int main(){
                         if( (kfptr = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "w" )) != NULL || (kfptr = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "w" )) != NULL ){
                                char cat_c;
                                while( !feof( fptr ) ){
-                                   fscanf( fptr, "%s%c", tc_array, &cat_c );
-                                   fprintf( kfptr, "%s\t%c\n", tc_array, cat_c );
+                                   if( hasColor != true ){
+                                       fscanf( fptr, "%s%c", tc_array, &cat_c );
+                                       fprintf( kfptr, "%s\t%c\n", tc_array, cat_c );
+                                   }
+                                   else{
+                                       char cat_c_a[64];
+                                       fscanf( fptr, "%s%s", tc_array, cat_c_a );
+                                       fprintf( kfptr, "%s\t%s\n", tc_array, cat_c_a );
+                                   }
                                }
                                fclose(kfptr);
                                fclose(fptr);
@@ -710,9 +563,12 @@ int main(){
                                 }
 			}
 		}
-		
-                bicRead( INPUT, defaultBicFile, biclusters, categ, matrixBiclusters, H_values, Hmax, minBicSize, maxBicSize, biclustering, INPUT.dim1(), INPUT.dim2() );
+                if( hasColor == false )
+                    bicRead( INPUT, defaultBicFile, biclusters, categ, matrixBiclusters, H_values, Hmax, minBicSize, maxBicSize, biclustering, INPUT.dim1(), INPUT.dim2() );
+                else
+                    bicRead( INPUT, defaultBicFile, biclusters, categ, matrixBiclusters, H_values, Hmax, minBicSize, maxBicSize, biclustering, INPUT.dim1(), INPUT.dim2(), hasColor );
 		cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
+
 		if( go_info == 1 ){
                         array<GENEONTO> geneOntoForData = geneOntologyHandling(gofile);
 			geneOntologyToBiclusterHandling( biclusters, geneOntoForData );
@@ -737,12 +593,32 @@ int main(){
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " Produce Bicluster Graphs" << endl;
 		cout << "/**************************************************/" << endl;
-		Categories.resize( INTERACTIONS.number_of_nodes() );
-                node n;
-                for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
-                    Categories[ i ] = 'X';
+                if( hasColor == false ){
+                    Categories.resize( INTERACTIONS.number_of_nodes() );
+                    node n;
+                    for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
+                        Categories[ i ] = 'X';
+                }
+                else{
+                    CategoriesXL.resize( INTERACTIONS.number_of_nodes() );
+                    node n;
+                    for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
+                        CategoriesXL[ i ].append('X');
+                }
 		listOfGraphs.resize( 0, biclusters.size() );
-		inpGraphProdHandling( G, listOfGraphs, abbv, Categories, temp, GenesNode, INTERACTIONS, TEMPINT, biclusters, cat_num );
+                if( hasColor == false ){
+                    inpGraphProdHandling( G, listOfGraphs, abbv, Categories, temp, GenesNode, INTERACTIONS, TEMPINT, biclusters, cat_num );
+                }
+                else{
+                    inpGraphProdHandling( G, listOfGraphs, abbv, CategoriesXL, temp, GenesNode, INTERACTIONS, TEMPINT, biclusters, cat_num );
+                    list_item it;
+//                    for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ ){
+//                        forall_items( it, CategoriesXL[ i ] ){
+//                            cout << CategoriesXL[ i ][ it ] << "-";
+//                        }
+//                        cout << endl;
+//                    }
+                }
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " End Producing Bicluster Graphs" << endl;
 		cout << "/**************************************************/" << endl;
@@ -753,12 +629,12 @@ int main(){
 		if( layered_layout ){
 			mainAlgHandlingForEachSubgraph( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, biclusters, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag );
 		}
-		else{
-			if( ffd_layout ){
+                else{
+                        if( ffd_layout && hasColor == false ){
                                 cout << " pirasa************************************* \n";
-				mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, biclusters, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num, Categories );
-			}
-		}
+                                mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, biclusters, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num, Categories );
+                        }
+                }
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " End Running Layering Algorithm" << endl;
 		cout << "/**************************************************/" << endl;
@@ -767,71 +643,18 @@ int main(){
 		cout << "/**************************************************/" << endl;
 		cout << endl;
 
-//                 printf("%d\n", minBicSize);
-// 		printf("%d\n", maxBicSize);
-// 		printf("%d\n", width);
-// 		printf("%d\n", space);
-// 		printf("Increment is %d\n", increment);
-// 		printf("%f\n", removeRat);
-// 		printf("%f\n", nodeSize);
-// 		printf("%f\n", edgeBendImp);
-// 		printf("%f\n", colorScale);
-// 		printf("%f\n", edgThicknessTher);
-// 		printf("%s\n",dataName);
-// 		printf("%s\n",dataName2);
-// 		printf("%s\n",ppifilename);
-// 		printf("%s\n",catfile);
-// 		printf("%s\n",gofile);
-// 		printf("%d\n", biclustering);
-// 		printf("%d\n", bimax_low_dim1);
-// 		printf("%d\n", bimax_low_dim2);
-// 		printf("%f\n", ther_disc);
-// 		printf("%d\n", bic_num_bimax);
-// 		printf("%d\n", bic_num_cc);
-// 		printf("%d\n", maxScore_);
-// 		printf("%d\n", minHeight_);
-// 		printf("%d\n", minWidth_);
-// 		printf("%d\n", maxSizeSubMatrix_exp1_g);
-// 		printf("%d\n", maxSizeSubMatrix_exp1_c);
-// 		printf("%d\n", minSizeSubMatrix_exp1_g);
-// 		printf("%d\n", minSizeSubMatrix_exp1_c);
-// 		printf("%d\n", repeat);
-// 		printf("%f\n", hvaluemin);
-// 		printf("%d\n", increment_exp1_g);
-// 		printf("%d\n", increment_exp1_c);
-// 		printf(ownFlag ? "1\n":"0\n");
-// 		printf(lebFlag ? "1\n":"0\n");
-// 		printf(ccFlag ? "1\n":"0\n");
-// 		printf(msbeFlag ? "1\n":"0\n");
-// 		printf(bimaxFlag ? "1\n":"0\n");
-// 		printf(rlebFlag ? "1\n":"0\n");
-// 		printf(brandFlag ? "1\n":"0\n");
-// 		printf(brandFlag2 ? "1\n":"0\n");
-// 		printf(ourMethodFlag ? "1\n":"0\n");
-// 		printf(ledaPostFlag ? "1\n":"0\n");
-// 		printf(readOption ? "1\n":"0\n");
-// 		printf(layered_layout ? "1\n":"0\n");
-// 		printf(go_info ? "1\n":"0\n");
-// 		printf(edgesBetween ? "1\n":"0\n");
-// 		printf(sharedGenes ? "1\n":"0\n");
-// 		printf(hvalueWeighting ? "1\n":"0\n");
-// 		printf(enrichmentWeighting_o ? "1\n":"0\n");
-// 		printf(enrichmentWeighting_f ? "1\n":"0\n");
-// 		printf(ppihitratioWeighting ? "1\n":"0\n");
-// 		printf(ffd_layout ? "1\n":"0\n");
-// 		printf(circular_layout ? "1\n":"0\n");
-// 		printf(circular_ffd_layout ? "1\n":"0\n");
-// 		printf(is_ppi_directed ? "1\n":"0\n");
-
-
-
 		if( layered_layout ){
+                    if( hasColor == false )
 			mainGraph( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
 				  increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
                                   POS, BENDS, LAYERS, abbv, cat_num, Categories, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
+                    else
+                        mainGraph( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
+                                  increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
+                                  POS, BENDS, LAYERS, abbv, cat_num, CategoriesXL, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ, hasColor );
 		}
 		else{
-			if( ffd_layout ){
+                        if( ffd_layout && hasColor == false ){
 				mainGraph2( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
 				  increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
                                   POS, BENDS, LAYERS, abbv, cat_num, Categories, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
