@@ -56,7 +56,7 @@
 	/**
 	* bool edgesBetween Second option for the main graph layout, when it is true, sharedGenes must be false
 	**/
-        bool edgesBetween = true;
+                bool edgesBetween = true;
 	/**
 	* double removeRat this restricts the main layout to have less edges when the doube value increases
 	**/
