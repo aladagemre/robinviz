@@ -1313,8 +1313,7 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 				     int increment,
 				     bool ledaPostFlag,
 				     array<char> &abbv,
-				     int cat_num,
-				     array<char> &Categories
+				     int cat_num
 				  ){
 	node projectNode,projectNode2,m,m1,m2,zzz,n1,n2,n;
 	edge e1,e2,e;
@@ -1346,10 +1345,10 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 			if( listOfGraphs[ i ].empty() != true ){
 				if( listOfGraphs[ i ].number_of_nodes() < 1500 ){
 					//H = RUN_CIRCLEALONE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100 );
-					H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100, 100.0 );
+                                        H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 100.0 );
 				}
 				else
-					H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100, 2, 0.20 );
+                                        H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 2, 0.20 );
 			}
 		    cout << " Graph " << i << " in process \n";
 		    nPar = 0;

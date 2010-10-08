@@ -162,7 +162,7 @@
         /**
         *	Color Method for journal paper
         **/
-                bool hasColor = false;
+                bool hasColor = true;
 	/**
 	*	GO file read or not, please specify if it is true at sources/usr_sources/vis...
 	**/

@@ -177,6 +177,20 @@ cout << "\n-----\n";
 #endif SPRING_DRAW
 }
 
+//i.   without fixed nodes
+void SPRING_EMBEDDING_(GRAPH<int,int>& G, node_array<double>& xpos,
+                                      node_array<double>& ypos,
+                                      double xleft, double xright,
+                                      double ybottom, double ytop,
+                                      int iterations,
+				      node_array<int> &nodeIds,
+				      array<char> &abbv,
+				      int cat_num )
+{ 
+	list<node> L;
+	SPRING_EMBEDDING_our2(G,L,xpos,ypos,xleft,xright,ybottom,ytop,iterations,nodeIds); 
+}
+
 //i.   without fixed nodes for main graph
 void SPRING_EMBEDDING2_(	GRAPH<int,int>& G, 
 			    node_array<double>& xpos,

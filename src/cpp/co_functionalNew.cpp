@@ -108,7 +108,7 @@
         /**
         *	Color Method for journal paper
         **/
-                bool hasColor = false;
+                bool hasColor = true;
         /**
         *	Category File
         **/

@@ -1366,7 +1366,6 @@ GRAPH<int,int> RUN_FFDANDCIRCLE(  GRAPH<int,int> &G,
 			  bool ledaPostFlag,
 			  array<char> &abbv,
 			  int cat_num,
-			  array<char> &Categories,
 			  int node_width,
 			  int minRadius
 ){	
@@ -1390,9 +1389,9 @@ GRAPH<int,int> RUN_FFDANDCIRCLE(  GRAPH<int,int> &G,
 	}
 	node_array<int> nodeid( G, 3 );
 	if( G.number_of_nodes() < 30 )
-		SPRING_EMBEDDING_( G, xpos, ypos, 0, 2000 ,0, 1000, 250, nodeid, abbv, cat_num, Categories );
+		SPRING_EMBEDDING_( G, xpos, ypos, 0, 2000 ,0, 1000, 250, nodeid, abbv, cat_num );
 	else
-		SPRING_EMBEDDING_( G, xpos, ypos, 0, 2000 + G.number_of_nodes()*13 ,0, 1000 + G.number_of_nodes()*5, 250, nodeid, abbv, cat_num, Categories );
+		SPRING_EMBEDDING_( G, xpos, ypos, 0, 2000 + G.number_of_nodes()*13 ,0, 1000 + G.number_of_nodes()*5, 250, nodeid, abbv, cat_num );
 
 	Xpos = xpos;
 	Ypos = ypos;
@@ -1925,24 +1924,23 @@ Function is based for Heuristic Circular Layout
 Inputs are straightforward, this procedure 
 calculates the peripheral graphs */
 GRAPH<int,int> RUN_CIRCULARKC(  GRAPH<int,int> &G, 
-							  array<list<node> > &layers, 
-							  int W, 
-							  node_array<double> &Xpos, 
-							  node_array<double> &Ypos, 
-							  int graphNo, 
-							  node_array<point> &posx,
-							  edge_array<list<point> > &bendsx, 
-							  int algorithmFlag, 
-							  int space, 
-							  bool xCoordFlag, 
-							  int increment,
-							  bool ledaPostFlag,
-							  array<char> &abbv,
-							  int cat_num,
-							  array<char> &Categories,
-							  int nodeWidth,
-							  int drawType,
-							  double threshold
+				array<list<node> > &layers, 
+				int W, 
+				node_array<double> &Xpos, 
+				node_array<double> &Ypos, 
+				int graphNo, 
+				node_array<point> &posx,
+				edge_array<list<point> > &bendsx, 
+				int algorithmFlag, 
+				int space, 
+				bool xCoordFlag, 
+				int increment,
+				bool ledaPostFlag,
+				array<char> &abbv,
+				int cat_num,
+				int nodeWidth,
+				int drawType,
+				double threshold
 ){	
 	edge e;
 	node n,m,k;
@@ -3647,7 +3645,7 @@ void RUN_FFD_AGAIN2(  GRAPH<int,int> G,
 	}
 }
 
-void RUN_FFD_AGAIN_COLOR(  GRAPH<int,int> G, 
+void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G, 
 		  int W, 
 		  node_array<double> &Xpos,
 		  node_array<double> &Ypos, 
@@ -3683,7 +3681,7 @@ void RUN_FFD_AGAIN_COLOR(  GRAPH<int,int> G,
 			for( int i = 0; i < cat_num; i++ ){
 				forall_items( it, Categories[ G[ n ] ] ){
 					if( Categories[ G[ n ] ][ it ] == abbv[ i ] ){
-						catid[ n ].append( i );
+						catid[ n ].append( abbv[ i ] );
 					}
 				}
 			}
@@ -3760,7 +3758,7 @@ void RUN_FFD_AGAIN_COLOR(  GRAPH<int,int> G,
 			strcat( temp_str.name, "_" );
 			forall_items( it2, catid[ s ] ){
 				char number[4];
-				sprintf( number, "%d:", catid[ s ][ it2 ] );
+				sprintf( number, "%c:", catid[ s ][ it2 ] );
 				strcat( temp_str.name, number );
 			}
 			gw2.set_label(s,temp_str.name);
