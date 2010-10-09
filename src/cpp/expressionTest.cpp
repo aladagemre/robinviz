@@ -51,9 +51,9 @@ typedef struct store STR;
 int main1(){
 
         list_item it;
-        FILE *fptr;
+        FILE *fptr,*fptr2;
         list<two_tuple<STR,STR> > files;
-        char read[256],command[256],filename[256],filename2[256],filename3[256];
+        char read[256],command[256],filename[256],filename2[256],filename3[256],copy,filename4[256],filename5[256];
 
         fptr = fopen( "data/expressions/forParsing.txt", "r" );
 
@@ -74,14 +74,28 @@ int main1(){
             sprintf( command, "python data/expressions/ungz.py data/expressions/gse/%s.gz", files[ it ].first().store );
             system( command );
             sprintf( filename, "data/expressions/gse/%s", files[ it ].first().store );
-
+            cout << "--------------\n";
             sprintf( filename2, "data/expressions/%s.annot.gz", files[ it ].second().store );
             if( (fptr = fopen( filename2, "r" )) == NULL ){
+                cout << "+++++++++++++++\n";
                 sprintf( command, "python data/expressions/ungz.py ftp://ftp.ncbi.nih.gov/pub/geo/DATA/annotation/platforms/%s.annot.gz", files[ it ].second().store );
                 system( command );
                 fclose( fptr );
+                cout << "Copy begins\n";
+                sprintf( filename4, "%s.annot", files[ it ].second().store );
+                sprintf( filename5, "data/expressions/%s.annot", files[ it ].second().store );
+                fptr = fopen( filename4, "r" );
+                fptr2 = fopen( filename5, "w" );
+                while( !feof( fptr ) ){
+                    fscanf( fptr, "%c", &copy );
+                    fprintf( fptr2, "%c", copy );
+                }
+                fclose( fptr );
+                fclose( fptr2 );
+                cout << "Copy is done\n";
             }
             else{
+                cout << "--------------\n";
                 sprintf( command, "python data/expressions/ungz.py %s", filename2 );
                 system( command );
             }
