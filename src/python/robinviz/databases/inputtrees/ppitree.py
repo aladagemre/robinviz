@@ -20,14 +20,14 @@ class PPISelector(QWidget):
         
         dir_prefix = "BIOGRID-OSPREY_DATASETS"
         #print os.listdir("ppidata")
-        biogrid_dirname = filter(lambda filename: filename.startswith(dir_prefix), os.listdir("ppidata") )[0]
+        biogrid_dirname = filter(lambda filename: filename.startswith(dir_prefix), os.listdir(ap("ppidata")) )[0]
         
         self.biogridVersion = biogrid_dirname[len(dir_prefix)+1:-7]
         self.osprey_dir = ap("ppidata/%s-%s.osprey" % (dir_prefix, self.biogridVersion))
         self.setupGUI()
     def assureOspreyDirExists(self):
 	dir_prefix = "BIOGRID-OSPREY_DATASETS"
-        dirs = filter(lambda filename: filename.startswith(dir_prefix), os.listdir("ppidata") )
+        dirs = filter(lambda filename: filename.startswith(dir_prefix), os.listdir(ap("ppidata")) )
         if len(dirs) == 0:
 	    if not os.path.exists(ap("ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey")):
 		download_file("http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.0.68/BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip")
