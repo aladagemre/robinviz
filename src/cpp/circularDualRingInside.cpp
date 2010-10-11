@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
         double radius2 = length / pi;
         tmp = pi;
         if( radius1  >= radius2 + 200 )
-            radius2 += 300;
+            radius2 = radius1 + 300;
         circle C2( 0, 0, radius2 );
 
         array<double> slotsD( circle2.size() + 1 );
