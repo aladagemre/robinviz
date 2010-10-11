@@ -100,7 +100,39 @@ class GeneDB:
 	bid = self.value2biogrid(from_value, from_type)
 	result = self.biogrid2value(bid, to_type)
 	return result
-    
+
+    def detectAnnotation(self, proteins):
+        """Detects annotation type of the given proteins by intersecting
+        their possible annotation type.
+        >>> db.detectAnnotation(['TESC', 'HSPA8','SLC37A3'])
+
+        """
+
+        for protein in proteins:
+            annotation_sets = set()
+            bids = self.value2biogrids(protein)
+            if bids:
+                annotation_sets.add(list(set([bid[1] for bid in bids])))
+
+        if not sets:
+	    return None
+
+	# Now find the intersection. Start with the first one.
+	# Iterate over the set cumulatively.
+	s = annotation_sets[0]
+	for i in range(len(annotation_sets)-1):
+	    s = s.intersection(annotation_sets[i+1])
+
+	# Intersection should be one item!
+	assert len(s)==1, "Length of annotation set is not 1 but %d" %len(s)
+
+	return s.pop()
+
+
+
+        pass
+
+
     def checkUniqueValues(self):
 	"""Checks if identifier values are unique so that no problem would arise when value2biogrid is called.
 	Returns True if all values are unique, else False."""
@@ -113,23 +145,6 @@ class GeneDB:
 	
 	return x - y
 	
-
-
-
-# Some example runs and their outputs:
-
-"""
-db = GeneDB()
-print db.value2biogrids("YCR011C")
-# ['30990']
-
-print db.biogrid2values("30990")
-#[(u'850369', u'ENTREZ_GENE'), (u'ETG850369', u'ENTREZ_GENE_ETG'), (u'YCR011C', u'SYSTEMATIC_NAME'), (u'ADP1', u'OFFICIAL_SYMBOL'), (u'51013563', u'GENBANK_PROTEIN_GI'), (u'51013562', u'GENBANK_GENOMIC_DNA_GI'), (u'14588926', u'GENBANK_PROTEIN_GI'), (u'85666111', u'GENBANK_GENOMIC_DNA_GI'), (u'X59720', u'GENBANK_GENOMIC_DNA_ACCESSION'), (u'AAT93075', u'GENBANK_PROTEIN_ACCESSION'), (u'P25371', u'GENBANK_PROTEIN_ACCESSION'), (u'14588895', u'GENBANK_GENOMIC_DNA_GI'), (u'AY693056', u'GENBANK_GENOMIC_DNA_ACCESSION'), (u'10383780', u'GENBANK_PROTEIN_GI'), (u'45644964', u'GENBANK_PROTEIN_GI'), (u'CAA42328', u'GENBANK_PROTEIN_ACCESSION'), (u'NP_009937', u'REFSEQ_PROTEIN_ACCESSION'), (u'NC_001135', u'REFSEQ_GENOMIC_DNA_ACCESSION'), (u'P25371', u'SWISSPROT'), (u'S000000604', u'SGD'), (u'649', u'GRID_LEGACY'), (u'30990', u'BIOGRID')]
-
-print db.biogrid2value("30990", "SYSTEMATIC_NAME")
-# YCR011C
-"""
-
 if __name__ == "__main__":
     db = GeneDB()
     import doctest

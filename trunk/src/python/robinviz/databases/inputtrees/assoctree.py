@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+"""Gene Ontology Association Source selector dialog"""
+from PyQt4.QtGui import QWidget, QTreeWidget, QTreeWidgetItem, QApplication, QHBoxLayout
+from PyQt4.QtCore import Qt
 import sys
-import urllib
 import os
 
 if not "utils" in sys.path:
@@ -12,6 +11,7 @@ if not "utils" in sys.path:
 from utils.info import ap
 from utils.compression import download_file_to, ungz
 from databases.genequery import GeneDB
+from databases.translator import AssociationTranslator
 
 from complete_goa import generate_index
 
@@ -34,14 +34,14 @@ class AssociationSelector(QWidget):
 	treeWidget.setColumnCount(3)
 	treeWidget.setHeaderLabels(("Organism", "Source DB", "Gene #",))
 	treeWidget.itemExpanded.connect(self.resizeColumns)
-	#treeWidget.setSortingEnabled(True)
+	treeWidget.setSortingEnabled(True)
 	
 	self.parseFile()	    
 	layout.addWidget(treeWidget)
 	
-	button = QPushButton("Report Selected")
-	button.clicked.connect(self.mergeSelectedAssociations)        
-        layout.addWidget(button)
+	#button = QPushButton("Report Selected")
+	#button.clicked.connect(self.mergeSelectedAssociations)
+        #layout.addWidget(button)
 
         self.setLayout(layout)
         self.setWindowTitle("Gene Association Sources")
@@ -60,16 +60,13 @@ class AssociationSelector(QWidget):
 	def traverse(item):
 	    # Add the term into checked items list if it's checked.
 	    if item.checkState(0) == Qt.Checked:
-		checkedItems.add(str(item.url))
-	    # For all children, traverse them too.
-	    for c in range( item.childCount() ):
-		child = item.child(c)
-		traverse(child)
-		
+		checkedItems.add(str(item.url))	
 	    
 	for i in range( self.treeWidget.topLevelItemCount() ):
 	    topLevelItem = self.treeWidget.topLevelItem(i)
-	    traverse(topLevelItem)
+            for c in range( topLevelItem.childCount() ):
+		child = topLevelItem.child(c)
+		traverse(child)
 	
 	checkedItems = sorted(checkedItems)
 	f = open(ap("assocdata/selected_assoc.txt"), "w")
@@ -120,7 +117,8 @@ class AssociationSelector(QWidget):
 		name = cols[2]
 	    else:
 		name = cols[1]
-	    
+
+            
 	    bids = self.db.value2biogrids(name)
 	    if len(bids) == 1:
 		# if only one type, just return it.
@@ -128,7 +126,9 @@ class AssociationSelector(QWidget):
 		return bids[0][1]
 		
 	    if bids:
-		# for each convertable
+                #print cols[2]
+		# for each convertable increase the counter
+                #print name
 		counter += 1
 		sets.append(set([bid[1] for bid in bids]))
 	    if counter == 10:
@@ -140,30 +140,93 @@ class AssociationSelector(QWidget):
 	    
 	# Now find the intersection. Start with the first one.
 	# Iterate over the set cumulatively.
+        #print sets
 	s = sets[0]
 	for i in range(len(sets)-1):
 	    s = s.intersection(sets[i+1])
 	
 	# Intersection should be one item!
-	assert len(s)==1, "Length of annotation set is not 1 but %d" %len(s)
-	
-	return s.pop() 
-		
+        if len(s) == 1:
+            return s.pop()
+        else:
+            print "No consensus. # of Candidates: %d" % len(s)
+            return None
+	#assert len(s)==1, "Length of annotation set is not 1 but %d" %len(s)
+
+    def _extend_dictionary(self, pool, newbie):
+        """Extends the pool dictionary with the newbie's contents.
+        Both dictionaries have list records mapped to string keys.
+        """
+        for key in newbie.keys():
+            l = pool.get(key)
+            if not l:
+                l = []
+            l.extend(newbie[key])
+            pool[key] = l
+
+        #return pool
+
+    def _get_dictionary_from_file(self, filename):
+        newbie = {}
+        f = open(filename)
+        for line in f:
+            cols = line.strip().split("\t")
+            if cols[1] == "NULL":
+                continue
+            newbie[cols[0]] = cols[1:]
+        return newbie
+        
     def mergeSelectedAssociations(self):
 	"""Merges selected association data files into one single assocdata/go_slim.txt"""
 	files = self.downloadCheckedAssociation()
 	o = open(ap("assocdata/go_slim.txt"),"w")
-	converted = 0
-	not_converted = 0
+	"""converted = 0
+	not_converted = 0"""
 	go_dict = {}
-	
+	TARGET_ANNOTATION= "BIOGRID"
 	self.db = GeneDB()
-	
+	translator = AssociationTranslator()
+
 	# ===============================================
 	for filename in files:
+            target_file = ap("%s-%s" % (filename, TARGET_ANNOTATION))
+            if os.path.exists( target_file ):
+                print target_file,"exists, shall not re-generate it."
+                newbie = self._get_dictionary_from_file(target_file)
+                self._extend_dictionary( go_dict, newbie )
+            else:
+                translator.set_filename(filename)
+                if translator.translate(None, TARGET_ANNOTATION):
+                    self._extend_dictionary( go_dict, translator.go_dict )
+            
+     	# ===============================================
+
+	for key in sorted(go_dict.keys()):
+	    try:
+                genes = list(set(go_dict[key]))
+                if genes:
+                    genes_str = "\t".join( map(str, genes) )
+                else:
+                    genes_str = "NULL"
+
+		o.write("%s\t%s\n" % ( key,  genes_str) )
+	    except:
+		raise Exception, "problem here. key: %s; values = %s" % (key, go_dict[key])
+	o.close()
+    
+            
+
+        """
+            print filename.split("/")[-1]
 	    atype = self.detectAnnotationType(filename)
-	    print filename.split("/")[-1]
+            if not atype:
+                print "Could not detect annotation type. Not using it."
+                print
+                continue
+                
 	    print "Annotation type:",atype
+            print
+            continue
 	    f = open(filename)
 	    for line in f:
 		if line[0] == "!":
@@ -199,13 +262,20 @@ class AssociationSelector(QWidget):
 	
 	for key in sorted(go_dict.keys()):
 	    try:
-		o.write("%s\t%s\n" % ( key, "\t".join( map(str, go_dict[key]) ) ) )
+                genes = go_dict[key]
+                if genes:
+                    genes_str = "\t".join( map(str, genes) )
+                else:
+                    genes_str = "NULL"
+
+                
+		o.write("%s\t%s\n" % ( key,  genes_str) )
 	    except:
 		raise Exception, "problem here. key: %s; values = %s" % (key, go_dict[key])
 	o.close()
     
 	print "Converted:",converted
-	print "Could not convert:",not_converted
+	print "Could not convert:",not_converted """
 	
 	
     def parseFile(self):
@@ -243,6 +313,6 @@ class AssociationSelector(QWidget):
 	    
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    mainWindow = AssociationSelector()
-    mainWindow.showMaximized()
+    selector = AssociationSelector()
+    selector.showMaximized()
     sys.exit(app.exec_())
