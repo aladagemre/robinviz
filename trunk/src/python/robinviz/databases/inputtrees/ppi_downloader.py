@@ -3,10 +3,10 @@
 Downloads HitPredict data for a given organism. Uses hitpredict module to combine Small Scale, High Confidence, Low Confidence datas.
 """
 import os
-import tarfile
 from hp_to_tabbedppi import *
 sys.path.append("../..")
 from utils.compression import download_targz
+from utils.info import ap
 
 
 def shorten_organism(long_name):
@@ -25,8 +25,9 @@ def get_lc_url(organism_name):
     return "http://hintdb.hgc.jp/htp/download/%s_spurious.tar.gz" % shorten_organism(organism_name)
 
 def download_organism(organism_name):
-    hitpredict_combined_ppi = "ppidata/hitpredict/%s.txt" % organism_name
+    hitpredict_combined_ppi = ap("ppidata/hitpredict/%s.txt" % organism_name)
     if os.path.exists(hitpredict_combined_ppi):
+        print "Hitpredict PPI file already exists, not creating again:", hitpredict_combined_ppi
 	return
 	
     files = []

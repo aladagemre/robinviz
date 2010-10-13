@@ -4,6 +4,7 @@ Given Hitpredict filenames, extracts the confidence values, normalizes and combi
 """
 import sys
 from databases.genequery import GeneDB
+from utils.info import ap
 
 def normalize(data):
     match = {}
@@ -19,7 +20,7 @@ def normalize(data):
     return data, match
     
 def tabify(files, organism_name):
-    hitpredict_combined_ppi = "ppidata/hitpredict/%s.txt" % organism_name
+    hitpredict_combined_ppi = ap("ppidata/hitpredict/%s.txt" % organism_name)
     lines = []
     for filename in files:
 	lines.extend( open(filename).readlines() )
@@ -56,26 +57,38 @@ def tabify(files, organism_name):
 		pass
 	    else:
 		fields = line.split("|")
+                #print fields
+                # ======PROTEIN1===============
 		protein1 = fields[2]
-		value = db.value2value(protein1, "SYSTEMATIC_NAME")
+                #value = db.value2biogrids(protein1, types=["SWISSPROT", "GENBANK_PROTEIN_ACCESSION"], only_ids=True)
+                value = db.value2biogrids(protein1, only_ids=True)
+		
 		if isinstance(value, list):
-		    """if len(value)>1:
-			print protein1, value"""
+		    if len(value)>1:
+			print protein1, value
 		    value = "/".join(value)
 		    
 		if value:
-		    protein1 = value
+		    protein1 = str(value)
 		else:
+                    print "could not convert:", protein1
 		    no_correspondance.add(protein1)
+                    #continue
+
+                # ======PROTEIN2===============
 		protein2 = fields[3]
-		value = db.value2value(protein2, "SYSTEMATIC_NAME")
+		#value = db.value2biogrid(protein2, ["SWISSPROT", "GENBANK_PROTEIN_ACCESSION"])
+                #value = db.value2biogrids(protein2, types=["SWISSPROT", "GENBANK_PROTEIN_ACCESSION"], only_ids=True)
+                value = db.value2biogrids(protein2, only_ids=True)
 		if isinstance(value, list):
 		    value = "/".join(value)
 		if value:
-		    protein2 = value
+		    protein2 = str(value)
 		else:
+                    print "could not convert:", protein2
 		    no_correspondance.add(protein2)
-		
+                    #continue
+                    
 		try:
 		    confidence = float(fields[-4])
 		except ValueError:
@@ -84,8 +97,9 @@ def tabify(files, organism_name):
 		    for proteiny in protein2.split("/"):
 			t = (proteinx, proteiny, str(match[confidence]))
 			output.write("\t\t".join(t) + "\n")
-		#t = (protein1, protein2, str(match[confidence]))
-		#output.write("\t".join(t) + "\n")
+                
+		"""t = (protein1, protein2, str(match[confidence]))
+		output.write("\t\t".join(t) + "\n")"""
 
     print "These genes have no corresponding names in BIOGRID_IDENTIFIERS:"
     print sorted(no_correspondance)	

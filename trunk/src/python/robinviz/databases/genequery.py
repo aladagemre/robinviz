@@ -21,15 +21,26 @@ class GeneDB:
 	self.conn = sqlite3.connect(os.path.join(database_root, "identifier.db"))
 	self.cursor = self.conn.cursor()
 
-    def value2biogrids(self, value):
+    def value2biogrids(self, value, types=None, only_ids = False):
 	"""Converts a given value of an UNKNOWN TYPE to corresponding biogrid ids.
 	>>> db.value2biogrids("30990")
 	[('57562', 'ENTREZ_GENE'), ('127342', 'HGNC'), ('30990', 'BIOGRID')]
 	"""
-	self.cursor.execute("SELECT biogrid_id, identifier_type FROM translation WHERE identifier_value=?;",  (value,) )
-	result = self.cursor.fetchall()
-	
-	biogrid_ids = list(set([(str(row[0]), str(row[1])) for row in result]))	    
+	if not types:
+            self.cursor.execute("SELECT biogrid_id, identifier_type FROM translation WHERE identifier_value=?;",  (value,) )
+            result = self.cursor.fetchall()
+        else:
+            qms = ",".join("?"*len(types)) # question marks
+            params = [value]
+            params.extend(types)
+            statement ="SELECT biogrid_id,identifier_type FROM translation WHERE identifier_value=? and identifier_type in (" + qms +");"
+            self.cursor.execute(statement, params)
+            result = self.cursor.fetchall()
+
+	if only_ids:
+            biogrid_ids = list(set([str(row[0]) for row in result ]))
+        else:
+            biogrid_ids = list(set([(str(row[0]), str(row[1])) for row in result]))
 	
 	return biogrid_ids
     
@@ -49,7 +60,7 @@ class GeneDB:
 	assert len(result) == 1, "Length is not 1 but %d" % len(result)"""
 	biogrid_id = result[0][0]
 	return biogrid_id
-	
+
     def biogrid2values(self, biogrid_id):
 	"""Converts a given biogrid_id to the other identifier values.
 	Result is a list in the format:
@@ -104,7 +115,7 @@ class GeneDB:
     def detectAnnotation(self, proteins):
         """Detects annotation type of the given proteins by intersecting
         their possible annotation type.
-        >>> db.detectAnnotation(['TESC', 'HSPA8','SLC37A3'])
+        db.detectAnnotation(['TESC', 'HSPA8','SLC37A3'])
 
         """
 
