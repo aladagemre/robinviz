@@ -22,7 +22,7 @@ class GEOSelector(QWidget):
     def checkIndex(self):
 	if os.path.exists(self.filename):
 	    return
-	url = "http://robinviz.googlecode.com/svn/data/expressions/geoTreeView.txt"
+	url = "http://robinviz.googlecode.com/svn/data2/expressions/geoTreeView.txt"
 	download_file_to(url, self.filename)
 		
     def setupGUI(self):

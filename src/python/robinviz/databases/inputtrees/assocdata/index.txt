@@ -1,0 +1,71 @@
+Filtered
+	Anaplasma phagocytophilum	JCVI	1289	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD
+	Agrobacterium tumefaciens	PAMGO	83	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.PAMGO_Atumefaciens.gz?rev=HEAD
+	Arabidopsis thaliana	TAIR	31339	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.tair.gz?rev=HEAD
+	Aspergillus nidulans	AspGD	11368	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.aspgd.gz?rev=HEAD
+	Bacillus anthracis	JCVI	5280	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Banthracis.gz?rev=HEAD
+	Bos taurus	GO Annotations @ EBI	24147	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.goa_cow.gz?rev=HEAD
+	Carboxydothermus hydrogenoformans	JCVI	2611	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Chydrogenoformans.gz?rev=HEAD
+	Caenorhabditis elegans	WormBase	17183	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.wb.gz?rev=HEAD
+	Campylobacter jejuni	JCVI	1829	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Cjejuni.gz?rev=HEAD
+	Candida albicans	CGD	5942	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.cgd.gz?rev=HEAD
+	Clostridium perfringens	JCVI	2892	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Cperfringens.gz?rev=HEAD
+	Colwellia psychrerythraea	JCVI	4752	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Cpsychrerythraea.gz?rev=HEAD
+	Coxiella burnetii	JCVI	2033	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Cburnetii.gz?rev=HEAD
+	Danio rerio	ZFIN	15525	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.zfin.gz?rev=HEAD
+	Dehalococcoides ethenogenes	JCVI	1584	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Dethenogenes.gz?rev=HEAD
+	Dickeya dadantii	PAMGO	126	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.PAMGO_Ddadantii.gz?rev=HEAD
+	Dictyostelium discoideum	dictyBase	7606	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.dictyBase.gz?rev=HEAD
+	Drosophila melanogaster	FlyBase	12706	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.fb.gz?rev=HEAD
+	Escherichia coli	EcoCyc & EcoliHub	3803	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.ecocyc.gz?rev=HEAD
+	Ehrlichia chaffeensis	JCVI	1091	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Echaffeensis.gz?rev=HEAD
+	Gallus gallus	GO Annotations @ EBI	16526	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.goa_chicken.gz?rev=HEAD
+	Geobacter sulfurreducens	JCVI	3410	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Gsulfurreducens.gz?rev=HEAD
+	Homo sapiens	GO Annotations @ EBI	18294	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.goa_human.gz?rev=HEAD
+	Hyphomonas neptunium	JCVI	3110	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Hneptunium.gz?rev=HEAD
+	Leishmania major	Sanger GeneDB	10	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.GeneDB_Lmajor.gz?rev=HEAD
+	Listeria monocytogenes	JCVI	2822	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Lmonocytogenes.gz?rev=HEAD
+	Magnaporthe grisea	PAMGO	11274	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.PAMGO_Mgrisea.gz?rev=HEAD
+	Methylococcus capsulatus	JCVI	2925	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Mcapsulatus.gz?rev=HEAD
+	Mus musculus	MGI	33957	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.mgi.gz?rev=HEAD
+	Neorickettsia sennetsu	JCVI	929	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Nsennetsu.gz?rev=HEAD
+	Oomycetes	PAMGO	126(126 non-IEA)	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.PAMGO_Oomycetes.gz?rev=HEAD
+	Oryza sativa	Gramene	41142	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.gramene_oryza.gz?rev=HEAD
+	Protein Data Bank [multispecies]	GO Annotations @ EBI	769896(13615 non-IEA)	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.goa_pdb.gz?rev=HEAD
+	Plasmodium falciparum	Sanger GeneDB	2205	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.GeneDB_Pfalciparum.gz?rev=HEAD
+	Pseudomonas aeruginosa	PseudoCAP	1519	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.pseudocap.gz?rev=HEAD
+	Pseudomonas fluorescens	JCVI	4669	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Pfluorescens.gz?rev=HEAD
+	Pseudomonas syringae	JCVI	4012	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Psyringae.gz?rev=HEAD
+	Pseudomonas syringae	JCVI	3565	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Psyringae_phaseolicola.gz?rev=HEAD
+	Rattus norvegicus	RGD	28924	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.rgd.gz?rev=HEAD
+	Reactome [multispecies]	CSHL & EBI	7929(7929 non-IEA)	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.reactome.gz?rev=HEAD
+	Saccharomyces cerevisiae	SGD	6357	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.sgd.gz?rev=HEAD
+	Schizosaccharomyces pombe	Sanger GeneDB	5290	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.GeneDB_Spombe.gz?rev=HEAD
+	Shewanella oneidensis	JCVI	4843	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Soneidensis.gz?rev=HEAD
+	Silicibacter pomeroyi	JCVI	4252	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Spomeroyi.gz?rev=HEAD
+	Solanaceae	SGN	155	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.sgn.gz?rev=HEAD
+	Trypanosoma brucei	Sanger GeneDB	2977	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.GeneDB_Tbrucei.gz?rev=HEAD
+	UniProt [multispecies] IEA annotations removed	GO Annotations @ EBI	46199(46199 non-IEA)	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.goa_uniprot_noiea.gz?rev=HEAD
+	Vibrio cholerae	JCVI	3858	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Vcholerae.gz?rev=HEAD
+	PAINT [multispecies]	 (GOC RefGenome)	18935(18935 non-IEA)	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.paint_other.gz?rev=HEAD
+Unfiltered
+	Protein Data Bank [multispecies]	GO Annotations @ EBI	1698905(352256 non-IEA)	http://www.geneontology.org/gene-associations/submission/gene_association.goa_pdb.gz
+	Reactome [multispecies]	CSHL & EBI	40845(40845 non-IEA)	http://www.geneontology.org/gene-associations/submission/gene_association.reactome.gz
+	UniProt [multispecies]	GO Annotations @ EBI	67417024(663594 non-IEA)	http://www.geneontology.org/gene-associations/submission/gene_association.goa_uniprot.gz
+	PAINT [multispecies]	 (GOC RefGenome)	21428(21428 non-IEA)	http://www.geneontology.org/gene-associations/submission/gene_association.paint_other.gz
+	Arabidopsis thaliana	GO Annotations @ EBI	22827	http://www.geneontology.org/gene-associations/submission/gene_association.goa_arabidopsis.gz
+	Arabidopsis thaliana	TAIR (GOC RefGenome)	52	http://www.geneontology.org/gene-associations/submission/gene_association.paint_tair.gz
+	Caenorhabditis elegans	WormBase (GOC RefGenome)	78	http://www.geneontology.org/gene-associations/submission/gene_association.paint_wb.gz
+	Danio rerio	GO Annotations @ EBI	26421	http://www.geneontology.org/gene-associations/submission/gene_association.goa_zebrafish.gz
+	Danio rerio	ZFIN (GOC RefGenome)	158	http://www.geneontology.org/gene-associations/submission/gene_association.paint_zfin.gz
+	Dictyostelium discoideum	dictyBase (GOC RefGenome)	36	http://www.geneontology.org/gene-associations/submission/gene_association.paint_dictyBase.gz
+	Drosophila melanogaster	FlyBase (GOC RefGenome)	59	http://www.geneontology.org/gene-associations/submission/gene_association.paint_fb.gz
+	Escherichia coli	EcoCyc & EcoliHub (GOC RefGenome)	7	http://www.geneontology.org/gene-associations/submission/gene_association.paint_ecocyc.gz
+	Gallus gallus	GO Annotations @ EBI (GOC RefGenome)	114	http://www.geneontology.org/gene-associations/submission/gene_association.paint_goa_chicken.gz
+	Homo sapiens	GO Annotations @ EBI (GOC RefGenome)	140	http://www.geneontology.org/gene-associations/submission/gene_association.paint_goa_human.gz
+	Mus musculus	GO Annotations @ EBI	36392	http://www.geneontology.org/gene-associations/submission/gene_association.goa_mouse.gz
+	Mus musculus	MGI (GOC RefGenome)	129	http://www.geneontology.org/gene-associations/submission/gene_association.paint_mgi.gz
+	Rattus norvegicus	GO Annotations @ EBI	27884	http://www.geneontology.org/gene-associations/submission/gene_association.goa_rat.gz
+	Rattus norvegicus	RGD (GOC RefGenome)	139	http://www.geneontology.org/gene-associations/submission/gene_association.paint_rgd.gz
+	Saccharomyces cerevisiae	SGD (GOC RefGenome)	27	http://www.geneontology.org/gene-associations/submission/gene_association.paint_sgd.gz
+	Schizosaccharomyces pombe	Sanger GeneDB (GOC RefGenome)	25	http://www.geneontology.org/gene-associations/submission/gene_association.paint_GeneDB_SPombe.gz

@@ -8,7 +8,29 @@ if not "utils" in sys.path:
 from utils.info import ap
 from genequery import GeneDB
 
+class BiogridOspreyTranslator:
+    def __init__(self, filename=None):
+        if filename:
+            self.set_filename(filename)
+        self.db = GeneDB()
+        
+    def set_filename(self, filename):
+        self.filename = filename
 
+    def translate(self):
+        lines = open(self.filename).readlines()
+        for line in lines[1:]:
+            cols = line.split("\t")
+            p1 = cols[0]
+            p2 = cols[1]
+            t1 = self.db.value2biogrids(p1, only_ids=True)
+            t2 = self.db.value2biogrids(p2, only_ids=True)
+
+            for t1x in t1:
+                for t2x in t2:
+                    pass
+                    
+            
 class AssociationTranslator:
     def __init__(self, filename=None):
         self.db = GeneDB()
