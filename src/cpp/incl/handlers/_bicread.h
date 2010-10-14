@@ -14,9 +14,9 @@ void bicRead( matrix &INPUT, char defaultBicFile[256], list<list<GENES> > &biclu
         biclusterHandling( INPUT, defaultBicFile,  biclusters, categ, matrixBiclusters, H_values, Hmax, minBicSize, maxBicSize, biclustering, dimension1, dimension2, hasColor );
 }
 
-void goCatRead (char inputGoFile[256], char defaultGoFile[256], list<list<GENES> > &gocat, list<int> &categ, list<leda::matrix> &matrixBiclusters, list<double> &H_values, double &Hmax, array<GENENAMES> &GenesNode ){
+void goCatRead (char inputGoFile[256], char defaultGoFile[256], list<list<GENES> > &gocat, list<int> &categ, list<leda::matrix> &matrixBiclusters, list<double> &H_values, double &Hmax, array<GENENAMES> &GenesNode, bool hasColor ){
         cout << "/**************************************************/" << endl;
         cout << "\t" << " Bicluster Examination Part" << endl;
         cout << "/**************************************************/" << endl;
-        goHandling( inputGoFile, defaultGoFile,  gocat, categ, matrixBiclusters, H_values, Hmax, GenesNode );
+        goHandling( inputGoFile, defaultGoFile,  gocat, categ, matrixBiclusters, H_values, Hmax, GenesNode, hasColor );
 }
