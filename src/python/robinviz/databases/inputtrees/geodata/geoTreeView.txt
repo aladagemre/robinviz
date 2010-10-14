@@ -28,8 +28,13 @@ Mus musculus	10090
 	GSE23800_series_matrix.txt	GSE23800	GPL1261	"Analysis of differential gene expression in Cebpa-positive and Cebpa-negative hematopoietic stem cells using a Cebpa-Cre EYFP reporter mouse model"
 	GSE21018_series_matrix.txt	GSE21018	GPL1261	"Cooperation of IRF-4 and IRF-8 deficiencies in the development of hematological malignancies"
 
+Schizosaccharomyces pombe	4896
+	GSE10079-GPL2529_series_matrix.txt	GSE10079	GPL2529	"A Med15 - Hrp1 complex associates with fission yeast Mediator"
+	GSE10901_series_matrix.txt	GSE10901	GPL1932	"Altered genes expression profile of Rep2 mutants in Fission Yeast upon HU treatment."
+
 Saccharomyces cerevisiae	4932
 	YEAST1_2993_173.txt.gz*	YEAST1	NONE	"Yeast dataset of 2993 genes over 173 experiments from Gasch et al"
+	GSE15352_series_matrix.txt	GSE15352	GPL2529	"Dynamic transcriptional and metabolic responses in yeast adapting to temperature stress."
 
 Canis lupus familiaris	9615
 	GSE14887_series_matrix.txt	GSE14887	GPL3979	"Mongrel dogs (weighing 22-29 kg, n = 13) were chronically instrumented for measurements of systemic hemodynamics. The control hemodynamics were recorded 10-14 days after the surgery. After the control recording, the dogs were divided into two groups: one normal (n = 7) and the other diabetic (n = 6). In the diabetic group, the dogs were injected with alloxan monohydrate (40-60 mg/kg iv) over 1 min. Alloxan was prepared as a 5% solution in citrate buffer (pH 4-4.5). Only dogs with blood glucose >200 mg/dl (fasted for at least 16 h) on day 7 were included in the diabetic group. Before and after the development of diabetes, the dogs had free access to water. Systemic hemodynamics were measured again after 4-5 wk. All the microarray analysis were perormed after 4 weeks of alloxan injection."
