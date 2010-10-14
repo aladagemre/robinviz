@@ -282,7 +282,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 		FILE *f;
 		list<GENES> tempGenes;
 		char line[ 100000 ];
-		char *pc,*pend,*go,cat[512];
+		char *pc,*pend,*go,*cat;
 		const char *strDelim = "\t";
 		const char *strDelim2 = " ";
 
@@ -339,6 +339,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 					
 					CATNAMES cats;
 					sprintf( cats.catName, "%s", pc );
+					cat = pc;
 					list_item catit;
 					int count_cat = 0;
 					forall_items( catit, inputCats ){
@@ -459,11 +460,12 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 * @param Hmax (double) Hmax is a value that stores max H-value
 */
 void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES> > &gocategories, list<int> &categ, 
-		 list<leda::matrix> &matrixCategories, list<double> &scores, double &Hmax, array<GENENAMES> &GenesNode ){
+                 list<leda::matrix> &matrixCategories, list<double> &scores, double &Hmax, array<GENENAMES> &GenesNode, bool hasColor ){
 	FILE *fptr;
 	char *pc;
 	list<two_tuple<CATNAMES,int> > categories;
 	list<CATNAMES> inputCats;
+        list_item it,it2;
 
 	if( (fptr = fopen( inputGoFile, "r") ) == NULL ){
 		FILE *erptr;
@@ -493,6 +495,30 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
 	array<GENEONTO> geneOntoForData = geneOntologyHandling2( defaultGoFile, inputCats, GenesNode, categories, gocategories );
 // 	cout << "\nWEDONE\n";
 	geneOntologyToBiclusterHandling( gocategories, geneOntoForData );
+        int catCount = 1;
+        forall_items( it, gocategories ){
+            FILE *saveGene;
+            if( gocategories[it].size() >= 1 ){
+                    char geneFile[ 1024 ];
+#ifdef LINUX
+                    sprintf( geneFile, "%s%d%s", "outputs/bicgenes/geneResult", catCount, ".txt" );
+// 				cout << " created\n";
+#else
+                    sprintf( geneFile, "%s%d%s", "outputs//bicgenes//geneResult", catCount, ".txt" );
+// 				cout << " created\n";
+#endif
+                    if( (saveGene = fopen( geneFile , "w" ) ) != NULL ){
+                        forall_items( it2, gocategories[ it ] ){
+                            fprintf( saveGene, "%s\n", gocategories[ it ][ it2 ].GENE );
+                        }
+                    }
+            }
+            catCount++;
+        }
+        if( hasColor )
+            analyseGenes2( "geneResult", categ, gocategories.size(), "", GenesNode.size(), 0, hasColor  );
+        else
+            analyseGenes2( "geneResult", categ, gocategories.size(), "", GenesNode.size(), 0  );
 }
 
 

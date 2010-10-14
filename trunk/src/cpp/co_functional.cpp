@@ -298,7 +298,7 @@ int main(){
 
                 interactionRead( temp, GenesNode, INTERACTIONS, TEMPINT, ppifilename );
 // 		INTERACTIONS.print();
-                goCatRead( inputGoFile, defaultGoFile, categories, categ, matrixCategories, H_values, Hmax, GenesNode );
+                goCatRead( inputGoFile, defaultGoFile, categories, categ, matrixCategories, H_values, Hmax, GenesNode, hasColor );
                 cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
 
                 FILE *cfptr;
