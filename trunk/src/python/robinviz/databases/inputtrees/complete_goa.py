@@ -2,7 +2,10 @@
 """This script downloads GO Annotation page and parses it. Creates an index file containing
 Organism - URL pairs with some additional information
 """
-from BeautifulSoup import BeautifulSoup
+import sys
+sys.path.append("../..")
+
+from utils.BeautifulSoup import BeautifulSoup
 import urllib
 
 def generate_index():

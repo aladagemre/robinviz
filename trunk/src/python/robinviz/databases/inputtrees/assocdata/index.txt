@@ -17,7 +17,7 @@ Filtered
 	Dickeya dadantii	PAMGO	126	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.PAMGO_Ddadantii.gz?rev=HEAD
 	Dictyostelium discoideum	dictyBase	7606	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.dictyBase.gz?rev=HEAD
 	Drosophila melanogaster	FlyBase	12706	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.fb.gz?rev=HEAD
-	Escherichia coli	EcoCyc & EcoliHub	3803	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.ecocyc.gz?rev=HEAD
+	Escherichia coli	EcoCyc & EcoliHub	3802	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.ecocyc.gz?rev=HEAD
 	Ehrlichia chaffeensis	JCVI	1091	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Echaffeensis.gz?rev=HEAD
 	Gallus gallus	GO Annotations @ EBI	16526	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.goa_chicken.gz?rev=HEAD
 	Geobacter sulfurreducens	JCVI	3410	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Gsulfurreducens.gz?rev=HEAD
@@ -27,11 +27,11 @@ Filtered
 	Listeria monocytogenes	JCVI	2822	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Lmonocytogenes.gz?rev=HEAD
 	Magnaporthe grisea	PAMGO	11274	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.PAMGO_Mgrisea.gz?rev=HEAD
 	Methylococcus capsulatus	JCVI	2925	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Mcapsulatus.gz?rev=HEAD
-	Mus musculus	MGI	33957	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.mgi.gz?rev=HEAD
+	Mus musculus	MGI	33954	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.mgi.gz?rev=HEAD
 	Neorickettsia sennetsu	JCVI	929	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Nsennetsu.gz?rev=HEAD
 	Oomycetes	PAMGO	126(126 non-IEA)	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.PAMGO_Oomycetes.gz?rev=HEAD
 	Oryza sativa	Gramene	41142	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.gramene_oryza.gz?rev=HEAD
-	Protein Data Bank [multispecies]	GO Annotations @ EBI	769896(13615 non-IEA)	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.goa_pdb.gz?rev=HEAD
+	Protein Data Bank [multispecies]	GO Annotations @ EBI	769882(13615 non-IEA)	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.goa_pdb.gz?rev=HEAD
 	Plasmodium falciparum	Sanger GeneDB	2205	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.GeneDB_Pfalciparum.gz?rev=HEAD
 	Pseudomonas aeruginosa	PseudoCAP	1519	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.pseudocap.gz?rev=HEAD
 	Pseudomonas fluorescens	JCVI	4669	http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Pfluorescens.gz?rev=HEAD
