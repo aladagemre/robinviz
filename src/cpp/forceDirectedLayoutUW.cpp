@@ -111,7 +111,7 @@ int main(int argc, char** argv) {
                     }
                 }
                 if( strcmp( flag1, "LEDA" ) == 0 ){
-                    SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 1000 );
+                    SPRING_EMBEDDING( G, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 1000 );
                 }
                 else{
                     if( strcmp( flag1, "OUR" ) == 0 ){

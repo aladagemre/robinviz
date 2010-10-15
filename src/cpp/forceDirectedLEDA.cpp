@@ -61,6 +61,13 @@ int main(int argc, char** argv) {
                     ypos[v]=y1_;
                 }
 
+//                gw.get_position( pos );
+//                forall_nodes(v,G) {
+//                    xpos[v] = pos[v].xcoord();
+//                    ypos[v] = pos[v].ycoord();
+//                    cout << xpos[v] << "\t" << ypos[v] << endl;
+//                }
+
 // 		cout << gw.get_xmin() << "\t" << gw.get_xmax() << "\t" << gw.get_ymin() << "\t" << gw.get_ymax() << endl;
                 //SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
 //                node_array<int> comp( G, 0 );
@@ -94,7 +101,7 @@ int main(int argc, char** argv) {
 //                        }
 //                    }
 //                }
-                SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
+                SPRING_EMBEDDING( G, xpos, ypos, gw.get_xmin()-100.0, gw.get_xmax()+100.0, gw.get_ymin()-100.0, gw.get_ymax()+100.0 );
 //                G.restore_all_nodes();
 //                //cout << " 1 \n";
 //                double xmin, xmax, ymin, ymax;
