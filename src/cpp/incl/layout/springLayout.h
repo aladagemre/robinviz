@@ -577,6 +577,14 @@ void SPRING_EMBEDDING_our2(GRAPH<int,int>& G, list<node>& fixed_nodes,
 		 }
 
 
+                node n;
+                node_array<float> degrees( G, 0.0 );
+                forall_nodes( n, G ){
+                    list<edge> uedge_l = G.adj_edges( n );
+                    list_item it;
+                    forall_items( it, uedge_l )
+                            degrees[ n ] += G[ uedge_l[ it ]];
+                }
 
 		// attractive forces
 
@@ -587,7 +595,8 @@ void SPRING_EMBEDDING_our2(GRAPH<int,int>& G, list<node>& fixed_nodes,
 			double ydist=ypos[v]-ypos[u];
 			double dist=sqrt(xdist*xdist+ydist*ydist);
 
-			float f = G[e] * (G.degree(u)+G.degree(v))/5.0;
+                        //float f = G[e] * (G.degree(u)+G.degree(v))/6.0;
+                        float f = (degrees[u]+degrees[v])/((float)G[e]*6.0);
 
 			dist /= f;
 

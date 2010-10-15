@@ -2,6 +2,7 @@ g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/circularLayout.cpp -lX11 -lm -lL -lG -l
 g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/circularForceLayout.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o circularForceLayout.exe
 g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/circularDualRingInside.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o circularDualRingInside.exe
 g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/circularDualRingOutside.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o circularDualRingOutside.exe
+g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/forceDirectedLayoutUW.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o forceDirectedLayoutUW.exe 
 g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/forceDirectedLayoutW.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o forceDirectedLayoutW.exe 
 g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/starLayout.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o starLayout.exe 
 g++ -I$LEDAROOT/incl -L$LEDAROOT src/cpp/layeredLayout.cpp -lX11 -lm -lL -lG -lP -lW -lD3 -lGeoW -O1 -o layeredLayout.exe 
