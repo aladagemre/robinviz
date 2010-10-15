@@ -111,7 +111,7 @@ int main(int argc, char** argv) {
                     }
                 }
                 if( strcmp( flag1, "LEDA" ) == 0 ){
-                    SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
+                    SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 1000 );
                 }
                 else{
                     if( strcmp( flag1, "OUR" ) == 0 ){
@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
                                 H.hide_node( n );
                         }
                         list<node> fixedNodes2;
-                        SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500, nodeId );
+                        SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 1000, nodeId );
                         forall_nodes( n, H ){
                             xpos[ nodes[ indexs2[ n ] ] ] = xpos2[ n ];
                             ypos[ nodes[ indexs2[ n ] ] ] = ypos2[ n ];
