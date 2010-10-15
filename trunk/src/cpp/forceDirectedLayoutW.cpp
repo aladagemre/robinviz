@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
                 }
                 //cout << " 2 \n";
                 double xpos1 = xmin;
-                double ypos1 = ymax + 35.0;
+                double ypos1 = ymax + 25.0;
                 list<node> justOnes;
                 //cout << max << " - " << election << endl;
                 for(int i = 0; i <= max; i++ ){
@@ -182,12 +182,12 @@ int main(int argc, char** argv) {
                                 if( xpos1 < xmax ){
                                     int diam = 30;
                                     if( COMPS[ i ].size() < 3 ){
-                                        diam = 10;
+                                        diam = 5;
                                     }
                                     else{
-                                        diam = 10 + COMPS[ i ].size() * 2;
+                                        diam = 5 + COMPS[ i ].size();
                                     }
-                                    circle C( xpos1 + 16, ypos1, diam );
+                                    circle C( xpos1 + 8, ypos1, diam );
                                     min = pi / (double)COMPS[ i ].size();
                                     tmp = pi;
                                     forall_items( it, COMPS[ i ] ){
@@ -201,15 +201,15 @@ int main(int argc, char** argv) {
                                 }
                                 else{
                                         xpos1 = xmin;
-                                        ypos1 += 50.0;
+                                        ypos1 += 25.0;
                                         int diam = 30;
                                         if( COMPS[ i ].size() < 3 ){
-                                            diam = 10;
+                                            diam = 5;
                                         }
                                         else{
-                                            diam = 10 + COMPS[ i ].size();
+                                            diam = 5 + COMPS[ i ].size();
                                         }
-                                        circle C( xpos1 + 16, ypos1, diam );
+                                        circle C( xpos1 + 8, ypos1, diam );
                                         min = pi / (double)COMPS[ i ].size();
                                         tmp = pi;
                                         forall_items( it, COMPS[ i ] ){
@@ -220,7 +220,7 @@ int main(int argc, char** argv) {
                                             tmp -= min;
                                         }
                                 }
-                                xpos1 += 66;
+                                xpos1 += 33;
                         }
                 }
 

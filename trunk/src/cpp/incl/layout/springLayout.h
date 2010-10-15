@@ -596,7 +596,7 @@ void SPRING_EMBEDDING_our2(GRAPH<int,int>& G, list<node>& fixed_nodes,
 			double dist=sqrt(xdist*xdist+ydist*ydist);
 
                         //float f = G[e] * (G.degree(u)+G.degree(v))/6.0;
-                        float f = (degrees[u]+degrees[v])/((float)G[e]*6.0);
+                        float f = (degrees[u]+degrees[v])/((float)G[e]*10.0);
 
 			dist /= f;
 
