@@ -97,6 +97,67 @@ class AssociationTranslator:
             return None
 	#assert len(s)==1, "Length of annotation set is not 1 but %d" %len(s)
 
+    def translate_biogrids(self):
+        o = open("%s-BIOGRID" % self.filename ,"w")
+	converted = 0
+	not_converted = 0
+	self.go_dict = go_dict = {}
+
+	# ===============================================
+	filename = self.filename
+        print filename.split("/")[-1]
+        f = open(filename)
+        for line in f:
+            if line[0] == "!":
+                continue
+            cols = line.split("\t")
+            protein_name1 = cols[1]
+            protein_name2 = cols[2]
+            go_term = cols[4]
+
+            l = go_dict.get(go_term)
+            if not l:
+                l = []
+
+            if protein_name2:
+                candidate_name = protein_name2
+            else:
+                candidate_name = protein_name1
+
+            if candidate_name:
+                bids = self.db.value2biogrids(candidate_name, only_ids=True)
+                if bids:
+                    converted+=1
+                    l.extend(bids)
+                else:
+                    not_converted+=1
+
+            else:
+                not_converted += 1
+
+
+
+            go_dict[go_term] = l
+        # ===============================================
+
+        for key in sorted(go_dict.keys()):
+            try:
+                genes = go_dict[key]
+                if genes:
+                    genes_str = "\t".join( map(str, genes) )
+                else:
+                    genes_str = "NULL"
+
+
+                o.write("%s\t%s\n" % ( key,  genes_str) )
+            except:
+                raise Exception, "problem here. key: %s; values = %s" % (key, go_dict[key])
+        o.close()
+
+        print "Converted:",converted
+        print "Could not convert:",not_converted
+        return True
+
     def translate(self, from_type, to_type):
         if not from_type:
             from_type = self.detect_annotation_type()
@@ -169,3 +230,4 @@ class AssociationTranslator:
         print "Converted:",converted
         print "Could not convert:",not_converted
         return True
+
