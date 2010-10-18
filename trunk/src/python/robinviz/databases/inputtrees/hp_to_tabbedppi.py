@@ -64,14 +64,14 @@ def tabify(files, organism_name):
                 value = db.value2biogrids(protein1, only_ids=True)
 		
 		if isinstance(value, list):
-		    if len(value)>1:
-			print protein1, value
+		    #if len(value)>1:
+			#print protein1, value
 		    value = "/".join(value)
 		    
 		if value:
 		    protein1 = str(value)
 		else:
-                    print "could not convert:", protein1
+                    #print "could not convert:", protein1
 		    no_correspondance.add(protein1)
                     #continue
 
@@ -85,7 +85,7 @@ def tabify(files, organism_name):
 		if value:
 		    protein2 = str(value)
 		else:
-                    print "could not convert:", protein2
+                    #print "could not convert:", protein2
 		    no_correspondance.add(protein2)
                     #continue
                     
@@ -96,10 +96,10 @@ def tabify(files, organism_name):
 		for proteinx in protein1.split("/"):
 		    for proteiny in protein2.split("/"):
 			t = (proteinx, proteiny, str(match[confidence]))
-			output.write("\t\t".join(t) + "\n")
+			output.write("\t".join(t) + "\n")
                 
 		"""t = (protein1, protein2, str(match[confidence]))
-		output.write("\t\t".join(t) + "\n")"""
+		output.write("\t".join(t) + "\n")"""
 
     print "These genes have no corresponding names in BIOGRID_IDENTIFIERS:"
     print sorted(no_correspondance)	
