@@ -175,14 +175,26 @@ class AssociationSelector(QWidget):
                 continue
             newbie[cols[0]] = cols[1:]
         return newbie
+
+    def filterSelected(self):
+        terms = sorted(map(lambda x:x.strip(), open(ap("godata/selected_terms.txt")).readlines()))
+        output = open(ap("assocdata/go_slim.txt"),"w")
         
+        for term in terms:
+            if term in self.go_dict:
+                genes = self.go_dict[term]
+                if not genes:
+                    genes = ["NULL"]
+                output.write("%s\t%s\n" % ( term, "\t".join( genes ) ) )
+
+        output.close()
     def mergeSelectedAssociations(self):
 	"""Merges selected association data files into one single assocdata/go_slim.txt"""
 	files = self.downloadCheckedAssociation()
-	o = open(ap("assocdata/go_slim.txt"),"w")
+	o = open(ap("assocdata/go.txt"),"w")
 	"""converted = 0
 	not_converted = 0"""
-	go_dict = {}
+	self.go_dict = go_dict = {}
 	TARGET_ANNOTATION= "BIOGRID"
 	self.db = GeneDB()
 	translator = AssociationTranslator()
@@ -196,9 +208,10 @@ class AssociationSelector(QWidget):
                 self._extend_dictionary( go_dict, newbie )
             else:
                 translator.set_filename(filename)
-                if translator.translate(None, TARGET_ANNOTATION):
+                """if translator.translate(None, TARGET_ANNOTATION):
+                    self._extend_dictionary( go_dict, translator.go_dict )"""
+                if translator.translate_biogrids():
                     self._extend_dictionary( go_dict, translator.go_dict )
-            
      	# ===============================================
 
 	for key in sorted(go_dict.keys()):
@@ -213,7 +226,9 @@ class AssociationSelector(QWidget):
 	    except:
 		raise Exception, "problem here. key: %s; values = %s" % (key, go_dict[key])
 	o.close()
-    
+
+
+        self.filterSelected()
             
 
         """
