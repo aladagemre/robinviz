@@ -10,7 +10,7 @@ if not "utils" in sys.path:
     
 from utils.info import ap
 from utils.compression import *
-
+from databases.translator import BiogridOspreyTranslator
 from ppi_downloader import download_organism
 
 class PPISelector(QWidget):
@@ -69,7 +69,7 @@ class PPISelector(QWidget):
 	self.organism_experiments = {} # organism_name : experiments...
 
 	for organism in organisms:
-	    experiment_files = filter(lambda filename: filename[0]!=".", os.listdir(self.osprey_dir + "/" + organism))
+	    experiment_files = filter(lambda filename: filename[0]!="." and filename.endswith(".txt"), os.listdir(self.osprey_dir + "/" + organism))
 	    organism_txt_length = len(organism)
 	    experiment_names = sorted(map(lambda fn:fn[15:-19-organism_txt_length], experiment_files))
 	    
@@ -100,7 +100,7 @@ class PPISelector(QWidget):
 	f = open(ap("ppidata/selected_ppis.txt"), "w")
 	f.write("\n".join( sorted(checkedItems) ) )
 	f.close()
-	
+
 	self.mergePPIFiles(checkedItems)
 
     def useDictionary(self, dictionary):
@@ -145,16 +145,22 @@ class PPISelector(QWidget):
 	    and store them in confidence_dicts"""
 	    d = {}
 	    for line in open(ap("ppidata/hitpredict/%s.txt" % organism )):
-		cols = line.split("\t\t")
+		cols = line.strip().split("\t")
+                print cols
 		d[cols[0], cols[1]] = cols[2]
 	    confidence_dicts[organism] = d
 	
 	interactions = {}
 	for filename in files:
+            bfilename = "%s-BIOGRID" % filename
+            if not os.path.exists(bfilename):
+                b = BiogridOspreyTranslator(filename)
+                b.translate()
+            filename = bfilename
+
 	    organism = self.convert_path_to_organism_name(filename)
-	    
-	    for line in open(filename).readlines()[1:]:
-		cols = line.split("\t")
+	    for line in open(filename):
+		cols = line.strip().split("\t")
 		if cols[0] == cols[1]:
 		    continue
 		
@@ -171,7 +177,6 @@ class PPISelector(QWidget):
 	
 	# Now we have an interactions dict, containing (p1,p2) => [conf1, conf2, ...]
 	# I'll take average of them. But I don't know if this is a good idea.
-	
 	single_ppi_file = open(ap("ppidata/ppi.txt"), "w")
 	
 	for key in interactions.keys():

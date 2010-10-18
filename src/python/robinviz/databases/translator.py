@@ -18,7 +18,9 @@ class BiogridOspreyTranslator:
         self.filename = filename
 
     def translate(self):
+        print "Translating %s to biogrid ids" % self.filename
         lines = open(self.filename).readlines()
+        output = open("%s-BIOGRID" % self.filename, "w")
         for line in lines[1:]:
             cols = line.split("\t")
             p1 = cols[0]
@@ -28,7 +30,8 @@ class BiogridOspreyTranslator:
 
             for t1x in t1:
                 for t2x in t2:
-                    pass
+                    output.write("%s\t%s\n" % (t1x, t2x) )
+        output.close()
                     
             
 class AssociationTranslator:
