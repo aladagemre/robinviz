@@ -2340,16 +2340,16 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 			ncount++;
 		}
 	}
-	double xpos1 = xmin;
+        double xpos1 = xmin - 200.0;
 	double ypos1 = ymax + 100.0;
 	forall_nodes( n, G ){
 		if( G.degree( n ) == 0 ){
-			if( xpos1 < xmax ){
+                        if( xpos1 < xmax + 200.0 ){
 				Xpos[ n ] = xpos1;
 				Ypos[ n ] = ypos1;
 			}
 			else{
-				xpos1 = xmin;
+                                xpos1 = xmin - 200.0;
 				ypos1 += 100.0;
 				Xpos[ n ] = xpos1;
 				Ypos[ n ] = ypos1;
@@ -2357,31 +2357,34 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 			xpos1 += 100.0;
 		}
 	}
-	cout << " 3 " << endl;
-	array<bool> colorChoose( 13 );
-	for( int c = 0; c < 13; c++ ){
-		colorChoose[ c ] = false;
-	}
-	colorChoose[ 5 ]  = true;
+//	cout << " 3 " << endl;
+//	array<bool> colorChoose( 13 );
+//        for( int c = 0; c < categ.size(); c++ ){
+//		colorChoose[ c ] = false;
+//	}
+//	colorChoose[ 5 ]  = true;
 	list_item it;
 
 	GraphWin gw(G);	
-	S(1,8);
-	int random_value;
-	for( int c = 0; c < 13; c++ ){
-		if(colorChoose[ c ] == true ){
-		      random_value = c;
-		      break;
-		}
-	}
+//	S(1,8);
+//	int random_value;
+//	for( int c = 0; c < 13; c++ ){
+//		if(colorChoose[ c ] == true ){
+//		      random_value = c;
+//		      break;
+//		}
+//	}
 
 	// Make all of the node as orange
+        int colorCount = 0;
 	forall_nodes( n, G ){
 			G[ n ] = PARS[ n ];
 			G[ n ] = 11;
-			color random( 11 );
-			gw.set_color( n, random);
-			gw.set_border_color( n, random);
+                        color chosen( categ[ categ.get_item( colorCount ) ] );
+                        gw.set_color( n, chosen);
+                        gw.set_border_color( n, chosen);
+//                        cout << categ[ categ.get_item( colorCount ) ] << endl;
+                        colorCount++;
 	}
 
 	forall_nodes( n, G ){
@@ -2477,7 +2480,7 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 
 	//gw.set_edge_thickness( 3, true );
 	//gw.set_node_height(50,true);
-	gw.set_node_border_color( black, true );
+        //gw.set_node_border_color( black, true );
 	gw.set_node_border_thickness( 4, true );
 	//gw.set_node_width( 100, true );
 	gw.set_node_shape( leda::circle_node, true );

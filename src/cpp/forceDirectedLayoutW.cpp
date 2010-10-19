@@ -2,12 +2,18 @@
 #include <LEDA/graph/graph_draw.h>
 #include <LEDA/core/array.h>
 
+/* Main function that takes an argument of char * as .gml file
+   and then finds the corresponding weighted force directed layout
+   of a graph in the .gml.
+*/
 int main(int argc, char** argv) {
         GraphWin gw;
         if( argc > 1 ){
                 graph G;
                 list_item it;
+                edge e;
                 leda::string fname = argv[1];
+                // Reading graph
                 char flag1[16];
 //                sprintf( flag1, "%s", argv[2] );
                 sprintf( flag1, "OUR" );
@@ -19,6 +25,7 @@ int main(int argc, char** argv) {
                     G = gw.get_graph();
 //                }
                 double x0, y0, x1, y1;
+                // Make sure that bounding box is taken
                 gw.get_bounding_box(x0, y0, x1, y1);
                 node_array<point> pos( G );
                 node_array<double> xpos( G );
@@ -53,7 +60,7 @@ int main(int argc, char** argv) {
                       pos[ n ] = C.point_on_circle( tmp );
                       xpos[ n ] = pos[ n ].xcoord();
                       ypos[ n ] = pos[ n ].ycoord();
-                      fixedNodes.append( n );
+//                      fixedNodes.append( n );
                       tmp -= min;
                 }
 
@@ -77,6 +84,8 @@ int main(int argc, char** argv) {
 
 // 		cout << gw.get_xmin() << "\t" << gw.get_xmax() << "\t" << gw.get_ymin() << "\t" << gw.get_ymax() << endl;
                 //SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
+
+                // FINDING COMPONENTS using LEDA function
                 node_array<int> comp( G, 0 );
                 COMPONENTS( G, comp );
                 int max = 0;
@@ -100,6 +109,9 @@ int main(int argc, char** argv) {
                 int election = 10;
                 if( maxComp < election )
                     election = maxComp;
+
+                // Smaller component should be hided before spring algorithm in order
+                // to obtain good visuals.
                 list<int> hidedIndexs;
                 for(int i = 0; i <= max; i++ ){
                     if( COMPS[ i ].size() < election ){
@@ -145,9 +157,17 @@ int main(int argc, char** argv) {
                         }
                     }
                 }
+                double averageDistance = 0;
+                forall_edges( e, G ){
+                    point p( xpos[ G.source( e ) ], ypos[ G.source( e ) ] );
+                    point q( xpos[ G.target( e ) ], ypos[ G.target( e ) ] );
+                    averageDistance += p.distance( q );
+                }
+                averageDistance = averageDistance / (double)(G.number_of_edges());
                 G.restore_all_nodes();
                 G.restore_all_edges();
                 //cout << " 1 \n";
+                // Discover the new layout, find limits
                 double xmin, xmax, ymin, ymax;
                 int ncount = 0;
                 forall_nodes( n, G ){
@@ -172,22 +192,27 @@ int main(int argc, char** argv) {
                         }
                 }
                 //cout << " 2 \n";
+
+                // Handle smaller components that have not been placed yet.
                 double xpos1 = xmin;
-                double ypos1 = ymax + 25.0;
+                double ypos1 = ymax + 20.0;
                 list<node> justOnes;
+                int maxDiam = 0;
                 //cout << max << " - " << election << endl;
                 for(int i = 0; i <= max; i++ ){
                         //cout << COMPS[ i ].size() << "\t";
+                        int diam = 30;
                         if( COMPS[ i ].size() < election && COMPS[ i ].size() != 0 ){
                                 if( xpos1 < xmax ){
-                                    int diam = 30;
                                     if( COMPS[ i ].size() < 3 ){
-                                        diam = 5;
+                                        diam = averageDistance / 3.0;
                                     }
                                     else{
-                                        diam = 5 + COMPS[ i ].size();
+                                        diam = (COMPS[ i ].size() / averageDistance ) * 10.0 + averageDistance / 3.0;
                                     }
-                                    circle C( xpos1 + 8, ypos1, diam );
+                                    if( maxDiam < diam )
+                                        maxDiam = diam;
+                                    circle C( xpos1 + diam, ypos1, diam );
                                     min = pi / (double)COMPS[ i ].size();
                                     tmp = pi;
                                     forall_items( it, COMPS[ i ] ){
@@ -201,15 +226,18 @@ int main(int argc, char** argv) {
                                 }
                                 else{
                                         xpos1 = xmin;
-                                        ypos1 += 25.0;
+                                        ypos1 += maxDiam + 10.0;
+                                        maxDiam = 0;
                                         int diam = 30;
                                         if( COMPS[ i ].size() < 3 ){
-                                            diam = 5;
+                                            diam = averageDistance / 3.0;
                                         }
                                         else{
-                                            diam = 5 + COMPS[ i ].size();
+                                            diam = (COMPS[ i ].size() / averageDistance ) * 10.0 + averageDistance / 3.0;
                                         }
-                                        circle C( xpos1 + 8, ypos1, diam );
+                                        if( maxDiam < diam )
+                                            maxDiam = diam;
+                                        circle C( xpos1 + diam, ypos1, diam );
                                         min = pi / (double)COMPS[ i ].size();
                                         tmp = pi;
                                         forall_items( it, COMPS[ i ] ){
@@ -220,10 +248,11 @@ int main(int argc, char** argv) {
                                             tmp -= min;
                                         }
                                 }
-                                xpos1 += 33;
+                                xpos1 += diam * 2 + 5.0;
                         }
                 }
 
+                // and handle self nodes
                 forall_nodes( n, G ){
                     if( G.degree( n ) == 0 ){
                         justOnes.append( n );
@@ -256,6 +285,7 @@ int main(int argc, char** argv) {
                 }
                 gw.set_position( xpos, ypos );
                 gw.place_into_box(x0, y0, x1, y1);
+                // save the file as a rule .cpp name and .gml since then renamed.
                 fname = fname.replace( ".gml", "forceDirectedLayoutW.gml" );
                 gw.save_gml( fname );
         }
