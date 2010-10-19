@@ -860,69 +860,109 @@ void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNo
 
 		fscanf( interactionsPtr, "%s%s%lf", sourceGene, targetGene, &value );
 		
-		// FOR SOURCE GENES
-		int flag = 0;
-		if( numberOfReleations > 0 ){
-			forall_items( it, entered ){
-				if( strcmp( entered[ it ].GENE, sourceGene ) == 0 ){
-					flag = 1;
-				}
-			}
-			if( flag == 1 ){
-				forall_nodes( n, INTERACTIONS ){
-					if( strcmp( GenesNode[ INTERACTIONS[ n ]].GENE , sourceGene ) == 0 ){
-						sourceTemp = n;
-						break;
-					}
-				}
-			}
-			else{
-				sourceTemp = INTERACTIONS.new_node();
-				INTERACTIONS[ sourceTemp ] = nodeAdded;
-				nodeAdded++;
-				GenesNode.resize( nodeAdded );
-				sprintf( GenesNode[ INTERACTIONS[ sourceTemp ] ].GENE, "%s",sourceGene );
-				GENENAMES tempx;
-				sprintf( tempx.GENE, "%s", sourceGene );
-				entered.append( tempx );
-			}
-		}
-		else{
-				sourceTemp = INTERACTIONS.new_node();
-				INTERACTIONS[ sourceTemp ] = nodeAdded;
-				nodeAdded++;
-				GenesNode.resize( nodeAdded );
-				sprintf( GenesNode[ INTERACTIONS[ sourceTemp ] ].GENE, "%s",sourceGene );
-				GENENAMES tempx;
-				sprintf( tempx.GENE, "%s", sourceGene );
-				entered.append( tempx );
-		}
+//		// FOR SOURCE GENES
+//		int flag = 0;
+//		if( numberOfReleations > 0 ){
+//			forall_items( it, entered ){
+//				if( strcmp( entered[ it ].GENE, sourceGene ) == 0 ){
+//					flag = 1;
+//				}
+//			}
+//			if( flag == 1 ){
+//				forall_nodes( n, INTERACTIONS ){
+//					if( strcmp( GenesNode[ INTERACTIONS[ n ]].GENE , sourceGene ) == 0 ){
+//						sourceTemp = n;
+//						break;
+//					}
+//				}
+//			}
+//			else{
+//				sourceTemp = INTERACTIONS.new_node();
+//				INTERACTIONS[ sourceTemp ] = nodeAdded;
+//				nodeAdded++;
+//				GenesNode.resize( nodeAdded );
+//				sprintf( GenesNode[ INTERACTIONS[ sourceTemp ] ].GENE, "%s",sourceGene );
+//				GENENAMES tempx;
+//				sprintf( tempx.GENE, "%s", sourceGene );
+//				entered.append( tempx );
+//			}
+//		}
+//		else{
+//				sourceTemp = INTERACTIONS.new_node();
+//				INTERACTIONS[ sourceTemp ] = nodeAdded;
+//				nodeAdded++;
+//				GenesNode.resize( nodeAdded );
+//				sprintf( GenesNode[ INTERACTIONS[ sourceTemp ] ].GENE, "%s",sourceGene );
+//				GENENAMES tempx;
+//				sprintf( tempx.GENE, "%s", sourceGene );
+//				entered.append( tempx );
+//		}
+//
+//		// FOR TARGET GENES
+//		flag = 0;
+//		forall_items( it, entered ){
+//			if( strcmp( entered[ it ].GENE , targetGene ) == 0 ){
+//				flag = 1;
+//			}
+//		}
+//		if( flag == 1 ){
+//			forall_nodes( n, INTERACTIONS ){
+//				if( strcmp( GenesNode[ INTERACTIONS[ n ] ].GENE, targetGene ) == 0 ){
+//					targetTemp = n;
+//					break;
+//				}
+//			}
+//		}
+//		else{
+//			targetTemp = INTERACTIONS.new_node();
+//			INTERACTIONS[ targetTemp ] = nodeAdded;
+//			nodeAdded++;
+//			GenesNode.resize( nodeAdded );
+//			sprintf( GenesNode[ INTERACTIONS[ targetTemp ] ].GENE, "%s", targetGene );
+//			GENENAMES tempx;
+//			sprintf( tempx.GENE, "%s", targetGene );
+//			entered.append( tempx );
+//		}
 
-		// FOR TARGET GENES
-		flag = 0;
-		forall_items( it, entered ){
-			if( strcmp( entered[ it ].GENE , targetGene ) == 0 ){
-				flag = 1;
-			}
-		}
-		if( flag == 1 ){
-			forall_nodes( n, INTERACTIONS ){
-				if( strcmp( GenesNode[ INTERACTIONS[ n ] ].GENE, targetGene ) == 0 ){
-					targetTemp = n;
-					break;
-				}
-			}
-		}
-		else{
-			targetTemp = INTERACTIONS.new_node();
-			INTERACTIONS[ targetTemp ] = nodeAdded;
-			nodeAdded++;
-			GenesNode.resize( nodeAdded );
-			sprintf( GenesNode[ INTERACTIONS[ targetTemp ] ].GENE, "%s", targetGene );
-			GENENAMES tempx;
-			sprintf( tempx.GENE, "%s", targetGene );
-			entered.append( tempx );
-		}
+                int flag_s = 0,flag_t = 0;
+                forall_nodes( n, INTERACTIONS ){
+                        if( strcmp( GenesNode[ INTERACTIONS[ n ]].GENE , sourceGene ) == 0 ){
+                                sourceTemp = n;
+                                flag_s = 1;
+                                if( flag_t == 1 )
+                                    break;
+                        }
+                        if( strcmp( GenesNode[ INTERACTIONS[ n ] ].GENE, targetGene ) == 0 ){
+                                targetTemp = n;
+                                flag_t = 1;
+                                if( flag_s == 1 )
+                                    break;
+                        }
+                }
+                // FOR SOURCE GENES
+                if( flag_s == 0 ){
+                        sourceTemp = INTERACTIONS.new_node();
+                        INTERACTIONS[ sourceTemp ] = nodeAdded;
+                        nodeAdded++;
+                        GenesNode.resize( nodeAdded );
+                        sprintf( GenesNode[ INTERACTIONS[ sourceTemp ] ].GENE, "%s",sourceGene );
+                        GENENAMES tempx;
+                        sprintf( tempx.GENE, "%s", sourceGene );
+                        entered.append( tempx );
+                }
+
+                // FOR TARGET GENES
+                if( flag_t == 0 ){
+                        targetTemp = INTERACTIONS.new_node();
+                        INTERACTIONS[ targetTemp ] = nodeAdded;
+                        nodeAdded++;
+                        GenesNode.resize( nodeAdded );
+                        sprintf( GenesNode[ INTERACTIONS[ targetTemp ] ].GENE, "%s", targetGene );
+                        GENENAMES tempx;
+                        sprintf( tempx.GENE, "%s", targetGene );
+                        entered.append( tempx );
+                }
+
 		e = INTERACTIONS.new_edge( sourceTemp, targetTemp );
 		INTERACTIONS[ e ] = (int)(value * 100.0);
 		if( INTERACTIONS[ e ] == 0 )

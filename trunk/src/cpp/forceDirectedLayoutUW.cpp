@@ -5,6 +5,7 @@
 int main(int argc, char** argv) {
         GraphWin gw;
         if( argc > 1 ){
+                edge e;
                 graph G;
 		list_item it;
 		leda::string fname = argv[1];
@@ -145,9 +146,17 @@ int main(int argc, char** argv) {
                         }
                     }
                 }
+                double averageDistance = 0;
+                forall_edges( e, G ){
+                    point p( xpos[ G.source( e ) ], ypos[ G.source( e ) ] );
+                    point q( xpos[ G.target( e ) ], ypos[ G.target( e ) ] );
+                    averageDistance += p.distance( q );
+                }
+                averageDistance = averageDistance / (double)(G.number_of_edges());
                 G.restore_all_nodes();
                 G.restore_all_edges();
                 //cout << " 1 \n";
+                // Discover the new layout, find limits
                 double xmin, xmax, ymin, ymax;
                 int ncount = 0;
                 forall_nodes( n, G ){
@@ -172,22 +181,27 @@ int main(int argc, char** argv) {
                         }
                 }
                 //cout << " 2 \n";
+
+                // Handle smaller components that have not been placed yet.
                 double xpos1 = xmin;
-                double ypos1 = ymax + 35.0;
+                double ypos1 = ymax + 20.0;
                 list<node> justOnes;
+                int maxDiam = 0;
                 //cout << max << " - " << election << endl;
                 for(int i = 0; i <= max; i++ ){
                         //cout << COMPS[ i ].size() << "\t";
-                        if( COMPS[ i ].size() < election && COMPS[ i ].size() != 1 ){
+                        int diam = 30;
+                        if( COMPS[ i ].size() < election && COMPS[ i ].size() != 0 ){
                                 if( xpos1 < xmax ){
-                                    int diam = 30;
                                     if( COMPS[ i ].size() < 3 ){
-                                        diam = 10;
+                                        diam = averageDistance / 3.0;
                                     }
                                     else{
-                                        diam = 10 + COMPS[ i ].size() * 2;
+                                        diam = (COMPS[ i ].size() / averageDistance ) * 10.0 + averageDistance / 3.0;
                                     }
-                                    circle C( xpos1 + 16, ypos1, diam );
+                                    if( maxDiam < diam )
+                                        maxDiam = diam;
+                                    circle C( xpos1 + diam, ypos1, diam );
                                     min = pi / (double)COMPS[ i ].size();
                                     tmp = pi;
                                     forall_items( it, COMPS[ i ] ){
@@ -201,15 +215,18 @@ int main(int argc, char** argv) {
                                 }
                                 else{
                                         xpos1 = xmin;
-                                        ypos1 += 50.0;
+                                        ypos1 += maxDiam + 10.0;
+                                        maxDiam = 0;
                                         int diam = 30;
                                         if( COMPS[ i ].size() < 3 ){
-                                            diam = 10;
+                                            diam = averageDistance / 3.0;
                                         }
                                         else{
-                                            diam = 10 + COMPS[ i ].size();
+                                            diam = (COMPS[ i ].size() / averageDistance ) * 10.0 + averageDistance / 3.0;
                                         }
-                                        circle C( xpos1 + 16, ypos1, diam );
+                                        if( maxDiam < diam )
+                                            maxDiam = diam;
+                                        circle C( xpos1 + diam, ypos1, diam );
                                         min = pi / (double)COMPS[ i ].size();
                                         tmp = pi;
                                         forall_items( it, COMPS[ i ] ){
@@ -220,10 +237,11 @@ int main(int argc, char** argv) {
                                             tmp -= min;
                                         }
                                 }
-                                xpos1 += 66;
+                                xpos1 += diam * 2 + 5.0;
                         }
                 }
 
+                // and handle self nodes
                 forall_nodes( n, G ){
                     if( G.degree( n ) == 0 ){
                         justOnes.append( n );
