@@ -4,6 +4,7 @@ from PyQt4.QtGui import QWidget, QTreeWidget, QTreeWidgetItem, QApplication, QHB
 from PyQt4.QtCore import Qt
 import sys
 import os
+import sqlite3
 
 if not "utils" in sys.path:
     sys.path.append("../..")
@@ -179,18 +180,27 @@ class AssociationSelector(QWidget):
     def filterSelected(self):
         terms = sorted(map(lambda x:x.strip(), open(ap("godata/selected_terms.txt")).readlines()))
         output = open(ap("assocdata/go_slim.txt"),"w")
-        
+        conn = sqlite3.connect(ap("godata/goinfo.sqlite3"))
+        cursor = conn.cursor()
+
+        def get_name_of_term(i):
+            cursor.execute("SELECT name FROM terms WHERE id=?", (str(i),))
+            return cursor.fetchone()[0]
+
         for term in terms:
             if term in self.go_dict:
                 genes = self.go_dict[term]
                 if not genes:
                     genes = ["NULL"]
-                output.write("%s\t%s\n" % ( term, "\t".join( genes ) ) )
+                output.write("%s\t%s\t%s\n" % ( term, get_name_of_term(int(term.split(":")[-1])), "\t".join( genes ) ) )
 
         output.close()
     def mergeSelectedAssociations(self):
-	"""Merges selected association data files into one single assocdata/go_slim.txt"""
+	"""Merges selected association data files into one single assocdata/input_go.txt"""
 	files = self.downloadCheckedAssociation()
+        if not files:
+            print "No association source selected, using the most recent preferences."
+            return
 	o = open(ap("assocdata/go.txt"),"w")
 	"""converted = 0
 	not_converted = 0"""
@@ -213,18 +223,25 @@ class AssociationSelector(QWidget):
                 if translator.translate_biogrids():
                     self._extend_dictionary( go_dict, translator.go_dict )
      	# ===============================================
+        conn = sqlite3.connect(ap("godata/goinfo.sqlite3"))
+        cursor = conn.cursor()
+        
+        def get_name_of_term(i):
+            cursor.execute("SELECT name FROM terms WHERE id=?", (str(i),))
+            return cursor.fetchone()[0]
 
-	for key in sorted(go_dict.keys()):
-	    try:
-                genes = list(set(go_dict[key]))
-                if genes:
-                    genes_str = "\t".join( map(str, genes) )
-                else:
-                    genes_str = "NULL"
+	for term in sorted(go_dict.keys()):
+#	    try:
+            genes = list(set(go_dict[term]))
+            if genes:
+                genes_str = "\t".join( map(str, genes) )
+            else:
+                genes_str = "NULL"
 
-		o.write("%s\t%s\n" % ( key,  genes_str) )
-	    except:
-		raise Exception, "problem here. key: %s; values = %s" % (key, go_dict[key])
+            #o.write("%s\t%s\n" % ( term,  genes_str) )
+            o.write("%s\t%s\t%s\n" % ( term, get_name_of_term(int(term.split(":")[-1])), genes_str ) )
+	    #except:
+#		raise Exception, "problem here. term: %s; genes= %s" % (term, go_dict[term])
 	o.close()
 
 

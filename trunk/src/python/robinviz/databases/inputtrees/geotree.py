@@ -67,7 +67,7 @@ class GEOSelector(QWidget):
         
     def downloadCheckedGEOs(self):
 	files = self.getCheckedItems()
-	base_url = "http://robinviz.googlecode.com/svn/data/expressions/gse"
+	base_url = "http://robinviz.googlecode.com/svn/data2/expressions/gse"
 	for filename in files:
 	    local_path = ap("geodata/%s" % filename)
 	    if not os.path.exists( local_path ):
