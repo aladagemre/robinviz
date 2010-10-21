@@ -21,8 +21,8 @@ class InputWizard(QWizard):
 	self.GEOSelectionPage = GEOSelectionPage()
 	
 	self.setPage(0, self.PPISelectionPage )
-	self.setPage(1, self.AssociationSelectionPage )
-	self.setPage(2, self.GOSelectionPage )
+	self.setPage(1, self.GOSelectionPage )
+        self.setPage(2, self.AssociationSelectionPage )
 	self.setPage(3, self.GEOSelectionPage )
 	
 	self.setStartId(0)
