@@ -59,7 +59,10 @@ class GEOSelector(QWidget):
 		if item.checkState(0) == Qt.Checked:
 		    checkedItems.add(str(item.filename))
 	    
-	
+	if not checkedItems:
+            print "No Gene Expression data source selected, using the most recent preferences."
+            return checkedItems
+        
 	f = open(ap("geodata/selected_geo.txt"), "w")
 	f.write("\n".join( sorted(checkedItems) ) )
 	f.close()

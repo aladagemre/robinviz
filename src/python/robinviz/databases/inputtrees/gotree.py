@@ -111,7 +111,11 @@ class GOSelector(QMainWindow):
 	for i in range( self.treeWidget.topLevelItemCount() ):
 	    topLevelItem = self.treeWidget.topLevelItem(i)
 	    traverse(topLevelItem)
-	
+
+        if not checkedItems:
+            print "No GO term selected, using the most recent preferences."
+            return checkedItems
+        
 	checkedItems = sorted(checkedItems)
 	f = open(ap("godata/selected_terms.txt"), "w")
 	f.write("\n".join( checkedItems ) )

@@ -186,9 +186,16 @@ class AssociationSelector(QWidget):
 
         def get_name_of_term(i):
             cursor.execute("SELECT name FROM terms WHERE id=?", (str(i),))
-            name = cursor.fetchone()[0]
-            catnames.write("%s\n" % name)
-            return name
+            name = cursor.fetchone()
+            
+            if name:
+                n = name[0]
+                catnames.write("%s\n" % n)
+                return n
+            else:
+                print "Name for term %s could not be found." % i
+                return "NULL"
+                
 
         for term in terms:
             if term in self.go_dict:
@@ -232,7 +239,12 @@ class AssociationSelector(QWidget):
         
         def get_name_of_term(i):
             cursor.execute("SELECT name FROM terms WHERE id=?", (str(i),))
-            return cursor.fetchone()[0]
+            name = cursor.fetchone()
+            if not name:
+                print "Name for term %s could not be found." % i
+                return "NULL"
+            else:
+                return name[0]
 
 	for term in sorted(go_dict.keys()):
 #	    try:
