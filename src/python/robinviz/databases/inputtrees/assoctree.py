@@ -178,7 +178,10 @@ class AssociationSelector(QWidget):
         return newbie
 
     def filterSelected(self):
+        topLevels = open(ap("godata/toplevel_function.txt")).read().split("\n")
         terms = sorted(map(lambda x:x.strip(), open(ap("godata/selected_terms.txt")).readlines()))
+        slim_terms = list(set(sorted(topLevels + terms)))
+
         output = open(ap("assocdata/go_slim.txt"),"w")
         catnames = open(ap("assocdata/input_go.txt"),"w")
         conn = sqlite3.connect(ap("godata/goinfo.sqlite3"))
@@ -189,20 +192,24 @@ class AssociationSelector(QWidget):
             name = cursor.fetchone()
             
             if name:
-                n = name[0]
-                catnames.write("%s\n" % n)
-                return n
+                return name[0]
             else:
                 print "Name for term %s could not be found." % i
                 return "NULL"
-                
 
-        for term in terms:
+        name_dict = {}
+        for term in slim_terms:
+            name_dict[term] = get_name_of_term(int(term.split(":")[-1]))
+
+        for term in terms: # only selected ones
+            catnames.write("%s\n" % name_dict[term])
+
+        for term in slim_terms:
             if term in self.go_dict:
                 genes = self.go_dict[term]
                 if not genes:
                     genes = ["NULL"]
-                output.write("%s\t%s\t%s\n" % ( term, get_name_of_term(int(term.split(":")[-1])), "\t".join( genes ) ) )
+                output.write("%s\t%s\t%s\n" % ( term, name_dict[term], "\t".join( genes ) ) )
 
         output.close()
         catnames.close()
