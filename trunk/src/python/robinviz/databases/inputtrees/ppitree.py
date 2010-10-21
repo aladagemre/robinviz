@@ -96,7 +96,11 @@ class PPISelector(QWidget):
 	    for c in range( topLevelItem.childCount() ):
 		child = topLevelItem.child(c)
 		traverse(child)
-	
+
+        if not checkedItems:
+            print "No PPI data source selected, using the most recent preferences."
+            return checkedItems
+        
 	f = open(ap("ppidata/selected_ppis.txt"), "w")
 	f.write("\n".join( sorted(checkedItems) ) )
 	f.close()
