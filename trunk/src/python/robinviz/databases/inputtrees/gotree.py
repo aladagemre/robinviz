@@ -115,17 +115,19 @@ class GOSelector(QMainWindow):
         if not checkedItems:
             print "No GO term selected, using the most recent preferences."
             return checkedItems
-        
+
 	checkedItems = sorted(checkedItems)
 	f = open(ap("godata/selected_terms.txt"), "w")
 	f.write("\n".join( checkedItems ) )
 	f.close()
-        
+
+        """
         # Now use complete go mapping to produce a sub-go mapping
         if not os.path.exists(ap("godata/go_mapping.txt")):
 	    # if go mapping has not been created yet, do it.
 	    ggp = Gene2GOParser(input_file=ap("godata/gene2go"),output_file=ap("godata/go_mapping.txt"), terms=None)
-	
+
+        
 	# filter complete go mapping.
 	go_term_list = open(ap("godata/go_mapping.txt")).readlines()
 	output = open(ap("godata/sub_go_mapping.txt"),"w")
@@ -137,7 +139,7 @@ class GOSelector(QMainWindow):
 	    else:
 		output.write(checkedItem+"\tNULL\n")
 		
-	output.close()
+	output.close()"""
 	    
         
         
