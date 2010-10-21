@@ -180,12 +180,15 @@ class AssociationSelector(QWidget):
     def filterSelected(self):
         terms = sorted(map(lambda x:x.strip(), open(ap("godata/selected_terms.txt")).readlines()))
         output = open(ap("assocdata/go_slim.txt"),"w")
+        catnames = open(ap("assocdata/input_go.txt"),"w")
         conn = sqlite3.connect(ap("godata/goinfo.sqlite3"))
         cursor = conn.cursor()
 
         def get_name_of_term(i):
             cursor.execute("SELECT name FROM terms WHERE id=?", (str(i),))
-            return cursor.fetchone()[0]
+            name = cursor.fetchone()[0]
+            catnames.write("%s\n" % name)
+            return name
 
         for term in terms:
             if term in self.go_dict:
@@ -195,6 +198,7 @@ class AssociationSelector(QWidget):
                 output.write("%s\t%s\t%s\n" % ( term, get_name_of_term(int(term.split(":")[-1])), "\t".join( genes ) ) )
 
         output.close()
+        catnames.close()
     def mergeSelectedAssociations(self):
 	"""Merges selected association data files into one single assocdata/input_go.txt"""
 	files = self.downloadCheckedAssociation()
