@@ -258,7 +258,7 @@ void  writeBicluster(long  firstRow, long  lastRow, cs_t  columnSet)
       count++;
   fprintf( fptr, "%d\t%d\n", lastRow - firstRow + 1, count );
   for (i = firstRow; i <= lastRow; i++){
-    fprintf( fptr, "gene%d\t", i ); 
+    fprintf( fptr, "gene%d\t", rows[i].originalRowNumber ); 
 //     printf("%ld\t", rows[i].originalRowNumber + 1L);
   }
 //   printf("\n");
