@@ -283,8 +283,8 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 		list<GENES> tempGenes;
 		char line[ 100000 ];
 		char *pc,*pend,*go,*cat;
-		const char *strDelim = "\t";
-		const char *strDelim2 = " ";
+                const char *strDelim = "\t";
+                const char *strDelim2 = " \t";
 
 		for( int i = 0; i < inputCats.size(); i++ ){
 			categoryGenes.append( tempGenes );
@@ -314,7 +314,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 		int line_i = 0;
 		while( !feof( f ) ){
 			fgets( line, 100000, f );
-// 			cout << line << endl;
+//                        cout << line << endl;
 			line_i++;
 		}
 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n" << "\n";
@@ -324,8 +324,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 			// count rows
 			two_tuple<CATNAMES,int> tup;
 			tup.second() = 0;
-			fgets( line, 100000, f );
-// 			cout << line << endl;
+                        fgets( line, 100000, f );
 			pc = strtok( line, strDelim );
 			go = pc;
 			if( feof( f ) )
@@ -335,8 +334,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 			while( pc != NULL ){
 				if( count == 0 ){
 					pc = strtok( NULL, strDelim );
-					sprintf( tup.first().catName, "%s", pc );
-					
+                                        sprintf( tup.first().catName, "%s", pc );
 					CATNAMES cats;
 					sprintf( cats.catName, "%s", pc );
 					cat = pc;
@@ -368,13 +366,13 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 						GENES now;
 						sprintf( now.GENE, "%s", pc );
 						categoryGenes[ categoryGenes.get_item(foundedone) ].append( now );
-// 						cout << pc << "\t";
+//                                                cout << pc << "\t";
 					}
 				}
-				//cout << pc << "\t";
+//                                cout << pc << "\t";
 				pend=pc+strlen(pc)-1; /* check last char for newline terminator */
 				if (*pend=='\n') 
-					pc = NULL;
+                                        pc = NULL;
 				count++;
 			}
 			line_i++;
