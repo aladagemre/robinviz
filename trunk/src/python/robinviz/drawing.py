@@ -9,10 +9,11 @@ import os
 from PyQt4 import QtWebKit
 from bicluster import BiclusterWindow
 import math
+from utils.info import root
 
 
 GRAPH_LAYOUTS = {}
-layoutFile = open("layouts.ini")
+layoutFile = open("%s/layouts.ini" % root)
 for line in layoutFile:
     if line.startswith("//"):
         continue # this is a comment
@@ -20,7 +21,7 @@ for line in layoutFile:
     GRAPH_LAYOUTS[name] = filename
 
 CATEGORY_COLORS = {}
-colorFile = open("outputs/colors_func.txt")
+colorFile = open("%s/outputs/colors_func.txt" % root)
 lineNum = 0
 for line in colorFile:
     name, r, g, b = line.strip().split()
@@ -858,6 +859,172 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
     def setSize(self, width=20):
 	self.w = self.h = width
 	
+    def setCategoryInformation(self):
+        """Sets category information to the node as tooltip."""
+        tip = "Category: %s" % CATEGORY_COLORS[self.node.parameter]
+        self.setToolTip(tip)
+
+
+class PiechartNode(NodeItem):
+    def __init__(self, node, parent=None, scene=None):
+        NodeItem.__init__(self, parent, scene)
+
+        # Default Values
+        # ---------------------
+        self.setFlag(QGraphicsItem.ItemIsMovable, True)
+        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        try:
+            # available only in Qt 4.6
+            #self.setFlag(QGraphicsItem.ItemSendsScenePositionChanges, True)
+            self.setFlag( QGraphicsItem.ItemSendsGeometryChanges)
+        except:
+            # no need to do this in Qt 4.5
+            pass
+
+        self._scene = scene
+        self.setAcceptsHoverEvents(True)
+        self.edges = []
+        self.setOpacity(0.5)
+        self.w = 20.0
+        self.setColors( map(QColor, [Qt.green, Qt.red, Qt.blue, Qt.yellow]) )
+
+        # Setup Operations
+        # ---------------------
+        self.associateWithNode(node)
+
+
+    def setColors(self, colors):
+        self.colors = colors
+        self.num_colors = len(colors)
+        self.angle_per_color = 16* (360 / self.num_colors)
+
+    def toggleHighlight(self):
+        for i, color in enumerate(self.colors):
+            if self.isSelected():
+                self.colors[i] = color.darker(100)
+            else:
+                self.colors[i] = color.lighter(100)
+
+
+    def paint(self, painter, option, widget):
+        #painter.drawRoundedRect(-10, -10, 20, 20, 5, 5)
+        rectangle = QRectF(0.0, 0.0, self.w, self.w)
+        startAngle = 0
+
+        painter.drawRect(rectangle)
+        for color in self.colors:
+            painter.setBrush(QBrush(color))
+            painter.drawPie(rectangle, startAngle, self.angle_per_color)
+            startAngle += self.angle_per_color
+
+    def mouseReleaseEvent(self, event):
+        """When released the button (stopped moving), update the edges/scene."""
+        QGraphicsItem.mouseReleaseEvent(self, event)
+        self.updateEdges()
+        self.updateLabel()
+        self.scene().update()
+
+    def itemChange(self, change, value):
+        if change == QGraphicsItem.ItemPositionChange or change == QGraphicsItem.ItemTransformHasChanged:
+            self.updateEdges()
+        """elif change == QGraphicsItem.ItemSelectedChange:
+            if self.isSelected():
+                #self.toggleHighlight()
+                for edge in self.edges:
+                    edge.toggleHighlight()
+                    #edge.end.toggleHighlight()
+                self.scene().update()
+            else:
+                for edge in self.edges:
+                    edge.toggleHighlight()
+                    #edge.end.toggleHighlight()"""
+
+        return QVariant(value)
+
+    def boundingRect(self):
+        return QRectF( self.pos().x() - self.w/2, self.pos().y()-self.w/2, self.w, self.w)
+
+    def contextMenuEvent(self, event):
+        print "context"
+        menu = QMenu()
+        displayNeighborsAction = menu.addAction("Display Neighbors in the whole PPI")
+        detailedInformation = menu.addAction("Detailed Information (Online)")
+        action = menu.exec_(event.screenPos())
+        if action == displayNeighborsAction:
+	    from windows import SinglePeripheralViewWindow
+	    self.specialWindow = SinglePeripheralViewWindow(self.scene().views()[0].__class__ , scene=None)
+	    neihgboringFilename = "outputs/graphs/%s.gml" % self.node.label
+	    if not os.path.exists(neihgboringFilename):
+		os.system("./proteinScreen.exe %s TXT" % self.node.label)
+	    self.specialWindow.loadGraph(neihgboringFilename)
+            self.specialWindow.showMaximized()
+	elif action == detailedInformation:
+	    url = "http://thebiogrid.org/search.php?search=%s&organism=all" % self.node.label
+	    self.detailBrowser = QtWebKit.QWebView()
+            self.detailBrowser.setUrl(QUrl(url))
+            self.detailBrowser.showMaximized()
+    #----------- GUI / Geometric Methods ------------------
+    def updateLabel(self):
+        self.text.setPos(self.pos().x() + self.w, self.pos().y() - self.w)
+
+    def intersectionPoint(self, startPoint):
+        """Gives the intersection point when a line is drawn into the center
+        of the circle node from the given startPoint."""
+
+        xdiff = self.centerPos().x() - startPoint.x()
+        ydiff = self.centerPos().y() - startPoint.y()
+
+        if ydiff == 0:
+            # inside it.
+            return
+
+        intersectPoint = QPointF()
+
+        # End point
+        r = self.w/2
+
+        r_over_h = r / (math.sqrt(ydiff**2 + xdiff**2))
+
+        a = xdiff * r_over_h
+        c = ydiff * r_over_h
+
+        intersectPoint = self.centerPos() + QPointF(-a,-c)
+
+        return intersectPoint
+
+    def associateWithNode(self, node):
+        # Store node data
+        self.node = node
+
+	self.setSize(50)
+	try:
+	    self.setCategoryInformation()
+	except:
+	    pass # do nothing if category information shall not be provided.
+
+
+        """# Set Color
+        self.defaultColor = QColor(node.graphics.outline)
+        self.currentColor = self.defaultColor
+        self.highlightedColor = self.defaultColor.lighter(150)
+        self.setBrush(self.defaultColor)"""
+
+        # Set position of the node:
+        self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
+        #self.setRect(0, 0, self.w, self.w)
+
+        # Construct the text.
+        self.text = QGraphicsTextItem(node.label, None, self._scene)
+        self.text.root = self
+        self.text.contextMenuEvent = self.contextMenuEvent
+        # Define bounding rect
+
+        # Align text.
+        self.updateLabel()
+
+    def setSize(self, width=20):
+	self.w = self.h = width
+
     def setCategoryInformation(self):
         """Sets category information to the node as tooltip."""
         tip = "Category: %s" % CATEGORY_COLORS[self.node.parameter]
