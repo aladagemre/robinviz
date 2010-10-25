@@ -1,5 +1,5 @@
 /*****************************************************************************************/
-/*	Copyright (C) <2009>  <Melih Sozdinler,Ahmet Emre Aladağ, Cesim Erten>   	 */
+/*	Copyright (C) <2010>  <Melih Sozdinler,Ahmet Emre Aladağ, Cesim Erten>   	 */
 /*											 */
 /*    This program is free software: you can redistribute it and/or modify		 */
 /*    it under the terms of the GNU General Public License as published by		 */
@@ -14,24 +14,18 @@
 /*    You should have received a copy of the GNU General Public License			 */
 /*    along with this program.  If not, see <http://www.gnu.org/licenses/>.		 */
 /*											 */
-/*    Copyright (C) <2009>  <Melih Sozdinler,Ahmet Emre Aladağ, Cesim Erten>		 */
+/*    Copyright (C) <2010>  <Melih Sozdinler,Ahmet Emre Aladağ, Cesim Erten>		 */
 /*    This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.         */
 /*    This is free software, and you are welcome to redistribute it                      */
 /*    under certain conditions; type `show c' for details.			         */
 /*****************************************************************************************/
-
-
-/*************************************************************************************
-
-handlers.h is for the ppibiclusters.cpp. The main contribuiton of this
-header is to functionate the main program. You can just call handlers for
-each iterative modules.
+/*****************************************************************************************
 
 Created
 
 18 October 2009, by Melih
 
-*************************************************************************************/
+*****************************************************************************************/
 
 #include "layout/interpretbiclusters.h"
 #include "layout/runFunctions.h"
@@ -43,6 +37,9 @@ Created
 #include "othervis/heatmap.h"
 #include "othervis/parallelCoordinate.h"
 
+/** 
+  ****************************************** STRUCTS *********************************************
+**/
 typedef struct Strings STRINGS;
 
 struct catNames{
@@ -65,6 +62,11 @@ struct geneonto{
 
 typedef struct geneonto GENEONTO;
 
+/** 
+  *************************************************************************************************************
+  ***************************************     FUNCTION PROTOYPES    *******************************************
+  *************************************************************************************************************
+**/
 
 /**
 * Function that produce data structure of entries
@@ -73,6 +75,417 @@ typedef struct geneonto GENEONTO;
 * GENENAME CATEGORY[] GO[]
 * These resulting array of substructure will
 * be processed by main program using leda::array<GENEONTO> variable
+**/
+array<GENEONTO> geneOntologyHandling( char gofile[256] ); 
+
+/**
+* Function that produce data structure of entries
+* with size of the given input data.
+* Each substructure has three attribute,
+* GENENAME CATEGORY[] GO[]
+* These resulting array of substructure will
+* be processed by main program using leda::array<GENEONTO> variable
+**/
+array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes, char filePath[256], list<two_tuple<CATNAMES,int> > &categories );
+
+/**
+* Function that produce data structure of entries
+* with size of category queries. 
+* Each substructure has three attribute,
+* GENENAME CATEGORY[] GO[]
+* These resulting array of substructure will
+* be processed by main program using leda::array<GENEONTO> variable
+**/
+array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCats, array<GENENAMES> &GenesNode,  list<two_tuple<CATNAMES,int> > &categories, list<list<GENES> > &categoryGenes );
+
+/**
+* goHandling is a function that handles the go input file
+* and responds to the main program by having modifying the passed
+* parameters.
+* @param inputGoFile (char[256]) Go Category file to read
+* @param defaultGoFile (char[256]) Go original file
+* @param gocategories (leda::list<list<GENES>>)filled with the GENE names provided by the data file
+* @param matrixCategories (leda::list<leda::matrix>)is used to score calculation we need this param to obtain
+* @param Hmax (double) Hmax is a value that stores max H-value
+*/
+void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES> > &gocategories, list<int> &categ, 
+                 list<leda::matrix> &matrixCategories, list<double> &scores, double &Hmax, array<GENENAMES> &GenesNode, bool hasColor );
+
+/*
+  -----------------------------------------------------------------------------------------------------------
+*/
+
+/**
+* cogFileHandling parse the given cogfile. It is called from cogHandling function.
+* @param cogfile (char[256]) Go Category file to read
+* @param categoryGenes (leda::list<list<GENES>>)filled with the GENE names provided by the data file
+- @param GenesNode (array<GENENAMES>) stores gene names inside this array
+*/
+array<GENEONTO> cogFileHandling( char cogfile[256], char orgAbv[12], list<CATNAMES> &inputCats, array<GENENAMES> &GenesNode,  list<two_tuple<CATNAMES,int> > &categories, list<list<GENES> > &categoryGenes );
+
+/**
+* cogHandling is a function that handles the cog input file from COG's database
+* and responds to the main program by having modifying the passed
+* parameters.
+* @param inputCogFile (char[256]) Go Category file to read
+* @param defaultCogFile (char[256]) Go original file
+* @param cogcategories (leda::list<list<GENES>>)filled with the GENE names provided by the data file
+* @param matrixCategories (leda::list<leda::matrix>)is used to score calculation we need this param to obtain
+* @param Hmax (double) Hmax is a value that stores max H-value
+*/
+void cogHandling( char inputCogFile[256], char defaultCogFile[256], list<list<GENES> > &cogcategories, list<int> &categ, 
+	list<leda::matrix> &matrixCategories, list<double> &scores, double &Hmax, array<GENENAMES> &GenesNode );
+
+/*
+  -----------------------------------------------------------------------------------------------------------
+*/
+
+
+/**
+* mainAlgHandlingForEachSubgraph is a function that handles the layering of
+* peripheral graphs using weighted layered drawing concept
+* @param abbv (char []) we need a categories for each organism. It may be too general as we did having n categories. abbv stores just a capital letter of categories.
+* @param Categories (leda::array<char>) stores each categories for each genes
+* @param listOfGraphs (leda::array<GRAPH<int,int>>) stores all the graphs in this parameter
+* @param GenesNode (leda::array<GENENAMES>) is used with the graph parameter to obtain the specific Genes corresponding nodes
+* @param biclusters we do not lose the track of bicluster genes(GENES)
+* @param TEMPINT (leda::GRAPH<int,int>) is andother copy PPI graph used for processing
+* @param ppiFile (leda::string) is obtained from main menu
+* @param POS Positions of all graphs stored in leda list
+* @param LAYERS Layer Numbers of all graphs stored in leda list
+* @param BENDS Edge bends meanly the points where edge passes and for all graphs
+* @param pos INTERACTION graph node positions
+* @param layers INTERACTION graph node layer numbers 
+* @param bends INTERACTION graph edge bends
+* @param namesForEachGraph have the gene names(GENENAMES) for each bicluster
+* @param width (int) operational param 1; max width for layering
+* @param algorithmFlag (int) operational param 2; chooses x-coordinate alg.
+* @param space (int) operational param 3; space between nodes
+* @param xCoordFlag (bool) operational param 4; our preliminary method for runnin layering
+* @param increment operational param 5; space between layers
+* @param ledaPostFlag (bool) operational param 6; if you need some post-process after x-coordinate assignment
+*/
+void mainAlgHandlingForEachSubgraph( node_array<point> &pos, 
+				     edge_array<list<point> > &bends, 
+				     array<list<node> > &layers,
+				     list<GRAPH<int,int> > &GraphList, 
+				     list<GRAPH<leda::string,int> > &GraphList_S,
+				     node_array<double> &Xpos,
+				     node_array<double> &Ypos,
+                                     list<node_array<point> > &POS,
+				     list<edge_array<list<point> > > &BENDS,
+				     list<array<list<node> > > &LAYERS,
+                                     GRAPH<leda::string,int> &PROJECT,
+				     array<GENENAMES> &GenesNode,
+				     array<GRAPH<int,int> > &listOfGraphs,
+				     list<list<Strings> > &namesForEachGraph,
+				     list<list<GENES> > &biclusters,
+				     int &width,
+				     int algorithmFlag,
+				     int space,
+				     bool xCoordFlag,
+				     int increment,
+				     bool ledaPostFlag
+				  );
+
+/**
+* mainAlgHandlingForEachSubgraph2 is a function that handles the force directed and circular layout of
+* peripheral graphs
+* @param abbv (char []) we need a categories for each organism. It may be too general as we did having n categories. abbv stores just a capital letter of categories.
+* @param Categories (leda::array<char>) stores each categories for each genes
+* @param listOfGraphs (leda::array<GRAPH<int,int>>) stores all the graphs in this parameter
+* @param GenesNode (leda::array<GENENAMES>) is used with the graph parameter to obtain the specific Genes corresponding nodes
+* @param biclusters we do not lose the track of bicluster genes(GENES)
+* @param TEMPINT (leda::GRAPH<int,int>) is andother copy PPI graph used for processing
+* @param ppiFile (leda::string) is obtained from main menu
+* @param POS Positions of all graphs stored in leda list
+* @param BENDS Edge bends meanly the points where edge passes and for all graphs
+* @param pos INTERACTION graph node positions
+* @param bends INTERACTION graph edge bends
+* @param namesForEachGraph have the gene names(GENENAMES) for each bicluster
+* @param width (int) operational param 1; max width for layering
+* @param algorithmFlag (int) operational param 2; chooses x-coordinate alg.
+* @param space (int) operational param 3; space between nodes
+* @param xCoordFlag (bool) operational param 4; our preliminary method for runnin layering
+* @param increment operational param 5; space between layers
+* @param ledaPostFlag (bool) operational param 6; if you need some post-process after x-coordinate assignment
+*/
+void mainAlgHandlingForEachSubgraph2( node_array<point> &pos, 
+				     edge_array<list<point> > &bends, 
+				     array<list<node> > &layers,
+				     list<GRAPH<int,int> > &GraphList, 
+				     list<GRAPH<leda::string,int> > &GraphList_S,
+				     node_array<double> &Xpos,
+				     node_array<double> &Ypos,
+                                     list<node_array<point> > &POS,
+				     list<edge_array<list<point> > > &BENDS,
+				     list<array<list<node> > > &LAYERS,
+                                     GRAPH<leda::string,int> &PROJECT,
+				     array<GENENAMES> &GenesNode,
+				     array<GRAPH<int,int> > &listOfGraphs,
+				     list<list<Strings> > &namesForEachGraph,
+				     list<list<GENES> > &biclusters,
+				     int &width,
+				     int algorithmFlag,
+				     int space,
+				     bool xCoordFlag,
+				     int increment,
+				     bool ledaPostFlag,
+				     array<char> &abbv,
+				     int cat_num
+				  );
+
+/*
+  -----------------------------------------------------------------------------------------------------------
+*/
+
+/**
+* mainGraphHandling is a function that handles the ISB 2010 submitted main layout on the 
+* peripheral graphs
+* @param Categories (leda::array<char>) stores each categories for each genes
+* @param listOfGraphs (leda::array<GRAPH<int,int>>) stores all the graphs in this parameter
+* @param GenesNode (leda::array<GENENAMES>) is used with the graph parameter to obtain the specific Genes corresponding nodes
+* @param biclusters we do not lose the track of bicluster genes(GENES)
+* @param TEMPINT (leda::GRAPH<int,int>) is andother copy PPI graph used for processing
+* @param ppiFile (leda::string) is obtained from main menu
+* @param POS Positions of all graphs stored in leda list
+* @param BENDS Edge bends meanly the points where edge passes and for all graphs
+* @param pos INTERACTION graph node positions
+* @param bends INTERACTION graph edge bends
+* @param namesForEachGraph have the gene names(GENENAMES) for each bicluster
+* @param width (int) operational param 1; max width for layering
+* @param algorithmFlag (int) operational param 2; chooses x-coordinate alg.
+* @param space (int) operational param 3; space between nodes
+* @param xCoordFlag (bool) operational param 4; our preliminary method for runnin layering
+* @param increment operational param 5; space between layers
+* @param ledaPostFlag (bool) operational param 6; if you need some post-process after x-coordinate assignment
+* @param removeRat(double) operational param 7; removes edge weights when they are smaller than this ratio
+* @param sharedGenes(bool) operational param 8: options for having a methodology to use shared Genes options specifed in the paper
+* @param max_weight(int) largets weight
+* @param edgesBetween(bool) operational param 9: the second method rather than shared Genes expained in the paper
+* @param hvalueWeighting(bool) Main graph weighting scheme according to H-values
+* @param enrichmentWeighting_o(bool) Main graph weighting scheme according to defined categories
+* @param enrichmentWeighting_f(bool) Main graph weighting scheme according to funcassociate results
+* @param ppihitratioWeighting(bool) Main graph weighting scheme according to Hit Ratios
+*/
+GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
+				  node_array<int> &nodesOfProjectStr,
+				  array<node> &nodesOfProjectInt,
+				  list<GRAPH<int,int> > &GraphList,
+				  list<GRAPH<leda::string,int> > &GraphList_S, 
+				  list<list<Strings> > &namesForEachGraph,
+				  array<GENENAMES> &GenesNode,
+				  node_array<double> &HValues,
+				  list<double> &H_values,
+				  array<char> &abbv,
+				  int cat_num,
+				  node_array<double> &Xpos,
+				  node_array<double> &Ypos,		
+				  node_array<point> &pos,
+				  edge_array<list<point> > &bends,
+				  edge_array<int> &edgeNumbersForStr_,
+				  array<edge> &edgeNumbersForInt_,
+				  int algorithmFlag,
+				  bool brandFlag,
+				  bool brandFlag2,
+				  bool ourMethodFlag,
+				  double space,
+				  int increment,
+				  bool ledaPostFlag,
+				  double nodeSize,
+				  double edgeBendImp,
+				  double colorScale,
+				  double edgThicknessTher,
+				  GRAPH<leda::string,int> &G1,
+				  GRAPH<leda::string,int> &G2,
+				  GRAPH<int,int> &TEMPINT,
+				  GRAPH<int,int> &G,
+				  int simplify,
+				  double removeRat,
+				  bool sharedGenes,
+				  double Hmax,
+				  int max_weight,
+				  bool edgesBetween,
+				  bool hvalueWeighting,
+				  bool enrichmentWeighting_o,
+				  bool enrichmentWeighting_f,
+				  bool ppihitratioWeighting,
+				  list<int> &categ,
+				  int width
+				);
+
+/**
+* mainGraphHandling2 is a function that handles layout for GO categories
+* @param Categories (leda::array<char>) stores each categories for each genes
+* @param listOfGraphs (leda::array<GRAPH<int,int>>) stores all the graphs in this parameter
+* @param GenesNode (leda::array<GENENAMES>) is used with the graph parameter to obtain the specific Genes corresponding nodes
+* @param biclusters we do not lose the track of bicluster genes(GENES)
+* @param TEMPINT (leda::GRAPH<int,int>) is andother copy PPI graph used for processing
+* @param ppiFile (leda::string) is obtained from main menu
+* @param POS Positions of all graphs stored in leda list
+* @param BENDS Edge bends meanly the points where edge passes and for all graphs
+* @param pos INTERACTION graph node positions
+* @param bends INTERACTION graph edge bends
+* @param namesForEachGraph have the gene names(GENENAMES) for each bicluster
+* @param width (int) operational param 1; max width for layering
+* @param algorithmFlag (int) operational param 2; chooses x-coordinate alg.
+* @param space (int) operational param 3; space between nodes
+* @param xCoordFlag (bool) operational param 4; our preliminary method for runnin layering
+* @param increment operational param 5; space between layers
+* @param ledaPostFlag (bool) operational param 6; if you need some post-process after x-coordinate assignment
+* @param removeRat(double) operational param 7; removes edge weights when they are smaller than this ratio
+* @param sharedGenes(bool) operational param 8: options for having a methodology to use shared Genes options specifed in the paper
+* @param max_weight(int) largets weight
+* @param edgesBetween(bool) operational param 9: the second method rather than shared Genes expained in the paper
+* @param hvalueWeighting(bool) Main graph weighting scheme according to H-values
+* @param enrichmentWeighting_o(bool) Main graph weighting scheme according to defined categories
+* @param enrichmentWeighting_f(bool) Main graph weighting scheme according to funcassociate results
+* @param ppihitratioWeighting(bool) Main graph weighting scheme according to Hit Ratios
+*/
+GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
+				  node_array<int> &nodesOfProjectStr,
+				  array<node> &nodesOfProjectInt,
+				  list<GRAPH<int,int> > &GraphList,
+				  list<GRAPH<leda::string,int> > &GraphList_S, 
+				  list<list<Strings> > &namesForEachGraph,
+				  array<GENENAMES> &GenesNode,
+				  node_array<double> &HValues,
+				  list<double> &H_values,
+				  array<char> &abbv,
+				  int cat_num,
+				  node_array<double> &Xpos,
+				  node_array<double> &Ypos,		
+				  node_array<point> &pos,
+				  edge_array<list<point> > &bends,
+				  edge_array<int> &edgeNumbersForStr_,
+				  array<edge> &edgeNumbersForInt_,
+				  int algorithmFlag,
+				  bool brandFlag,
+				  bool brandFlag2,
+				  bool ourMethodFlag,
+				  double space,
+				  int increment,
+				  bool ledaPostFlag,
+				  double nodeSize,
+				  double edgeBendImp,
+				  double colorScale,
+				  double edgThicknessTher,
+				  GRAPH<leda::string,int> &G1,
+				  GRAPH<leda::string,int> &G2,
+				  GRAPH<int,int> &TEMPINT,
+				  GRAPH<int,int> &G,
+				  int simplify,
+				  double removeRat,
+				  bool sharedGenes,
+				  double Hmax,
+				  int max_weight,
+				  bool edgesBetween,
+				  bool hvalueWeighting,
+				  bool enrichmentWeighting_o,
+				  bool enrichmentWeighting_f,
+				  bool ppihitratioWeighting,
+				  list<int> &categ,
+				  int width
+				);
+/*
+  -----------------------------------------------------------------------------------------------------------
+*/
+
+/**
+    Does handling of obtaining colors via first level of Molecular Function Reads from gofile and
+    finds protein to list of categories for each proteins and write into catfile where robinviz main
+    reads from main file.
+    File format first we write
+    Cat Number generally 
+    18 
+    % then abrrv and category names
+    A antioxidant activity
+    .
+    .
+    .
+    S transporter activity
+    % then gene to category abbrvs.
+    gene1 ABC
+    gene2 PRS
+    ...
+    @param catfile(char[256]) :saved for post processing in bicluster and go handling
+    @param gofile(char[256]) : needed for parsing and forming colors for each genes
+**/
+void colorHandling( char catfile[256], char gofile[256] );
+
+/*
+  -----------------------------------------------------------------------------------------------------------
+*/
+
+/**
+* biclusterHandling is a function that handles the bicluster output
+* and responds to the main program by having modifying the passed
+* parameters.
+* @param INPUT (leda::matrix) input matrix obtained from the given input file sources/data_sources
+* @param biclusters (leda::list<list<GENES>>)filled with the GENE names provided by the data file
+* @param matrixBiclusters (leda::list<leda::matrix>)is used H-value calculation we need this param to obtain submatrices of biclusters
+* @param H-values (leda::list) are used in order to have a corresponding value obtained with the id of biclusters       
+* @param Hmax (double) Hmax is a value that stores max H-value
+* @param minBicSize to control bicluster sizes
+* @param maxBicSize to control bicluster sizes
+* @param biclustering (int) is for choosing different biclustering outputs, We have to do that since each alg. has different output from its tool.
+* @param dimension1(int) size of the data row dimension
+* @param dimension2(int) size of the data column dimension
+* @param hasColor(bool) reimplementation when the new coloring methodology is used.
+*/
+void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES> > &biclusters, list<int> &categ, list<leda::matrix> &matrixBiclusters, list<double> &H_values, double &Hmax, int minBicSize, int maxBicSize, int biclustering, int dimension1, int dimension2, bool hasColor  );
+
+/*
+  -----------------------------------------------------------------------------------------------------------
+*/
+
+/**
+* interactionHandling is a function that handles the PPI extraction from
+* given file
+* @param temp (leda::node_array<GENENAMES>) temp file for proceessing
+* @param GenesNode (leda::array<GENENAMES>) is used with the graph parameter to obtain the specific Genes corresponding nodes
+* @param INTERACTIONS (leda::GRAPH<int,int>) is PPI graph extracted from sources/ppi_sources/<ppiFile> 
+* @param TEMPINT (leda::GRAPH<int,int>) is andother copy PPI graph used for processing
+* @param ppiFile (leda::string) is obtained from main menu
+*/
+void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, GRAPH<int,int> &TEMPINT, char ppiFile[256] );
+
+/*
+  -----------------------------------------------------------------------------------------------------------
+*/
+
+
+/**
+* inpGraphProdHandling is a function that handles the production of
+* peripheral graphs
+* @param abbv (char []) we need a categories for each organism. It may be too general as we did having n categories. abbv stores just a capital letter of categories.
+* @param Categories (leda::array<list<char> >) stores each categorie(s) for each genes rather than other inpGraphProdHandling several categs may be owned by each genes
+* @param listOfGraphs (leda::array<GRAPH<int,int>>) stores all the graphs in this parameter
+* @param GenesNode (leda::array<GENENAMES>) is used with the graph parameter to obtain the specific Genes corresponding nodes
+* @param INTERACTIONS (leda::GRAPH<int,int>) is PPI graph extracted from sources/ppi_sources/<ppiFile> it is original graph obtained with interactionHandling
+* @param biclusters we do not lose the track of bicluster genes
+* @param TEMPINT (leda::GRAPH<int,int>) is andother copy PPI graph used for processing
+* @param ppiFile (leda::string) is obtained from main menu
+
+*/
+void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGraphs, array<char> &abbv,  array<list<char> > &Categories, node_array<GENENAMES> &temp, array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, GRAPH<int,int> &TEMPINT, list<list<GENES> > &biclusters, int cat_num );
+
+
+/** 
+  ***********************************************************************************************************
+  *************************************** FUNCTION DEFINITIONS    *******************************************
+  ***********************************************************************************************************
+**/
+
+/**
+* Function that produce data structure of entries
+* with size of the given input data.
+* Each substructure has three attribute,
+* GENENAME CATEGORY[] GO[]
+* These resulting array of substructure will
+* be processed by main program using leda::array<GENEONTO> variable
+* and returned.
+* @param  gofile ( char[256] ) 
 **/
 array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		cout << "/**************************************************/" << endl;
@@ -2677,9 +3090,24 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 }
 
 /**
-    Does handling of obtaining colors via first level of Molecular Function Reads from gofile and
-    finds protein to list of categories for each proteins and write into catfile where robinbiz main
+    Does handling of obtaining colors via first level of Molecular Function(For this function) Reads from gofile and
+    finds protein to list of categories for each proteins and write into catfile where robinviz main
     reads from main file.
+    File format first we write
+    Cat Number generally 
+    18 
+    % then abrrv and category names
+    A antioxidant activity
+    .
+    .
+    .
+    S transporter activity
+    % then gene to category abbrvs.
+    gene1 ABC
+    gene2 PRS
+    ...
+    @param catfile(char[256]) :saved for post processing in bicluster and go handling
+    @param gofile(char[256]) : needed for parsing and forming colors for each genes
 **/
 void colorHandling( char catfile[256], char gofile[256] ){
 	int GOSIZE = 18;
@@ -2727,6 +3155,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 		exit(1);
 	}
 
+	/* First we parse gofile to see how many lines of categories */
 	int line_i = 0;
 	while( !feof( f ) ){
 		fgets( line, 100000, f );
@@ -2735,6 +3164,9 @@ void colorHandling( char catfile[256], char gofile[256] ){
 // 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
 	rewind( f );
 	line_i = 0;
+	/* We rewind and based on line by line parsing we check that is gofile contains
+	   the predefined categories in molecularF double char array
+	*/
 	while( !feof( f ) ){
 		// count rows
 // 		two_tuple<CATNAMES,int> tup;
@@ -2780,6 +3212,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 // 			cout << "\t Parsed " << line_i << " ...\n";
 	}
 	fclose( f );
+	/* With the next double loop we obtain pure gene list obtained with 18 categories */
 	forall_items( it, allGenes ){
 		forall_items( it2, allGenes ){
 			if( it != it2 ){
@@ -2789,8 +3222,10 @@ void colorHandling( char catfile[256], char gofile[256] ){
 			}
 		}
 	}
+	/* we now begin saving catfile. We collect the genes for each categories. */
 	f = fopen( catfile, "w" );
 	fprintf( f, "%d\n", GOSIZE );
+	/* Saving category header: abbrv and name */
 	for( int i = 0; i < GOSIZE; i++ ){
 		for( int j = 0; molecularF[ i ][ j ] != '\0'; j++ ){
 			if( molecularF[ i ][ j ] == ' ' ){
@@ -2799,6 +3234,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 		}
 		fprintf( f, "\"%c\"\t%s\n", abbrv[ i ], molecularF[ i ] );
 	}
+	/* Saving gene to abbrvs */
 	forall_items( it, allGenes ){
 		bool one = false;
 		char funcCateg[18]="",funcCateg2[18]="";
@@ -2849,6 +3285,13 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
         list_item it;
 	leda::matrix inverseINPUT = INPUT.trans();
 	list<list<CONDS> > conditions;
+	/* Bicluster results can be saved with several different methods but the first four option is the most common one 
+	   For our robinviz tool we use the following format
+	   Gene 1#(int) Cond 2#(int)
+	   Gene_id1 Gene_id2 ... Gene_id1#
+	   Cond_id1 Cond_id2 ... Cond_id2#
+	   ...
+	*/
 	if( biclustering == 1 ){
 		getBiclustersFromFile( inverseINPUT, defaultBicFile, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 ); 
                 analyseGenes2( "geneResult", categ, biclusters.size(), "", dimension1, dimension2, hasColor  );
@@ -2874,6 +3317,7 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
 // 		analyseGenes2( "geneResult", biclusters.size(), "MSBE" , dimension1, dimension2, hasColor );
 // 	}
 	if( biclusters.size() == 0 ) { 
+		/* Error checking if there is no reported bicluster */
 		FILE *erptr;
 		erptr = fopen( "outputs/error.txt", "w" );
 		fprintf( erptr, "Error-id1: No bicluster candidate to draw, make sure that you use correct parameters\n" );
@@ -2885,6 +3329,9 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
 // 	cout << " COND LIST size : " << conditions.size() << endl;
 // 	cout << " MATRIX LIST size : " << matrixBiclusters.size() << endl;
 
+	/* If the program escapes from prev error check this means there are some reported biclusters
+	   so we form heatmap and pc outputs. The visualization of these outputs are done within the
+	   python side with PyQT. Make sure the format you save is correct */
 	for( int i=0; i < biclusters.size(); i++ ){
 #ifdef LINUX
 		char out[ 64 ] = "outputs/heatmap/out";
@@ -2912,6 +3359,10 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
 	matrix newI2;
 	int k = 1;
 	bool loopflg = false;
+	/* Now we are calculating a H-value for each bicluster. In essence each biclusters have a submatrix from
+	   original gene expression. So the reported genes and conds form this submatrix. Based on the function given
+	   by Cheng and Church 2000 we do the calculations. This is vital when the user selected(with robinviz gui) that
+	   for seeing size of nodes with respect to lower H-values. */
 	forall_items( it , matrixBiclusters ){
 		char filename2[1024] = "";
 		int count_i = 0;
@@ -3010,6 +3461,7 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
                 fclose( erptr );
         }
         int geneCount = 0;
+	/* First we load categor file produced in main */
         while( !feof( categoryOfGenes ) ){
             fscanf( categoryOfGenes, "%s%s", g[ geneCount ].gene, g[ geneCount ].geneType );
             forall_nodes( n, INTERACTIONS ){
@@ -3032,12 +3484,13 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
               cout << Categories[ INTERACTIONS[n] ] << " ";
         }*/
         fclose( categoryOfGenes );
+	/* Loading ends */
 #ifdef DEBUG_ROBINVIZ
         cout << endl << " * Gene File is loaded from ppi_sources" << endl;
 
         cout << endl << " * Loading biclusters to form their ppi graphs " << endl;
 #endif
-                    TEMPINT = INTERACTIONS;
+        TEMPINT = INTERACTIONS;
         array<int> nodePar( INTERACTIONS.number_of_nodes()+1 );
         int nPar = 0;
         forall_nodes( n, INTERACTIONS ){
@@ -3055,6 +3508,8 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 
         list<edge> list_E;
         list_item it_b1 = biclusters.first_item(),it_b2;
+	/* For each gene list we detect its neigbors that are also in the gene group and we delete remaining edges
+	   and nodes from the original interaction graph obtained with ppihandler function */
         for( int i = 0; i < biclusters.size(); i++ ){
                 G = listOfGraphs[ i ];
                 list<GENES> tmp1 = biclusters[ it_b1 ];
