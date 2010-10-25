@@ -1,5 +1,5 @@
  /*******************************************************************************************************/
-/*	Copyright (C) <2009>  <Melih Sozdinler,Ahmet Emre Aladağ, Cesim Erten>   	 	       */
+/*	Copyright (C) <2010>  <Melih Sozdinler,Ahmet Emre Aladağ, Cesim Erten>   	 	       */
 /*											 	       */
 /*    This program is free software: you can redistribute it and/or modify		 	       */
 /*    it under the terms of the GNU General Public License as published by		 	       */
@@ -32,6 +32,11 @@
 *  Melih Sözdinler, melihsozdinler{at}gmail{dot}com, melih.sozdinler{at}boun{dot}edu{dot}tr 		*
 *  Ahmet Emre Aladağ, aladagemre{at}gmail{dot}com, emre.aladag{at}stu{dot}khas{dot}edu{dot}tr      	*
 *                                                                               			*
+********************************************************************************************************/
+/*******************************************************************************************************
+
+Created by Melih
+
 ********************************************************************************************************/
 
 #include <LEDA/graphics/graphwin.h>
