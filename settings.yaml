@@ -62,12 +62,12 @@ Confirmation:
             
     CoFunctionality:
         Input:
-            ppifilename_go: sources/organisms/Yeast2993x173/ppi.txt
+            ppifilename_go: src/python/robinviz/databases/inputtrees/ppidata/ppi.txt
             catfile_go: sources/organisms/Yeast2993x173/category.txt
-            gofile_go: sources/organisms/Yeast2993x173/go_slim.txt
-            dataName_go: sources/organisms/Yeast2993x173/input_go.txt
+            gofile_go: src/python/robinviz/databases/inputtrees/assocdata/go_slim.txt
+            dataName_go: src/python/robinviz/databases/inputtrees/assocdata/input_go.txt
         Drawing:
-            removeRat: 0.10
+            removeRat: 0.01
             nodeSize: 50.0
             edgeBendImp: 35.0
             colorScale: 130.0
