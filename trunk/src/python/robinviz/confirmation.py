@@ -8,9 +8,9 @@ from os.path import normcase
 import os
 from bicluster import *
 import yaml
-
+from utils.info import rp # root path function
 CATEGORY_COLORS = {}
-colorFile = open("outputs/colors_func.txt")
+colorFile = open(rp("outputs/colors_func.txt"))
 lineNum = 0
 for line in colorFile:
     name, r, g, b = line.strip().split()
@@ -25,12 +25,13 @@ class CoExpressionMainScene(MainScene):
         self.loadYAMLSettings()
 
         # By default, Scene is NOT directed.
-        # But main scene can be directed or undirected.
+        """# But main scene can be directed or undirected.
         if self.params["Algorithms"]["edgesBetween"]:
             self.directed = True
             self.onlyUp = True
         else:
-            self.directed = False
+            self.directed = False"""
+        self.directed = False
 
     def loadGraph(self, filename):
         MainScene.loadGraph(self, filename)
@@ -158,11 +159,12 @@ class CoFunctionalityMainScene(MainScene):
 
         # By default, Scene is NOT directed.
         # But main scene can be directed or undirected.
-        if self.params["Algorithms"]["edgesBetween"]:
+        """if self.params["Algorithms"]["edgesBetween"]:
             self.directed = True
             self.onlyUp = True
         else:
-            self.directed = False
+            self.directed = False"""
+        self.directed = False
 
     def loadGraph(self, filename):
         MainScene.loadGraph(self, filename)
