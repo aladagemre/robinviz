@@ -185,8 +185,8 @@ class PeripheralScene(Scene):
         self.id = id
 
     def addNode(self, node):
-        item = TinyNode(node, parent=None, scene=self)
-        self.addItem(item)
+        item = PiechartNode(node, parent=None, scene=self)
+        #self.addItem(item)
         self.nodeDict[node] = item
         self.nodeDict[node.id] = item
         #item.associateWithNode(node)
@@ -891,7 +891,8 @@ class PiechartNode(NodeItem):
 
         # Setup Operations
         # ---------------------
-        self.associateWithNode(node)
+        if node:
+            self.associateWithNode(node)
 
 
     def setColors(self, colors):
@@ -912,7 +913,7 @@ class PiechartNode(NodeItem):
         rectangle = QRectF(0.0, 0.0, self.w, self.w)
         startAngle = 0
 
-        painter.drawRect(rectangle)
+        #painter.drawRect(rectangle)
         for color in self.colors:
             painter.setBrush(QBrush(color))
             painter.drawPie(rectangle, startAngle, self.angle_per_color)
@@ -943,7 +944,7 @@ class PiechartNode(NodeItem):
         return QVariant(value)
 
     def boundingRect(self):
-        return QRectF( self.pos().x() - self.w/2, self.pos().y()-self.w/2, self.w, self.w)
+        return QRectF(0, 0, self.w, self.w)
 
     def contextMenuEvent(self, event):
         print "context"
@@ -966,7 +967,7 @@ class PiechartNode(NodeItem):
             self.detailBrowser.showMaximized()
     #----------- GUI / Geometric Methods ------------------
     def updateLabel(self):
-        self.text.setPos(self.pos().x() + self.w, self.pos().y() - self.w)
+        self.text.setPos(self.pos().x() + self.w, self.pos().y() - 2)
 
     def intersectionPoint(self, startPoint):
         """Gives the intersection point when a line is drawn into the center
@@ -1012,16 +1013,15 @@ class PiechartNode(NodeItem):
 
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
-        #self.setRect(0, 0, self.w, self.w)
 
         # Construct the text.
-        """self.text = QGraphicsTextItem(node.label, None, self._scene)
+        self.text = QGraphicsTextItem(node.label, None, self._scene)
         self.text.root = self
-        self.text.contextMenuEvent = self.contextMenuEvent"""
+        self.text.contextMenuEvent = self.contextMenuEvent
         # Define bounding rect
 
         # Align text.
-        #self.updateLabel()
+        self.updateLabel()
 
     def setSize(self, width=20):
 	self.w = self.h = width

@@ -9,10 +9,12 @@ from PyQt4.QtGui import *
 
 from os.path import split
 from os.path import normcase
+
+from utils.info import rp # root path function
 import os
 
 GRAPH_LAYOUTS = {}
-layoutFile = open("layouts.ini")
+layoutFile = open(rp("layouts.ini"))
 for line in layoutFile:
     if line.startswith("//"):
         continue # this is a comment
