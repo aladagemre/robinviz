@@ -535,7 +535,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
     """
     NodeItem with circle shape
     """
-    def __init__(self, node, parent=None, scene=None):
+    def __init__(self, node, parent=None, scene=None, label=None):
         QGraphicsEllipseItem.__init__(self, parent, scene)
         NodeItem.__init__(self)
         # Object Creation
@@ -543,7 +543,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         
         # Default Values
         # ---------------------
-        #self.setFlag(QGraphicsItem.ItemIsMovable, True)
+        self.setFlag(QGraphicsItem.ItemIsMovable, True)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         try:
             # available only in Qt 4.6
@@ -554,6 +554,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
             pass
 
         self._scene = scene
+        self.label = label
         self.setAcceptsHoverEvents(True)
         self.edges = []
         self.defaultColor = QColor("#52C6FF")
@@ -668,18 +669,18 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         textFont = QFont()
         textFont.setBold(True)
         #textFont.setPointSize(20)
-	textFont.setPixelSize(self.w/2)
+	textFont.setPixelSize(self.w/4)
         self.text.setFont(textFont)
         if self.defaultColor < 250 or self.defaultColor in (Qt.red, Qt.green, Qt.blue, Qt.black, QColor("#0000CD")):
             self.text.setDefaultTextColor(QColor(Qt.white))
 
         # Set node id as text.
-        self.text.setPlainText(str(node.id))
+        self.text.setPlainText(self.label) #str(node.id))
         self.text.contextMenuEvent = self.contextMenuEvent
         # Define bounding rect
         boundRect = self.text.boundingRect()
         # Align text to the center.
-        self.text.setPos((self.w - boundRect.width()) / 2, (self.w - boundRect.height()) / 2)
+        self.text.setPos(  (self.w + 3), -1    )
 
         self.setupAnimation()
 
@@ -1014,13 +1015,13 @@ class PiechartNode(NodeItem):
         #self.setRect(0, 0, self.w, self.w)
 
         # Construct the text.
-        self.text = QGraphicsTextItem(node.label, None, self._scene)
+        """self.text = QGraphicsTextItem(node.label, None, self._scene)
         self.text.root = self
-        self.text.contextMenuEvent = self.contextMenuEvent
+        self.text.contextMenuEvent = self.contextMenuEvent"""
         # Define bounding rect
 
         # Align text.
-        self.updateLabel()
+        #self.updateLabel()
 
     def setSize(self, width=20):
 	self.w = self.h = width

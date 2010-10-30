@@ -32,7 +32,7 @@ class CoExpressionMainScene(MainScene):
         else:
             self.directed = False"""
         self.directed = False
-
+        
     def loadGraph(self, filename):
         MainScene.loadGraph(self, filename)
         self.determineScoring()
@@ -165,17 +165,22 @@ class CoFunctionalityMainScene(MainScene):
         else:
             self.directed = False"""
         self.directed = False
-
+	self.category_names = map( lambda name: name.strip(), open(self.params["Input"]["dataName_go"]).readlines() )
+	
+	
     def loadGraph(self, filename):
         MainScene.loadGraph(self, filename)
         #self.determineScoring()
 
     def addNode(self, node):
-        item = CircleNode(node, parent=None, scene=self)
-        item.setNoProperties()
-        self.addItem(item)
-        self.nodeDict[node] = item
-        self.nodeDict[node.id] = item
+	try:
+	    item = CircleNode(node, parent=None, scene=self, label=self.category_names[node.id])
+	    item.setNoProperties()
+	    self.addItem(item)
+	    self.nodeDict[node] = item
+	    self.nodeDict[node.id] = item
+	except IndexError:
+	    print "Node id (%d) is out of bounds (%d)" % (node.id, len(self.category_names) )
 
     def loadYAMLSettings(self):
         stream = file('settings.yaml', 'r')    # 'document.yaml' contains a single YAML document.
