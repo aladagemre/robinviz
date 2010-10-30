@@ -1,14 +1,19 @@
 #from extensions import *
-from windows import SingleMainViewWindow
+from confirmation import CoFunctionalityPeripheralView
+from windows import SingleMainViewWindow, SinglePeripheralViewWindow
+import sys
+from PyQt4.QtGui import QApplication
+import os
+from utils.info import rp
 
 def main():
     app = QApplication(sys.argv)
 
-    #mainWindow = SinglePeripheralViewWindow()
-    #mainWindow.loadGraph(os.path.normcase("../outputs/graphs/graph0.gml"))
+    mainWindow = SinglePeripheralViewWindow(CoFunctionalityPeripheralView)
+    mainWindow.loadGraph(os.path.normcase(rp("outputs/graphs/graph7.gml")))
 
-    mainWindow = SingleMainViewWindow()
-    mainWindow.loadGraph(os.path.normcase("../outputs/graphs/maingraph.gml"))
+    #mainWindow = SingleMainViewWindow()
+    #mainWindow.loadGraph(os.path.normcase("../outputs/graphs/maingraph.gml"))
     
     mainWindow.showMaximized()
     #mainWindow.show()
@@ -22,6 +27,7 @@ def main():
 
 
 if __name__ == "__main__":
-    import cProfile
-    cProfile.run('main()')
+    #import cProfile
+    #cProfile.run('main()')
+    main()
 
