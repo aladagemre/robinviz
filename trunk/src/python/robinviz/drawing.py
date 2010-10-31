@@ -675,7 +675,11 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
             self.text.setDefaultTextColor(QColor(Qt.white))
 
         # Set node id as text.
-        self.text.setPlainText(self.label) #str(node.id))
+        if self.label:
+            self.text.setPlainText(self.label)
+        else:
+            self.text.setPlainText(str(node.id))
+            
         self.text.contextMenuEvent = self.contextMenuEvent
         # Define bounding rect
         boundRect = self.text.boundingRect()
