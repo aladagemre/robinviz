@@ -241,6 +241,12 @@ class AssociationSelector(QWidget):
                 if translator.translate_biogrids():
                     self._extend_dictionary( go_dict, translator.go_dict )
      	# ===============================================
+
+        # ============= REMOVE DUPLICATE GENES  ==============
+        for key in go_dict.keys():
+            l = go_dict[key]
+            go_dict[key] = set(l)
+        # =====================================================
         conn = sqlite3.connect(ap("godata/goinfo.sqlite3"))
         cursor = conn.cursor()
         
