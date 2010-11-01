@@ -906,7 +906,7 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
 	array<GENEONTO> geneOntoForData = geneOntologyHandling2( defaultGoFile, inputCats, GenesNode, categories, gocategories );
 // 	cout << "\nWEDONE\n";
 	geneOntologyToBiclusterHandling( gocategories, geneOntoForData );
-        int catCount = 1;
+        int catCount = 0;
         forall_items( it, gocategories ){
             FILE *saveGene;
             if( gocategories[it].size() >= 1 ){
@@ -926,10 +926,12 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
             }
             catCount++;
         }
+        cout << "||||||||||||||||||||||||||||||||\n";
         if( hasColor )
             analyseGenes2( "geneResult", categ, gocategories.size(), "", GenesNode.size(), 0, hasColor  );
         else
             analyseGenes2( "geneResult", categ, gocategories.size(), "", GenesNode.size(), 0  );
+        cout << "||||||||||||||||||||||||||||||||\n";
 }
 
 
@@ -3140,7 +3142,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 	char line[ 100000 ];
 	char *pc,*pend,*go,*cat;
 	const char *strDelim = "\t\n";
-	const char *strDelim2 = " ";
+        const char *strDelim2 = " \t";
 
 	if( (f = fopen( gofile, "r" )) == NULL){
 		FILE *erptr;
@@ -3193,7 +3195,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 			else{
 				if( categIndex != -1 ){
 					pc = strtok( NULL, strDelim2 );
-// 					cout << pc << " - ";
+//                                        cout << pc << " - ";
 					GENES temporary;
 					sprintf( temporary.GENE, "%s", pc );
 					molecularFunction[ categIndex ].append( temporary );
@@ -3202,26 +3204,77 @@ void colorHandling( char catfile[256], char gofile[256] ){
 				else
 					break;
 			}
-			pend=pc+strlen(pc)-1; /* check last char for newline terminator */
-			if (*pend=='\n') 
-				pc = NULL;
+                        pend = pc; /* check last char for newline terminator */
+                        int chCount = 0;
+                        while( *(pend+chCount) != '\0' ){
+                            if( *(pend+chCount) == '\n' ){
+                                    pc = NULL;
+                                    break;
+                            }
+                            chCount++;
+                        }
 			count++;
 		}
+//                cout << endl << "************************\n";
 		line_i++;
 // 		if( line_i % 10 == 0 )
 // 			cout << "\t Parsed " << line_i << " ...\n";
 	}
+        cout << " We are done \n";
 	fclose( f );
 	/* With the next double loop we obtain pure gene list obtained with 18 categories */
+        array<bool> marked( allGenes.size() + 1 );
+        int count = 0;
+        forall_items( it, allGenes ){
+            marked[ count ] = false;
+            count++;
+        }
+        count = 0;
 	forall_items( it, allGenes ){
-		forall_items( it2, allGenes ){
-			if( it != it2 ){
-				if( strcmp( allGenes[ it ].GENE, allGenes[ it2 ].GENE ) == 0 ){
-					allGenes.del_item( it2 );
-				}
-			}
-		}
+//                cout << allGenes[it].GENE << " - " << count << endl;
+//                it2 = allGenes.succ(it);
+//                while( it2 != NULL ){
+//			if( it != it2 ){
+////                                cout << allGenes[it].GENE << " - " << allGenes[it2].GENE << endl;
+//				if( strcmp( allGenes[ it ].GENE, allGenes[ it2 ].GENE ) == 0 ){
+//                                        list_item it3 = allGenes.succ(it2);
+//					allGenes.del_item( it2 );
+//                                        if( it3 != NULL )
+//                                            it2 = it3;
+//                                        else
+//                                            break;
+//				}
+//			}
+//                        it2 = allGenes.succ(it2);
+//		}
+                if( marked[ count ] == false ){
+                    int count2 = 0;
+                    forall_items( it2, allGenes ){
+                        if( it != it2 ){
+                            if( marked[ count2 ] == false ){
+                                if( strcmp( allGenes[ it ].GENE, allGenes[ it2 ].GENE ) == 0 ){
+                                    marked[ count2 ] = true;
+                                }
+                            }
+                        }
+                        count2++;
+                    }
+                }
+                count++;
 	}
+        list<list_item> deleted;
+        count = 0;
+        forall_items( it, allGenes ){
+            if( marked[ count ] == true ){
+                deleted.append( it );
+            }
+            count++;
+        }
+        forall_items( it, deleted ){
+            allGenes.del_item(deleted[ it ]);
+        }
+
+        cout << " We are done \n";
 	/* we now begin saving catfile. We collect the genes for each categories. */
 	f = fopen( catfile, "w" );
 	fprintf( f, "%d\n", GOSIZE );
@@ -3234,6 +3287,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 		}
 		fprintf( f, "\"%c\"\t%s\n", abbrv[ i ], molecularF[ i ] );
 	}
+        cout << " We are done \n";
 	/* Saving gene to abbrvs */
 	forall_items( it, allGenes ){
 		bool one = false;
@@ -3262,6 +3316,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 			fprintf( f, "%s\t%s\n", allGenes[ it ].GENE, funcCateg );
 		}
 	}
+        cout << " We are done \n";
 	fclose( f );
 }
 

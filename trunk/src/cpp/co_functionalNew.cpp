@@ -41,8 +41,8 @@
 #include "incl/handlers/_ppiread.h"
 #include "incl/handlers/_maingraph.h"
 #include "incl/handlers/_iniread.h"
-#include "incl/bicalg/bimax/bimax.h"
-#include "incl/bicalg/cc/cc.h"
+//#include "incl/bicalg/bimax/bimax.h"
+//#include "incl/bicalg/cc/cc.h"
 #include "incl/bicalg/rleb/runleb.h"
 
 #define ORDVARS
@@ -319,7 +319,7 @@ int main(){
                 }
 
                 cout << "/**************************************************/" << endl;
-                cout << "\t" << " Produce Bicluster Graphs" << endl;
+                cout << "\t" << " Produce GO Graphs" << endl;
                 cout << "/**************************************************/" << endl;
 //                Categories.resize( INTERACTIONS.number_of_nodes() );
 //                node n;
