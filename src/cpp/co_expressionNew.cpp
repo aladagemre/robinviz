@@ -630,12 +630,12 @@ int main(){
 		if( layered_layout ){
 			mainAlgHandlingForEachSubgraph( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, biclusters, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag );
 		}
-                else{
-                        if( ffd_layout && hasColor == false ){
-                                cout << " pirasa************************************* \n";
-                                mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, biclusters, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num, Categories );
-                        }
-                }
+//                else{
+//                        if( ffd_layout && hasColor == false ){
+//                                cout << " pirasa************************************* \n";
+//                                mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, biclusters, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num, Categories );
+//                        }
+//                }
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " End Running Layering Algorithm" << endl;
 		cout << "/**************************************************/" << endl;

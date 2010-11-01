@@ -632,7 +632,6 @@ int main(){
 		}
                 else{
                         if( ffd_layout && hasColor == false ){
-                                cout << " pirasa************************************* \n";
                                 mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, biclusters, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num, Categories );
                         }
                 }

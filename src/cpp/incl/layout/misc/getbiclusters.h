@@ -43,7 +43,7 @@ struct genesx{
     char geneType[ 1 ];
 };
 typedef struct genesx GNDATAx;
-GNDATAx gx[10000];
+GNDATAx gx[50000];
 
 struct genes3{
     leda::string gene;
@@ -877,9 +877,9 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
     } 
     int fileCount = 0;
 
-// 	cout << " Gecti1 " << endl;
+//        cout << " Gecti1 " << endl;
 #ifdef LINUX
-    FILE *gptr = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "r");
+        FILE *gptr = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "r");
 #else
 	FILE *gptr = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "r");
 #endif
@@ -888,7 +888,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
         count++;
     }
     fclose( gptr );
-// 	cout << " Gecti2 " << endl;
+//        cout << " Gecti2 " << endl;
 #ifdef LINUX
     FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "r" );
 #else
@@ -897,7 +897,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 
     while( !feof( yFptr ) ){
         fscanf( yFptr, "%s", allGenes[ fileCount ].GENE );
-        for( int j = 0; j < 10000; j++ ){
+        for( int j = 0; j < 50000; j++ ){
             if( strcmp( allGenes[ fileCount ].GENE, gx[ j ].gene ) == 0 ){
                 for( int k = 0; k < cat_num; k++ ){
 		    int ii = 0;
@@ -912,7 +912,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
     }
     fclose( yFptr );
     
-//     	cout << " Gecti3 " << endl;
+//        cout << " Gecti3 " << endl;
 #ifdef LINUX
         resultPtr = fopen( "outputs/enrich/result.txt", "w" );
 #else
@@ -939,14 +939,14 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 			    fprintf( resultPtr, "%20d\n", inCategory[ i ] );
 	    }
     }
-    for( int i = 0; i < biNumber - 1; i++ ){
+    for( int i = 0; i < biNumber; i++ ){
 #ifdef LINUX
         sprintf( fileName2, "outputs/bicgenes/%s%s%d%s", fileName, algName, i+1, ".txt" );
 #else
 	sprintf( fileName2, "outputs//bicgenes//%s%s%d%s", fileName, algName, i+1, ".txt" );
 #endif
 		if( (fptr = fopen( fileName2, "r" )) == NULL ){
-			cout << "FILE NOT FOUND";
+                        cout << "List " << i << " has 0 prots" << "\n";
 		}
 		else{
 			array<int> countAbbv( 64 );
@@ -981,7 +981,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 		}
     }
 
-//  	cout << " Gecti4 " << endl;
+//        cout << " Gecti4 " << endl;
     fclose( resultPtr );
 
     FILE *efptr;
