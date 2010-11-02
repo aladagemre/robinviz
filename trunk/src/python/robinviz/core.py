@@ -132,7 +132,7 @@ class View(QGraphicsView):
             self.scene().addEdge(edge)
 
         for item in self.scene().items():
-            if isinstance(item, TinyNode):
+            if isinstance(item, PiechartNode):
                 item.updateLabel()
             
         self.reselectItemsAfterLayoutChange()
@@ -221,7 +221,9 @@ class View(QGraphicsView):
             self.animations = []
             
             for node in newGraph.nodes:
-                item = self.scene().nodeDict[node.id]
+                item = self.scene().nodeDict.get(node.id)
+                if not item:
+                    continue
                 #item.setPos(node.graphics.x, node.graphics.y)
                 oldPos = item.scenePos()
                 x1 = oldPos.x()

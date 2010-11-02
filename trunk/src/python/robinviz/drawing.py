@@ -746,8 +746,10 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
 
     def stopAnimation(self):
         """Stops the selected node animation."""
-        self.animation.setStep(0)
-        self.timeline.stop()
+        if hasattr(self, 'animation'):
+            # to avoid fake nodes (TODO: should remove these lines later)
+            self.animation.setStep(0)
+            self.timeline.stop()
 
 
 class TinyNode(QGraphicsEllipseItem, NodeItem):
