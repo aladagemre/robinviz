@@ -221,7 +221,23 @@ int main(){
                     cout << "/**************************************************/" << endl;
                     cout << "\t" << " Color Processing" << endl;
                     cout << "/**************************************************/" << endl;
-                    colorHandling( catfile, defaultGoFile );
+
+                    char molecularF[13][128] = {
+                                "cell",
+                                "cell part",
+                                "extracellular region",
+                                "extracellular region part",
+                                "macromolecular complex",
+                                "membrane-enclosed lumen",
+                                "organelle",
+                                "organelle part",
+                                "symplast",
+                                "synapse",
+                                "synapse part",
+                                "virion",
+                                "virion part",
+                    };
+                    colorHandling( catfile, defaultGoFile, molecularF, 13 );
                 }
                 if( (fptr = fopen( catfile , "r" )) !=NULL ){
                     if( (kfptr = fopen( "sources/usr_sources/visualization_data/functions.txt", "w" )) != NULL || (kfptr = fopen( "sources//usr_sources//visualization_data//functions.txt", "w" )) != NULL ){
