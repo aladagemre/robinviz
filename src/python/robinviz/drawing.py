@@ -600,7 +600,30 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
             QMessageBox.information(None, 'GO Table not found.',
      "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
 
+    def mousePressEvent(self, event):
+        QGraphicsItem.mousePressEvent(self, event)
+        self.stopAnimation()
+        
+    def mouseReleaseEvent(self, event):
+        QGraphicsItem.mouseReleaseEvent(self, event)
+        localPos = event.pos()
+        scenePos = event.scenePos()
 
+        newPos = QPointF(scenePos.x() - localPos.x(), scenePos.y() - localPos.y())
+        self.setPos(newPos)
+
+        self._scene.update()
+        self.setupAnimation()
+        self.toggleAnimation()
+        
+    def toggleAnimation(self):
+        action = {
+                    QTimeLine.Running : self.stopAnimation,
+                    QTimeLine.NotRunning: self.startAnimation
+                }
+
+        action[self.timeline.State()]()
+            
     def itemChange(self, change, value):        
         if change == QGraphicsItem.ItemPositionChange or change == QGraphicsItem.ItemTransformHasChanged:
             self.updateEdges()
@@ -618,7 +641,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
                     edge.end.toggleHighlight()
                 """if self.highlightedColor == Qt.yellow:
                     self.text.setDefaultTextColor(QColor(Qt.black))"""
-                self.startAnimation()
+                #self.startAnimation()
 
         return QVariant(value)
 
@@ -686,7 +709,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         # Align text to the center.
         self.text.setPos(  (self.w + 3), -1    )
 
-        self.setupAnimation()
+        #self.setupAnimation()
 
     def setupAnimation(self):
         """Sets up how the animation shall be. Calculates positions."""
@@ -694,20 +717,29 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         animationPeriod = 1500 + (self._scene.numElements - 50) * 3
         self.timeline = QTimeLine(animationPeriod)
         self.timeline.setCurveShape(QTimeLine.SineCurve)
-        self.timeline.setFrameRange(0, 100)
+        self.timeline.setFrameRange(0, 16)
         self.timeline.setLoopCount(0)
 
         self.animation = QGraphicsItemAnimation()
         self.animation.setItem(self)
         self.animation.setTimeLine(self.timeline)
         self.timeline.stateChanged.connect(self.updateEdges)
+        self.timeline.frameChanged.connect(self.frameChanged) # consuming so much cycles!
 
+        #rect = self.boundingRect()
+        #self.refreshFrame = QRectF(rect.x()-30, rect.y()+30, rect.width()+60, rect.height()+60)
+        
         for i in range(100):
             newxPos = self.originalPos.x() - (0.01 * i) * (self.w /2)
             newyPos = self.originalPos.y() - (0.01 * i) * (self.w /2)
 
             self.animation.setPosAt(i/100.0, QPointF(newxPos, newyPos))
             self.animation.setScaleAt(i/100.0, 1 + 0.01 * i, 1 + 0.01 * i)
+        
+    def frameChanged(self):
+        if self.timeline.currentFrame() == self.timeline.endFrame()-1:
+            self._scene.update() # self.refreshFrame)
+
     def startAnimation(self):
         """Starts the selected node animation."""
         self.timeline.start()
