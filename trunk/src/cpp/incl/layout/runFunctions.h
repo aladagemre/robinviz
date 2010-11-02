@@ -3650,15 +3650,12 @@ void RUN_FFD_AGAIN2(  GRAPH<int,int> G,
 	}
 }
 
-void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G, 
-		  int W, 
-		  node_array<double> &Xpos,
-		  node_array<double> &Ypos, 
+void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 		  char filename[ 1024 ], 
 		  int graphNo, 
-		  list<list<struct Strings> > namesForEachGraph, 
-		  node_array<point> pos ,
-		  edge_array<list<point> > bends, 
+                  list<list<struct Strings> > &namesForEachGraph,
+                  node_array<point> &pos ,
+                  edge_array<list<point> > &bends,
 		  array<char> &abbv,
 		  int cat_num,
 		  array<list<char> > &Categories,
@@ -3673,7 +3670,7 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 		list<struct Strings> nodeNames;
 		//list<list<Strings>> namesForEachGraph
 		int counter = 0;
-		list_item it,it2;
+                list_item it,it2;
 		forall_items( it, namesForEachGraph ){
 			nodeNames = namesForEachGraph[ it ];
 			if( counter == graphNo )
@@ -3682,6 +3679,7 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 		}
 		node_array<list<int> > catid( G );
 		gw2.set_edge_thickness( 3, true );
+//                cout << "0:";
 		forall_nodes( n, G ){
 			for( int i = 0; i < cat_num; i++ ){
 				forall_items( it, Categories[ G[ n ] ] ){
@@ -3692,13 +3690,14 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 			}
 			gw2.set_color( n, red );
 		}
+//                cout << "1:";
 		edge e;
 		array<color> color_l( 5 );
 
 		list<int> weights;
-		forall_edges( e, G ){
-
-		}
+//		forall_edges( e, G ){
+//
+//		}
 		list<two_tuple<color,int> > variations;
 		list<int> edgeWeights;
 
@@ -3714,6 +3713,7 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 				edgeWeights.push_back( G[ e ] );
 			}
 		}
+//                cout << "2:";
 		edgeWeights.sort();
 		int tm_c = (double)(220.0 / (double)edgeWeights.size() );
 		int count = 20 + edgeWeights.size() * tm_c;
@@ -3731,6 +3731,7 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 			}
 			count++;
 		}
+//                cout << "3:";
 		int increase = (int) ((double)variations.size() / (double)edgeWeights.size());
 // 		cout << " increase : " << increase << endl;
 		forall_edges( e, G ){              
@@ -3746,7 +3747,7 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 			gw2.set_color( e, Tp.first() );
 // 			cout << Tp << endl;
 		}
-
+//                cout << "4:";
 		gw2.set_node_height(50,true);
 // 		gw2.set_node_border_color( red, true );
 		gw2.set_node_border_thickness( 3, true );

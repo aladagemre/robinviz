@@ -3321,6 +3321,216 @@ void colorHandling( char catfile[256], char gofile[256] ){
 }
 
 /**
+    Does handling of obtaining colors via first level of X Function( General Functional terms) Reads from gofile and
+    finds protein to list of categories for each proteins and write into catfile where robinviz main
+    reads from main file.
+    File format first we write
+    Cat Number generally
+    18
+    % then abrrv and category names
+    A antioxidant activity
+    .
+    .
+    .
+    S transporter activity
+    % then gene to category abbrvs.
+    gene1 ABC
+    gene2 PRS
+    ...
+    @param catfile(char[256]) :saved for post processing in bicluster and go handling
+    @param gofile(char[256]) : needed for parsing and forming colors for each genes
+    @param char molecularF(char[18][128]) : different from calling with other option than molecular function
+**/
+void colorHandling( char catfile[256], char gofile[256], char molecularF[][128], int size ){
+        int GOSIZE = size;
+        char abbrv[19] = "ABCDEFGHIJKLMNOPRS";
+        array<list<GENES> > molecularFunction( GOSIZE );
+        list<GENES> allGenes;
+
+        FILE *f;
+        list_item it,it2;
+        char line[ 100000 ];
+        char *pc,*pend,*go,*cat;
+        const char *strDelim = "\t\n";
+        const char *strDelim2 = " \t";
+
+        if( (f = fopen( gofile, "r" )) == NULL){
+                FILE *erptr;
+#ifdef LINUX
+                erptr = fopen( "outputs/error.txt", "w" );
+#else
+                erptr = fopen( "outputs//error.txt", "w" );
+#endif
+                fprintf( erptr, "Error-id4: You did not specify GO based functional category file although you selected to use that file\n" );
+                fclose( erptr );
+                cout << "\nError-id4: You did not specify GO based functional category file although you selected to use that file\n";
+                exit(1);
+        }
+
+        /* First we parse gofile to see how many lines of categories */
+        int line_i = 0;
+        while( !feof( f ) ){
+                fgets( line, 100000, f );
+                line_i++;
+        }
+// 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
+        rewind( f );
+        line_i = 0;
+        /* We rewind and based on line by line parsing we check that is gofile contains
+           the predefined categories in molecularF double char array
+        */
+        while( !feof( f ) ){
+                // count rows
+// 		two_tuple<CATNAMES,int> tup;
+// 		tup.second() = 0;
+                fgets( line, 100000, f );
+                pc = strtok( line, strDelim );
+                go = pc;
+                if( feof( f ) )
+                        break;
+                int count = 0;
+                int categIndex = -1;
+                while( pc != NULL ){
+                        if( count == 0 ){
+                                pc = strtok( NULL, strDelim );
+                                cat = pc;
+// 				sprintf( tup.first().catName, "%s", cat );
+                                for( int i = 0; i < GOSIZE; i++ ){
+                                        if( strcmp( molecularF[ i ], cat ) == 0 ){
+                                                categIndex = i;
+// 						cout <<  molecularF[ i ] << " is found\n";
+                                        }
+                                }
+                        }
+                        else{
+                                if( categIndex != -1 ){
+                                        pc = strtok( NULL, strDelim2 );
+//                                        cout << pc << " - ";
+                                        GENES temporary;
+                                        sprintf( temporary.GENE, "%s", pc );
+                                        molecularFunction[ categIndex ].append( temporary );
+                                        allGenes.append( temporary );
+                                }
+                                else
+                                        break;
+                        }
+                        pend = pc; /* check last char for newline terminator */
+                        int chCount = 0;
+                        while( *(pend+chCount) != '\0' ){
+                            if( *(pend+chCount) == '\n' ){
+                                    pc = NULL;
+                                    break;
+                            }
+                            chCount++;
+                        }
+                        count++;
+                }
+//                cout << endl << "************************\n";
+                line_i++;
+// 		if( line_i % 10 == 0 )
+// 			cout << "\t Parsed " << line_i << " ...\n";
+        }
+        cout << " We are done \n";
+        fclose( f );
+        /* With the next double loop we obtain pure gene list obtained with 18 categories */
+        array<bool> marked( allGenes.size() + 1 );
+        int count = 0;
+        forall_items( it, allGenes ){
+            marked[ count ] = false;
+            count++;
+        }
+        count = 0;
+        forall_items( it, allGenes ){
+//                cout << allGenes[it].GENE << " - " << count << endl;
+//                it2 = allGenes.succ(it);
+//                while( it2 != NULL ){
+//			if( it != it2 ){
+////                                cout << allGenes[it].GENE << " - " << allGenes[it2].GENE << endl;
+//				if( strcmp( allGenes[ it ].GENE, allGenes[ it2 ].GENE ) == 0 ){
+//                                        list_item it3 = allGenes.succ(it2);
+//					allGenes.del_item( it2 );
+//                                        if( it3 != NULL )
+//                                            it2 = it3;
+//                                        else
+//                                            break;
+//				}
+//			}
+//                        it2 = allGenes.succ(it2);
+//		}
+                if( marked[ count ] == false ){
+                    int count2 = 0;
+                    forall_items( it2, allGenes ){
+                        if( it != it2 ){
+                            if( marked[ count2 ] == false ){
+                                if( strcmp( allGenes[ it ].GENE, allGenes[ it2 ].GENE ) == 0 ){
+                                    marked[ count2 ] = true;
+                                }
+                            }
+                        }
+                        count2++;
+                    }
+                }
+                count++;
+        }
+        list<list_item> deleted;
+        count = 0;
+        forall_items( it, allGenes ){
+            if( marked[ count ] == true ){
+                deleted.append( it );
+            }
+            count++;
+        }
+        forall_items( it, deleted ){
+            allGenes.del_item(deleted[ it ]);
+        }
+
+        cout << " We are done \n";
+        /* we now begin saving catfile. We collect the genes for each categories. */
+        f = fopen( catfile, "w" );
+        fprintf( f, "%d\n", GOSIZE );
+        /* Saving category header: abbrv and name */
+        for( int i = 0; i < GOSIZE; i++ ){
+                for( int j = 0; molecularF[ i ][ j ] != '\0'; j++ ){
+                        if( molecularF[ i ][ j ] == ' ' ){
+                                  molecularF[ i ][ j ] = '_';
+                        }
+                }
+                fprintf( f, "\"%c\"\t%s\n", abbrv[ i ], molecularF[ i ] );
+        }
+        cout << " We are done \n";
+        /* Saving gene to abbrvs */
+        forall_items( it, allGenes ){
+                bool one = false;
+                char funcCateg[18]="",funcCateg2[18]="";
+                for( int i = 0; i < GOSIZE; i++ ){
+                        forall_items( it2, molecularFunction[ i ] ){
+                                if( strcmp( allGenes[ it ].GENE, molecularFunction[ i ][ it2 ].GENE ) == 0 ){
+                                        one = true;
+                                        sprintf( funcCateg2, "%c", abbrv[ i ] );
+                                        strcat( funcCateg, funcCateg2 );
+                                        break;
+                                }
+                        }
+                }
+                if( one == false ){
+// 			fprintf( f, "X\n" );
+                }
+                else{
+                        int j = 0;
+                        while( allGenes[ it ].GENE[ j ] != '\0' ){
+                                if( allGenes[ it ].GENE[ j ] == '\n' ){
+                                        allGenes[ it ].GENE[ j ] = '\0';
+                                }
+                                j++;
+                        }
+                        fprintf( f, "%s\t%s\n", allGenes[ it ].GENE, funcCateg );
+                }
+        }
+        cout << " We are done \n";
+        fclose( f );
+}
+
+/**
 * biclusterHandling is a function that handles the bicluster output
 * and responds to the main program by having modifying the passed
 * parameters.
@@ -3590,12 +3800,12 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 #ifdef DEBUG_ROBINVIZ
                 cout << " GRAPH IS PRODUCED ||";
 #endif
-                forall_nodes( m1, G ){
-                    list<edge> inedges = G.in_edges( m1 );
-                    list<edge> outedges = G.out_edges( m1 );
-                    if( (inedges.size() + outedges.size() ) == 0 )
-                        G.del_node( m1 );
-                }
+//                forall_nodes( m1, G ){
+//                    list<edge> inedges = G.in_edges( m1 );
+//                    list<edge> outedges = G.out_edges( m1 );
+//                    if( (inedges.size() + outedges.size() ) == 0 )
+//                        G.del_node( m1 );
+//                }
 #ifdef DEBUG_ROBINVIZ
                 cout << endl;
                 forall_nodes( m1, G ){
