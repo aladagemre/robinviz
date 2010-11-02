@@ -2320,6 +2320,8 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 	double xmin, xmax, ymin, ymax;
 	int ncount = 0;
 	forall_nodes( n, G ){
+                Xpos[ n ] = Xpos[ n ] * 2.5;
+                Ypos[ n ] = Ypos[ n ] * 2.5;
 		if( G.degree( n ) != 0 ){
 			if( ncount == 0 ){
 				xmin = Xpos[ n ];
