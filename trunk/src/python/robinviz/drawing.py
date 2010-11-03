@@ -686,6 +686,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
         self.setRect(0, 0, self.w, self.w)
 
+        # ============== ID INSIDE NODE ==================
         # Construct the text.
         self.text = QGraphicsTextItem(self)
         self.text.root = self
@@ -698,18 +699,32 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
             self.text.setDefaultTextColor(QColor(Qt.white))
 
         # Set node id as text.
-        if self.label:
-            self.text.setPlainText(self.label)
-        else:
-            self.text.setPlainText(str(node.id))
-            
+        self.text.setPlainText(str(node.id))
         self.text.contextMenuEvent = self.contextMenuEvent
         # Define bounding rect
         boundRect = self.text.boundingRect()
-        # Align text to the center.
-        self.text.setPos(  (self.w + 3), -1    )
 
-        #self.setupAnimation()
+        # Align text to the center.
+        self.text.setPos((self.w - boundRect.width()) / 2, (self.w - boundRect.height()) / 2)
+
+        # =============== LABEL ==================
+        # Set label
+        if self.label:
+            self.labelText = QGraphicsTextItem(self)
+            self.labelText.root = self
+            labelFont = QFont()
+            labelFont.setBold(False)
+            labelFont.setPixelSize(self.w/4)
+            self.labelText.setFont(labelFont)
+        
+            print "using label '%s'" % self.label
+            self.labelText.setPlainText(self.label)
+            print "set:", self.labelText.toPlainText()
+        else:
+            print "no label"
+
+        # Position the label test
+        self.labelText.setPos(  (self.w + 3), -1    )
 
     def setupAnimation(self):
         """Sets up how the animation shall be. Calculates positions."""
@@ -742,6 +757,8 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
 
     def startAnimation(self):
         """Starts the selected node animation."""
+        for edge in self.edges:
+            edge.prepareGeometryChange()
         self.timeline.start()
 
     def stopAnimation(self):
@@ -1005,7 +1022,7 @@ class PiechartNode(NodeItem):
             self.detailBrowser.showMaximized()
     #----------- GUI / Geometric Methods ------------------
     def updateLabel(self):
-        self.text.setPos(self.pos().x() + self.w, self.pos().y() - 2)
+        self.labelText.setPos(  (self.w + 3), -1    )
 
     def intersectionPoint(self, startPoint):
         """Gives the intersection point when a line is drawn into the center
@@ -1053,12 +1070,23 @@ class PiechartNode(NodeItem):
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
 
         # Construct the text.
-        self.text = QGraphicsTextItem(node.label, None, self._scene)
-        self.text.root = self
-        self.text.contextMenuEvent = self.contextMenuEvent
+        #self.text = QGraphicsTextItem(node.label, None, self._scene)
+        #self.text.root = self
+        #self.text.contextMenuEvent = self.contextMenuEvent
         # Define bounding rect
 
-        # Align text.
+        if node.label:
+            self.labelText = QGraphicsTextItem(self)
+            self.labelText.root = self
+            labelFont = QFont()
+            labelFont.setBold(False)
+            labelFont.setPixelSize(self.w/4)
+            self.labelText.setFont(labelFont)
+            self.labelText.setPlainText(node.label)
+        else:
+            print "no label"
+            
+        # Position the label text
         self.updateLabel()
 
     def setSize(self, width=20):
