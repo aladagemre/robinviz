@@ -326,8 +326,8 @@ class MultiViewWindow(QMainWindow):
                 self.pScenes[id] = scene
             except IOError:
                 # If we can't create the scene, means that there's no such graph file.
-                QMessageBox.information(self, 'Empty Bicluster',
-                    "No interactions found in this bicluster")
+                QMessageBox.information(self, 'Empty Bicluster/Category',
+                    "No associated genes/proteins found.")
                 self.mainScene.nodeDict[id].blowUp()
                 del scene
                 return
