@@ -11,6 +11,26 @@ from bicluster import BiclusterWindow
 import math
 from utils.info import root, ap
 
+COLORS18 = {
+"A": "#CB2838",
+"B": "#FEC9BD",
+"C": "#5EF6DA",
+"D": "#321B28",
+"E": "#CD9BB4",
+"F": "#28E4F2",
+"G": "#BEF98A",
+"H": "#6C9627",
+"I": "#F481F0",
+"J": "#8B7F82",
+"K": "#4003C0",
+"L": "#499411",
+"M": "#E6C8BE",
+"N": "#DB26B2",
+"O": "#E4C645",
+"P": "#87D29A",
+"R": "#BC34F3",
+"S": "#5D9154"
+}
 
 GRAPH_LAYOUTS = {}
 layoutFile = open("%s/layouts.ini" % root)
@@ -1007,6 +1027,10 @@ class PiechartNode(NodeItem):
         startAngle = 0
 
         #painter.drawRect(rectangle)
+        if len(self.colors) == 1:
+            painter.setBrush(QBrush(self.colors[0]))
+            painter.drawEllipse(rectangle)
+            return
         for color in self.colors:
             painter.setBrush(QBrush(color))
             painter.drawPie(rectangle, startAngle, self.angle_per_color)
@@ -1054,7 +1078,7 @@ class PiechartNode(NodeItem):
 	    self.specialWindow.loadGraph(neihgboringFilename)
             self.specialWindow.showMaximized()
 	elif action == detailedInformation:
-	    url = "http://thebiogrid.org/search.php?search=%s&organism=all" % self.node.label
+	    url = "http://thebiogrid.org/search.php?search=%s&organism=all" % self.node.label.split("_")[0]
 	    self.detailBrowser = QtWebKit.QWebView()
             self.detailBrowser.setUrl(QUrl(url))
             self.detailBrowser.showMaximized()
@@ -1114,13 +1138,16 @@ class PiechartNode(NodeItem):
         # Define bounding rect
 
         if node.label:
+            label, colors = node.label.split("_")
             self.labelText = QGraphicsTextItem(self)
             self.labelText.root = self
             labelFont = QFont()
             labelFont.setBold(False)
             labelFont.setPixelSize(self.w/4)
             self.labelText.setFont(labelFont)
-            self.labelText.setPlainText(node.label)
+            self.labelText.setPlainText(label)
+            colors = map(QColor, filter(lambda color: color is not "", map(COLORS18.get, colors.split(":")) ))
+            self.setColors(colors)
         else:
             print "no label"
             
