@@ -21,7 +21,13 @@ for line in layoutFile:
     name, filename = line.strip().split(":")
     GRAPH_LAYOUTS[name] = filename
 
-
+OTHER_GRAPH_LAYOUTS = {}
+layoutFile = open(rp("otherlayouts.txt"))
+for line in layoutFile:
+    if line.startswith("//"):
+        continue # this is a comment
+    name, filename = line.strip().split(":")
+    OTHER_GRAPH_LAYOUTS[name] = filename
 
 class View(QGraphicsView):
     def __init__(self, parent=None):
@@ -96,7 +102,16 @@ class View(QGraphicsView):
             # Link action to the method.
             actionToFunction[newLayoutAction] = self.switchToLayout
 
+        # ==== OTHERS SUBMENU =============
+        othersMenu = QMenu("Others")
+        for graphLayout in sorted(OTHER_GRAPH_LAYOUTS.keys()):
+            # Create action
+            newLayoutAction = othersMenu.addAction(graphLayout)
+            newLayoutAction.isLayoutAction = True
+            # Link action to the method.
+            actionToFunction[newLayoutAction] = self.switchToLayout
 
+        switchToLayoutMenu.addMenu(othersMenu)
 
         action = menu.exec_(self.mapToGlobal(event.pos()))
         if not action:
@@ -186,7 +201,10 @@ class View(QGraphicsView):
             return False
         else:
             # Find the exe
-            exename = GRAPH_LAYOUTS[str(layoutName)]
+            exename = GRAPH_LAYOUTS.get(str(layoutName))
+            if not exename:
+                exename = OTHER_GRAPH_LAYOUTS.get(str(layoutName))
+            assert exename is not None, "Could not find layout exe for %s" % layoutName
             # Run the exe
             command = "%s %s" % (exename, self.originalFileName)
             if os.name == "posix":
