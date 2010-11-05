@@ -16,4 +16,4 @@ structural_molecule_activity 175 175 175
 transcription_regulator_activity 128 128 128
 translation_regulator_activity 255 255 230
 transporter_activity 75 75 75
-None 0 0 795046515
+None 45 255 45

@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
                     gw.set_thickness( e, G[ e ] );
             }
             gw.place_into_box(x0-600.0, y0, x1+550.0, y1);
-            fname = fname.replace( ".gml", "layeredLayout.gml" );
+            fname = fname.replace( ".gml", "sugiyamaStyle.gml" );
             gw.save_gml( fname );
     }
     return 0;

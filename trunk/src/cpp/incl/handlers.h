@@ -829,10 +829,10 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 	    }
 	    fclose( fptr2 );
 
-		fprintf( fptr, "\n\t<th scope=\"col\"> %s </th>\n", "Gene Names" );
-		fprintf( fptr, "\n\t<th scope=\"col\"> %s </th>\n", "Gene Ontology Id" );
-		fprintf( fptr, "\n\t<th scope=\"col\"> %s </th>\n", "Category" );
-		fprintf( fptr, "\n\t</tr>\n\t</thead>\n\t<tfoot>\n\t<tr>\n\t\t<td colspan=\"%d\">Gene Ontologies and Categories for each gene of Bicluster %d</td>\n\t<tr>\n\t</tfoot>\n<tbody>\n", 3, count );
+                fprintf( fptr, "\n\t<th scope=\"col\"> %s </th>\n", "Gene(Protein)" );
+                fprintf( fptr, "\n\t<th scope=\"col\"> %s </th>\n", "Category Name" );
+                fprintf( fptr, "\n\t<th scope=\"col\"> %s </th>\n", "Gene Ontology Id" );
+                fprintf( fptr, "\n\t</tr>\n\t</thead>\n\t<tfoot>\n\t<tr>\n\t\t<td colspan=\"%d\">GO Id %d, can view html file at ouptuts/go/ </td>\n\t<tr>\n\t</tfoot>\n<tbody>\n", 3, count );
 			
 		forall_items( it2, temp ){
 			for( i = 0; i < inputGenes.size(); i++ ){
@@ -1385,11 +1385,10 @@ void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNo
 		/*cout << endl;*/			
 	}
 // 	exit(1);
-	cout << endl;
+        cout << endl;
 // 	forall_edges( e, INTERACTIONS )
 // 		cout << GenesNode[ INTERACTIONS[ INTERACTIONS.source( e ) ] ].GENE << " " << GenesNode[ INTERACTIONS[ INTERACTIONS.target( e )] ].GENE << endl;
-// 	  
-	gwSave( GenesNode, INTERACTIONS );
+//
 	fclose( interactionsPtr );
 }
 
@@ -1440,6 +1439,8 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 	    //cout << geneCount << " ";
 	    geneCount++;
 	}
+
+        gwSave( GenesNode, INTERACTIONS );
 	/*forall_nodes( n, INTERACTIONS ){
 	      cout << Categories[ INTERACTIONS[n] ] << " ";
 	}*/
@@ -3745,6 +3746,8 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
             //cout << geneCount << " ";
             geneCount++;
         }
+
+        gwSave( GenesNode, INTERACTIONS, Categories);
         /*forall_nodes( n, INTERACTIONS ){
               cout << Categories[ INTERACTIONS[n] ] << " ";
         }*/
