@@ -9,7 +9,7 @@ import os
 from PyQt4 import QtWebKit
 from bicluster import BiclusterWindow
 import math
-from utils.info import root
+from utils.info import root, ap
 
 
 GRAPH_LAYOUTS = {}
@@ -578,9 +578,18 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         # We can setNoProperties to prevent properties action to be added.
         menu = QMenu()
         goTable = menu.addAction("GO Table")
+        
+        # ======== DETAILED INFORMATION =======
+        detailedInformation = None
+        if self.label:
+            detailedInformation = menu.addAction("Detailed Information (Online)")
+
+        # ======== PROPERTIES =================
         propertiesAction = None
         if not self.noProperties:
             propertiesAction = menu.addAction("Properties")
+
+        # ======== EXECUTE ====================
         action = menu.exec_(event.screenPos())
         if action == propertiesAction:
             if not hasattr(self, 'biclusterWindow'):
@@ -589,6 +598,8 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
             self.biclusterWindow.showMaximized()
         elif action == goTable:
             self.showGOTable()
+        elif action == detailedInformation:
+            self.showDetailedInformation()
 
     def showGOTable(self):
         path = normcase("outputs/go/gobicluster%d.html" % self.node.id)
@@ -600,6 +611,36 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
             QMessageBox.information(None, 'GO Table not found.',
      "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
 
+    def showDetailedInformation(self):
+        code = open(ap("assocdata/category_codes.txt")).readlines()[self.node.id].strip()
+        #TODO: fix this. get the filename from settings.yaml
+        html = """
+        <html><head></head><body>
+        <form id="form" action="http://amigo.geneontology.org/cgi-bin/amigo/search.cgi" method="post">
+        <input type="hidden" name="search_query" value="%(code)s"/>
+        <input type="hidden" name="search_constraint" value="term"/>
+        <input type="hidden" value="454amigo1288983527" name="session_id"/>
+
+        <input type="hidden" value="new-search" name="action"/>
+        
+        <input type="submit" value="Press here to continue"/>
+        </form>
+
+        <script type="text/javascript">
+        function myfunc () {
+        var frm = document.getElementById("form");
+        frm.submit();
+        }
+        window.onload = myfunc;
+        </script>
+        </body></html>
+        """ % { 'code': code,                
+                }
+
+        self.detailBrowser = QtWebKit.QWebView()
+        self.detailBrowser.setHtml(html)
+        self.detailBrowser.showMaximized()
+        
     def mousePressEvent(self, event):
         QGraphicsItem.mousePressEvent(self, event)
         self.stopAnimation()
@@ -716,12 +757,9 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
             labelFont.setBold(False)
             labelFont.setPixelSize(self.w/4)
             self.labelText.setFont(labelFont)
-        
-            print "using label '%s'" % self.label
             self.labelText.setPlainText(self.label)
-            print "set:", self.labelText.toPlainText()
         else:
-            print "no label"
+            print "no label for %d" % node.id
 
         # Position the label test
         self.labelText.setPos(  (self.w + 3), -1    )

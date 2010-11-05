@@ -184,6 +184,7 @@ class AssociationSelector(QWidget):
 
         output = open(ap("assocdata/go_slim.txt"),"w")
         catnames = open(ap("assocdata/input_go.txt"),"w")
+        catcodes = open(ap("assocdata/category_codes.txt"), "w")
         conn = sqlite3.connect(ap("godata/goinfo.sqlite3"))
         cursor = conn.cursor()
 
@@ -203,6 +204,7 @@ class AssociationSelector(QWidget):
 
         for term in terms: # only selected ones
             catnames.write("%s\n" % name_dict[term])
+            catcodes.write("%s\n" % term)
 
         for term in slim_terms:
             if term in self.go_dict:

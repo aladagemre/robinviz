@@ -144,13 +144,17 @@ class PPISelector(QWidget):
 	
 	organisms = self.findSelectedOrganisms(files)
 	map(download_organism, organisms) # Download HitPredict data and generate (p1 p2 confidence) file.
+
+        # TODO: find the max and min values of the files.
+
 	for organism in organisms:
 	    """For each organism, create a dictionary holding (p1,p2)=>confidence
 	    and store them in confidence_dicts"""
 	    d = {}
 	    for line in open(ap("ppidata/hitpredict/%s.txt" % organism )):
 		cols = line.strip().split("\t")
-                print cols
+                #print cols
+                # TODO: make a normalization here. remove old normalization
 		d[cols[0], cols[1]] = cols[2]
 	    confidence_dicts[organism] = d
 	

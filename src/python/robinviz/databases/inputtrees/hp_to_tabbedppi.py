@@ -28,6 +28,9 @@ def tabify(files, organism_name):
     output = open(hitpredict_combined_ppi, "w")
     confs = set()
     max_confidence = 0
+    # TODO: Here max_confidence assignment is faulty! use 1 or 0.1.
+    # What about t/f values?
+    
     for line in lines:
 	if line:
 	    try:
