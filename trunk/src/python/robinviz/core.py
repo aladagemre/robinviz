@@ -107,10 +107,6 @@ class View(QGraphicsView):
             actionToFunction[action]()
 
 
-            
-
-
-
     def addCustomMenuItems(self):
         """ABSTRACT METHOD: Needs to be implemented by each confirmation view type."""
         pass
@@ -137,11 +133,13 @@ class View(QGraphicsView):
             
         self.reselectItemsAfterLayoutChange()
         self.refresh()
-        
+    
     def refresh(self):
         if self.scene():
             self.scene().update()
-            self.fitInView(self.scene().itemsBoundingRect(), Qt.KeepAspectRatio)
+            # Leave some margin
+            rect = self.scene().itemsBoundingRect().adjusted(-10, -10, 10, 10)
+            self.fitInView(rect, Qt.KeepAspectRatio)
         
     def reselectItemsAfterLayoutChange(self):
         """Re-selects previously selected items after layout changed."""

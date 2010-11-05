@@ -34,7 +34,8 @@ class SingleMainViewWindow(QMainWindow):
         #self.view.setViewport(QGLWidget());
         self.view.setRenderHints(QPainter.Antialiasing)
         self.view.setSceneRect(self.scene.sceneRect())
-        self.view.fitInView(self.scene.itemsBoundingRect(),Qt.KeepAspectRatio)
+        #self.view.fitInView(self.scene.itemsBoundingRect(),Qt.KeepAspectRatio)
+        self.view.refresh()
 
         layout = QHBoxLayout()
         layout.addWidget(self.view)
@@ -93,6 +94,7 @@ class SingleMainViewWindow(QMainWindow):
     def resizeEvent(self, event):
         #self.view.setSceneRect(self.scene.sceneRect())
         self.view.fitInView(self.scene.itemsBoundingRect(),Qt.KeepAspectRatio)
+        #self.view.refresh()
 
 
 
@@ -272,8 +274,9 @@ class MultiViewWindow(QMainWindow):
         self.mainScene = self.mainSceneType()
         self.mainScene.loadGraph(normcase("outputs/graphs/maingraph.gml"))
         self.mainView.setScene(self.mainScene)
-        self.mainView.setSceneRect(self.mainScene.sceneRect())
-        self.mainView.fitInView(self.mainScene.sceneRect(),Qt.KeepAspectRatio)
+        self.mainView.setSceneRect(self.mainScene.sceneRect().adjusted(-10, -10, 10, 10))
+        #self.mainView.fitInView(self.mainScene.sceneRect(),Qt.KeepAspectRatio)
+        self.mainView.refresh()
 
         if self.confirmationType == "Co-Expression":
             self.keyList = map(lambda d: "Bicluster %0d" % d, range(len(self.mainScene.g.nodes)))
@@ -349,7 +352,8 @@ class MultiViewWindow(QMainWindow):
             elif not view.scene():
                 # If t
                 view.setScene(scene)
-                view.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
+                #view.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
+                view.refresh()
                 break
         else:
             # If no break occurs, means no place left :(
