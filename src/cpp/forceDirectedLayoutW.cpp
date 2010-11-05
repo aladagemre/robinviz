@@ -7,8 +7,8 @@
    of a graph in the .gml.
 */
 int main(int argc, char** argv) {
-        GraphWin gw;
         if( argc > 1 ){
+                GraphWin gw;
                 graph G;
                 list_item it;
                 edge e;
@@ -286,7 +286,7 @@ int main(int argc, char** argv) {
                 gw.set_position( xpos, ypos );
                 gw.place_into_box(x0, y0, x1, y1);
                 // save the file as a rule .cpp name and .gml since then renamed.
-                fname = fname.replace( ".gml", "forceDirectedLayoutW.gml" );
+                fname = fname.replace( ".gml", "sprinEmbedder.gml" );
                 gw.save_gml( fname );
         }
         return 0;

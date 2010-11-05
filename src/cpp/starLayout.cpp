@@ -2,8 +2,8 @@
 #include <LEDA/graph/graph_draw.h>
 
 int main(int argc, char** argv) {
-	GraphWin gw;
 	if( argc > 1 ){
+                GraphWin gw;
 		leda::string fname = argv[1];
 		double pi = 2.0 * 3.147;
 		double tmp = pi;

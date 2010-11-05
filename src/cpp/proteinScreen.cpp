@@ -1,8 +1,8 @@
 #include "incl/handlers.h"
-#include "incl/handlers/_dataread.h"
-#include "incl/handlers/_bicread.h"
-#include "incl/handlers/_ppiread.h"
-#include "incl/handlers/_maingraph.h"
+//#include "incl/handlers/_dataread.h"
+//#include "incl/handlers/_bicread.h"
+//#include "incl/handlers/_ppiread.h"
+//#include "incl/handlers/_maingraph.h"
 
 
 int main(int argc, char** argv) {

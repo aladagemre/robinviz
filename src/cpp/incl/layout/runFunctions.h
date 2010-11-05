@@ -3677,8 +3677,7 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 				break;
 			counter++;
 		}
-		node_array<list<int> > catid( G );
-		gw2.set_edge_thickness( 3, true );
+                node_array<list<int> > catid( G );
 //                cout << "0:";
 		forall_nodes( n, G ){
 			for( int i = 0; i < cat_num; i++ ){
@@ -3700,62 +3699,64 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 //		}
 		list<two_tuple<color,int> > variations;
 		list<int> edgeWeights;
-
-		forall_edges( e, G ){
-			int flag = 0;
-			forall_items( it, edgeWeights ){
-				if( edgeWeights[ it ] == G[ e ] ){
-					flag = 1;
-					break;
-				}
-			}
-			if( flag == 0 ){
-				edgeWeights.push_back( G[ e ] );
-			}
-		}
-//                cout << "2:";
-		edgeWeights.sort();
-		int tm_c = (double)(220.0 / (double)edgeWeights.size() );
-		int count = 20 + edgeWeights.size() * tm_c;
-		for( int j = 0; j < color_l.size(); j++ ){
-			color el( count, count, count );
-			color_l[ j ] = el;
-			count -= tm_c;
-		}		
-		count = 0;
-		for( int x = edgeWeights[edgeWeights.first()]; x <= edgeWeights[edgeWeights.last()]; x++ ){	
-			for( int j = 0; j < color_l.size(); j++ ){
-				two_tuple<color,int> Tp( color_l[ j ], x );
-// 				cout << Tp << endl;
-				variations.push_back( Tp );
-			}
-			count++;
-		}
-//                cout << "3:";
-		int increase = (int) ((double)variations.size() / (double)edgeWeights.size());
-// 		cout << " increase : " << increase << endl;
-		forall_edges( e, G ){              
-			count = 0;
-			forall_items( it, edgeWeights ){
-			      if( edgeWeights[ it ] == G[ e ] ){
-				    break;
-			      }
-			      count++;
-			}
-			two_tuple<color,int> Tp = variations[ variations.get_item( increase / edgThicknessTher * count ) ] ;
-			gw2.set_thickness( e, Tp.second() / edgThicknessTher * 5.0 );
-			gw2.set_color( e, Tp.first() );
-// 			cout << Tp << endl;
-		}
+                if( G.number_of_edges() != 0 ){
+                    forall_edges( e, G ){
+                            int flag = 0;
+                            forall_items( it, edgeWeights ){
+                                    if( edgeWeights[ it ] == G[ e ] ){
+                                            flag = 1;
+                                            break;
+                                    }
+                            }
+                            if( flag == 0 ){
+                                    edgeWeights.push_back( G[ e ] );
+                            }
+                    }
+    //                cout << "2:";
+                    edgeWeights.sort();
+                    int tm_c = (double)(220.0 / (double)edgeWeights.size() );
+                    int count = 20 + edgeWeights.size() * tm_c;
+                    for( int j = 0; j < color_l.size(); j++ ){
+                            color el( count, count, count );
+                            color_l[ j ] = el;
+                            count -= tm_c;
+                    }
+                    count = 0;
+                    for( int x = edgeWeights[edgeWeights.first()]; x <= edgeWeights[edgeWeights.last()]; x++ ){
+                            for( int j = 0; j < color_l.size(); j++ ){
+                                    two_tuple<color,int> Tp( color_l[ j ], x );
+    // 				cout << Tp << endl;
+                                    variations.push_back( Tp );
+                            }
+                            count++;
+                    }
+    //                cout << "3:";
+                    int increase = (int) ((double)variations.size() / (double)edgeWeights.size());
+    // 		cout << " increase : " << increase << endl;
+                    forall_edges( e, G ){
+                            count = 0;
+                            forall_items( it, edgeWeights ){
+                                  if( edgeWeights[ it ] == G[ e ] ){
+                                        break;
+                                  }
+                                  count++;
+                            }
+                            two_tuple<color,int> Tp = variations[ variations.get_item( increase / edgThicknessTher * count ) ] ;
+                            gw2.set_thickness( e, Tp.second() / edgThicknessTher * 5.0 );
+                            gw2.set_color( e, Tp.first() );
+    // 			cout << Tp << endl;
+                    }
+                    gw2.set_edge_thickness( 3, true );
+                    gw2.set_edge_label_type(leda::data_label , true);
+                    gw2.set_edge_label_font(leda::roman_font, 10);
+                    gw2.set_edge_shape( leda::poly_edge, true );
+                }
 //                cout << "4:";
 		gw2.set_node_height(50,true);
 // 		gw2.set_node_border_color( red, true );
 		gw2.set_node_border_thickness( 3, true );
 		gw2.set_node_width( 100, true );
-		gw2.set_node_shape( leda::ovalrect_node, true );
-		gw2.set_edge_label_type(leda::data_label , true);
-		gw2.set_edge_label_font(leda::roman_font, 10);
-		gw2.set_edge_shape( leda::poly_edge, true );
+                gw2.set_node_shape( leda::ovalrect_node, true );
 		node s;
 		it = nodeNames.first_item();
 		struct Strings temp_str;
