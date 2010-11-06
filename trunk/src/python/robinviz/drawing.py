@@ -805,7 +805,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         self.animation.setItem(self)
         self.animation.setTimeLine(self.timeline)
         self.timeline.stateChanged.connect(self.updateEdges)
-        self.timeline.frameChanged.connect(self.frameChanged) # consuming so much cycles!
+        #self.timeline.frameChanged.connect(self.frameChanged) # consuming so much cycles!
 
         #rect = self.boundingRect()
         #self.refreshFrame = QRectF(rect.x()-30, rect.y()+30, rect.width()+60, rect.height()+60)
@@ -1023,8 +1023,8 @@ class PiechartNode(NodeItem):
             # if no color provided, assume that's an X. (unknown)
             self.colors = [ COLORS18.get("X") ]
             
-        self.num_colors = len(colors)
-        if len(colors) > 1:
+        self.num_colors = len(self.colors)
+        if len(self.colors) > 1:
             self.angle_per_color = 16* (360 / self.num_colors)
 
     def toggleHighlight(self):
@@ -1041,7 +1041,7 @@ class PiechartNode(NodeItem):
         startAngle = 0
 
         #painter.drawRect(rectangle)
-        if len(self.colors) == 1:
+        if self.num_colors == 1:
             painter.setBrush(QBrush(self.colors[0]))
             painter.drawEllipse(rectangle)
             return

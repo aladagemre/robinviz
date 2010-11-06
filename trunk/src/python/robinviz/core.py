@@ -201,18 +201,19 @@ class View(QGraphicsView):
             return False
         else:
             # Find the exe
-            exename = GRAPH_LAYOUTS.get(str(layoutName))
-            if not exename:
-                exename = OTHER_GRAPH_LAYOUTS.get(str(layoutName))
-            assert exename is not None, "Could not find layout exe for %s" % layoutName
+            action = GRAPH_LAYOUTS.get(str(layoutName))
+            if not action:
+                action = OTHER_GRAPH_LAYOUTS.get(str(layoutName))
+            assert action is not None, "Could not find layout exe for %s" % layoutName
             # Run the exe
-            command = "%s %s" % (exename, self.originalFileName)
+            exe, flag = action.split(" ")
+            command = "%s %s %s" % (exe, self.originalFileName, flag)
             if os.name == "posix":
                 command = "./" + command
             os.system(normcase(command))
 
             if not self.useAnimation:
-                self.scene().reloadGraph("%s%s.gml" % (self.originalFileName.split(".")[0], exename.split("-")[-1]) )
+                self.scene().reloadGraph("%s%s.gml" % (self.originalFileName.split(".")[0], action.split("-")[-1]) )
                 return False
             
             # Load the graph
@@ -220,7 +221,7 @@ class View(QGraphicsView):
             """if str(layoutName) == "Layered":
                 newFileName = filename
             else:""" # this part is for animation to layered in the future.
-            newFileName = "%s%s.gml" % (self.originalFileName.split(".")[0], exename.split("-")[-1])
+            newFileName = "%s%s.gml" % (self.originalFileName.split(".")[0], action.split("-")[-1])
             self.newGraph.read_gml(newFileName)
             newGraph.prepare()
             self.scene().filename = newFileName
