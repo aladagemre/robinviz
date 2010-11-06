@@ -1017,9 +1017,16 @@ class PiechartNode(NodeItem):
 
 
     def setColors(self, colors):
-        self.colors = colors
+        if colors:
+            self.colors = colors
+            if len(colors) > 1:
+                self.angle_per_color = 16* (360 / self.num_colors)
+                
+        else:
+            # if no color provided, assume that's an X. (unknown)
+            self.colors = [ COLORS18.get("X") ]
+            
         self.num_colors = len(colors)
-        self.angle_per_color = 16* (360 / self.num_colors)
 
     def toggleHighlight(self):
         for i, color in enumerate(self.colors):
