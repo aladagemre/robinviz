@@ -599,9 +599,9 @@ int main(){
                 }
                 else{
                     CategoriesXL.resize( INTERACTIONS.number_of_nodes() );
-                    node n;
-                    for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
-                        CategoriesXL[ i ].append('X');
+//                    node n;
+//                    for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
+//                        CategoriesXL[ i ].append('X');
                 }
 		listOfGraphs.resize( 0, biclusters.size() );
                 if( hasColor == false ){

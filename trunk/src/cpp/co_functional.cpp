@@ -339,7 +339,7 @@ int main(){
                 }
                 else{
                     CategoriesXL.resize( INTERACTIONS.number_of_nodes() );
-                    node n;
+//                    node n;
                     //for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
                         //CategoriesXL[ i ].append('X');
                 }

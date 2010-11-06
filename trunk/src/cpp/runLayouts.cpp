@@ -731,6 +731,8 @@ void layoutHandler::runSpringEmbedder( void ){
             averageDistance = averageDistance / (double)(G.number_of_edges());
             G.restore_all_nodes();
             G.restore_all_edges();
+
+            list<node> justOnes;
             // and handle self nodes
             forall_nodes( n, G ){
                 if( G.degree( n ) == 0 ){
@@ -768,7 +770,6 @@ void layoutHandler::runSpringEmbedder( void ){
             // Handle smaller components that have not been placed yet.
             double xpos1 = xmin;
             double ypos1 = ymax + 20.0;
-            list<node> justOnes;
             int maxDiam = 0;
             //cout << max << " - " << election << endl;
             for(int i = 0; i <= max; i++ ){
