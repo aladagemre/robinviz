@@ -926,6 +926,14 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
             }
             catCount++;
         }
+#ifdef LINUX
+        FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
+#else
+        FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "w" );
+#endif
+        for( int i = 0; i < GenesNode.size(); i++ )
+            fprintf( yFptr, "%s\n", GenesNode[i].GENE );
+        fclose( yFptr );
         cout << "||||||||||||||||||||||||||||||||\n";
         if( hasColor )
             analyseGenes2( "geneResult", categ, gocategories.size(), "", GenesNode.size(), 0, hasColor  );
