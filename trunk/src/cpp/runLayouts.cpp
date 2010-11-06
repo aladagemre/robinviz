@@ -731,6 +731,13 @@ void layoutHandler::runSpringEmbedder( void ){
             averageDistance = averageDistance / (double)(G.number_of_edges());
             G.restore_all_nodes();
             G.restore_all_edges();
+            // and handle self nodes
+            forall_nodes( n, G ){
+                if( G.degree( n ) == 0 ){
+                    justOnes.append( n );
+                    G.hide_node( n );
+                }
+            }
             //cout << " 1 \n";
             // Discover the new layout, find limits
             double xmin, xmax, ymin, ymax;
@@ -816,15 +823,11 @@ void layoutHandler::runSpringEmbedder( void ){
                             xpos1 += diam * 2 + 5.0;
                     }
             }
+            G.restore_all_nodes();
+            G.restore_all_edges();
 
-            // and handle self nodes
-            forall_nodes( n, G ){
-                if( G.degree( n ) == 0 ){
-                    justOnes.append( n );
-                }
-            }
             xpos1 = xmin;
-            cout << endl << xmin << " | " << xmax << endl;
+//            cout << endl << xmin << " | " << xmax << endl;
 //                if( xmax - xmin < 400 )
 //                    xmax = xmin + 400;
             ypos1 = ymin - 50.0;
@@ -835,11 +838,17 @@ void layoutHandler::runSpringEmbedder( void ){
                 }
                 else{
                     xpos1 = xmin;
-                    ypos1 -= 30.0;
+                    if( fname.contains( "maingraph" ) == true )
+                        ypos1 -= 30.0;
+                    else
+                        ypos1 -= 7;
                     xpos[ justOnes[ it ] ] = xpos1;
                     ypos[ justOnes[ it ] ] = ypos1;
                 }
-                xpos1 += 22;
+                if( fname.contains( "maingraph" ) == true )
+                    xpos1 += 22;
+                else
+                    xpos1 += 5;
             }
 
             //cout << "\n 3 \n";
