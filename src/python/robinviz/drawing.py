@@ -900,19 +900,20 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
 
     def contextMenuEvent(self, event):
         menu = QMenu()
-        displayNeighborsAction = menu.addAction("Display Neighbors in the whole PPI")
         detailedInformation = menu.addAction("Detailed Information (Online)")
+        displayNeighborsAction = menu.addAction("Display Neighbors in the whole PPI")
         action = menu.exec_(event.screenPos())
         if action == displayNeighborsAction:
 	    from windows import SinglePeripheralViewWindow
 	    self.specialWindow = SinglePeripheralViewWindow(self.scene().views()[0].__class__ , scene=None)
-	    neihgboringFilename = "outputs/graphs/%s.gml" % self.node.label
+            geneId = self.node.label.split("_")[0]
+	    neihgboringFilename = "outputs/graphs/%s.gml" % geneId
 	    if not os.path.exists(neihgboringFilename):
 		os.system("./proteinScreen.exe %s TXT" % self.node.label)
 	    self.specialWindow.loadGraph(neihgboringFilename)
             self.specialWindow.showMaximized()
 	elif action == detailedInformation:
-	    url = "http://thebiogrid.org/search.php?search=%s&organism=all" % self.node.label
+	    url = "http://thebiogrid.org/search.php?search=%s&organism=all" % geneId
 	    self.detailBrowser = QtWebKit.QWebView()
             self.detailBrowser.setUrl(QUrl(url))
             self.detailBrowser.showMaximized()
@@ -1021,7 +1022,7 @@ class PiechartNode(NodeItem):
             self.colors = colors
         else:
             # if no color provided, assume that's an X. (unknown)
-            self.colors = [ COLORS18.get("X") ]
+            self.colors = [ QColor(COLORS18.get("X")) ]
             
         self.num_colors = len(self.colors)
         if len(self.colors) > 1:
@@ -1078,11 +1079,13 @@ class PiechartNode(NodeItem):
         return QRectF(0, 0, self.w, self.w)
 
     def contextMenuEvent(self, event):
-        print "context"
         menu = QMenu()
-        displayNeighborsAction = menu.addAction("Display Neighbors in the whole PPI")
         detailedInformation = menu.addAction("Detailed Information (Online)")
+        displayNeighborsAction = menu.addAction("Display Neighbors in the whole PPI")
         action = menu.exec_(event.screenPos())
+
+        geneId = self.node.label.split("_")[0]
+        
         if action == displayNeighborsAction:
 	    from windows import SinglePeripheralViewWindow
 	    self.specialWindow = SinglePeripheralViewWindow(self.scene().views()[0].__class__ , scene=None)
@@ -1092,7 +1095,7 @@ class PiechartNode(NodeItem):
 	    self.specialWindow.loadGraph(neihgboringFilename)
             self.specialWindow.showMaximized()
 	elif action == detailedInformation:
-	    url = "http://thebiogrid.org/search.php?search=%s&organism=all" % self.node.label.split("_")[0]
+	    url = "http://thebiogrid.org/search.php?search=%s&organism=all" % geneId
 	    self.detailBrowser = QtWebKit.QWebView()
             self.detailBrowser.setUrl(QUrl(url))
             self.detailBrowser.showMaximized()
