@@ -16,6 +16,7 @@ class GEOSelector(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         self.filename = ap("geodata/geoTreeView.txt")
+        self.radio2item = {}
         self.checkIndex()
         self.setupGUI()
         
@@ -24,16 +25,18 @@ class GEOSelector(QWidget):
 	    return
 	url = "http://robinviz.googlecode.com/svn/data2/expressions/geoTreeView.txt"
 	download_file_to(url, self.filename)
-		
+        
     def setupGUI(self):
 	layout = QHBoxLayout()
 	
 	self.treeWidget = treeWidget = QTreeWidget()
-	treeWidget.setColumnCount(3)
-	treeWidget.setHeaderLabels(("Accession", "Series Platform ID","Description",))
+	treeWidget.setColumnCount(4)
+	treeWidget.setHeaderLabels(("", "Accession", "Series Platform ID","Description",))
 	treeWidget.setSortingEnabled(True)
-	
+        treeWidget.setSelectionMode(QAbstractItemView.SingleSelection)
+
 	self.parseFile()
+        self.setItemWidgets()
 	self.resizeColumns()
 	    
 	layout.addWidget(treeWidget)
@@ -46,27 +49,21 @@ class GEOSelector(QWidget):
         
     def resizeColumns(self):
 	"""Resizes columns appropriately to content size."""
-	for i in range(3):
+	for i in range(1,4):
 	    self.treeWidget.resizeColumnToContents(i)
-	    
+
+        self.treeWidget.setColumnWidth(0, 65)
     def getCheckedItems(self):
-	checkedItems = set()
-	
-	for i in range( self.treeWidget.topLevelItemCount() ):
-	    topLevelItem = self.treeWidget.topLevelItem(i)
-	    for c in range(topLevelItem.childCount()):
-		item = topLevelItem.child(c)
-		if item.checkState(0) == Qt.Checked:
-		    checkedItems.add(str(item.filename))
+        for key in self.radio2item.keys():
+            if key.isChecked():
+                item_filename = self.radio2item[key].filename
+                f = open(ap("geodata/selected_geo.txt"), "w")
+                f.write("%s\n" % item_filename)
+                f.close()
+                return [item_filename]
 	    
-	if not checkedItems:
-            print "No Gene Expression data source selected, using the most recent preferences."
-            return checkedItems
-        
-	f = open(ap("geodata/selected_geo.txt"), "w")
-	f.write("\n".join( sorted(checkedItems) ) )
-	f.close()
-        return checkedItems
+        print "No Gene Expression data source selected, using the most recent preferences."
+        return []
         
     def downloadCheckedGEOs(self):
 	files = self.getCheckedItems()
@@ -98,24 +95,36 @@ class GEOSelector(QWidget):
 	    numt = tcount(line)
 	    if numt == 0: # If top level,
 		cols = line.strip().split("\t")
-		data = ("%s (%s)" % tuple(cols) ,) # Homo Sapiens (9606)
+                # leave blank for radio button
+		data = ("", "%s (%s)" % tuple(cols) ,) # Homo Sapiens (9606)
 		item = QTreeWidgetItem(self.treeWidget, data )
+                #item.setFlags( Qt.ItemIsSelectable | Qt.ItemIsEnabled)
 		self.treeWidget.insertTopLevelItem(0, item)
 		lastNodeAtLevel[0] = item # save the last root
 	    else: # If inner level
 		parent = lastNodeAtLevel[numt-1] # find who the parent is.
 		cols = line.strip().split("\t") # split into columns
-		data = tuple(cols[1:]) # leave the first column (filename)
-		
+                temp = [""] # for radio button
+                temp.extend(cols[1:])
+		data = tuple(temp) # leave the first column (filename)
 		item = QTreeWidgetItem(parent, data )
 		item.filename = cols[0] # assign filename to the item object secretly.
 		
 		parent.addChild( item )
 		lastNodeAtLevel[numt] = item	# assign itself as the last root at its level
- 
-	    item.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsTristate)
-	    item.setCheckState(0, Qt.Unchecked)
+                #item.setFlags( Qt.ItemIsSelectable | Qt.ItemIsEnabled)
 	    
+    def setItemWidgets(self):
+	for i in range( self.treeWidget.topLevelItemCount() ):
+	    topLevelItem = self.treeWidget.topLevelItem(i)
+	    for c in range(topLevelItem.childCount()):
+		item = topLevelItem.child(c)
+                radio = QRadioButton(self)
+                self.radio2item[radio] = item
+                self.treeWidget.setItemWidget(item, 0, radio)
+		if item.checkState(0) == Qt.Checked:
+		    checkedItems.add(str(item.filename))
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     mainWindow = GEOSelector()
