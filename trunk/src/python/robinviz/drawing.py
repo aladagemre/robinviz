@@ -1155,7 +1155,8 @@ class PiechartNode(NodeItem):
             self.labelText.setFont(labelFont)
             self.labelText.setPlainText(label)
              # find hex codes for colors
-            codes = filter(lambda color: color is not "", map(COLORS18.get, colors.split(":")) )
+            letters = colors.split(":")
+            codes = filter(lambda color: color is not None, map(COLORS18.get, letters) )
             colors = map(QColor, codes)
             self.setColors(colors)
         else:
