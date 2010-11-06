@@ -29,7 +29,8 @@ COLORS18 = {
 "O": "#E4C645",
 "P": "#87D29A",
 "R": "#BC34F3",
-"S": "#5D9154"
+"S": "#5D9154",
+"X": "#808080",
 }
 
 GRAPH_LAYOUTS = {}
@@ -267,6 +268,7 @@ class EdgeItem(QGraphicsItem):
 
     def updatePosition(self):
         self.__avoidCrossingNodeBorder()  # update path to avoid crossing node borders
+        self.findBoundingRect()
         self.update()
 
     def toggleHighlight(self):
@@ -660,9 +662,14 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         self.detailBrowser = QtWebKit.QWebView()
         self.detailBrowser.setHtml(html)
         self.detailBrowser.showMaximized()
-        
+
+    def updateEdges(self):
+        for edge in self.edges:
+            edge.updatePosition()
+            
     def mousePressEvent(self, event):
         QGraphicsItem.mousePressEvent(self, event)
+        self.updateEdges()            
         self.stopAnimation()
         
     def mouseReleaseEvent(self, event):
@@ -673,6 +680,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         newPos = QPointF(scenePos.x() - localPos.x(), scenePos.y() - localPos.y())
         self.setPos(newPos)
 
+        self.updateEdges()
         self._scene.update()
         self.setupAnimation()
         self.toggleAnimation()
@@ -1146,7 +1154,9 @@ class PiechartNode(NodeItem):
             labelFont.setPixelSize(self.w/4)
             self.labelText.setFont(labelFont)
             self.labelText.setPlainText(label)
-            colors = map(QColor, filter(lambda color: color is not "", map(COLORS18.get, colors.split(":")) ))
+             # find hex codes for colors
+            codes = filter(lambda color: color is not "", map(COLORS18.get, colors.split(":")) )
+            colors = map(QColor, codes)
             self.setColors(colors)
         else:
             print "no label"
