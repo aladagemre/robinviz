@@ -191,7 +191,7 @@ class View(QGraphicsView):
         if not hasattr(self, 'originalFileName'):
             self.originalFileName = filename
 
-	if layoutName == "Layered" and open("outputs/resultparams.txt").read().strip() == "Co-Regulation":
+	if layoutName == "Layered" and open("outputs/resultparams.txt").read().strip() == "Co-Expression":
         #if layoutName == "Layered":
             self.scene().clear()
             # Switch back to original.
@@ -212,7 +212,7 @@ class View(QGraphicsView):
             os.system(normcase(command))
 
             if not self.useAnimation:
-                self.scene().reloadGraph("%s%s.gml" % (self.originalFileName.split(".")[0], exename.split(".")[0]) )
+                self.scene().reloadGraph("%s%s.gml" % (self.originalFileName.split(".")[0], exename.split("-")[-1]) )
                 return False
             
             # Load the graph
@@ -220,7 +220,7 @@ class View(QGraphicsView):
             """if str(layoutName) == "Layered":
                 newFileName = filename
             else:""" # this part is for animation to layered in the future.
-            newFileName = "%s%s.gml" % (self.originalFileName.split(".")[0], exename.split(".")[0])
+            newFileName = "%s%s.gml" % (self.originalFileName.split(".")[0], exename.split("-")[-1])
             self.newGraph.read_gml(newFileName)
             newGraph.prepare()
             self.scene().filename = newFileName
