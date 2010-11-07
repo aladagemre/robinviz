@@ -357,9 +357,9 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 			//hvvalueCalculator( results, "Modified" );
 			FILE *fptr;
 #ifdef LINUX
-			fptr = fopen( "outputs/biclusters/RLEBResult.txt" , "a" );
+                        fptr = fopen( "outputs/biclusters/REALResult.txt" , "a" );
 #else
-			fptr = fopen( "outputs//biclusters//RLEBResult.txt" , "a" );
+                        fptr = fopen( "outputs//biclusters//REALResult.txt" , "a" );
 #endif
 			forall_items( it2, output ){
 // 				cout << output[ it2 ].fourth().dim1() << "\t" << output[ it2 ].fourth().dim2() << endl;

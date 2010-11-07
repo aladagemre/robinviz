@@ -1132,7 +1132,7 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
 	}
 	if( biclustering == 4 ){
 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "RLEB", dimension1, dimension2 ); 
-		analyseGenes2( "geneResult", categ, biclusters.size(), "RLEB" , dimension1, dimension2 );
+                analyseGenes2( "geneResult", categ, biclusters.size(), "REAL" , dimension1, dimension2 );
 	}
 // 	if( biclustering == 5 ){
 // 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "SAMBA", dimension1, dimension2 ); 
@@ -3229,7 +3229,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 // 		if( line_i % 10 == 0 )
 // 			cout << "\t Parsed " << line_i << " ...\n";
 	}
-        cout << " We are done \n";
+//        cout << " We are done \n";
 	fclose( f );
 	/* With the next double loop we obtain pure gene list obtained with 18 categories */
         array<bool> marked( allGenes.size() + 1 );
@@ -3283,7 +3283,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
             allGenes.del_item(deleted[ it ]);
         }
 
-        cout << " We are done \n";
+//        cout << " We are done \n";
 	/* we now begin saving catfile. We collect the genes for each categories. */
 	f = fopen( catfile, "w" );
 	fprintf( f, "%d\n", GOSIZE );
@@ -3296,7 +3296,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 		}
 		fprintf( f, "\"%c\"\t%s\n", abbrv[ i ], molecularF[ i ] );
 	}
-        cout << " We are done \n";
+//        cout << " We are done \n";
 	/* Saving gene to abbrvs */
 	forall_items( it, allGenes ){
 		bool one = false;
@@ -3325,7 +3325,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 			fprintf( f, "%s\t%s\n", allGenes[ it ].GENE, funcCateg );
 		}
 	}
-        cout << " We are done \n";
+//        cout << " We are done \n";
 	fclose( f );
 }
 
@@ -3439,7 +3439,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
 // 		if( line_i % 10 == 0 )
 // 			cout << "\t Parsed " << line_i << " ...\n";
         }
-        cout << " We are done \n";
+//        cout << " We are done \n";
         fclose( f );
         /* With the next double loop we obtain pure gene list obtained with 18 categories */
         array<bool> marked( allGenes.size() + 1 );
@@ -3493,7 +3493,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
             allGenes.del_item(deleted[ it ]);
         }
 
-        cout << " We are done \n";
+//        cout << " We are done \n";
         /* we now begin saving catfile. We collect the genes for each categories. */
         f = fopen( catfile, "w" );
         fprintf( f, "%d\n", GOSIZE );
@@ -3506,7 +3506,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
                 }
                 fprintf( f, "\"%c\"\t%s\n", abbrv[ i ], molecularF[ i ] );
         }
-        cout << " We are done \n";
+//        cout << " We are done \n";
         /* Saving gene to abbrvs */
         forall_items( it, allGenes ){
                 bool one = false;
@@ -3535,7 +3535,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
                         fprintf( f, "%s\t%s\n", allGenes[ it ].GENE, funcCateg );
                 }
         }
-        cout << " We are done \n";
+//        cout << " We are done \n";
         fclose( f );
 }
 
