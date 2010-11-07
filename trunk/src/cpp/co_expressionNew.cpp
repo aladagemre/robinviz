@@ -604,6 +604,16 @@ int main(){
 //                        CategoriesXL[ i ].append('X');
                 }
 		listOfGraphs.resize( 0, biclusters.size() );
+
+//                uncomment to see genes
+//                list_item it1,it2;
+//                forall_items( it1, biclusters ){
+//                    forall_items( it2, biclusters[it1] ){
+//                        cout << biclusters[it1][it2].GENE << " ";
+//                    }
+//                    cout << endl;
+//                }
+
                 if( hasColor == false ){
                     inpGraphProdHandling( G, listOfGraphs, abbv, Categories, temp, GenesNode, INTERACTIONS, TEMPINT, biclusters, cat_num );
                 }
