@@ -14,7 +14,7 @@ def normalize(data):
 	if max_val == min_val:
 	    new_val = max_val
 	else:
-	    new_val = float(value - min_val) / (max_val - min_val)
+	    new_val = 0.2 + 0.8 * (  float(value - min_val) / (max_val - min_val) )
             data[i] = new_val
         match[value] = new_val
     return data, match

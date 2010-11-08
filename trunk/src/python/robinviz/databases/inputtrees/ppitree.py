@@ -146,19 +146,32 @@ class PPISelector(QWidget):
 	map(download_organism, organisms) # Download HitPredict data and generate (p1 p2 confidence) file.
 
         # TODO: find the max and min values of the files.
-
+        interactions = {}
+        
 	for organism in organisms:
 	    """For each organism, create a dictionary holding (p1,p2)=>confidence
 	    and store them in confidence_dicts"""
-	    d = {}
+	    d = {} # to store 
+            interactions = {}
+            
 	    for line in open(ap("ppidata/hitpredict/%s.txt" % organism )):
 		cols = line.strip().split("\t")
                 #print cols
                 # TODO: make a normalization here. remove old normalization
-		d[cols[0], cols[1]] = cols[2]
+                interaction = cols[0], cols[1]
+                confidence = cols[2]
+		d[interaction] = confidence
+                # get the confidence list for the interaction
+		i = interactions.get( interaction )
+		if not i:
+                    # if no confidence recorded yet, create an empty list
+		    i = []
+                i.append( float(confidence) )
+                interactions[interaction] = i
+                
 	    confidence_dicts[organism] = d
 	
-	interactions = {}
+	
 	for filename in files:
             bfilename = "%s-BIOGRID" % filename
             if not os.path.exists(bfilename):
@@ -170,18 +183,32 @@ class PPISelector(QWidget):
 	    for line in open(filename):
 		cols = line.strip().split("\t")
 		if cols[0] == cols[1]:
+                    # ignore self-interactions
 		    continue
-		
+
+                # Find the interaction and its confidence if exists.
 		interaction = cols[0], cols[1]
 		confidence = confidence_dicts[organism].get(interaction)
 		if not confidence:
-		    continue
-		
-		i = interactions.get( interaction )
-		if not i:
-		    i = []
-		i.append( float(confidence) )
-		interactions[ interaction ] = i
+                    # if no confidence, assign 0.1 (biogrid interaction without confidence)
+                    # and add this confidence to the list as it hasn't been added
+                    # in the hitpredict part above.
+		    confidence = 0.1
+
+                    # get the confidence list for the interaction
+                    i = interactions.get( interaction )
+                    if i:
+                        # if some confidence value has been assigned,
+                        # no need to add confidence 0.1 to the list
+                        # as there are already more reliable confidence
+                        # scores.
+                        continue
+
+                    # ELSE: (if no confidence values recorded in the hitpredict part,
+                    # if no confidence recorded yet, create an empty list
+                    # put the new confidence and save the new list.
+                    i = [ float(confidence) ]                    
+                    interactions[ interaction ] = i
 	
 	# Now we have an interactions dict, containing (p1,p2) => [conf1, conf2, ...]
 	# I'll take average of them. But I don't know if this is a good idea.
