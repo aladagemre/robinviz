@@ -3160,9 +3160,9 @@ void colorHandling( char catfile[256], char gofile[256] ){
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
 #endif
-		fprintf( erptr, "Error-id4: You did not specify GO based functional category file although you selected to use that file\n" );
-		fclose( erptr );
-		cout << "\nError-id4: You did not specify GO based functional category file although you selected to use that file\n"; 
+                fprintf( erptr, "Error-color: You did not specify GO based functional category file hence we use it for color processing\n" );
+                fclose( erptr );
+                cout << "\nError-color: You did not specify GO based functional category file hence we use it for color processing\n";
 		exit(1);
 	}
 
@@ -3172,6 +3172,18 @@ void colorHandling( char catfile[256], char gofile[256] ){
 		fgets( line, 100000, f );
 		line_i++;
 	}
+        if( line_i == 0 ){
+            FILE *erptr;
+#ifdef LINUX
+            erptr = fopen( "outputs/error.txt", "w" );
+#else
+            erptr = fopen( "outputs//error.txt", "w" );
+#endif
+            fprintf( erptr, "Error-color-2:GO based functional category file has no category hence we can not continue\n" );
+            fclose( erptr );
+            cout << "\nError-color-2:GO based functional category file has no category hence we can not continue\n";
+            exit(1);
+        }
 // 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
 	rewind( f );
 	line_i = 0;
@@ -3370,9 +3382,9 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
 #else
                 erptr = fopen( "outputs//error.txt", "w" );
 #endif
-                fprintf( erptr, "Error-id4: You did not specify GO based functional category file although you selected to use that file\n" );
+                fprintf( erptr, "Error-color: You did not specify GO based functional category file hence we use it for color processing\n" );
                 fclose( erptr );
-                cout << "\nError-id4: You did not specify GO based functional category file although you selected to use that file\n";
+                cout << "\nError-color: You did not specify GO based functional category file hence we use it for color processing\n";
                 exit(1);
         }
 
@@ -3381,6 +3393,18 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
         while( !feof( f ) ){
                 fgets( line, 100000, f );
                 line_i++;
+        }
+        if( line_i == 0 ){
+            FILE *erptr;
+#ifdef LINUX
+            erptr = fopen( "outputs/error.txt", "w" );
+#else
+            erptr = fopen( "outputs//error.txt", "w" );
+#endif
+            fprintf( erptr, "Error-color-2:GO based functional category file has no category hence we can not continue\n" );
+            fclose( erptr );
+            cout << "\nError-color-2:GO based functional category file has no category hence we can not continue\n";
+            exit(1);
         }
 // 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
         rewind( f );
