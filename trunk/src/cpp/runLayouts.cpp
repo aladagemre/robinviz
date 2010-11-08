@@ -775,7 +775,7 @@ void layoutHandler::runSpringEmbedder( void ){
             for(int i = 0; i <= max; i++ ){
                     //cout << COMPS[ i ].size() << "\t";
                     int diam = 30;
-                    if( COMPS[ i ].size() < election && COMPS[ i ].size() != 0 ){
+                    if( COMPS[ i ].size() < election && COMPS[ i ].size() > 1 ){
                             if( xpos1 < xmax ){
                                 if( COMPS[ i ].size() < 3 ){
                                     diam = averageDistance / 3.0;
@@ -832,6 +832,11 @@ void layoutHandler::runSpringEmbedder( void ){
 //                if( xmax - xmin < 400 )
 //                    xmax = xmin + 400;
             ypos1 = ymin - 50.0;
+            if( G.number_of_edges() < 5 )
+                averageDistance = averageDistance / 5;
+            else
+                averageDistance = averageDistance / 3;
+
             forall_items( it, justOnes ){
                 if( xpos1 < xmax ){
                     xpos[ justOnes[ it ] ] = xpos1;
@@ -842,14 +847,14 @@ void layoutHandler::runSpringEmbedder( void ){
                     if( fname.contains( "maingraph" ) == true )
                         ypos1 -= 30.0;
                     else
-                        ypos1 -= 7;
+                        ypos1 -= averageDistance;
                     xpos[ justOnes[ it ] ] = xpos1;
                     ypos[ justOnes[ it ] ] = ypos1;
                 }
                 if( fname.contains( "maingraph" ) == true )
                     xpos1 += 22;
                 else
-                    xpos1 += 5;
+                    xpos1 += averageDistance;
             }
 
             //cout << "\n 3 \n";
