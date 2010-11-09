@@ -176,7 +176,7 @@ class CoFunctionalityMainScene(MainScene):
 	try:
 	    item = CircleNode(node, parent=None, scene=self, label=self.category_names[node.id])
 	    item.setNoProperties()
-	    self.addItem(item)
+	    #self.addItem(item)
 	    self.nodeDict[node] = item
 	    self.nodeDict[node.id] = item
 	except IndexError:

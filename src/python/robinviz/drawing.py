@@ -431,11 +431,12 @@ class NodeItem(QGraphicsItem):
         radialGrad.setColorAt(1, Qt.black)
         self.defaultColor = radialGrad
     def toggleHighlight(self):
-        if self.currentColor == self.defaultColor:
+        """if self.currentColor == self.defaultColor:
             self.currentColor = self.highlightedColor
         else:
             self.currentColor = self.defaultColor
-        self.setBrush(self.currentColor)
+        self.setBrush(self.currentColor)"""
+        pass
         
 
 class RectNode(QGraphicsPolygonItem, NodeItem):
@@ -553,13 +554,12 @@ class RectNode(QGraphicsPolygonItem, NodeItem):
         # Leave some margin for the text.
         self.text.setPos(1,1)
 
-class CircleNode(QGraphicsEllipseItem, NodeItem):
+class CircleNode(NodeItem):
     """
     NodeItem with circle shape
     """
     def __init__(self, node, parent=None, scene=None, label=None):
-        QGraphicsEllipseItem.__init__(self, parent, scene)
-        NodeItem.__init__(self)
+        NodeItem.__init__(self, parent, scene)
         # Object Creation
         # ---------------------
         
@@ -579,16 +579,12 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         self.label = label
         self.setAcceptsHoverEvents(True)
         self.edges = []
-        self.defaultColor = QColor("#52C6FF")
-        self.highlightedColor = QColor("#E6FF23")
-        self.currentColor = self.defaultColor
         self.setOpacity(0.5)
         self.noProperties = False
 
         # Setup Operations
         # ---------------------
         self.associateWithNode(node)
-        self.setBrush(self.defaultColor)
 
 
     #----------- Event Methods ------------------
@@ -698,16 +694,16 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
             self.updateEdges()
         elif change == QGraphicsItem.ItemSelectedChange:
             if self.isSelected():
-                self.toggleHighlight()
+                #self.toggleHighlight()
                 for edge in self.edges:
                     edge.toggleHighlight()
-                    edge.end.toggleHighlight()
+                    #edge.end.toggleHighlight()
                 self.stopAnimation()
                 self.scene().update()
             else:
                 for edge in self.edges:
                     edge.toggleHighlight()
-                    edge.end.toggleHighlight()
+                    #edge.end.toggleHighlight()
                 """if self.highlightedColor == Qt.yellow:
                     self.text.setDefaultTextColor(QColor(Qt.black))"""
                 #self.startAnimation()
@@ -739,23 +735,56 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         intersectPoint = self.centerPos() + QPointF(-c,-a)
 
         return intersectPoint
+    
+    def setPercentageColors(self, colors):
+        if colors:
+            self.percentColors = colors
+        else:
+            self.percentColors = [ ( QColor(COLORS18.get("X")) , 100) ]
+
+        self.num_colors = len(self.percentColors)
+
+    def paint(self, painter, option, widget):
+        rectangle = QRectF(0.0, 0.0, self.w, self.w)
+        startAngle = 0
+        # if this is a main scene node.
+
+        if self.num_colors == 1:
+            painter.setBrush(QBrush(self.percentColors[0][0]))
+            painter.drawEllipse(rectangle)
+            return
+        for color in self.percentColors:
+            angle = color[1] * 360 * 16
+            painter.setBrush(QBrush(color[0]))
+            painter.drawPie(rectangle, startAngle, angle)
+            startAngle += angle
+    
+    def boundingRect(self):
+        return QRectF(0, 0, self.w, self.w)
 
     def associateWithNode(self, node):
         # Store node data
         self.node = node
         self.w = self.h = node.graphics.w
 
-        # Set Color
-        self.defaultColor = QColor(node.graphics.outline)
-        self.currentColor = self.defaultColor
-        self.highlightedColor = self.defaultColor.lighter(150)
-        self.setBrush(self.defaultColor)
+
+        # =============== COLORS ===================
+        f = open("outputs/enrich/pie%d.txt" % node.id)
+        colors = []
+        for line in f:
+            letter, percentage = line.split(" ")
+            percentage = float(percentage)
+            code = COLORS18.get(letter)
+            if not code:
+                code = COLORS18.get("X")
+            colors.append( (QColor(code), percentage) )
+        self.setPercentageColors(colors)
 
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
-        self.setRect(0, 0, self.w, self.w)
+        
 
-        # ============== ID INSIDE NODE ==================
+        """# ============== ID INSIDE NODE ==================
         # Construct the text.
         self.text = QGraphicsTextItem(self)
         self.text.root = self
@@ -774,7 +803,7 @@ class CircleNode(QGraphicsEllipseItem, NodeItem):
         boundRect = self.text.boundingRect()
 
         # Align text to the center.
-        self.text.setPos((self.w - boundRect.width()) / 2, (self.w - boundRect.height()) / 2)
+        self.text.setPos((self.w - boundRect.width()) / 2, (self.w - boundRect.height()) / 2)"""
 
         # =============== LABEL ==================
         # Set label
@@ -989,7 +1018,7 @@ class TinyNode(QGraphicsEllipseItem, NodeItem):
 
 
 class PiechartNode(NodeItem):
-    def __init__(self, node, parent=None, scene=None):
+    def __init__(self, node, parent=None, scene=None, label=None):
         NodeItem.__init__(self, parent, scene)
 
         # Default Values
@@ -1005,6 +1034,7 @@ class PiechartNode(NodeItem):
             pass
 
         self._scene = scene
+        self.label = label
         self.setAcceptsHoverEvents(True)
         self.edges = []
         self.setOpacity(0.5)
@@ -1016,7 +1046,6 @@ class PiechartNode(NodeItem):
         if node:
             self.associateWithNode(node)
 
-
     def setColors(self, colors):
         if colors:
             self.colors = colors
@@ -1027,7 +1056,7 @@ class PiechartNode(NodeItem):
         self.num_colors = len(self.colors)
         if len(self.colors) > 1:
             self.angle_per_color = 16* (360 / self.num_colors)
-
+        
     def toggleHighlight(self):
         for i, color in enumerate(self.colors):
             if self.isSelected():
@@ -1035,13 +1064,12 @@ class PiechartNode(NodeItem):
             else:
                 self.colors[i] = color.lighter(100)
 
+        self.update(self.boundingRect())
 
     def paint(self, painter, option, widget):
-        #painter.drawRoundedRect(-10, -10, 20, 20, 5, 5)
         rectangle = QRectF(0.0, 0.0, self.w, self.w)
         startAngle = 0
 
-        #painter.drawRect(rectangle)
         if self.num_colors == 1:
             painter.setBrush(QBrush(self.colors[0]))
             painter.drawEllipse(rectangle)
@@ -1061,17 +1089,17 @@ class PiechartNode(NodeItem):
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemPositionChange or change == QGraphicsItem.ItemTransformHasChanged:
             self.updateEdges()
-        """elif change == QGraphicsItem.ItemSelectedChange:
+        elif change == QGraphicsItem.ItemSelectedChange:
             if self.isSelected():
-                #self.toggleHighlight()
+                self.toggleHighlight()
                 for edge in self.edges:
                     edge.toggleHighlight()
-                    #edge.end.toggleHighlight()
+                    edge.end.toggleHighlight()
                 self.scene().update()
             else:
                 for edge in self.edges:
                     edge.toggleHighlight()
-                    #edge.end.toggleHighlight()"""
+                    edge.end.toggleHighlight()
 
         return QVariant(value)
 
@@ -1170,7 +1198,7 @@ class PiechartNode(NodeItem):
             self.setColors(colors)
         else:
             print "no label"
-            
+        
         # Position the label text
         self.updateLabel()
 
