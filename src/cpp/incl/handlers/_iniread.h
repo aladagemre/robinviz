@@ -145,7 +145,7 @@ void _iniReadCoExpression(  int &minBicSize,
 	//7             repeat: 50
 	      fscanf( fptr, "%s%d", temp, &repeat );
 	//8             hvaluemin: 1500.00
-	      fscanf( fptr, "%s%lf", temp, &ther_disc );
+              fscanf( fptr, "%s%lf", temp, &hvaluemin );
 	//9             increment_exp1_g: 10
 	      fscanf( fptr, "%s%d", temp, &increment_exp1_g );
 	//1             increment_exp1_c: 10

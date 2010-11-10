@@ -23,7 +23,7 @@
 #include "extract.h"
 #define IS =
 #define DRAW 0
-#define debugANH 1
+#define debugANH 0
 
 matrix graphToMatrix(GRAPH<int,int>& G,list<node> A,list<node> B, char filename[ 1024 ], bool weighted=true ){
 		int i,j;
@@ -387,7 +387,7 @@ void rlebmain_m( matrix &INPUT, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatri
 	}
 	
 	cout << "/**************************************************/" << endl;
-	cout << "         RLEB Algorithm Begins" << endl;
+        cout << "         REAL Algorithm Begins" << endl;
 	cout << "/**************************************************/" << endl;
 		
 	

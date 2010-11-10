@@ -3416,18 +3416,51 @@ void RUN_AGAIN2_COLOR(  GRAPH<int,int> G,
 				break;
 			counter++;
 		}
-		node_array<list<char> > catid( G );
-		gw2.set_edge_thickness( 3, true );
-		forall_nodes( n, G ){
-			for( int i = 0; i < cat_num; i++ ){
-				forall_items( it, Categories[ G[ n ] ] ){
-					if( Categories[ G[ n ] ][ it ] == abbv[ i ] ){
-						catid[ n ].append( abbv[ i ] );
-					}
-				}
-			}
-			gw2.set_color( n, red );
-		}
+
+
+                node_array<list<char> > catid( G );
+                char pie[256];
+                FILE *pieNode;
+#ifdef LINUX
+                sprintf( pie, "%s%d.txt", "outputs/enrich/pie", graphNo );
+                pieNode = fopen( pie, "w" );
+#else
+                sprintf( pie, "%s%d.txt", "outputs//enrich//pie", graphNo );
+                pieNode = fopen( pie, "w" );
+#endif
+
+                array<int> abbv_i( abbv.size() );
+                int geneCount = 0;
+                for( int i = 0; i < cat_num; i++ ){
+                    abbv_i[ i ] = 0;
+                }
+
+                forall_nodes( n, G ){
+                        for( int i = 0; i < cat_num; i++ ){
+                                forall_items( it, Categories[ G[ n ] ] ){
+                                        if( Categories[ G[ n ] ][ it ] == abbv[ i ] ){
+                                                catid[ n ].append( abbv[ i ] );
+                                                abbv_i[ i ]++;
+                                        }
+                                }
+                        }
+                        geneCount++;
+                        gw2.set_color( n, red );
+                }
+
+                double dsum = 0;
+                for( int i = 0; i < cat_num; i++ ){
+                    if( (double)abbv_i[ i ] / (double)geneCount > 0 ){
+                        fprintf( pieNode, "%c %lf\n", abbv[ i ], (double)((double)abbv_i[ i ] / (double)geneCount ) );
+                        cout << abbv[ i ] << "\t" << (double)abbv_i[ i ] / (double)geneCount << endl;
+                        dsum += (double)abbv_i[ i ] / (double)geneCount;
+                    }
+                }
+                if( dsum < 1.0 )
+                    fprintf( pieNode, "%c %lf\n", 'X', 1.0 - dsum );
+
+                fclose( pieNode );
+
 // 		cout << " COLOR SELECTION IS DONE\n";
 		edge e;
 		array<color> color_l( 5 );
@@ -3718,7 +3751,8 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
                         dsum += (double)abbv_i[ i ] / (double)geneCount;
                     }
                 }
-                fprintf( pieNode, "%c %lf\n", 'X', 1.0 - dsum );
+                if( dsum < 1.0 )
+                    fprintf( pieNode, "%c %lf\n", 'X', 1.0 - dsum );
 
                 fclose( pieNode );
 

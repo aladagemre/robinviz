@@ -567,10 +567,10 @@ int main(){
                     bicRead( INPUT, defaultBicFile, biclusters, categ, matrixBiclusters, H_values, Hmax, minBicSize, maxBicSize, biclustering, INPUT.dim1(), INPUT.dim2(), hasColor );
 		cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
 
-		if( go_info == 1 ){
-                        array<GENEONTO> geneOntoForData = geneOntologyHandling(gofile);
-			geneOntologyToBiclusterHandling( biclusters, geneOntoForData );
-		}
+//		if( go_info == 1 ){
+//                        array<GENEONTO> geneOntoForData = geneOntologyHandling(gofile);
+//			geneOntologyToBiclusterHandling( biclusters, geneOntoForData );
+//		}
                 FILE *cfptr;
                 if( (cfptr =fopen("outputs/colors_func.txt", "w"))==NULL && (cfptr=fopen("outputs//colors_func.txt", "w")) ==NULL ){
                     cout << " Error: Cannot write into outputs folder";
