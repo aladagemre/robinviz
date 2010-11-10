@@ -8,6 +8,7 @@ import os.path
 from confirmation import CoExpressionMainView, CoExpressionMainScene
 from settings import SettingsDialog
 from search import ComprehensiveSearchWidget, ProteinSearchWidget
+from misc.legend import LegendWidget
 import os
 from os.path import normcase
 from wizards import InputWizard
@@ -66,6 +67,11 @@ class SingleMainViewWindow(QMainWindow):
         refresh.setStatusTip('Refresh the view')
         self.connect(refresh, SIGNAL('triggered()'), self.view.refresh)
 
+        legend = QAction('Legend', self)
+        legend.setShortcut('F6')
+        legend.setStatusTip('Display the legend')
+        self.connect(legend, SIGNAL('triggered()'), self.view.legend)
+
         aboutDialog = QAction('About', self)
         aboutDialog.setStatusTip('About RobinViz')
         self.connect(aboutDialog, SIGNAL('triggered()'), self.displayAboutDialog)
@@ -79,6 +85,7 @@ class SingleMainViewWindow(QMainWindow):
         # ====== View Menu ========
         self.viewMenu = viewMenu = menubar.addMenu('&View')
         viewMenu.addAction(refresh)
+        viewMenu.addAction(legend)
 
         # ====== Help Menu ========
         helpMenu = menubar.addMenu('&Help')
@@ -542,6 +549,11 @@ class MultiViewWindow(QMainWindow):
         if hasattr(self, 'mainScene'):
             del self.mainScene
 
+    def legend(self):
+        """Displays meanings of the colors"""
+        self.legendWindow = LegendWidget()
+        self.legendWindow.show()
+        
     def setFullScreen(self, value):
         if value:
             self.showFullScreen()
@@ -659,6 +671,11 @@ class MultiViewWindow(QMainWindow):
         refresh.setStatusTip('Refresh the view')
         self.connect(refresh, SIGNAL('triggered()'), self.refreshAll)
 
+        legend = QAction('Legend', self)
+        legend.setShortcut('F6')
+        legend.setStatusTip('Display the legend')
+        self.connect(legend, SIGNAL('triggered()'), self.legend)
+
         clearViews = QAction("C&lear Views", self)
         clearViews.setShortcut('Ctrl+L')
         clearViews.setStatusTip('Clear the views in the window.')
@@ -674,6 +691,7 @@ class MultiViewWindow(QMainWindow):
         viewMenu.addAction(goto)
         viewMenu.addAction(refresh)
         viewMenu.addAction(clearViews)
+        viewMenu.addAction(legend)
         viewMenu.addAction(showFullscreen)
 
 
