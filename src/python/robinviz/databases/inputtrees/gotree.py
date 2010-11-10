@@ -45,7 +45,9 @@ class GOSelector(QMainWindow):
 	treeWidget.itemDoubleClicked.connect(self.itemDoubleClicked) # Define what shall happen when double clicked on an item.
 	treeWidget.itemExpanded.connect(self.itemExpanded) # Define what shall happen when double clicked on an item.
 	
-	self.loadTopLevelGO() # Load first level
+	self.loadTopLevelGO(3674) # Load first level
+        self.loadTopLevelGO(5575) # Load first level
+        self.loadTopLevelGO(8150) # Load first level
 	self.resizeFirstColumn()
 
         layout.addWidget(treeWidget)
@@ -153,8 +155,8 @@ class GOSelector(QMainWindow):
 	parent = QTreeWidgetItem(self.treeWidget, ("GO:%07d"% record_id, name) )
 	self.treeWidget.insertTopLevelItem(0, parent)
 	
-	parent.setFlags( Qt.ItemIsSelectable | Qt.ItemIsEnabled)
-	parent.setCheckState(0, Qt.Unchecked)
+	#parent.setFlags( Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+	#parent.setCheckState(0, Qt.Unchecked)
 	
 	for child in children.split(","):
 	    cid, cname, cchild = self.getRecord(int(child))
