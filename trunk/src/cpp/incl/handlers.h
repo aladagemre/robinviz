@@ -495,7 +495,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		list<GENES> dataGenes;
 		char line[ 100000 ];
 		char *pc,*pend,*go,*cat;
-		const char *strDelim = "\t";
+		const char *strDelim = " \t";
 		const char *strDelim2 = " ";
 #ifdef LINUX
 		char filePath[256] = "sources/usr_sources/visualization_data/funcassociate_go_associations.txt";
@@ -527,8 +527,8 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		array<GENEONTO> inputGenes( dataGenes.size()+1 );
 		for( int i = 0; i < dataGenes.size(); i++ ){
 			inputGenes[ i ].index = 0;
-			inputGenes[ i ].categories.resize( 200 );
-			inputGenes[ i ].gos.resize( 200 );
+			inputGenes[ i ].categories.resize( 18 );
+			inputGenes[ i ].gos.resize( 18 );
 			sprintf( inputGenes[ i ].genename, "%s", dataGenes[ dataGenes.get_item( i ) ].GENE );
 			
 		}
@@ -549,6 +549,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		int line_i = 0;
 		while( !feof( f ) ){
 			fgets( line, 100000, f );
+cout << line_i << endl;
 			line_i++;
 		}
 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
@@ -558,6 +559,8 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 			// count rows
 			fgets( line, 100000, f );
 			pc = strtok( line, strDelim );
+
+cout << line_i << " : " << pc << endl;
 			go = pc;
 			if( feof( f ) )
 				break;
@@ -571,7 +574,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 				else{
 					pc = strtok( NULL, strDelim2 );
 					for( int i = 0; i < dataGenes.size(); i++ ){
-						if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 200 ){
+						if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 18 ){
 							sprintf( inputGenes[ i ].categories[ inputGenes[ i ].index ].catName, "%s", cat );
 							sprintf( inputGenes[ i ].gos[ inputGenes[ i ].index++ ].goName, "%s", go );
 							break;
@@ -605,12 +608,12 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 **/
 array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes, char filePath[256], list<two_tuple<CATNAMES,int> > &categories ){
 		cout << "/**************************************************/" << endl;
-		cout << "\t" << " Parsing GO File as you wish" << endl;
+                cout << "\t" << " Parsing GO File" << endl;
 		cout << "/**************************************************/" << endl;
 		FILE *f;
 		char line[ 100000 ];
 		char *pc,*pend,*go,*cat;
-		const char *strDelim = "\t";
+                const char *strDelim = " \t";
 		const char *strDelim2 = " ";
 
 		array<GENEONTO> inputGenes( dataGenes.size()+1 );
@@ -634,14 +637,14 @@ array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes,
 			exit(1);
 		}
 
-		int line_i = 0;
-		while( !feof( f ) ){
-			fgets( line, 100000, f );
-			line_i++;
-		}
-		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
-		rewind( f );
-		line_i = 0;
+                int line_i = 0;
+//		while( !feof( f ) ){
+//			fgets( line, 100000, f );
+//			line_i++;
+//		}
+//		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
+//		rewind( f );
+//		line_i = 0;
 		while( !feof( f ) ){
 			// count rows
 			two_tuple<CATNAMES,int> tup;
@@ -804,7 +807,7 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 	list_item it,it2;
 	list<GENES> temp;
 	char filename[256];
-	int i = 0,count=0,j = 0;
+        int i = 0,count=1,j = 0;
 	char c;
 	FILE *fptr,*fptr2;
 
@@ -812,9 +815,9 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 		//cout << " Bic\n";
 		temp = biclusters[ it ];
 #ifdef LINUX
-		sprintf( filename, "outputs/go/gobicluster%d.html", count );
+                sprintf( filename, "outputs/go/gobicluster%d.html", count - 1 );
 #else
-		sprintf( filename, "outputs//go//gobicluster%d.html", count );
+                sprintf( filename, "outputs//go//gobicluster%d.html", count - 1);
 #endif		
 		fptr = fopen( filename, "w" );
 
@@ -905,6 +908,7 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
 // 	cout << "\nWEDONE\n";
 	array<GENEONTO> geneOntoForData = geneOntologyHandling2( defaultGoFile, inputCats, GenesNode, categories, gocategories );
 // 	cout << "\nWEDONE\n";
+        gocategories.del_item( gocategories.first_item() );
 	geneOntologyToBiclusterHandling( gocategories, geneOntoForData );
         int catCount = 0;
         forall_items( it, gocategories ){
@@ -3640,8 +3644,8 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
                 analyseGenes2( "geneResult", categ, biclusters.size(), "CC", dimension1, dimension2, hasColor  );
 	}
 	if( biclustering == 4 ){
-		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "RLEB", dimension1, dimension2 ); 
-                analyseGenes2( "geneResult", categ, biclusters.size(), "RLEB" , dimension1, dimension2, hasColor );
+                getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "REAL", dimension1, dimension2 );
+                analyseGenes2( "geneResult", categ, biclusters.size(), "REAL" , dimension1, dimension2, hasColor );
 	}
 // 	if( biclustering == 5 ){
 // 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "SAMBA", dimension1, dimension2 ); 

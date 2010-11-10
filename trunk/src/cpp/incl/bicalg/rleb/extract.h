@@ -251,10 +251,11 @@ void hvvalueCalculator( list<four_tuple<int,int,double,matrix> > &matrices, char
 void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatrix_exp1_c, int minSizeSubMatrix_exp1_g, int minSizeSubMatrix_exp1_c, int increment_exp1_g, int increment_exp1_c, double hvaluemin  ){
 	list_item it,it2;
 	FILE *fptr2;
+        int biCount = 1;
 #ifdef LINUX
-	fptr2 = fopen( "outputs/biclusters/RLEBResult.txt" , "w" );
+        fptr2 = fopen( "outputs/biclusters/REALResult.txt" , "w" );
 #else
-	fptr2 = fopen( "outputs//biclusters//RLEBResult.txt" , "w" );
+        fptr2 = fopen( "outputs//biclusters//REALResult.txt" , "w" );
 #endif
 	fclose( fptr2 );
 	matrix BEFORE;	// pure dataset
@@ -289,10 +290,12 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 		list<matrix> submatricesForProcessing_Modifed, submatricesForProcessing_Pure;
 		matrix temp_m;
 		forall_items( it, randomSubmatrixIndexs ){
+                        cout << "\n Searching dimensions: " << randomSubmatrixIndexs[ it ].first() << "x" << randomSubmatrixIndexs[ it ].second() << " and maxHvalue is " <<  hvaluemin << endl;
 			//cout << "\n2\n";
 			int count_bic = 0;
 			double max_hvalue = 0;
 			for( int count = 0; count < repeat; count++ ){
+//                                cout << "|";
 				random_source G( 0, data_dim1 - randomSubmatrixIndexs[ it ].first() - 1 );
 				random_source C( 0, data_dim2 - randomSubmatrixIndexs[ it ].second() - 1 );
 				G.set_seed(count);
@@ -376,6 +379,8 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 				}
 				fprintf( fptr, "\n" );
 				//cout << endl;
+                                cout << "\n REAL Bicluster" << biCount << " is found\n";
+                                biCount++;
 			}
 			//cout << "\n4\n";
 			fclose( fptr );

@@ -12,36 +12,36 @@ Confirmation:
             width: 15
             space: 50
             increment: 300
-            removeRat: 0.50
+            removeRat: 0.25
             nodeSize: 50.0
             edgeBendImp: 35.0
             colorScale: 130.0
             edgThicknessTher: 4.0
         Biclustering:
-            biclustering: 2
+            biclustering: 4
             bimax_low_dim1: 10
             bimax_low_dim2: 10
-            ther_disc: 0.510000
+            ther_disc: 0.10000
             bic_num_bimax: 25
             bic_num_cc: 30
             maxScore_: 1
-            minHeight_: 400
+            minHeight_: 1500
             minWidth_: 10
-            maxSizeSubMatrix_exp1_g: 300
-            maxSizeSubMatrix_exp1_c: 50
-            minSizeSubMatrix_exp1_g: 200
-            minSizeSubMatrix_exp1_c: 30
+            maxSizeSubMatrix_exp1_g: 1200
+            maxSizeSubMatrix_exp1_c: 10
+            minSizeSubMatrix_exp1_g: 1000
+            minSizeSubMatrix_exp1_c: 5
             repeat: 50
-            hvaluemin: 1500.00
-            increment_exp1_g: 10
-            increment_exp1_c: 10
+            hvaluemin: 100000.00
+            increment_exp1_g: 200
+            increment_exp1_c: 5
         Algorithms:
             ownFlag: 0
             lebFlag: 0
-            ccFlag: 1
+            ccFlag: 0
             msbeFlag: 0
             bimaxFlag: 0
-            rlebFlag: 0
+            rlebFlag: 1
             brandFlag: 1
             brandFlag2: 0
             ourMethodFlag: 0
@@ -51,7 +51,7 @@ Confirmation:
             layered_layout: 1
             circular_layout: 0
             circular_ffd_layout: 0
-            go_info: 0
+            go_info: 1
             edgesBetween: 1
             sharedGenes: 0
             hvalueWeighting: 1
