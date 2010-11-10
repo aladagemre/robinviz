@@ -390,7 +390,7 @@ int main(){
                 }
 
                 cout << "/**************************************************/" << endl;
-                cout << "\t" << " End Producing Bicluster Graphs" << endl;
+                cout << "\t" << " End Producing GO Graphs" << endl;
                 cout << "/**************************************************/" << endl;
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " Running Layering Algorithm" << endl;
@@ -398,6 +398,13 @@ int main(){
 
                 mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, categories, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num );
 
+                cout << "\n*******************************\n";
+                int count_i = 0;
+                forall_items( it, GraphList ){
+                    cout << endl << count_i << " - " << GraphList[it].number_of_nodes() << " - " << GraphList[it].number_of_edges() << endl;
+                    count_i++;
+                }
+                cout << "\n*******************************\n";
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " End Running Layering Algorithm" << endl;
                 cout << "/**************************************************/" << endl;
@@ -406,6 +413,7 @@ int main(){
                 cout << "/**************************************************/" << endl;
                 cout << endl;
 
+                node n;
                 if( hasColor == false )
                     mainGraph2( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
                                         increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
@@ -414,6 +422,7 @@ int main(){
                     mainGraph2( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
                                         increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
                     POS, BENDS, LAYERS, abbv, cat_num, CategoriesXL, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
+
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " End Building High Level Graph " << endl;
                 cout << "/**************************************************/" << endl;

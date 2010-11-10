@@ -1491,6 +1491,9 @@ GRAPH<int,int> RUN_FFDANDCIRCLE(  GRAPH<int,int> &G,
 		point p( Xpos[ n ], Ypos[ n ] );
 		posx[ n ] = p;
 	}
+        char filename_[64] = "outputs/graphs/graph_";
+        sprintf( filename_, "%s%d%s", filename_, graphNo, ".gml" );
+        G.write_gml( filename_ );
 	return G;
 }
 
@@ -2381,7 +2384,7 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
         int colorCount = 0;
 	forall_nodes( n, G ){
 			G[ n ] = PARS[ n ];
-			G[ n ] = 11;
+                        //G[ n ] = 11;
                         color chosen( categ[ categ.get_item( colorCount ) ] );
                         gw.set_color( n, chosen);
                         gw.set_border_color( n, chosen);
@@ -3679,16 +3682,46 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 		}
                 node_array<list<int> > catid( G );
 //                cout << "0:";
+
+                char pie[256];
+                FILE *pieNode;
+#ifdef LINUX
+                sprintf( pie, "%s%d.txt", "outputs/enrich/pie", graphNo );
+                pieNode = fopen( pie, "w" );
+#else
+                sprintf( pie, "%s%d.txt", "outputs//enrich//pie", graphNo );
+                pieNode = fopen( pie, "w" );
+#endif
+                array<int> abbv_i( abbv.size() );
+                int geneCount = 0;
+                for( int i = 0; i < cat_num; i++ ){
+                    abbv_i[ i ] = 0;
+                }
+
 		forall_nodes( n, G ){
 			for( int i = 0; i < cat_num; i++ ){
 				forall_items( it, Categories[ G[ n ] ] ){
 					if( Categories[ G[ n ] ][ it ] == abbv[ i ] ){
 						catid[ n ].append( abbv[ i ] );
+                                                abbv_i[ i ]++;
 					}
 				}
 			}
+                        geneCount++;
 			gw2.set_color( n, red );
 		}
+
+                double dsum = 0;
+                for( int i = 0; i < cat_num; i++ ){
+                    if( (double)abbv_i[ i ] / (double)geneCount > 0 ){
+                        fprintf( pieNode, "%c %lf\n", abbv[ i ], (double)((double)abbv_i[ i ] / (double)geneCount ) );
+                        dsum += (double)abbv_i[ i ] / (double)geneCount;
+                    }
+                }
+                fprintf( pieNode, "%c %lf\n", 'X', 1.0 - dsum );
+
+                fclose( pieNode );
+
 //                cout << "1:";
 		edge e;
 		array<color> color_l( 5 );

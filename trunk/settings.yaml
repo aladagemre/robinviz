@@ -25,7 +25,7 @@ Confirmation:
             bic_num_bimax: 25
             bic_num_cc: 30
             maxScore_: 1
-            minHeight_: 50
+            minHeight_: 400
             minWidth_: 10
             maxSizeSubMatrix_exp1_g: 300
             maxSizeSubMatrix_exp1_c: 50

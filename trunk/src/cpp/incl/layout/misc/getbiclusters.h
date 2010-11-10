@@ -943,9 +943,9 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
     }
     for( int i = 0; i < biNumber; i++ ){
 #ifdef LINUX
-        sprintf( fileName2, "outputs/bicgenes/%s%s%d%s", fileName, algName, i+1, ".txt" );
+        sprintf( fileName2, "outputs/bicgenes/%s%s%d%s", fileName, algName, i, ".txt" );
 #else
-	sprintf( fileName2, "outputs//bicgenes//%s%s%d%s", fileName, algName, i+1, ".txt" );
+        sprintf( fileName2, "outputs//bicgenes//%s%s%d%s", fileName, algName, i, ".txt" );
 #endif
 		if( (fptr = fopen( fileName2, "r" )) == NULL ){
                         cout << "List " << i << " has 0 prots" << "\n";
@@ -1087,14 +1087,14 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 			rewind( resultPtr );
 
                         char pie[256];
-                        sprintf( pie, "%s%d.txt", "outputs/enrich/pie", i );
+                        sprintf( pie, "%s%d.txt", "outputs/enrich/pie_", i );
                         pieNode = fopen( pie, "w" );
 
 			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Categories" );
 			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Number of Genes" );
                         //fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Ratio Respect to All Category Genes" );
 			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Ratio Respect to Bicluster Gene Space" );
-			fprintf( oneResultPtr, "\n\t</tr>\n\t</thead>\n\t<tfoot>\n\t<tr>\n\t\t<td colspan=\"%d\">Table shows the enrichment results for Bicluster %d</td>\n\t<tr>\n\t</tfoot>\n<tbody>\n", 3, i );
+                        fprintf( oneResultPtr, "\n\t</tr>\n\t</thead>\n\t<tfoot>\n\t<tr>\n\t\t<td colspan=\"%d\">Table shows the enrichment results for Categories %d</td>\n\t<tr>\n\t</tfoot>\n<tbody>\n", 3, i );
 			for( int j = 0; j < cat_num; j++ ){
 				fprintf( oneResultPtr, "\t<tr>\n" );
 				fprintf( oneResultPtr, "\t\t<td>%s</td>\n", categoriesOfGenes2[ categoriesOfGenes2.get_item( j ) ].categ );
@@ -1127,14 +1127,14 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 			rewind( resultPtr );
 
                         char pie[256];
-                        sprintf( pie, "%s%d.txt", "outputs//enrich//pie", i );
+                        sprintf( pie, "%s%d.txt", "outputs//enrich//pie_", i );
                         pieNode = fopen( pie, "w" );
 
 			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Categories" );
 			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Number of Genes" );
 			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Ratio Respect to All Category Genes" );
 			fprintf( oneResultPtr, "\n\t<th scope=\"col\"> %s </th>\n", "Ratio Respect to Bicluster Gene Space" );
-			fprintf( oneResultPtr, "\n\t</tr>\n\t</thead>\n\t<tfoot>\n\t<tr>\n\t\t<td colspan=\"%d\">Table shows the enrichment results for Bicluster %d</td>\n\t<tr>\n\t</tfoot>\n<tbody>\n", 3, i );
+                        fprintf( oneResultPtr, "\n\t</tr>\n\t</thead>\n\t<tfoot>\n\t<tr>\n\t\t<td colspan=\"%d\">Table shows the enrichment results for Categories %d</td>\n\t<tr>\n\t</tfoot>\n<tbody>\n", 3, i );
 			for( int j = 0; j < cat_num; j++ ){
 				fprintf( oneResultPtr, "\t<tr>\n" );
 				fprintf( oneResultPtr, "\t\t<td>%s</td>\n", categoriesOfGenes2[ categoriesOfGenes2.get_item( j ) ].categ );
@@ -1147,7 +1147,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 				fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum );
 				fprintf( oneResultPtr, "\t</tr>\n" );
                                 if( categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] > 0 )
-                                    fprintf( pieNode, "%c %lf\n", abbv[ j ], (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum * 100.0) );
+                                    fprintf( pieNode, "%c %lf\n", abbv[ j ], (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum  );
 			}
 			fprintf( oneResultPtr, "\t</tbody>\n</table>\n</body>\n</html>" );
 			fclose( oneResultPtr );                        

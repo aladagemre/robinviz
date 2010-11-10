@@ -359,7 +359,7 @@ void mainGraph2( GRAPH<leda::string,int> &PROJECT,
 	cout << "\t" << " Forming High Level Layout " << endl;
 	cout << "/**************************************************/" << endl;
 
-	int count = 1;
+        int count = 0;
       	char filename[ 64 ];
 	if( autoFlag == true ){
 		for( count = 0; count < GraphList.size(); count++ ){
@@ -484,14 +484,14 @@ void mainGraph2( GRAPH<leda::string,int> &PROJECT,
 	cout << "\t" << " Forming High Level Layout " << endl;
 	cout << "/**************************************************/" << endl;
 
-	int count = 1;
+        int count = 1;
       	char filename[ 64 ];
 	if( autoFlag == true ){
-		for( count = 0; count < GraphList.size(); count++ ){
+                for( count = 0; count < GraphList.size(); count++ ){
 			#ifdef LINUX
-				sprintf( filename, "outputs/graphs/graph%d.gml", count );
+                                sprintf( filename, "outputs/graphs/graph%d.gml", count );
 			#else
-				sprintf( filename, "outputs//graphs//graph%d.gml", count );
+                                sprintf( filename, "outputs//graphs//graph%d.gml", count );
 			#endif
                         array<list<node> > layers_  = LAYERS[ LAYERS.get_item( count )];
                         node_array<point> pos_ = POS[ POS.get_item( count )];                        
