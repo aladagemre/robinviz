@@ -179,8 +179,8 @@ class AssociationSelector(QWidget):
 
     def filterSelected(self):
         topLevels = open(ap("godata/toplevel_function.txt")).read().split("\n")
-        terms = sorted(map(lambda x:x.strip(), open(ap("godata/selected_terms.txt")).readlines()))
-        slim_terms = list(set(sorted(topLevels + terms)))
+        selected_terms = sorted(map(lambda x:x.strip(), open(ap("godata/selected_terms.txt")).readlines()))
+        united_terms = list(set(sorted(topLevels + selected_terms)))
 
         output = open(ap("assocdata/go_slim.txt"),"w")
         catnames = open(ap("assocdata/input_go.txt"),"w")
@@ -199,14 +199,14 @@ class AssociationSelector(QWidget):
                 return "NULL"
 
         name_dict = {}
-        for term in slim_terms:
+        for term in united_terms:
             name_dict[term] = get_name_of_term(int(term.split(":")[-1]))
 
-        for term in terms: # only selected ones
+        for term in selected_terms: # only selected ones
             catnames.write("%s\n" % name_dict[term])
             catcodes.write("%s\n" % term)
 
-        for term in slim_terms:
+        for term in united_terms:
             if term in self.go_dict:
                 genes = self.go_dict[term]
                 if not genes:

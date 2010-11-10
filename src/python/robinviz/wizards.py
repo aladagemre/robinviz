@@ -6,6 +6,8 @@ from databases.inputtrees.ppitree import PPISelector
 from databases.inputtrees.gotree import GOSelector
 from databases.inputtrees.geotree import GEOSelector
 from databases.inputtrees.assoctree import AssociationSelector
+from databases.inputtrees.selectors import ConfirmationSelector
+from utils.info import ap
 import os
 
 
@@ -15,15 +17,17 @@ class InputWizard(QWizard):
 	
 	#os.chdir("src/python/robinviz/databases/inputtrees")
 
+        self.ConfirmationSelectionPage = ConfirmationSelectionPage()
 	self.PPISelectionPage = PPISelectionPage()
 	self.AssociationSelectionPage = AssociationSelectionPage()
 	self.GOSelectionPage = GOSelectionPage()
 	self.GEOSelectionPage = GEOSelectionPage()
-	
-	self.setPage(0, self.PPISelectionPage )
-	self.setPage(1, self.GOSelectionPage )
-        self.setPage(2, self.AssociationSelectionPage )
-	self.setPage(3, self.GEOSelectionPage )
+
+        self.setPage(0, self.ConfirmationSelectionPage )
+	self.setPage(1, self.PPISelectionPage )
+	self.setPage(2, self.GOSelectionPage )
+        self.setPage(3, self.AssociationSelectionPage )
+	self.setPage(4, self.GEOSelectionPage )
 	
 	self.setStartId(0)
 	#self.setWindowModality(QWidget.modal)
@@ -31,6 +35,32 @@ class InputWizard(QWizard):
     def showHelp(self):
 	pass
 
+class ConfirmationSelectionPage(QWizardPage):
+    def __init__(self, parent=None):
+	QWizardPage.__init__(self, parent)
+	self.setTitle("Confirmation type selection")
+	topLabel = QLabel("In this page, you need to select the confirmation type.")
+	topLabel.setWordWrap(True)
+	layout = QVBoxLayout()
+	self.selector = ConfirmationSelector()
+	layout.addWidget(self.selector)
+	self.setLayout(layout)
+
+    def validatePage(self):
+	self.confirmation = selection = self.selector.getSelection()
+        if selection == "Co-Expression":
+            f = open(ap("godata/selected_terms.txt"), "w")
+            f.close()
+            f = open("outputs/resultparams.txt","w")
+            f.write("Co-Expression")
+            f.close()
+        else:
+            f = open("outputs/resultparams.txt","w")
+            f.write("Co-Ontology")
+            f.close()
+            
+	return True
+    
 class AssociationSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
