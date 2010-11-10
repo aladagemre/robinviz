@@ -56,7 +56,7 @@ class ConfirmationSelectionPage(QWizardPage):
             f.close()
         else:
             f = open("outputs/resultparams.txt","w")
-            f.write("Co-Ontology")
+            f.write("Co-Functionality")
             f.close()
             
 	return True

@@ -3,6 +3,7 @@
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from PyQt4.QtCore import qFuzzyCompare
 from pygml import Graph
 from os.path import normcase
 import os
@@ -390,7 +391,7 @@ class NodeItem(QGraphicsItem):
     def __init__(self, parent=None, scene=None):
         QGraphicsItem.__init__(self, parent, scene)
         self.highlighted = False
-        
+    
     #----------- Event Methods ------------------
     def hoverEnterEvent(self, event):
         """When hovered on the node, we make the scene unable to be moved by dragging."""
@@ -437,6 +438,45 @@ class NodeItem(QGraphicsItem):
         self.highlighted ^= 1
         self.update()
 
+    def qMin(self, a1,  a2):
+        if a1 >= a2:
+            return a2
+        else:
+            return a1
+    def qMax(self, a1,  a2):
+        if a1 <= a2:
+            return a2
+        else:
+            return a1
+
+    def qt_graphicsItem_highlightSelected(self, item, painter, option):
+        murect = painter.transform().mapRect(QRectF(0, 0, 1, 1))
+        """if abs(self.qMax(murect.width(), murect.height()) + 1 - 1) < 0.00001:
+            return"""
+
+        if qFuzzyCompare(self.qMax(murect.width(), murect.height()) + 1, 1):
+            return
+        mbrect = painter.transform().mapRect(item.boundingRect())
+        if self.qMin(mbrect.width(), mbrect.height()) < 1.0:
+            return
+        itemPenWidth = 1.0
+        pad = itemPenWidth / 2
+        penWidth = 0 # cosmetic pen
+
+        fgcolor = option.palette.windowText().color()
+        red = 0 if fgcolor.red() > 127 else 255
+        green = 0 if fgcolor.green() > 127 else 255
+        blue = 0 if fgcolor.blue() > 127 else 255
+        bgcolor = QColor ( # ensure good contrast against fgcolor
+        red, green, blue)
+
+        painter.setPen(QPen(bgcolor, penWidth, Qt.SolidLine))
+        painter.setBrush(Qt.NoBrush)
+        painter.drawRect(item.boundingRect().adjusted(pad, pad, -pad, -pad))
+        painter.setPen(QPen(option.palette.windowText(), 0, Qt.DashLine))
+        painter.setBrush(Qt.NoBrush)
+        painter.drawRect(item.boundingRect().adjusted(pad, pad, -pad, -pad))
+        
 class CircleNode(NodeItem):
     """
     NodeItem with circle shape
@@ -630,7 +670,10 @@ class CircleNode(NodeItem):
     def paint(self, painter, option, widget):
         rectangle = QRectF(0.0, 0.0, self.w, self.w)
         startAngle = 0
-        # if this is a main scene node.
+
+        # selection box
+        if option.state & QStyle.State_Selected:
+            self.qt_graphicsItem_highlightSelected(self, painter, option)
 
         if self.highlighted:
             colors = self.lighterColors
@@ -646,7 +689,7 @@ class CircleNode(NodeItem):
             painter.setBrush(QBrush(color[0]))
             painter.drawPie(rectangle, startAngle, angle)
             startAngle += angle
-        
+            
     def boundingRect(self):
         return QRectF(0, 0, self.w, self.w)
 
@@ -960,6 +1003,9 @@ class PiechartNode(NodeItem):
         rectangle = QRectF(0.0, 0.0, self.w, self.w)
         startAngle = 0
 
+        if option.state & QStyle.State_Selected:
+            self.qt_graphicsItem_highlightSelected(self, painter, option)
+            
         if self.num_colors == 1:
             painter.setBrush(QBrush(self.colors[0]))
             painter.drawEllipse(rectangle)
@@ -968,7 +1014,7 @@ class PiechartNode(NodeItem):
             painter.setBrush(QBrush(color))
             painter.drawPie(rectangle, startAngle, self.angle_per_color)
             startAngle += self.angle_per_color
-
+                        
     def mouseReleaseEvent(self, event):
         """When released the button (stopped moving), update the edges/scene."""
         QGraphicsItem.mouseReleaseEvent(self, event)
