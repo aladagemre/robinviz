@@ -11,6 +11,7 @@ from os.path import split
 from os.path import normcase
 
 from utils.info import rp # root path function
+from misc.legend import LegendWidget
 import os
 
 GRAPH_LAYOUTS = {}
@@ -155,6 +156,11 @@ class View(QGraphicsView):
             # Leave some margin
             rect = self.scene().itemsBoundingRect().adjusted(-10, -10, 10, 10)
             self.fitInView(rect, Qt.KeepAspectRatio)
+            
+    def legend(self):
+        """Displays meanings of the colors"""
+        self.legendWindow = LegendWidget()
+        self.legendWindow.show()
         
     def reselectItemsAfterLayoutChange(self):
         """Re-selects previously selected items after layout changed."""
