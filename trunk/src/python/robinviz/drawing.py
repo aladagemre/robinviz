@@ -387,7 +387,10 @@ class EdgeItem(QGraphicsItem):
 
 class NodeItem(QGraphicsItem):
     """Common methods for NodeItem of various shapes."""
-
+    def __init__(self, parent=None, scene=None):
+        QGraphicsItem.__init__(self, parent, scene)
+        self.highlighted = False
+        
     #----------- Event Methods ------------------
     def hoverEnterEvent(self, event):
         """When hovered on the node, we make the scene unable to be moved by dragging."""
@@ -397,8 +400,8 @@ class NodeItem(QGraphicsItem):
         if len(self.scene().items()) > 1000:
             # If we have lots of items in the scene, do not apply highligting.
             return
-        if not self.isSelected():
-            self.toggleHighlight()
+        #if not self.isSelected():
+        self.toggleHighlight()
         
     def hoverLeaveEvent(self, event):
         """When hovering is off the node, we make the scene able to be moved by dragging."""
@@ -431,128 +434,8 @@ class NodeItem(QGraphicsItem):
         radialGrad.setColorAt(1, Qt.black)
         self.defaultColor = radialGrad
     def toggleHighlight(self):
-        """if self.currentColor == self.defaultColor:
-            self.currentColor = self.highlightedColor
-        else:
-            self.currentColor = self.defaultColor
-        self.setBrush(self.currentColor)"""
-        pass
-        
-
-class RectNode(QGraphicsPolygonItem, NodeItem):
-    def __init__(self, node, parent=None, scene=None):
-        QGraphicsPolygonItem.__init__(self, parent, scene)
-        NodeItem.__init__(self)
-        path = QPainterPath()
-        path.moveTo(0,0)
-        path.addRect(0, 0, 130, 40)
-        polygon = path.toFillPolygon()
-        self.setPolygon(polygon)
-        self.setOpacity(0.5)
-        self.defaultColor = Qt.blue
-
-
-        self.setAcceptHoverEvents(True)
-        self.setFlag(QGraphicsItem.ItemIsMovable, True)
-        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
-        try:
-            # available only in Qt 4.6
-            #self.setFlag(QGraphicsItem.ItemSendsScenePositionChanges, True)
-            self.setFlag( QGraphicsItem.ItemSendsGeometryChanges)
-        except:
-            # no need to do this in Qt 4.5
-            pass
-        
-        self.setAcceptsHoverEvents(True)
-        self.edges = []
-        self.associateWithNode(node)
-
-    def paint(self, painter, option,widget):
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setBrush(self.currentColor)
-        if self.isSelected():
-            pen = QPen()
-            pen.setWidth(6)
-            color = QColor()
-            color.setRgb(255,255,0)
-            pen.setColor(color)
-            painter.setPen(pen)
-        else:
-            painter.setPen(QPen())
-        painter.drawRoundedRect(0, 0, self.w, self.h, 5, 5)
-    
-    def intersectionPoint(self, startPoint):
-        """Gives the intersection point when a line is drawn into the center
-        of the node from the given startPoint."""
-
-        if self.polygon().containsPoint(startPoint - self.pos(), Qt.OddEvenFill):
-            return startPoint
-        
-        centerLine = QLineF(startPoint, self.centerPos()) # The line
-        p1 = self.polygon().first() + self.pos() # Take the first point
-
-        intersectPoint = QPointF() # Define the intersection point.
-        for i in self.polygon(): # For each point in the polygon,
-            p2 = i + self.pos() # Determine that point's coords.
-            polyLine = QLineF(p1, p2) # Imagine the edge between p1 and p2
-            intersectType = polyLine.intersect(centerLine, intersectPoint)
-            if intersectType == QLineF.BoundedIntersection: # If they intersect
-                break # Stop. We'll use the intersectPoint.
-            p1 = p2 # If not encountered an intersection, go on over other edges.
-
-        return intersectPoint
-
-    #========= Events =====================
-    def mouseReleaseEvent(self, event):
-        """When released the button (stopped moving), update the edges/scene."""
-        QGraphicsItem.mouseReleaseEvent(self, event)
-        self.updateEdges()
-        self.scene().update()
-
-    def itemChange(self, change, value):
-        if change == QGraphicsItem.ItemPositionChange:
-            self.updateEdges()
-        return QVariant(value)
-
-    def associateWithNode(self, node):
-        self.defaultColor = QColor(node.graphics.outline)
-        self.highlightedColor = self.defaultColor.lighter(150)
-        self.currentColor = self.defaultColor
-        self.setBrush(self.currentColor) # Give the category color.
-        margin = 2.0
-        # Construct the text.
-        self.text = QGraphicsTextItem(self)
-        self.text.root = self
-        #if int(node.graphics.outline[1:], 16) < int("FFFFFF", 16) / 2:
-            #self.text.setDefaultTextColor(QColor(Qt.white))
-        if node.graphics.outline == "#000000":
-            self.text.setDefaultTextColor(QColor(Qt.white))
-
-
-        textFont = QFont()
-        textFont.setBold(True)
-        textFont.setPointSize(16)
-        self.text.setFont(textFont)
-
-        # Set node id as text.
-        #self.text.setPlainText("YNL199C")
-        self.text.setPlainText(node.label)
-
-
-        # Define bounding rect
-        boundRect = self.text.boundingRect()
-        self.w = boundRect.width() + margin
-        self.h = boundRect.height() + margin
-
-        # Store node data
-        self.node = node
-        # Set position of the node:
-        self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.h/2))
-        tip = "Category: %s" % CATEGORY_COLORS[node.parameter]
-        self.setToolTip(tip)
-
-        # Leave some margin for the text.
-        self.text.setPos(1,1)
+        self.highlighted ^= 1
+        self.update()
 
 class CircleNode(NodeItem):
     """
@@ -694,19 +577,17 @@ class CircleNode(NodeItem):
             self.updateEdges()
         elif change == QGraphicsItem.ItemSelectedChange:
             if self.isSelected():
-                #self.toggleHighlight()
+                self.stopAnimation()
+                self.toggleHighlight()
                 for edge in self.edges:
                     edge.toggleHighlight()
-                    #edge.end.toggleHighlight()
-                self.stopAnimation()
+                    edge.end.toggleHighlight()
                 self.scene().update()
             else:
                 for edge in self.edges:
                     edge.toggleHighlight()
-                    #edge.end.toggleHighlight()
-                """if self.highlightedColor == Qt.yellow:
-                    self.text.setDefaultTextColor(QColor(Qt.black))"""
-                #self.startAnimation()
+                    edge.end.toggleHighlight()
+                self.startAnimation()
 
         return QVariant(value)
 
@@ -739,8 +620,10 @@ class CircleNode(NodeItem):
     def setPercentageColors(self, colors):
         if colors:
             self.percentColors = colors
+            self.lighterColors = [ ( color[0].lighter(), color[1] ) for color in colors]
         else:
             self.percentColors = [ ( QColor(COLORS18.get("X")) , 100) ]
+            self.lighterColors = [ ( QColor(COLORS18.get("X")).lighter() , 100)]
 
         self.num_colors = len(self.percentColors)
 
@@ -749,16 +632,21 @@ class CircleNode(NodeItem):
         startAngle = 0
         # if this is a main scene node.
 
+        if self.highlighted:
+            colors = self.lighterColors
+        else:
+            colors = self.percentColors
+            
         if self.num_colors == 1:
-            painter.setBrush(QBrush(self.percentColors[0][0]))
+            painter.setBrush(QBrush(colors[0][0]))
             painter.drawEllipse(rectangle)
             return
-        for color in self.percentColors:
+        for color in colors:
             angle = color[1] * 360 * 16
             painter.setBrush(QBrush(color[0]))
             painter.drawPie(rectangle, startAngle, angle)
             startAngle += angle
-    
+        
     def boundingRect(self):
         return QRectF(0, 0, self.w, self.w)
 
@@ -820,6 +708,8 @@ class CircleNode(NodeItem):
 
         # Position the label test
         self.labelText.setPos(  (self.w + 3), -1    )
+
+        self.setupAnimation()
 
     def setupAnimation(self):
         """Sets up how the animation shall be. Calculates positions."""
