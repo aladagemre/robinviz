@@ -909,7 +909,8 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
         int catCount = 0;
         forall_items( it, gocategories ){
             FILE *saveGene;
-            if( gocategories[it].size() >= 1 ){
+            if( gocategories[it].size() >= 0 ){
+//                    cout << catCount << " - \t";
                     char geneFile[ 1024 ];
 #ifdef LINUX
                     sprintf( geneFile, "%s%d%s", "outputs/bicgenes/geneResult", catCount, ".txt" );
@@ -920,9 +921,12 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
 #endif
                     if( (saveGene = fopen( geneFile , "w" ) ) != NULL ){
                         forall_items( it2, gocategories[ it ] ){
+//                            cout << gocategories[ it ][ it2 ].GENE << " ";
                             fprintf( saveGene, "%s\n", gocategories[ it ][ it2 ].GENE );
                         }
+//                        cout << endl;
                     }
+//                    cout << "\n**********************************\n";
             }
             catCount++;
         }
@@ -1401,6 +1405,39 @@ void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNo
 }
 
 /**
+* handleZeroDegreeNodes is a function that adds zero degree nodes due to categories
+* given file
+* @param GenesNode (leda::array<GENENAMES>) is used with the graph parameter to obtain the specific Genes corresponding nodes
+* @param INTERACTIONS (leda::GRAPH<int,int>) is PPI graph extracted from sources/ppi_sources/<ppiFile>
+* @param biclusters (leda::list<list<GENES> >) is list ofe genes in category
+*/
+void handleZeroDegreeNodes( array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, list<list<GENES> > &categories ){
+    list_item it1,it2;
+    list<GENES> genes;
+    node n;
+    int nodeAdded = INTERACTIONS.number_of_nodes();
+    forall_items( it1, categories ){
+        genes = categories[ it1 ];
+        forall_items( it2, genes ){
+            bool flag = false;
+            for( int i = 0; i < GenesNode.size(); i++ ){
+                if( strcmp( GenesNode[ i ].GENE, genes[ it2 ].GENE ) == 0 ){
+                    flag = true;
+                    break;
+                }
+            }
+            if( flag == false ){
+                n = INTERACTIONS.new_node();
+                INTERACTIONS[ n ] = nodeAdded;
+                nodeAdded++;
+                GenesNode.resize( nodeAdded  );
+                sprintf( GenesNode[ INTERACTIONS[ n ] ].GENE, "%s",  genes[ it2 ].GENE );
+            }
+        }
+    }
+}
+
+/**
 * inpGraphProdHandling is a function that handles the production of
 * peripheral graphs
 * @param abbv (char []) we need a categories for each organism. It may be too general as we did having n categories. abbv stores just a capital letter of categories.
@@ -1819,7 +1856,7 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 // 	wptr3 = fopen( "sources//graph_sources//graph_infos.txt", "w" );
 // #endif
 	for(int i = 0; i < biclusters.size(); i++ ){	
-// 		if( listOfGraphs[ i ].empty() != true ){
+                if( listOfGraphs[ i ].empty() != true ){
 		    pos.init( listOfGraphs[ i ] );
 		    bends.init( listOfGraphs[ i ] );   
 		    array<int> nodePar( listOfGraphs[ i ].number_of_nodes()+1 );
@@ -1833,10 +1870,10 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 			if( listOfGraphs[ i ].empty() != true ){
 				if( listOfGraphs[ i ].number_of_nodes() < 1500 ){
 					//H = RUN_CIRCLEALONE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100 );
-                                        H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 100.0 );
+                                        H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 100.0 );
 				}
 				else
-                                        H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 2, 0.20 );
+                                        H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 2, 0.20 );
 			}
 		    cout << " Graph " << i << " in process \n";
 		    nPar = 0;
@@ -1988,12 +2025,11 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 			GraphList_S.append( HAsString );
 			//cout << " Size 1 : " << HAsString.number_of_nodes() << " Size 2 : " << listOfGraphs[ i ].number_of_nodes() << " Size 3 : " << nameGraph.size() << endl;
 			HAsString.clear();
-// 		}
+                }
 			    /************************************************/
 			    /* End of Copy Graph as leda::string type Graph */
 			    /************************************************/
-	}
-// 	fclose( wptr3 );
+        }
 }
 
 
@@ -3097,6 +3133,7 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 	cout << " RUN LAYOUT\n";
 	RUN_FFD_SELF( PROJECT2, PARS, max_weight, width, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
 // 	cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
+
 	return PROJECT2;
 }
 
