@@ -68,6 +68,8 @@ class PiechartNode3(QGraphicsItem):
             painter.drawPie(rectangle, startAngle, self.angles[i])
             startAngle += self.angles[i]
 
+
+
 class PiechartNode2(QGraphicsItem):
     def __init__(self,parent=None):
         QGraphicsItem.__init__(self, parent)
@@ -81,6 +83,50 @@ class PiechartNode2(QGraphicsItem):
     def paint(self, painter, option, widget):
         painter.setBrush(QColor(Qt.black))
         painter.drawEllipse(0,0,20,20)
+        
+        self.qt_graphicsItem_highlightSelected(self, painter, option)
+        
+    def qMin(self, a1,  a2):
+        if a1 >= a2:
+            return a2
+        else:
+            return a1
+    def qMax(self, a1,  a2):
+        if a1 <= a2:
+            return a2
+        else:
+            return a1
+
+
+    def qt_graphicsItem_highlightSelected(self, item, painter, option):
+        murect = painter.transform().mapRect(QRectF(0, 0, 1, 1))
+        """if abs(self.qMax(murect.width(), murect.height()) + 1 - 1) < 0.00001:
+            return"""
+
+        if qFuzzyCompare(self.qMax(murect.width(), murect.height()) + 1, 1):
+            return
+        mbrect = painter.transform().mapRect(item.boundingRect())
+        if self.qMin(mbrect.width(), mbrect.height()) < 1.0:
+            return
+        itemPenWidth = 1.0
+        pad = itemPenWidth / 2
+        penWidth = 0 # cosmetic pen
+
+        fgcolor = option.palette.windowText().color()
+        red = 0 if fgcolor.red() > 127 else 255
+        green = 0 if fgcolor.green() > 127 else 255
+        blue = 0 if fgcolor.blue() > 127 else 255
+        bgcolor = QColor ( # ensure good contrast against fgcolor
+        red, green, blue)
+
+        painter.setPen(QPen(bgcolor, penWidth, Qt.SolidLine))
+        painter.setBrush(Qt.NoBrush)
+        painter.drawRect(item.boundingRect().adjusted(pad, pad, -pad, -pad))
+        painter.setPen(QPen(option.palette.windowText(), 0, Qt.DashLine))
+        painter.setBrush(Qt.NoBrush)
+        painter.drawRect(item.boundingRect().adjusted(pad, pad, -pad, -pad))
+
+
         
 class ItemDisplayer(QWidget):
     def __init__(self, parent=None):
@@ -105,7 +151,7 @@ class ItemDisplayer(QWidget):
 def main():
     app = QApplication(sys.argv)
     displayer= ItemDisplayer()
-    displayer.addItem(PiechartNode3())
+    displayer.addItem(PiechartNode2())
 
     elips = QGraphicsEllipseItem(10,10,20,20)
     elips.setBrush(QBrush(QColor(Qt.black)))
@@ -119,46 +165,3 @@ if __name__ == "__main__":
     main()
 
 
-
-"""
-
-    def qMin(self, a1,  a2):
-        if a1 >= a2:
-            return a2
-        else:
-            return a1
-    def qMax(self, a1,  a2):
-        if a1 <= a2:
-            return a2
-        else:
-            return a1
-
-
-    def qt_graphicsItem_highlightSelected(self, item, painter, option):
-        murect = painter.transform().mapRect(QRectF(0, 0, 1, 1))
-        if abs(self.qMax(murect.width(), murect.height()) + 1 - 1) < 0.00001:
-            return
-        mbrect = painter.transform().mapRect(item.boundingRect())
-        if self.qMin(mbrect.width(), mbrect.height()) < 1.0:
-            return
-        itemPenWidth = 1.0
-        pad = itemPenWidth / 2
-        penWidth = 0 # cosmetic pen
-
-        fgcolor = option.palette.windowText().color()
-        red = 0 if fgcolor.red() > 127 else 255
-        green = 0 if fgcolor.green() > 127 else 255
-        blue = 0 if fgcolor.blue() > 127 else 255
-        bgcolor = QColor ( # ensure good contrast against fgcolor
-        red, green, blue)
-
-        painter.setPen(QPen(bgcolor, penWidth, Qt.SolidLine))
-        painter.setBrush(Qt.NoBrush)
-        painter.drawRect(item.boundingRect().adjusted(pad, pad, -pad, -pad))
-        painter.setPen(QPen(option.palette.windowText(), 0, Qt.DashLine))
-        painter.setBrush(Qt.NoBrush)
-        painter.drawRect(item.boundingRect().adjusted(pad, pad, -pad, -pad))
-
-
-
-"""
