@@ -207,7 +207,11 @@ class ComprehensiveSearchWidget(QWidget):
     # ========= BUTTON EVENTS ==================
     def listProteins(self):
         self.clearAll()
-        for protein in sorted(filter(lambda text: text[0]=="Y", self.index.keys())):
+        proteins = filter(lambda text: text[0].isdigit(), self.index.keys())
+        proteins_int = map(int, [ protein.split("_")[0] for protein in proteins ])
+        proteins_int.sort()
+        proteins = map(str, proteins_int)
+        for protein in proteins:
             self.listWidget.addItem(protein)
     def listCategories(self):
         self.clearAll()
@@ -266,7 +270,7 @@ class ComprehensiveSearchWidget(QWidget):
             self.index = shelve.open(normcase("outputs/gene_index.shelve"))
         
             # Now fetch the labels in each file.
-            pattern = compile('label "\w+-?\w*"')
+            pattern = compile('label "\d+_?[A-Z:]*"')
             for graphFile in self.graphFiles:
                 content = open('outputs/graphs/'+graphFile).read()
                 labels = pattern.findall(content)
@@ -274,7 +278,7 @@ class ComprehensiveSearchWidget(QWidget):
                 labels = map(lambda line: line[7:-1], labels)
                 graphNum = int(graphFile[5:-4]) # get the number
 
-
+                print labels
                 for label in labels:
                     x = self.index.get(label)
                     if not x:
