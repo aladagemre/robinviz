@@ -305,8 +305,11 @@ class MultiViewWindow(QMainWindow):
 
     def viewSelected(self, id):
         self.mainScene.clearSelection()
-        self.mainScene.nodeDict[id].setSelected(True)
-        self.nodeSelected(id)
+        try:
+            self.mainScene.nodeDict[id].setSelected(True)
+            self.nodeSelected(id)
+        except:
+            print "No associated node"
 
     def displayCoordinate(self, point):
         self.statusBar().showMessage("(%s, %s)" % (point.x(), point.y()))
@@ -335,7 +338,7 @@ class MultiViewWindow(QMainWindow):
                 # If we can't create the scene, means that there's no such graph file.
                 QMessageBox.information(self, 'Empty Bicluster/Category',
                     "No associated genes/proteins found.")
-                self.mainScene.nodeDict[id].blowUp()
+                #self.mainScene.nodeDict[id].blowUp()
                 del scene
                 return
             except:

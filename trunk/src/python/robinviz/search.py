@@ -96,7 +96,9 @@ class ProteinSearchWidget(QWidget):
     # ========= BUTTON EVENTS ==================
     def listProteins(self):
         self.clearAll()
-        for protein in sorted(filter(lambda text: text[0]=="Y", self.index.keys())):
+        keys = self.index.keys()
+        proteins = set(filter(lambda text: text[0].isdigit(), keys))
+        for protein in sorted(proteins):
             self.listWidget.addItem(protein)
 
     def clearAll(self):
@@ -132,7 +134,7 @@ class ProteinSearchWidget(QWidget):
         # ProteinName - NodeItem matching.
         for item in self.scene.items():
             if hasattr(item, 'node'):
-                self.index[item.node.label] = item
+                self.index[ item.node.label.split("_")[0] ] = item
 
 
     def search(self):
@@ -240,7 +242,15 @@ class ComprehensiveSearchWidget(QWidget):
     def listCategories(self):
         self.clearAll()
         for category in sorted(self.multiView.keyList):
-            self.listWidget.addItem(category)
+            category_id = self.index[category][0]
+            item = QListWidgetItem(category)
+
+            if not exists(normcase("outputs/graphs/graph%d.gml" % category_id)):
+                strike_font = QFont()
+                strike_font.setStrikeOut(True)
+                item.setFont(strike_font)
+
+            self.listWidget.addItem(item)
 
     def clearAll(self):
         self.lineEdit.clear()
