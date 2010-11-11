@@ -62,7 +62,7 @@ matrix getMatrixFromFile( char filename[ 128 ], int &dimension1, int &dimension2
 // 	cout << " MATRIX " << endl;
 	FILE *fcptr;
 	fcptr = fopen( filename, "r" );
-	int dim1,dim2,count = 0,count2 = 0;
+        int dim1,dim2,count = 0,count2 = 0, count3 = 0;
 	double value;
 	fscanf( fcptr, "%d%d", &dim1, &dim2 );
 	char probeset[128];
@@ -74,27 +74,64 @@ matrix getMatrixFromFile( char filename[ 128 ], int &dimension1, int &dimension2
 // 		cout << condArray[ i ].COND << endl;
 		condArray[ i ].index = i+1;
 	}
-	fscanf( fcptr, "%s", geneArray[ count2 ].GENE );
-	geneArray[ count2 ].index = count2+1;
+        count3++;
+        fscanf( fcptr, "%s", geneArray[ count2 ].GENE );
+        while( true ){
+            if( strcmp( geneArray[ count2 ].GENE , "None" ) != 0 )
+                break;
+            for( int i = 0; i < dim2; i++ ){
+                fscanf( fcptr, "%lf" , &value );
+            }
+            count3++;
+            fscanf( fcptr, "%s", geneArray[ count2 ].GENE );
+            if( count3 == dim1 - 1 )
+                    break;
+        }
+        geneArray[ count2 ].index = count2+1;
+//        cout << geneArray[ count2 ].GENE << endl;
 	matrix TEMP( dim1, dim2 );
-	while( feof( fcptr ) != true ){
+        while( !feof( fcptr ) ){
 		fscanf( fcptr, "%lf" , &value );
 		TEMP( count2, count ) = value;
 // 		cout << TEMP( count2, count ) << "\t";
 		count++;
 		if( count == dim2 ){
+                        count3++;
 			count2++;
 			fscanf( fcptr, "%s", geneArray[ count2 ].GENE );
+                        while( true ){
+                            if( strcmp( geneArray[ count2 ].GENE , "None" ) != 0 )
+                                break;
+                            for( int i = 0; i < dim2; i++ ){
+                                fscanf( fcptr, "%lf" , &value );
+                            }
+                            count3++;
+                            fscanf( fcptr, "%s", geneArray[ count2 ].GENE );
+                            if( count3 == dim1 - 1 )
+                                    break;
+                        }
 			geneArray[ count2 ].index = count2+1;
+//                        cout << geneArray[ count2 ].GENE << " - " << count2 << " - " << count3 <<  " - " << dim1 <<endl;
 			count = 0;
 // 			cout << endl;
 		}
-		if( count2 == dim1 - 1 )
+                if( count3 == dim1 - 1 )
 			break;
 	}
-	dimension1 = dim1;
+//        cout << "DONE\n";
+        matrix TEMP2( count2, dim2 );
+        for( int i=0; i < count2; i++ ){
+            for( int j=0; j < dim2; j++ ){
+                TEMP2(i,j) = TEMP(i,j);
+            }
+//            cout << geneArray[ i ].GENE << endl;
+        }
+//        cout << dim1 << " - " << dim2 << endl;
+//        cout << count2 << " - " << dim2 << endl;
+        geneArray.resize( count2 );
+        dimension1 = count2;
 	dimension2 = dim2;
-	return TEMP;
+        return TEMP2;
 }
 
 matrix getMatrixFromFile( char filename[ 128 ] , double multiplyParameter, int &dimension1, int &dimension2 ){
@@ -1065,7 +1102,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 	    }
 	    fclose( resultPtr );
 
-	    fprintf( efptr, "\n\t<th scope=\"col\">Bicluster Id</th>\n" );
+            fprintf( efptr, "\n\t<th scope=\"col\">Category(Bicluster) Id</th>\n" );
 	    list<CAT> categoriesOfGenes2 = categoriesOfGenes;
 	    for( int i = 0; i < cat_num; i++ ){
 			for( int j = 0; j < 64; j++ ){
@@ -1180,7 +1217,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 // 	</tr>
 	    for( int counter = 0; counter < numberOfBiclusters-1; counter++ ){
 		  fprintf( efptr, "\t<tr>\n" );
-                  fprintf( efptr, "\t\t<td rowspan=\"2\">Category %d</td>\n", counter+1 );
+                  fprintf( efptr, "\t\t<td rowspan=\"1\">Category %d</td>\n", counter+1 );
 		  for( int i = 0; i < cat_num; i++ ){
 			  fprintf( efptr, "\t\t<td>%d</td>\n", categoryPerGenes[ counter ][ categoryPerGenes[ counter ].get_item( i )] );
 		  }
@@ -1440,7 +1477,7 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
 		fscanf( fptr, "%d%d", &numberOfConditions , &numberOfGenes);	
 		int bicount = 0;
 
-        int geneCount = 1;
+        int geneCount = 0;
 
 	array<GENES> allGenes( dimension1 + 1 );
 #ifdef LINUX
@@ -1470,12 +1507,13 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
 #ifdef LINUX
                 FILE *xptr = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "r" );
 #else
-				FILE *xptr = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "r" );
+                FILE *xptr = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "r" );
 #endif
                 while( !feof( xptr ) ){
                     fscanf( xptr, "%s%s", gene, realGeneName );
                     if( strcmp( listOfFile[ it ], realGeneName ) == 0 ){
                         listOfFile[ it ] = gene;
+                        break;
                     }
                 }
                 fclose( xptr );

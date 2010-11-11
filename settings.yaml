@@ -7,8 +7,8 @@ Confirmation:
             catfile_bic: sources/organisms/Yeast2993x173/category.txt
             gofile_bic: src/python/robinviz/databases/inputtrees/assocdata/go_slim.txt
         Drawing:
-            minBicSize: 0
-            maxBicSize: 1000
+            minBicSize: 1
+            maxBicSize: 5000
             width: 15
             space: 50
             increment: 300
@@ -19,8 +19,8 @@ Confirmation:
             edgThicknessTher: 4.0
         Biclustering:
             biclustering: 4
-            bimax_low_dim1: 10
-            bimax_low_dim2: 10
+            bimax_low_dim1: 100
+            bimax_low_dim2: 7
             ther_disc: 0.10000
             bic_num_bimax: 25
             bic_num_cc: 30
@@ -32,16 +32,16 @@ Confirmation:
             minSizeSubMatrix_exp1_g: 1000
             minSizeSubMatrix_exp1_c: 5
             repeat: 50
-            hvaluemin: 100000.00
+            hvaluemin: 250000.00
             increment_exp1_g: 200
             increment_exp1_c: 5
         Algorithms:
             ownFlag: 0
             lebFlag: 0
-            ccFlag: 0
+            ccFlag: 1
             msbeFlag: 0
             bimaxFlag: 0
-            rlebFlag: 1
+            rlebFlag: 0
             brandFlag: 1
             brandFlag2: 0
             ourMethodFlag: 0
