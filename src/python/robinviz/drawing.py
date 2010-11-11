@@ -760,7 +760,7 @@ class CircleNode(NodeItem):
         animationPeriod = 1500 + (self._scene.numElements - 50) * 3
         self.timeline = QTimeLine(animationPeriod)
         self.timeline.setCurveShape(QTimeLine.SineCurve)
-        self.timeline.setFrameRange(0, 16)
+        self.timeline.setFrameRange(0, 24)
         self.timeline.setLoopCount(0)
 
         self.animation = QGraphicsItemAnimation()
