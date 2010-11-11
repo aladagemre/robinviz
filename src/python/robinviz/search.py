@@ -204,20 +204,43 @@ class ComprehensiveSearchWidget(QWidget):
 
     def isProtein(self, text):
         return self.proteinNamePattern.match(text)
-        
+
+    def splitProteinsCategories(self):
+        # get the proteins
+        keys = self.index.keys()
+        # filter the proteins
+        proteins = set(filter(lambda text: text[0].isdigit(), keys))
+        # filter the category names
+        categories = set(keys) - proteins
+
+        # sort proteins by int
+        proteins_int = map(int, proteins )
+        proteins_int.sort()
+        proteins = map(str, proteins_int)
+
+        # now index categories        
+        self.category_dict = {}
+        for category in categories:
+            # for each category, match
+            # category # - category name pair.
+            i = self.index[category][0]
+            self.category_dict[i] = category
+
+        return proteins
+
     # ========= BUTTON EVENTS ==================
     def listProteins(self):
         self.clearAll()
-        proteins = filter(lambda text: text[0].isdigit(), self.index.keys())
-        proteins_int = map(int, [ protein.split("_")[0] for protein in proteins ])
-        proteins_int.sort()
-        proteins = map(str, proteins_int)
+        proteins = self.splitProteinsCategories()
+        
         for protein in proteins:
             self.listWidget.addItem(protein)
+
     def listCategories(self):
         self.clearAll()
         for category in sorted(self.multiView.keyList):
             self.listWidget.addItem(category)
+
     def clearAll(self):
         self.lineEdit.clear()
         self.listWidget.clear()
@@ -237,19 +260,15 @@ class ComprehensiveSearchWidget(QWidget):
     def itemDoubleClicked(self, item):
         itemText = item.text()
         try:
-            # If double clicked on a number, emit signal
+            # If double clicked on a protein, just search it.
             id = int(itemText)
-            self.emit(SIGNAL("graphDoubleClicked"), id)
+            self.lineEdit.setText(itemText)
+            self.search()
+            
         except:
-            # If it's not a number, it means it's protein/category/bicluster
-            if self.isProtein(str(itemText)):
-                # If double clicked on a protein, just search it.
-                self.lineEdit.setText(itemText)
-                self.search()
-            else:
-                # If double clicked on a category/bicluster, just emit id signal
-                id = self.index.get(str(itemText))[0]
-                self.emit(SIGNAL("graphDoubleClicked"), id)
+            # If it's not a number, it means it's category/bicluster                
+            id = self.index.get(str(itemText))[0]
+            self.emit(SIGNAL("graphDoubleClicked"), id)
                 
     # ========= LINE EDIT EVENTS ==================
     def setAutoCompletion(self):
@@ -279,10 +298,9 @@ class ComprehensiveSearchWidget(QWidget):
                 content = open('outputs/graphs/'+graphFile).read()
                 labels = pattern.findall(content)
                 # Clear label " and " characters and get the gene name
-                labels = map(lambda line: line[7:-1], labels)
+                labels = map(lambda line: line[7:-1].split("_")[0], labels)
                 graphNum = int(graphFile[5:-4]) # get the number
 
-                print labels
                 for label in labels:
                     x = self.index.get(label)
                     if not x:
@@ -317,15 +335,15 @@ class ComprehensiveSearchWidget(QWidget):
         keyword = self.lineEdit.text()
         self.listWidget.clear()
         if not self.index:
-            #self.index = shelve.open("outputs/gene_index.shelve")
             self.generateIndex()
 
         self.index = shelve.open(normcase("outputs/gene_index.shelve"))
         graphs = self.index.get(str(keyword))
-        
+
         if graphs:
             for graph in sorted(graphs):
-                self.listWidget.addItem(str(graph))
+                category_name = self.category_dict[graph]
+                self.listWidget.addItem(category_name)
         else:
             QMessageBox.information(self, "No results", "The protein you look for does not exist in any of the sub-graphs.")
         
