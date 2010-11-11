@@ -114,13 +114,14 @@ class Scene(QGraphicsScene):
 	if not g.edges:
 	    return
 	    
-	edgeWidthMin = g.edges[0].graphics.width
-        edgeWidthMax = g.edges[0].graphics.width
+	edgeWidthMin = int(g.edges[0].parameter)
+        edgeWidthMax = int(g.edges[0].parameter)
         for edge in g.edges:
-            if edge.graphics.width < edgeWidthMin:
-                edgeWidthMin = edge.graphics.width
-            elif edge.graphics.width > edgeWidthMax:
-                edgeWidthMax = edge.graphics.width
+            weight = int(edge.parameter)
+            if weight < edgeWidthMin:
+                edgeWidthMin = weight
+            elif weight > edgeWidthMax:
+                edgeWidthMax = weight
         
         for edge in g.edges:
             edge.minWidth = edgeWidthMin
@@ -281,19 +282,22 @@ class EdgeItem(QGraphicsItem):
         """Defines how to paint the edge item."""
         # --------- Set the pen settings -----------
         thickPen = QPen()
-        #thickPen.setWidth(10*self.edge.graphics.width / self.edge.minWidth)
+        #thickPen.setWidth(10*self.edge.parameter / self.edge.minWidth)
         #thickPen.setColor(QColor(self.edge.graphics.fill))
         if self.highlighted:
             thickPen.setColor(QColor(255,0,0))
         else:
-            thickPen.setColor(QColor(0,0,0))
+            if self.edge.parameter == "10":
+                thickPen.setColor(QColor("#8f8989"))
+            else:
+                thickPen.setColor(QColor(0,0,0))
 
         thicknessRange = 5
         if self.edge.maxWidth == self.edge.minWidth:
             newWidth = 2
         else:
-            newWidth = 2 + thicknessRange*( (self.edge.graphics.width - self.edge.minWidth) / (self.edge.maxWidth - self.edge.minWidth) )
-            #newRatio = ((self.edge.graphics.width - self.edge.minWidth)/(self.edge.maxWidth - self.edge.minWidth)) * newRange + 30
+            newWidth = 2 + thicknessRange*( (int(self.edge.parameter) - self.edge.minWidth) / (self.edge.maxWidth - self.edge.minWidth) )
+            #newRatio = ((self.edge.parameter - self.edge.minWidth)/(self.edge.maxWidth - self.edge.minWidth)) * newRange + 30
 
         thickPen.setWidthF(newWidth)
         #thickPen.setColor(QColor(0,0,0, newRatio))
