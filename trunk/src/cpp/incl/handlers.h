@@ -3226,7 +3226,7 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 **/
 void colorHandling( char catfile[256], char gofile[256] ){
 	int GOSIZE = 18;
-	char abbrv[19] = "ABCDEFGHIJKLMNOPRS";
+        char abbrv[34] = "ABCDEFGHIJKLMNOPQRSTUVWYZ01234567";
 	char molecularF[18][128] = {
 		    "antioxidant activity",
 		    "binding",
@@ -3468,7 +3468,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 **/
 void colorHandling( char catfile[256], char gofile[256], char molecularF[][128], int size ){
         int GOSIZE = size;
-        char abbrv[19] = "ABCDEFGHIJKLMNOPRS";
+        char abbrv[34] = "ABCDEFGHIJKLMNOPQRSTUVWYZ01234567";
         array<list<GENES> > molecularFunction( GOSIZE );
         list<GENES> allGenes;
 
