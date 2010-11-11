@@ -169,7 +169,8 @@ class ComprehensiveSearchWidget(QWidget):
         self.setAutoCompletion()
 
     def setupVariables(self):
-        self.proteinNamePattern = compile('^Y[A-Z]{2}\d{3}[A-Z]{1}-?[A-Z]?$')
+        self.proteinNamePattern = compile('^\d+$')
+
     def setupGUI(self):
         # ========= Buttons ===========
         self.proteinButton = QPushButton("Pro")
@@ -215,7 +216,7 @@ class ComprehensiveSearchWidget(QWidget):
             self.listWidget.addItem(protein)
     def listCategories(self):
         self.clearAll()
-        for category in self.multiView.keyList:
+        for category in sorted(self.multiView.keyList):
             self.listWidget.addItem(category)
     def clearAll(self):
         self.lineEdit.clear()
@@ -224,10 +225,13 @@ class ComprehensiveSearchWidget(QWidget):
     # ========== LIST WIDGET EVENTS ===============
     def itemClicked(self, item):
         try:
+            # if clicked on a protein,
             id = int(item.text())
+            # do nothing
         except:
+            # if it's not a protein but a category/bicluster
+            # get its id and emit a signal
             id = self.index.get(str(item.text()))[0]
-        if not self.isProtein(str(item.text())):
             self.emit(SIGNAL("graphClicked"), int(id))
 
     def itemDoubleClicked(self, item):
