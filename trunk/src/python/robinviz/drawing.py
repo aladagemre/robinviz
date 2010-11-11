@@ -742,19 +742,25 @@ class CircleNode(NodeItem):
 
         # =============== LABEL ==================
         # Set label
-        if self.label:
-            self.labelText = QGraphicsTextItem(self)
-            self.labelText.root = self
-            labelFont = QFont()
-            labelFont.setBold(False)
-            labelFont.setPixelSize(self.w/4)
-            self.labelText.setFont(labelFont)
-            self.labelText.setPlainText(self.label)
+        if not self.label:
+            self.label = str(node.id)
+            width = self.w/2
+            #print "no label for %d" % node.id
         else:
-            print "no label for %d" % node.id
-
+            width = self.w/3
+            
+        self.labelText = QGraphicsTextItem(self)
+        self.labelText.root = self
+        labelFont = QFont()
+        labelFont.setBold(False)
+        labelFont.setPixelSize(width)
+        self.labelText.setFont(labelFont)
+        self.labelText.setPlainText(self.label)
         # Position the label test
         self.labelText.setPos(  (self.w + 3), -1    )
+    
+
+        
 
         self.setupAnimation()
 
