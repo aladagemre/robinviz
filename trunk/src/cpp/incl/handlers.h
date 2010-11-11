@@ -1636,8 +1636,67 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 // 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
 			  nPar++;
 		    }
-		    if( listOfGraphs[ i ].empty() != true )
+                    if( listOfGraphs[ i ].empty() != true ){
+                              cout << " Graph " << i << " is processed\n";
 			      H = RUN_SELF( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag );
+//                              node_array<bool> markDegreeZero( listOfGraphs[ i ], false );
+//                              list<node> justOnes;
+//                              forall_nodes( n, listOfGraphs[ i ] ){
+//                                  if( listOfGraphs[ i ].degree( n ) == 0 ){
+//                                      justOnes.append( n );
+////                                      markDegreeZero[ n ] = true;
+//                                  }
+//                              }
+//                              cout << "\ndone";
+//                              double averageDistance = 0;
+//                              forall_edges( e, listOfGraphs[ i ] ){
+//                                  point p( Xpos[ listOfGraphs[ i ].source( e ) ], Ypos[ listOfGraphs[ i ].source( e ) ] );
+//                                  point q( Xpos[ listOfGraphs[ i ].target( e ) ], Ypos[ listOfGraphs[ i ].target( e ) ] );
+//                                  averageDistance += p.distance( q );
+//                              }
+//                              averageDistance = averageDistance / (double)(listOfGraphs[ i ].number_of_edges());
+//
+//                              cout << "\ndone";
+//                              double xmin, xmax, ymin, ymax;
+//                              forall_nodes( n, listOfGraphs[ i ] ){
+////                                  if( markDegreeZero[ n ] != true ){
+//                                      if( ncount == 0 ){
+//                                              xmin = Xpos[ n ];
+//                                              xmax = Xpos[ n ];
+//                                              ymin = Ypos[ n ];
+//                                              ymax = Ypos[ n ];
+//                                      }
+//                                      else{
+//                                          if( Xpos[ n ] < xmin )
+//                                                xmin = Xpos[ n ];
+//                                          if( Xpos[ n ] > xmax )
+//                                                xmax = Xpos[ n ];
+//                                          if( Ypos[ n ] < ymin )
+//                                                ymin = Ypos[ n ];
+//                                          if( Ypos[ n ] > ymax )
+//                                                ymax = Ypos[ n ];
+//                                      }
+////                                  }
+//                              }
+//                              cout << "\ndone";
+//                              double xpos1 = xmin;
+//                              double ypos1 = ymin - space;
+//
+//                              forall_items( it, justOnes ){
+//                                  if( xpos1 < xmax ){
+//                                      Xpos[ justOnes[ it ] ] = xpos1;
+//                                      Ypos[ justOnes[ it ] ] = ypos1;
+//                                  }
+//                                  else{
+//                                      xpos1 = xmin;
+//                                      ypos1 -= space;
+//                                      Xpos[ justOnes[ it ] ] = xpos1;
+//                                      Ypos[ justOnes[ it ] ] = ypos1;
+//                                  }
+//                                  xpos1 += increment;
+//                              }
+//                              cout << "OK\n";
+                          }
 
 		    nPar = 0;
 		    forall_nodes( n, listOfGraphs[ i ] ){
@@ -2390,7 +2449,10 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 					innerCount++;
 				}
 				int flg = 0;
-				forall_items( it2, GraphList_S){
+                                if( GraphList_S.succ( it1 ) != NULL )
+                                it2 = GraphList_S.succ( it1 );
+                                countIN = countOUT;
+                                while( GraphList_S.succ( it2 ) != NULL ){
 						G2 = GraphList_S[ it2 ];
 						innerCount2 = 0;
 						forall_nodes( f2, PROJECT ){
@@ -2422,6 +2484,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 						countIN++;
 						if( countIN == GraphList_S.size() )
 							break;
+                                                it2 = GraphList_S.succ( it2 );
 				}
 				countIN = 0;
 				countOUT++;
