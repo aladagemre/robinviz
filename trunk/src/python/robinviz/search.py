@@ -218,13 +218,14 @@ class ComprehensiveSearchWidget(QWidget):
         proteins_int.sort()
         proteins = map(str, proteins_int)
 
-        # now index categories        
-        self.category_dict = {}
-        for category in categories:
-            # for each category, match
-            # category # - category name pair.
-            i = self.index[category][0]
-            self.category_dict[i] = category
+        if not hasattr(self, 'category_dict'):
+            # now index categories        
+            self.category_dict = {}
+            for category in categories:
+                # for each category, match
+                # category # - category name pair.
+                i = self.index[category][0]
+                self.category_dict[i] = category
 
         return proteins
 
@@ -340,6 +341,9 @@ class ComprehensiveSearchWidget(QWidget):
         self.index = shelve.open(normcase("outputs/gene_index.shelve"))
         graphs = self.index.get(str(keyword))
 
+        if not hasattr(self, 'category_dict'):
+            self.splitProteinsCategories()
+            
         if graphs:
             for graph in sorted(graphs):
                 category_name = self.category_dict[graph]
