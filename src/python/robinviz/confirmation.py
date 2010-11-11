@@ -39,7 +39,7 @@ class CoExpressionMainScene(MainScene):
 
     def addNode(self, node):
         item = CircleNode(node, parent=None, scene=self)
-        self.addItem(item)
+        #self.addItem(item)
         self.nodeDict[node] = item
         self.nodeDict[node.id] = item
         

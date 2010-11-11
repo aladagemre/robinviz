@@ -49,12 +49,14 @@ class ConfirmationSelectionPage(QWizardPage):
     def validatePage(self):
 	self.confirmation = selection = self.selector.getSelection()
         if selection == "Co-Expression":
+            print "Co-Expression selected"
             f = open(ap("godata/selected_terms.txt"), "w")
             f.close()
             f = open("outputs/resultparams.txt","w")
             f.write("Co-Expression")
             f.close()
         else:
+            print "Co-Functionality selected"
             f = open("outputs/resultparams.txt","w")
             f.write("Co-Functionality")
             f.close()
