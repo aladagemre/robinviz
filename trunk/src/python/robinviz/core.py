@@ -130,23 +130,33 @@ class View(QGraphicsView):
     def restoreEdges(self):
         newGraph = self.newGraph
         # Add the edges
-        edgeWidthMin = newGraph.edges[0].graphics.width
+        
+        """edgeWidthMin = newGraph.edges[0].graphics.width
         edgeWidthMax = newGraph.edges[0].graphics.width
         for edge in newGraph.edges:
             if edge.graphics.width < edgeWidthMin:
                 edgeWidthMin = edge.graphics.width
             elif edge.graphics.width > edgeWidthMax:
-                edgeWidthMax = edge.graphics.width
+                edgeWidthMax = edge.graphics.width"""
 
-        for edge in newGraph.edges:
+        oldGraph = self.scene().g
+        edgeWidthMin = oldGraph.edges[0].minWidth
+        edgeWidthMax = oldGraph.edges[0].maxWidth
+
+        for i, edge in enumerate(newGraph.edges):
+            edge.weight = oldGraph.edges[i].weight
             edge.minWidth = edgeWidthMin
             edge.maxWidth = edgeWidthMax
             self.scene().addEdge(edge)
 
         for item in self.scene().items():
             if isinstance(item, PiechartNode):
+                # TODO: do we need this?
                 item.updateLabel()
-            
+            elif isinstance(item, CircleNode):
+                item.setupAnimation()
+                
+        
         self.reselectItemsAfterLayoutChange()
         self.refresh()
     
