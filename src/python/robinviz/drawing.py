@@ -1056,19 +1056,28 @@ class PiechartNode(NodeItem):
     def contextMenuEvent(self, event):
         menu = QMenu()
         detailedInformation = menu.addAction("Detailed Information (Online)")
-        displayNeighborsAction = menu.addAction("Display Neighbors in the whole PPI")
-        action = menu.exec_(event.screenPos())
 
+        neighborMenu = QMenu("Display Neighbors in the whole PPI")
+        display1NeighborsAction = neighborMenu.addAction("1. Level Neighbors")
+        display2NeighborsAction = neighborMenu.addAction("2. Level Neighbors")
+        menu.addMenu(neighborMenu)
+
+        action = menu.exec_(event.screenPos())
         geneId = self.node.label.split("_")[0]
         
-        if action == displayNeighborsAction:
-	    from windows import SinglePeripheralViewWindow
-	    self.specialWindow = SinglePeripheralViewWindow(self.scene().views()[0].__class__ , scene=None)
-	    neihgboringFilename = "outputs/graphs/%s.gml" % self.node.label
-	    if not os.path.exists(neihgboringFilename):
-		os.system("./proteinScreen.exe %s TXT" % self.node.label)
-	    self.specialWindow.loadGraph(neihgboringFilename)
+        def displayWindow(numHop=1):
+            from windows import SinglePeripheralViewWindow
+            self.specialWindow = SinglePeripheralViewWindow(self.scene().views()[0].__class__ , scene=None)
+            neihgboringFilename = "outputs/graphs/%s.gml" % self.node.label
+            os.system("./proteinScreen.exe %s TXT%d" % (self.node.label,numHop))
+            self.specialWindow.loadGraph(neihgboringFilename)
             self.specialWindow.showMaximized()
+            del self.specialWindow
+
+        if action == display1NeighborsAction:
+            displayWindow(1)
+        elif action == display2NeighborsAction:
+            displayWindow(2)
 	elif action == detailedInformation:
 	    url = "http://thebiogrid.org/search.php?search=%s&organism=all" % geneId
 	    self.detailBrowser = QtWebKit.QWebView()
