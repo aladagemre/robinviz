@@ -246,8 +246,20 @@
         list<int> categ;
 #endif LEDAVARS
 
-int main(){
-	
+int main( int argc, char **argv ){
+        if( argc != 2 ){
+            cout << argc << endl;
+            FILE *erptr;
+#ifdef LINUX
+            erptr = fopen( "outputs/error.txt", "w" );
+#else
+            erptr = fopen( "outputs//error.txt", "w" );
+#endif
+            fprintf( erptr, "Error 101: Error in Main function of co_ontologies.cpp: You did not specify ontology flag\n" );
+            fclose( erptr );
+            cout << "\nError 101: Error in Main function of co_ontologies.cpp: You did not specify ontology flag\n";
+            exit(1);
+        }
 	FILE *fptr;
         if( (fptr = fopen( "settings.yaml", "r" ) ) == NULL ){
 		printf( "\n settings.yaml file can not be found\n" );
@@ -313,10 +325,148 @@ int main(){
                                          is_ppi_directed
                 );               
                 if( hasColor == true ){
-                    cout << "/**************************************************/" << endl;
-                    cout << "\t" << " Color Processing" << endl;
-                    cout << "/**************************************************/" << endl;
-                    colorHandling( catfile, gofile );
+                        if( strcmp( argv[1], "-f" ) == 0 ){
+
+                            cout << "/**************************************************/" << endl;
+                            cout << "\t" << " Color Processing based on Molecular Function" << endl;
+                            cout << "/**************************************************/" << endl;
+                            char molecularF[18][128] = {
+                                        "antioxidant activity",
+                                        "binding",
+                                        "catalytic activity",
+                                        "channel regulator activity",
+                                        "chemoattractant activity",
+                                        "chemorepellent activity",
+                                        "electron carrier activity",
+                                        "enzyme regulator activity",
+                                        "metallochaperone activity",
+                                        "molecular transducer activity",
+                                        "nutrient reservoir activity",
+                                        "protein binding transcription factor activity",
+                                        "protein tag",
+                                        "sequence-specific DNA binding transcription factor activity",
+                                        "structural molecule activity",
+                                        "transcription regulator activity",
+                                        "translation regulator activity",
+                                        "transporter activity"
+                            };
+                            colorHandling( catfile, gofile, molecularF, 18 );
+                        }
+                        else{
+                            if( strcmp( argv[1], "-l" ) == 0 ){
+                                cout << "/**************************************************/" << endl;
+                                cout << "\t" << " Color Processing based on Cellular Component" << endl;
+                                cout << "/**************************************************/" << endl;
+                                char molecularF[13][128] = {
+                                            "cell",
+                                            "cell part",
+                                            "extracellular region",
+                                            "extracellular region part",
+                                            "macromolecular complex",
+                                            "membrane-enclosed lumen",
+                                            "organelle",
+                                            "organelle part",
+                                            "symplast",
+                                            "synapse",
+                                            "synapse part",
+                                            "virion",
+                                            "virion part"
+                                };
+                                colorHandling( catfile, gofile, molecularF, 13 );
+                            }
+                            else{
+                                if( strcmp( argv[1], "-p" ) == 0 ){
+                                    cout << "/**************************************************/" << endl;
+                                    cout << "\t" << " Color Processing based on Biological Process " << endl;
+                                    cout << "/**************************************************/" << endl;
+                                    char molecularF[33][128] = {
+                                                "biological adhesion",
+                                                "biological regulation",
+                                                "carbohydrate utilization",
+                                                "carbon utilization",
+                                                "cell killing",
+                                                "cell proliferation",
+                                                "cellular component organization or biogenesis",
+                                                "cellular process",
+                                                "death",
+                                                "developmental process",
+                                                "establishment of localization",
+                                                "growth",
+                                                "immune system process",
+                                                "localization",
+                                                "locomotion",
+                                                "metabolic process",
+                                                "multi-organism process",
+                                                "multicellular organismal process",
+                                                "negative regulation of biological process",
+                                                "nitrogen utilization",
+                                                "phosphorus utilization",
+                                                "pigmentation",
+                                                "positive regulation of biological process",
+                                                "regulation of biological process",
+                                                "reproduction",
+                                                "reproductive process",
+                                                "response to stimulus",
+                                                "rhythmic process",
+                                                "signaling",
+                                                "signaling process",
+                                                "sugar utilization",
+                                                "sulfur utilization",
+                                                "viral reproduction"
+                                    };
+                                    colorHandling( catfile, gofile, molecularF, 33 );
+                                }
+                                else{
+                                    if( strcmp( argv[1], "-o" ) == 0 ){
+                                        cout << "/**************************************************/" << endl;
+                                        cout << "\t" << " Color Processing based on Wholo Ontology " << endl;
+                                        cout << "/**************************************************/" << endl;
+                                        char molecularF[33][128] = {
+                                        "biological regulation",
+                                        "cellular component organization or biogenesis",
+                                        "cellular process",
+                                        "developmental process",
+                                        "localization",
+                                        "metabolic process",
+                                        "multi-organism process",
+                                        "multicellular organismal process",
+                                        "negative regulation of biological process",
+                                        "positive regulation of biological process",
+                                        "regulation of biological process",
+                                        "reproductive process",
+                                        "response to stimulus",
+                                        "signaling process",
+                                        "cell part",
+                                        "extracellular region part",
+                                        "macromolecular complex",
+                                        "membrane-enclosed lumen",
+                                        "organelle part",
+                                        "symplast",
+                                        "synapse",
+                                        "synapse part",
+                                        "virion part",
+                                        "binding",
+                                        "catalytic activity",
+                                        "electron carrier activity",
+                                        "enzyme regulator activity",
+                                        "metallochaperone activity",
+                                        "molecular transducer activity",
+                                        "nutrient reservoir activity",
+                                        "structural molecule activity",
+                                        "transcription regulator activity",
+                                        "transporter activity"
+                                        };
+                                        colorHandling( catfile, gofile, molecularF, 33 );
+                                    }
+                                    else{
+                                        cout << "/**************************************************/" << endl;
+                                        cout << "\t" << " Color Processing" << endl;
+                                        cout << "/**************************************************/" << endl;
+                                        colorHandling( catfile, gofile );
+                                    }
+                                }
+                            }
+                        }
                 }
                 FILE *kfptr;
                 if( (fptr = fopen( catfile , "r" )) !=NULL ){

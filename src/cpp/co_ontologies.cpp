@@ -191,7 +191,8 @@
 #endif LEDAVARS
 
 int main(int argc, char **argv){
-        if( argc < 1 ){
+        if( argc != 2 ){
+            cout << argc << endl;
             FILE *erptr;
 #ifdef LINUX
             erptr = fopen( "outputs/error.txt", "w" );
@@ -226,10 +227,11 @@ int main(int argc, char **argv){
 
                 FILE *kfptr;
                 if( hasColor == true ){
-                    cout << "/**************************************************/" << endl;
-                    cout << "\t" << " Color Processing" << endl;
-                    cout << "/**************************************************/" << endl;
                     if( strcmp( argv[1], "-f" ) == 0 ){
+
+                        cout << "/**************************************************/" << endl;
+                        cout << "\t" << " Color Processing based on Molecular Function" << endl;
+                        cout << "/**************************************************/" << endl;
                         char molecularF[18][128] = {
                                     "antioxidant activity",
                                     "binding",
@@ -254,6 +256,9 @@ int main(int argc, char **argv){
                     }
                     else{
                         if( strcmp( argv[1], "-l" ) == 0 ){
+                            cout << "/**************************************************/" << endl;
+                            cout << "\t" << " Color Processing based on Cellular Component" << endl;
+                            cout << "/**************************************************/" << endl;
                             char molecularF[13][128] = {
                                         "cell",
                                         "cell part",
@@ -272,7 +277,10 @@ int main(int argc, char **argv){
                             colorHandling( catfile, defaultGoFile, molecularF, 13 );
                         }
                         else{
-                            if( strcmp( argv[1], "-f" ) == 0 ){
+                            if( strcmp( argv[1], "-p" ) == 0 ){
+                                cout << "/**************************************************/" << endl;
+                                cout << "\t" << " Color Processing based on Biological Process " << endl;
+                                cout << "/**************************************************/" << endl;
                                 char molecularF[33][128] = {
                                             "biological adhesion",
                                             "biological regulation",
@@ -312,6 +320,9 @@ int main(int argc, char **argv){
                             }
                             else{
                                 if( strcmp( argv[1], "-o" ) == 0 ){
+                                    cout << "/**************************************************/" << endl;
+                                    cout << "\t" << " Color Processing based on Wholo Ontology " << endl;
+                                    cout << "/**************************************************/" << endl;
                                     char molecularF[33][128] = {
                                     "biological regulation",
                                     "cellular component organization or biogenesis",
@@ -348,6 +359,12 @@ int main(int argc, char **argv){
                                     "transporter activity"
                                     };
                                     colorHandling( catfile, defaultGoFile, molecularF, 33 );
+                                }
+                                else{
+                                    cout << "/**************************************************/" << endl;
+                                    cout << "\t" << " Color Processing" << endl;
+                                    cout << "/**************************************************/" << endl;
+                                    colorHandling( catfile, defaultGoFile );
                                 }
                             }
                         }
