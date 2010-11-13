@@ -512,9 +512,9 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 #else
 			erptr = fopen( "outputs//error.txt", "w" );
 #endif
-			fprintf( erptr, "Error-id5: You did not specify gene name file, sources/usr_sources/visualization_data/genenames.txt \n" );
+                        fprintf( erptr, "Error-301: You did not specify gene name file, sources/usr_sources/visualization_data/genenames.txt \n" );
 			fclose( erptr );
-			cout << "\nError-id5: You did not specify gene name file, sources/usr_sources/visualization_data/genenames.txt \n"; 
+                        cout << "\nError-301: You did not specify gene name file, sources/usr_sources/visualization_data/genenames.txt \n";
 			exit(1);
 		}else{
 			while( !feof( f ) ){
@@ -540,9 +540,9 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 #else
 			erptr = fopen( "outputs//error.txt", "w" );
 #endif
-			fprintf( erptr, "Error-id4: You did not specify GO based functional category file although you selected to use that file\n" );
+                        fprintf( erptr, "Error 302: You did not specify GO based functional category file although you selected to use that file\n" );
 			fclose( erptr );
-			cout << "\nError-id4: You did not specify GO based functional category file although you selected to use that file\n"; 
+                        cout << "\nError 302: You did not specify GO based functional category file although you selected to use that file\n";
 			exit(1);
 		}
 
@@ -631,9 +631,9 @@ array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes,
 #else
 			erptr = fopen( "outputs//error.txt", "w" );
 #endif
-			fprintf( erptr, "Error-id4: You did not specify GO based functional category file although you selected to use that file\n" );
+                        fprintf( erptr, "Error 303: You did not specify GO based functional category file although you selected to use that file\n" );
 			fclose( erptr );
-			cout << "\nError-id4: You did not specify GO based functional category file although you selected to use that file\n"; 
+                        cout << "\nError 303: You did not specify GO based functional category file although you selected to use that file\n";
 			exit(1);
 		}
 
@@ -709,8 +709,8 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 		array<GENEONTO> inputGenes( GenesNode.size()+1 );
 		for( int i = 0; i < GenesNode.size(); i++ ){
 			inputGenes[ i ].index = 0;
-			inputGenes[ i ].categories.resize( 100 );
-			inputGenes[ i ].gos.resize( 100 );
+                        inputGenes[ i ].categories.resize( 25 );
+                        inputGenes[ i ].gos.resize( 25 );
 			sprintf( inputGenes[ i ].genename, "%s", GenesNode[ i ].GENE );
 		}
 
@@ -721,9 +721,9 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 #else
 			erptr = fopen( "outputs//error.txt", "w" );
 #endif
-			fprintf( erptr, "Error-id4: You did not specify GO based functional category file although you selected to use that file\n" );
+                        fprintf( erptr, "Error 304: You did not specify GO based functional category file although you selected to use that file\n" );
 			fclose( erptr );
-			cout << "\nError-id4: You did not specify GO based functional category file although you selected to use that file\n"; 
+                        cout << "\nError 304: You did not specify GO based functional category file although you selected to use that file\n";
 			exit(1);
 		}
 
@@ -888,9 +888,9 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
 		#else
 					erptr = fopen( "outputs//error.txt", "w" );
 		#endif
-		fprintf( erptr, "Error-id_1: You did not specify GO input file correctly\n" );
+                fprintf( erptr, "Error 305: You did not specify GO input file correctly\n" );
 		fclose( erptr );
-		cout << "\nError-id_1: You did not specify GO input file correctly\n"; 
+                cout << "\nError 305: You did not specify GO input file correctly\n";
 		exit(1);
 	}
 	else{
@@ -943,10 +943,13 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
             fprintf( yFptr, "%s\n", GenesNode[i].GENE );
         fclose( yFptr );
         cout << "||||||||||||||||||||||||||||||||\n";
+        char headerFileName[64];
+        sprintf( headerFileName, "geneResult" );
+        char algName[64] = "";
         if( hasColor )
-            analyseGenes2( "geneResult", categ, gocategories.size(), "", GenesNode.size(), 0, hasColor  );
+            analyseGenes2( headerFileName, categ, gocategories.size(), algName, GenesNode.size(), 0, hasColor  );
         else
-            analyseGenes2( "geneResult", categ, gocategories.size(), "", GenesNode.size(), 0  );
+            analyseGenes2( headerFileName, categ, gocategories.size(), algName, GenesNode.size(), 0  );
         cout << "||||||||||||||||||||||||||||||||\n";
 }
 
@@ -982,9 +985,9 @@ array<GENEONTO> cogFileHandling( char cogfile[256], char orgAbv[12], list<CATNAM
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
 #endif
-		fprintf( erptr, "Error-id4: You did not specify COG based functional category file although you selected to use that file\n" );
+                fprintf( erptr, "Error 306: You did not specify COG based functional category file although you selected to use that file\n" );
 		fclose( erptr );
-		cout << "\nError-id4: You did not specify COG based functional category file although you selected to use that file\n"; 
+                cout << "\nError 306: You did not specify COG based functional category file although you selected to use that file\n";
 		exit(1);
 	}
 
@@ -1080,13 +1083,13 @@ void cogHandling( char inputCogFile[256], char defaultCogFile[256], list<list<GE
 	if( (fptr = fopen( inputCogFile, "r") ) == NULL ){
 		FILE *erptr;
 		#ifdef LINUX
-					erptr = fopen( "outputs/error.txt", "w" );
+                    erptr = fopen( "outputs/error.txt", "w" );
 		#else
-					erptr = fopen( "outputs//error.txt", "w" );
+                    erptr = fopen( "outputs//error.txt", "w" );
 		#endif
-		fprintf( erptr, "Error-id_1: You did not specify COG input file correctly\n" );
+                fprintf( erptr, "Error 307: You did not specify COG input file correctly\n" );
 		fclose( erptr );
-		cout << "\nError-id_1: You did not specify COG input file correctly\n"; 
+                cout << "\nError 307: You did not specify COG input file correctly\n";
 		exit(1);
 	}
 	else{
@@ -1126,22 +1129,22 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
         list_item it;
 	leda::matrix inverseINPUT = INPUT.trans();
 	list<list<CONDS> > conditions;
-	if( biclustering == 1 ){
-		getBiclustersFromFile( inverseINPUT, defaultBicFile, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 ); 
-		analyseGenes2( "geneResult", categ, biclusters.size(), "", dimension1, dimension2  );
-	}
-	if( biclustering == 2 ){ 
-		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "BIMAX", dimension1, dimension2 );
-		analyseGenes2( "geneResult", categ, biclusters.size(), "BIMAX", dimension1, dimension2  );
-	}
-	if( biclustering == 3 ){
-		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "CC", dimension1, dimension2 ); 
-		analyseGenes2( "geneResult", categ, biclusters.size(), "CC", dimension1, dimension2  );
-	}
-	if( biclustering == 4 ){
-		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "RLEB", dimension1, dimension2 ); 
-                analyseGenes2( "geneResult", categ, biclusters.size(), "REAL" , dimension1, dimension2 );
-	}
+        char headerFileName[64] = "geneResult";
+        char algname[64];
+        if( biclustering == 1 ){
+                sprintf( algname, "" );
+        }
+        if( biclustering == 2 ){
+                sprintf( algname, "BIMAX" );
+        }
+        if( biclustering == 3 ){
+                sprintf( algname, "CC" );
+        }
+        if( biclustering == 4 ){
+                sprintf( algname, "REAL" );
+        }
+        getBiclustersFromFile( inverseINPUT, defaultBicFile, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 );
+        analyseGenes2( headerFileName, categ, biclusters.size(), algname, dimension1, dimension2  );
 // 	if( biclustering == 5 ){
 // 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "SAMBA", dimension1, dimension2 ); 
 // 		analyseGenes2( "geneResult", biclusters.size(), "SAMBA" , dimension1, dimension2 );
@@ -1153,9 +1156,9 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
 	if( biclusters.size() == 0 ) { 
 		FILE *erptr;
 		erptr = fopen( "outputs/error.txt", "w" );
-		fprintf( erptr, "Error-id1: No bicluster candidate to draw, make sure that you use correct parameters\n" );
+                fprintf( erptr, "Error 301: No bicluster candidate to draw, make sure that you use correct parameters\n" );
 		fclose( erptr );
-		cout << "\nError-id1: No bicluster candidate to draw, make sure that you use correct parameters\n"; 
+                cout << "\nError 301: No bicluster candidate to draw, make sure that you use correct parameters\n";
 		exit(1);
 	}
 // 	cout << " GENE LIST size : " << biclusters.size() << endl;
@@ -1463,14 +1466,14 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 	categoryOfGenes = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "r" );
 #endif
 	if( categoryOfGenes == NULL ){
-		cout << "\n Error id3: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n";
+                cout << "\n Error 303: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n";
 		FILE *erptr;
 #ifdef LINUX
 		erptr = fopen( "outputs/error.txt", "w" );
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
 #endif
-		fprintf( erptr, "\n Error id3: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n" );
+                fprintf( erptr, "\n Error 303: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n" );
 		fclose( erptr );
 	}
 	int geneCount = 0;
@@ -2234,9 +2237,9 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 #else
 					erptr = fopen( "outputs//error.txt", "w" );
 #endif
-					fprintf( erptr, "Error-id2: outputs/enrich/result.txt file does not exist\n" );
+                                        fprintf( erptr, "Error 302: outputs/enrich/result.txt file does not exist\n" );
 					fclose( erptr );
-					cout << "\nError-id2: outputs/enrich/result.txt file does not exist\n"; 
+                                        cout << "\nError 302: outputs/enrich/result.txt file does not exist\n";
 					exit(1);
 				}
 				else{
@@ -2792,9 +2795,9 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 #else
 					erptr = fopen( "outputs//error.txt", "w" );
 #endif
-					fprintf( erptr, "Error-id2: outputs/enrich/result.txt file does not exist\n" );
+                                        fprintf( erptr, "Error 302: outputs/enrich/result.txt file does not exist\n" );
 					fclose( erptr );
-					cout << "\nError-id2: outputs/enrich/result.txt file does not exist\n"; 
+                                        cout << "\nError 302: outputs/enrich/result.txt file does not exist\n";
 					exit(1);
 				}
 				else{
@@ -3264,9 +3267,9 @@ void colorHandling( char catfile[256], char gofile[256] ){
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
 #endif
-                fprintf( erptr, "Error-color: You did not specify GO based functional category file hence we use it for color processing\n" );
+                fprintf( erptr, "Error color: You did not specify GO based functional category file hence we use it for color processing\n" );
                 fclose( erptr );
-                cout << "\nError-color: You did not specify GO based functional category file hence we use it for color processing\n";
+                cout << "\nError color: You did not specify GO based functional category file hence we use it for color processing\n";
 		exit(1);
 	}
 
@@ -3694,22 +3697,22 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
 	   Cond_id1 Cond_id2 ... Cond_id2#
 	   ...
 	*/
+        char headerFileName[64] = "geneResult";
+        char algname[64];
 	if( biclustering == 1 ){
-		getBiclustersFromFile( inverseINPUT, defaultBicFile, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 ); 
-                analyseGenes2( "geneResult", categ, biclusters.size(), "", dimension1, dimension2, hasColor  );
+                sprintf( algname, "" );
 	}
 	if( biclustering == 2 ){ 
-		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "BIMAX", dimension1, dimension2 );
-                analyseGenes2( "geneResult", categ, biclusters.size(), "BIMAX", dimension1, dimension2, hasColor  );
+                sprintf( algname, "BIMAX" );
 	}
 	if( biclustering == 3 ){
-		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "CC", dimension1, dimension2 ); 
-                analyseGenes2( "geneResult", categ, biclusters.size(), "CC", dimension1, dimension2, hasColor  );
+                sprintf( algname, "CC" );
 	}
 	if( biclustering == 4 ){
-                getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "REAL", dimension1, dimension2 );
-                analyseGenes2( "geneResult", categ, biclusters.size(), "REAL" , dimension1, dimension2, hasColor );
+                sprintf( algname, "REAL" );
 	}
+        getBiclustersFromFile( inverseINPUT, defaultBicFile, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 );
+        analyseGenes2( headerFileName, categ, biclusters.size(), algname, dimension1, dimension2, hasColor  );
 // 	if( biclustering == 5 ){
 // 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "SAMBA", dimension1, dimension2 ); 
 // 		analyseGenes2( "geneResult", biclusters.size(), "SAMBA" , dimension1, dimension2, hasColor );
@@ -3722,9 +3725,9 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
 		/* Error checking if there is no reported bicluster */
 		FILE *erptr;
 		erptr = fopen( "outputs/error.txt", "w" );
-		fprintf( erptr, "Error-id1: No bicluster candidate to draw, make sure that you use correct parameters\n" );
+                fprintf( erptr, "Error 301: No bicluster candidate to draw, make sure that you use correct parameters\n" );
 		fclose( erptr );
-		cout << "\nError-id1: No bicluster candidate to draw, make sure that you use correct parameters\n"; 
+                cout << "\nError 301: No bicluster candidate to draw, make sure that you use correct parameters\n";
 		exit(1);
 	}
 // 	cout << " GENE LIST size : " << biclusters.size() << endl;
@@ -3852,14 +3855,14 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
         categoryOfGenes = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "r" );
 #endif
         if( categoryOfGenes == NULL ){
-                cout << "\n Error id3: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n";
+                cout << "\n Error 303: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n";
                 FILE *erptr;
 #ifdef LINUX
                 erptr = fopen( "outputs/error.txt", "w" );
 #else
                 erptr = fopen( "outputs//error.txt", "w" );
 #endif
-                fprintf( erptr, "\n Error id3: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n" );
+                fprintf( erptr, "\n Error 303: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n" );
                 fclose( erptr );
         }
         int geneCount = 0;

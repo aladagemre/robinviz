@@ -35,6 +35,7 @@
 ********************************************************************************************************/
 
 #include "incl/handlers.h"
+#include "incl/ehandlers.h"
 #include "incl/handlers/_dataread.h"
 #include "incl/handlers/_bicread.h"
 #include "incl/handlers/_ppiread.h"
@@ -248,21 +249,12 @@
 
 int main( int argc, char **argv ){
         if( argc != 2 ){
-            cout << argc << endl;
-            FILE *erptr;
-#ifdef LINUX
-            erptr = fopen( "outputs/error.txt", "w" );
-#else
-            erptr = fopen( "outputs//error.txt", "w" );
-#endif
-            fprintf( erptr, "Error 101: Error in Main function of co_ontologies.cpp: You did not specify ontology flag\n" );
-            fclose( erptr );
-            cout << "\nError 101: Error in Main function of co_ontologies.cpp: You did not specify ontology flag\n";
-            exit(1);
+            mainOntologyFlagCheckerEXP();
         }
 	FILE *fptr;
         if( (fptr = fopen( "settings.yaml", "r" ) ) == NULL ){
 		printf( "\n settings.yaml file can not be found\n" );
+                settingsYamlChecker();
 		return 0;
 	}
 	else{
@@ -500,43 +492,15 @@ int main( int argc, char **argv ){
                                fclose(fptr);
                         }
                         else{
-                            FILE *erptr;
-#ifdef LINUX
-                            erptr = fopen( "outputs/error.txt", "w" );
-#else
-                            erptr = fopen( "outputs//error.txt", "w" );
-#endif
-                            fprintf( erptr, "You Probably Deleted genefunctions.txt\n" );
-                            fclose( erptr );
-                            cout << "\nYou Probably Deleted genefunctions.txt\n";
-                            exit(1);
+                           geneFunctionFileChecker();
                         }
                     }
                     else{
-                        FILE *erptr;
-#ifdef LINUX
-                        erptr = fopen( "outputs/error.txt", "w" );
-#else
-                        erptr = fopen( "outputs//error.txt", "w" );
-#endif
-                        fprintf( erptr, "You Probably Deleted functions.txt\n" );
-                        fclose( erptr );
-                        cout << "\nYou Probably Deleted functions.txt\n";
-                        exit(1);
-
+                        functionsFileChecker();
                     }
                 }
                 else{
-                    FILE *erptr;
-#ifdef LINUX
-                    erptr = fopen( "outputs/error.txt", "w" );
-#else
-                    erptr = fopen( "outputs//error.txt", "w" );
-#endif
-                    fprintf( erptr, "Check that you specifiy the correct category file\n" );
-                    fclose( erptr );
-                    cout << "\nCheck that you specifiy the correct category file\n";
-                    exit(1);
+                    categoryFileChecker();
                 }
 
                 char defaultBicFile[256];
@@ -548,6 +512,8 @@ int main( int argc, char **argv ){
                         FILE *defaultRunTo;
                         char chr;
 			INPUT = dataRead( dataName2, geneArray, condArray );
+                        if( rlebFlag == true )
+                            minHvalueErrorChecker( INPUT, hvaluemin );
                          //cout << "\nDONE";
 #ifdef LINUX
                          defaultRunTo = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
@@ -587,20 +553,13 @@ int main( int argc, char **argv ){
                          //cout << "\nDONE\n";
 	// 		drawHeatmap( INPUT, geneArray, condArray, "outputs/heatmap/out.html" );
 		}
+                char algName[64];
 		if( bimaxFlag == true ){
 			dataWriteBimax( INPUT, bimax_low_dim1, bimax_low_dim2, ther_disc );
 			biclustering = 2;
                         if( bimax_low_dim1 > INPUT.dim1() || bimax_low_dim2 > INPUT.dim2() ){
-                            FILE *erptr;
-#ifdef LINUX
-                            erptr = fopen( "outputs/error.txt", "w" );
-#else
-                            erptr = fopen( "outputs//error.txt", "w" );
-#endif
-                            fprintf( erptr, "Check the desired dimensions of BIMAX algorithm\n" );
-                            fclose( erptr );
-                            cout << "\nCheck the desired dimensions of BIMAX algorithm\n";
-                            exit(1);
+                            sprintf( algName, "BIMAX" );
+                            dimensionChecker( algName );
                         }
 			#ifdef LINUX
                                 bimaxMain( "src/cpp/incl/bicalg/bimax/matrix_robin.txt", bic_num_bimax );
@@ -611,16 +570,8 @@ int main( int argc, char **argv ){
 			if( ccFlag == true ){
 				dataWriteCC( INPUT ); 
                                 if( minHeight_ > INPUT.dim1() || minWidth_ > INPUT.dim2() ){
-                                    FILE *erptr;
-#ifdef LINUX
-                                    erptr = fopen( "outputs/error.txt", "w" );
-#else
-                                    erptr = fopen( "outputs//error.txt", "w" );
-#endif
-                                    fprintf( erptr, "Check the desired dimensions of CC algorithm\n" );
-                                    fclose( erptr );
-                                    cout << "\nCheck the desired dimensions of CC algorithm\n";
-                                    exit(1);
+                                    sprintf( algName, "ChengAndChurch" );
+                                    dimensionChecker( algName );
                                 }
 				biclustering = 3;
 				#ifdef LINUX
@@ -631,16 +582,8 @@ int main( int argc, char **argv ){
 			}else{
 				if( rlebFlag == true ){
                                         if( maxSizeSubMatrix_exp1_g > INPUT.dim1() || minSizeSubMatrix_exp1_g > INPUT.dim1()  || minSizeSubMatrix_exp1_c > INPUT.dim2() || maxSizeSubMatrix_exp1_c > INPUT.dim2() || maxSizeSubMatrix_exp1_g < minSizeSubMatrix_exp1_g || maxSizeSubMatrix_exp1_c < minSizeSubMatrix_exp1_c ){
-                                            FILE *erptr;
-#ifdef LINUX
-                                            erptr = fopen( "outputs/error.txt", "w" );
-#else
-                                            erptr = fopen( "outputs//error.txt", "w" );
-#endif
-                                            fprintf( erptr, "Check the desired dimensions of RLEB algorithm\n" );
-                                            fclose( erptr );
-                                            cout << "\nCheck the desired dimensions of RLEB algorithm\n";
-                                            exit(1);
+                                            sprintf( algName, "REAL" );
+                                            dimensionChecker( algName );
                                         }
 					biclustering = 4;
                                         rlebmain_m( INPUT, maxSizeSubMatrix_exp1_g, maxSizeSubMatrix_exp1_c, minSizeSubMatrix_exp1_g, minSizeSubMatrix_exp1_c, repeat, hvaluemin, increment_exp1_g, increment_exp1_c );

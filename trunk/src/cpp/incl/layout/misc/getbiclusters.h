@@ -898,7 +898,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
     }
 }
 
-void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumber, char algName[], int dimension1, int dimension, bool hasColor ){
+void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNumber, char algName[64], int dimension1, int dimension, bool hasColor ){
 
     list<CAT> categoriesOfGenes;
     FILE *fptr,*resultPtr;
