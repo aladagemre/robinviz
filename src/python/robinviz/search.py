@@ -241,8 +241,10 @@ class ComprehensiveSearchWidget(QWidget):
 
     def listCategories(self):
         self.clearAll()
+
         for category in self.multiView.keyList:
             category_id = self.index[category][0]
+
             item = QListWidgetItem(category)
 
             if not exists(normcase("outputs/graphs/graph%d.gml" % category_id)):

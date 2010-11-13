@@ -6,7 +6,7 @@ from databases.inputtrees.ppitree import PPISelector
 from databases.inputtrees.gotree import GOSelector
 from databases.inputtrees.geotree import GEOSelector
 from databases.inputtrees.assoctree import AssociationSelector
-from databases.inputtrees.selectors import ConfirmationSelector
+from databases.inputtrees.selectors import ConfirmationSelector, ColorSelector
 from utils.info import ap
 import os
 
@@ -18,16 +18,18 @@ class InputWizard(QWizard):
 	#os.chdir("src/python/robinviz/databases/inputtrees")
 
         self.ConfirmationSelectionPage = ConfirmationSelectionPage()
+        self.ColorSelectionPage = ColorSelectionPage()
 	self.PPISelectionPage = PPISelectionPage()
 	self.AssociationSelectionPage = AssociationSelectionPage()
 	self.GOSelectionPage = GOSelectionPage()
 	self.GEOSelectionPage = GEOSelectionPage()
 
         self.setPage(0, self.ConfirmationSelectionPage )
-	self.setPage(1, self.PPISelectionPage )
-	self.setPage(2, self.GOSelectionPage )
-        self.setPage(3, self.AssociationSelectionPage )
-	self.setPage(4, self.GEOSelectionPage )
+        self.setPage(1, self.ColorSelectionPage )
+	self.setPage(2, self.PPISelectionPage )
+	self.setPage(3, self.GOSelectionPage )
+        self.setPage(4, self.AssociationSelectionPage )
+	self.setPage(5, self.GEOSelectionPage )
 	
 	self.setStartId(0)
 	#self.setWindowModality(QWidget.modal)
@@ -53,16 +55,36 @@ class ConfirmationSelectionPage(QWizardPage):
             f = open(ap("godata/selected_terms.txt"), "w")
             f.close()
             f = open("outputs/resultparams.txt","w")
-            f.write("Co-Expression")
+            f.write("co_expression.exe")
             f.close()
         else:
-            print "Co-Functionality selected"
+            print "Co-Ontology selected"
             f = open("outputs/resultparams.txt","w")
-            f.write("Co-Functionality")
+            f.write("co_ontologies.exe")
             f.close()
             
 	return True
-    
+
+class ColorSelectionPage(QWizardPage):
+    def __init__(self, parent=None):
+	QWizardPage.__init__(self, parent)
+	self.setTitle("Color selection")
+	topLabel = QLabel("In this page, you need to select the way nodes are colored. \n" +
+        "Nodes will have colors according to the category type you select.")
+	topLabel.setWordWrap(True)
+	layout = QVBoxLayout()
+	self.selector = ColorSelector()
+	layout.addWidget(self.selector)
+	self.setLayout(layout)
+
+    def validatePage(self):
+	self.flag = flag = self.selector.getSelection()
+        f = open("outputs/resultparams.txt","a")
+        f.write(" %s" % flag )
+        f.close()
+	return True
+
+
 class AssociationSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)

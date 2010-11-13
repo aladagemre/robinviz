@@ -150,41 +150,26 @@ class MultiViewWindow(QMainWindow):
         self.detectLastConfirmationType()
 
     def setConfirmationType(self, confirmationType=None):
-        if not confirmationType:
-            confirmationType = str(self.coGroup.checkedAction().text())
+        print "Setting confirmationType:", confirmationType
             
-        if confirmationType == "Co-Expression":
+        if confirmationType.startswith( "co_expression.exe" ):
             self.mainViewType = CoExpressionMainView
             self.peripheralViewType = CoExpressionPeripheralView
             self.mainSceneType = CoExpressionMainScene
-            pass
-        elif confirmationType == "Co-Functionality":
+        elif confirmationType.startswith("co_ontologies.exe"):
             self.mainViewType = CoFunctionalityMainView
             self.peripheralViewType = CoFunctionalityPeripheralView
             self.mainSceneType = CoFunctionalityMainScene
-            pass
-        elif confirmationType == "Co-Localization":
-            pass
         else:
             print "No such confirmation type:", confirmationType
-            print "Setting Co-Expression as default."
-            confirmationType = "Co-Expression"
+            print "Setting Co-Ontology as default."
+            confirmationType = "co_ontologies.exe -f"
             
 
         self.confirmationType = confirmationType
         self.menuBar().clear()
         self.setupGUI()
-
-        self.checkCurrentConfirmationType()
-
-    def checkCurrentConfirmationType(self):
-
-        actionDict = {"Co-Expression": self.coExpressionAction,
-                      "Co-Functionality": self.coFunctionalityAction,
-                      "Co-Localization": self.coLocalizationAction,
-                      }
-        actionDict[self.confirmationType].setChecked(True)
-        
+            
     def setupGUI(self):
         desktop = QDesktopWidget().availableGeometry()
         brPoint = desktop.bottomRight()
@@ -285,10 +270,10 @@ class MultiViewWindow(QMainWindow):
         #self.mainView.fitInView(self.mainScene.sceneRect(),Qt.KeepAspectRatio)
         self.mainView.refresh()
 
-        if self.confirmationType == "Co-Expression":
+        if self.confirmationType.startswith("co_expression.exe"):
             self.keyList = map(lambda d: "Bicluster %0d" % d, range(len(self.mainScene.g.nodes)))
 
-        elif self.confirmationType == "Co-Functionality":
+        elif self.confirmationType.startswith("co_ontologies.exe"):
             self.keyList = map(lambda line: line.strip(), open(self.mainScene.params["Input"]["dataName_go"]).readlines())
             
 
@@ -431,7 +416,8 @@ class MultiViewWindow(QMainWindow):
 
     def run(self):
         """Runs the analysis operation."""
-
+        self.detectLastConfirmationType()
+        
         # ======= PREPARE ========
         if not self.confirmationType:
             print "No confirmation type specified, won't run."
@@ -456,7 +442,9 @@ class MultiViewWindow(QMainWindow):
 	# ======= INPUT SELECTION ===
 
         # ======== RUN ==============
-        failed = os.system(normcase(exe_files[self.confirmationType])) # returns 0 for success
+        path = normcase("./"+self.confirmationType)
+        print "Running", path
+        failed = os.system(path) # returns 0 for success
 
         # ======== DISPLAY ==========
         if not failed:
@@ -466,6 +454,7 @@ class MultiViewWindow(QMainWindow):
             # Write the confirmation type so that we can recognize what type
             # of confirmation has been applied.
             with open("outputs/resultparams.txt", "w") as resultparams:
+                print "Writing conftype", self.confirmationType
                 resultparams.write(self.confirmationType)
             
         else:
@@ -497,13 +486,13 @@ class MultiViewWindow(QMainWindow):
             os.system(normcase("./session.exe save %s %d" % ( fileName, len(self.mainView.scene().g.nodes) )))
 
     def detectLastConfirmationType(self):
-        try:
-            with open("outputs/resultparams.txt") as resultparams:
-                confirmationType = resultparams.read().strip()
-                self.setConfirmationType(confirmationType)
-        except:
+        
+        with open("outputs/resultparams.txt") as resultparams:
+            confirmationType = resultparams.read().strip()
+            self.setConfirmationType(confirmationType)
+        """except:
             print "No confirmation type found, using Co-Expression."
-            self.setConfirmationType("Co-Expression")
+            self.setConfirmationType("co_expression.exe -f")"""
 
     def displayLast(self):
         self.clearViews()
@@ -597,25 +586,6 @@ class MultiViewWindow(QMainWindow):
         run.setStatusTip('Confirmation by Co-Expression')
         self.connect(run, SIGNAL('triggered()'), self.run)
 
-
-        confirmationMenu = QMenu('Confirmation', self.menuBar())
-        self.coGroup = coGroup = QActionGroup(confirmationMenu)
-        coGroup.setExclusive(True)
-        
-        self.coExpressionAction = coExpression = QAction('Co-Expression', coGroup)
-        self.coFunctionalityAction = coFunctionality = QAction('Co-Functionality', coGroup)
-        self.coLocalizationAction = coLocalization = QAction('Co-Localization', coGroup)
-
-
-        coActions = (coExpression, coFunctionality, coLocalization)
-        # Add actions to confirmation menu.
-        map(confirmationMenu.addAction, coActions)
-        # Set checkable
-        map(lambda action: action.setCheckable(True), coActions)
-        # Connect signals (sets confirmation type)
-        map(lambda action: self.connect(action, SIGNAL('triggered()'), self.setConfirmationType) , coActions)
-
-
         loadSession = QAction('L&oad Session', self)
         loadSession.setShortcut('Ctrl+O')
         loadSession.setStatusTip('Load a saved session.')
@@ -630,8 +600,6 @@ class MultiViewWindow(QMainWindow):
         displayLast.setShortcut('Ctrl+E')
         displayLast.setStatusTip('Display Recent Results without running the program again.')
         self.connect(displayLast, SIGNAL('triggered()'), self.displayLast)
-
-
 
         settings = QAction('Se&ttings', self)
         settings.setShortcut('Ctrl+T')
@@ -653,7 +621,6 @@ class MultiViewWindow(QMainWindow):
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(run)
-        fileMenu.addMenu(confirmationMenu)
         fileMenu.addSeparator()
         map(fileMenu.addAction, (loadSession, saveSession, displayLast, settings, selectInput))
         fileMenu.addSeparator()
