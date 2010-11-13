@@ -289,7 +289,7 @@ class MultiViewWindow(QMainWindow):
             self.keyList = map(lambda d: "Bicluster %0d" % d, range(len(self.mainScene.g.nodes)))
 
         elif self.confirmationType == "Co-Functionality":
-            self.keyList = sorted(map(lambda line: line.strip(), open(self.mainScene.params["Input"]["dataName_go"]).readlines()))
+            self.keyList = map(lambda line: line.strip(), open(self.mainScene.params["Input"]["dataName_go"]).readlines())
             
 
         self.createDockWindows()
