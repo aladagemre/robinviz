@@ -36,6 +36,7 @@
 
 #include <LEDA/graphics/graphwin.h>
 #include "incl/handlers.h"
+#include "incl/ehandlers.h"
 #include "incl/handlers/_dataread.h"
 #include "incl/handlers/_bicread.h"
 #include "incl/handlers/_ppiread.h"
@@ -192,21 +193,12 @@
 
 int main(int argc, char **argv){
         if( argc != 2 ){
-            cout << argc << endl;
-            FILE *erptr;
-#ifdef LINUX
-            erptr = fopen( "outputs/error.txt", "w" );
-#else
-            erptr = fopen( "outputs//error.txt", "w" );
-#endif
-            fprintf( erptr, "Error 101: Error in Main function of co_ontologies.cpp: You did not specify ontology flag\n" );
-            fclose( erptr );
-            cout << "\nError 101: Error in Main function of co_ontologies.cpp: You did not specify ontology flag\n";
-            exit(1);
+            mainOntologyFlagCheckerONT();
         }
 	FILE *fptr;
         if( (fptr = fopen( "settings.yaml", "r" ) ) == NULL ){
                 printf( "\n Ini file can not be found\n" );
+                settingsYamlChecker();
                 return 0;
         }
         else{
@@ -401,43 +393,15 @@ int main(int argc, char **argv){
                                fclose(fptr);
                         }
                         else{
-                            FILE *erptr;
-        #ifdef LINUX
-                            erptr = fopen( "outputs/error.txt", "w" );
-        #else
-                            erptr = fopen( "outputs//error.txt", "w" );
-        #endif
-                            fprintf( erptr, "You Probably Deleted genefunctions.txt\n" );
-                            fclose( erptr );
-                            cout << "\nYou Probably Deleted genefunctions.txt\n";
-                            exit(1);
+                           geneFunctionFileChecker();
                         }
                     }
                     else{
-                        FILE *erptr;
-        #ifdef LINUX
-                        erptr = fopen( "outputs/error.txt", "w" );
-        #else
-                        erptr = fopen( "outputs//error.txt", "w" );
-        #endif
-                        fprintf( erptr, "You Probably Deleted functions.txt\n" );
-                        fclose( erptr );
-                        cout << "\nYou Probably Deleted functions.txt\n";
-                        exit(1);
-
+                        functionsFileChecker();
                     }
                 }
                 else{
-                    FILE *erptr;
-        #ifdef LINUX
-                    erptr = fopen( "outputs/error.txt", "w" );
-        #else
-                    erptr = fopen( "outputs//error.txt", "w" );
-        #endif
-                    fprintf( erptr, "Check that you specifiy the correct category file\n" );
-                    fclose( erptr );
-                    cout << "\nCheck that you specifiy the correct category file\n";
-                    exit(1);
+                    categoryFileChecker();
                 }
 
                 list<leda::matrix> matrixCategories;
@@ -524,16 +488,18 @@ int main(int argc, char **argv){
                 Hmax = 0;
                 forall_items( it , matrixCategories ){
                         char filename2[1024] = "";
-                        int count_i = 0;
+                        double count_i = 0;
                         newI2 = matrixCategories[ it ];
                         double rs_value;
                         double bagMean = 0;
                         for( int bag1_int = 0; bag1_int <  newI2.dim1(); bag1_int++ ){
                                 for( int bag2_int = 0; bag2_int <  newI2.dim2(); bag2_int++ ){
                                         bagMean += newI2( bag1_int, bag2_int );
+                                        if( newI2( bag1_int, bag2_int ) > 0 )
+                                            count_i+=1.0;
                                 }
                         }
-                        bagMean = bagMean / (double)( newI2.dim1() * newI2.dim2() );
+                        bagMean = sqrt(count_i) * bagMean / (double)( newI2.dim1() * newI2.dim2() );
                         H_values.append( bagMean );
                         if( Hmax < bagMean )
                                 Hmax = bagMean;
