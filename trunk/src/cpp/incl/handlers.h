@@ -1143,7 +1143,7 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
         if( biclustering == 4 ){
                 sprintf( algname, "REAL" );
         }
-        getBiclustersFromFile( inverseINPUT, defaultBicFile, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 );
+        getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, algname, dimension1, dimension2 ); 
         analyseGenes2( headerFileName, categ, biclusters.size(), algname, dimension1, dimension2  );
 // 	if( biclustering == 5 ){
 // 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "SAMBA", dimension1, dimension2 ); 
@@ -3711,7 +3711,7 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
 	if( biclustering == 4 ){
                 sprintf( algname, "REAL" );
 	}
-        getBiclustersFromFile( inverseINPUT, defaultBicFile, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, dimension1, dimension2 );
+        getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, algname, dimension1, dimension2 ); 
         analyseGenes2( headerFileName, categ, biclusters.size(), algname, dimension1, dimension2, hasColor  );
 // 	if( biclustering == 5 ){
 // 		getBiclustersFromFile2( inverseINPUT, 1, minBicSize , maxBicSize, matrixBiclusters, biclusters, conditions, "SAMBA", dimension1, dimension2 ); 
