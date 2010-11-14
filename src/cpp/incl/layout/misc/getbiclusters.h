@@ -392,9 +392,9 @@ void analyseGenes( char fileName[], list<int> &categoriesBicluster, int biNumber
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
 #endif
-	    fprintf( erptr, "Error-id2: outputs/enrich/result.txt file does not exist\n" );
+	    fprintf( erptr, "Error-401: outputs/enrich/result.txt file does not exist in directory, enrichment process can not continue\n" );
 	    fclose( erptr );
-	    cout << "\nError-id2: outputs/enrich/result.txt file does not exist\n"; 
+	    cout << "Error-401: outputs/enrich/result.txt file does not exist in directory, enrichment process can not continue\n"; 
 	    exit(1);
     }
     else{
@@ -706,9 +706,9 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
 #endif
-	    fprintf( erptr, "Error-id2: outputs/enrich/result.txt file does not exist\n" );
+	    fprintf( erptr, "Error-401: outputs/enrich/result.txt file does not exist in directory, enrichment process can not continue\n" );
 	    fclose( erptr );
-	    cout << "\nError-id2: outputs/enrich/result.txt file does not exist\n"; 
+	    cout << "Error-401: outputs/enrich/result.txt file does not exist in directory, enrichment process can not continue\n"; 
 	    exit(1);
     }
     else{
@@ -1031,9 +1031,9 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
 #endif
-	    fprintf( erptr, "Error-id2: outputs/enrich/result.txt file does not exist\n" );
+	    fprintf( erptr, "Error-401: outputs/enrich/result.txt file does not exist in directory, enrichment process can not continue\n" );
 	    fclose( erptr );
-	    cout << "\nError-id2: outputs/enrich/result.txt file does not exist\n"; 
+	    cout << "Error-401: outputs/enrich/result.txt file does not exist in directory, enrichment process can not continue\n"; 
 	    exit(1);
     }
     else{
@@ -1267,9 +1267,9 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
 #endif
-	    fprintf( erptr, "Error-id8: %s does not exist\n", defaultBicFile );
+	    fprintf( erptr, "Error-402: %s does not exist\n", defaultBicFile );
 	    fclose( erptr );
-	    cout << "\nError-id8: " << defaultBicFile << " file does not exist\n"; 
+	    cout << "\nError-402: " << defaultBicFile << " file does not exist\n"; 
 	    exit(1);
 	}
 	else{
