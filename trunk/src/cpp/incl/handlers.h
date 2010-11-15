@@ -908,7 +908,7 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
 // 	cout << "\nWEDONE\n";
 	array<GENEONTO> geneOntoForData = geneOntologyHandling2( defaultGoFile, inputCats, GenesNode, categories, gocategories );
 // 	cout << "\nWEDONE\n";
-        gocategories.del_item( gocategories.first_item() );
+        //gocategories.del_item( gocategories.first_item() );
 	geneOntologyToBiclusterHandling( gocategories, geneOntoForData );
         int catCount = 0;
         forall_items( it, gocategories ){
