@@ -524,6 +524,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 			}
 		}
 		fclose( f );
+//                system( "PAUSE" );
 		array<GENEONTO> inputGenes( dataGenes.size()+1 );
 		for( int i = 0; i < dataGenes.size(); i++ ){
 			inputGenes[ i ].index = 0;
@@ -532,7 +533,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 			sprintf( inputGenes[ i ].genename, "%s", dataGenes[ dataGenes.get_item( i ) ].GENE );
 			
 		}
-		//system( "PAUSE" );
+//                system( "PAUSE" );
 		if( (f = fopen( filePath, "r" )) == NULL){
 			FILE *erptr;
 #ifdef LINUX
@@ -549,10 +550,11 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		int line_i = 0;
 		while( !feof( f ) ){
 			fgets( line, 100000, f );
-cout << line_i << endl;
+//cout << line_i << endl;
 			line_i++;
 		}
 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
+//                system( "PAUSE" );
 		rewind( f );
 		line_i = 0;
 		while( !feof( f ) ){
