@@ -511,7 +511,7 @@ class MultiViewWindow(QMainWindow):
 
     def selectInputs(self):
 	self.inputWizard = InputWizard()
-	self.inputWizard.showMaximized()
+	self.inputWizard.show()
 	
     ############### VIEW MENU ###################
     def goto(self):
