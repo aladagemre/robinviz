@@ -6,8 +6,8 @@ from databases.inputtrees.ppitree import PPISelector
 from databases.inputtrees.gotree import GOSelector
 from databases.inputtrees.geotree import GEOSelector
 from databases.inputtrees.assoctree import AssociationSelector
-from databases.inputtrees.selectors import ConfirmationSelector, ColorSelector
-from utils.info import ap
+from databases.inputtrees.selectors import *
+from utils.info import ap, rp
 import os
 
 
@@ -19,6 +19,8 @@ class InputWizard(QWizard):
 
         self.ConfirmationSelectionPage = ConfirmationSelectionPage()
         self.ColorSelectionPage = ColorSelectionPage()
+        self.EdgeWeightSelectorPage = EdgeWeightSelectorPage()
+        self.NodeWeightSelectorPage = NodeWeightSelectorPage()
 	self.PPISelectionPage = PPISelectionPage()
 	self.AssociationSelectionPage = AssociationSelectionPage()
 	self.GOSelectionPage = GOSelectionPage()
@@ -26,10 +28,12 @@ class InputWizard(QWizard):
 
         self.setPage(0, self.ConfirmationSelectionPage )
         self.setPage(1, self.ColorSelectionPage )
-	self.setPage(2, self.PPISelectionPage )
-	self.setPage(3, self.GOSelectionPage )
-        self.setPage(4, self.AssociationSelectionPage )
-	self.setPage(5, self.GEOSelectionPage )
+        self.setPage(2, self.EdgeWeightSelectorPage)
+        self.setPage(3, self.NodeWeightSelectorPage)
+	self.setPage(4, self.PPISelectionPage )
+	self.setPage(5, self.GOSelectionPage )
+        self.setPage(6, self.AssociationSelectionPage )
+	self.setPage(7, self.GEOSelectionPage )
 	
 	self.setStartId(0)
 	#self.setWindowModality(QWidget.modal)
@@ -79,11 +83,40 @@ class ColorSelectionPage(QWizardPage):
 
     def validatePage(self):
 	self.flag = flag = self.selector.getSelection()
-        f = open("outputs/resultparams.txt","a")
-        f.write(" %s" % flag )
+        filename = rp("outputs/resultparams.txt")
+        exe = open(filename, "r").read().strip().split(" ")[0]
+
+        f = open(filename, "w")
+        f.write("%s %s" % (exe, flag ))
         f.close()
 	return True
 
+
+class EdgeWeightSelectorPage(QWizardPage):
+    def __init__(self, parent=None):
+	QWizardPage.__init__(self, parent)
+	self.setTitle("Edge Weights / Ratio")
+	layout = QVBoxLayout()
+        self.setLayout(layout)
+        
+	self.selector = EdgeWeightSelector()
+	layout.addWidget(self.selector)
+
+    def validatePage(self):
+	return True
+
+class NodeWeightSelectorPage(QWizardPage):
+    def __init__(self, parent=None):
+	QWizardPage.__init__(self, parent)
+	self.setTitle("Node Weights calculation method")
+	layout = QVBoxLayout()
+        self.setLayout(layout)
+
+	self.selector = NodeWeightSelector()
+	layout.addWidget(self.selector)
+
+    def validatePage(self):
+	return True
 
 class AssociationSelectionPage(QWizardPage):
     def __init__(self, parent=None):
