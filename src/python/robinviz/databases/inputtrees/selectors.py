@@ -17,6 +17,8 @@ class ConfirmationSelector(QWidget):
 
         self.coexpression = QRadioButton("Co-Expression: Use biclustering to analyse PPI Network")
         self.coontology = QRadioButton("Co-Ontology: Use Gene Ontology to analyse PPI Network")
+
+        self.coontology.setChecked(True)
         
         self.layout.addWidget(self.coexpression)
         self.layout.addWidget(self.coontology)
@@ -41,6 +43,8 @@ class ColorSelector(QWidget):
         self.coprocess = QRadioButton("Co-Process: Biological Process categories")
         self.coontology = QRadioButton("Co-Ontology: All categories")
 
+        self.cofunctionality.setChecked(True)
+        
         self.layout.addWidget(self.heading)
         self.layout.addWidget(self.cofunctionality)
         self.layout.addWidget(self.colocalization)
