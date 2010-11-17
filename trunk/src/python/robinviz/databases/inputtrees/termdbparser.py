@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 """Reads from go_daily-termdb.rdf-xml and converts it to an sql file called goinfo.sqlite3 so that it can be queried fastly (via indices)."""
+import sys
+sys.path.append("../..")
 
 from xml.dom.minidom import parse
 import shelve
 import sqlite3
 import os
-from gene2goparser import download_file, ungz, root
+from utils.info import ap
+from utils.compression import ungz, download_file
 import shutil
 
 def createTable(curs):
@@ -23,14 +26,14 @@ def createTable(curs):
 
 def generateTermDict():
     # DOWNLOAD DATABASE TXT HERE
-    input_file = os.path.join(root, "godata/go_daily-termdb.rdf-xml")
+    input_file = ap("godata/go_daily-termdb.rdf-xml")
     print "Input: %s" % input_file
     if not os.path.exists(input_file):
 	download_file("http://archive.geneontology.org/latest-termdb/go_daily-termdb.rdf-xml.gz")
 	ungz("go_daily-termdb.rdf-xml.gz")
 	shutil.move("go_daily-termdb.rdf-xml", input_file)
     # "go_daily-termdb.rdf-xml/slim.xml"
-    output_file = os.path.join(root, "godata/goinfo.sqlite3")
+    output_file = ap("godata/goinfo.sqlite3")
     print "Output: %s" % output_file
 
 

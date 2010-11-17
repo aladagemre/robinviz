@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Gene Ontology Association Source selector dialog"""
+import shutil
 from PyQt4.QtGui import QWidget, QTreeWidget, QTreeWidgetItem, QApplication, QHBoxLayout
 from PyQt4.QtCore import Qt
 import sys
@@ -9,7 +10,7 @@ import sqlite3
 if not "utils" in sys.path:
     sys.path.append("../..")
     
-from utils.info import ap
+from utils.info import ap, rp
 from utils.compression import download_file_to, ungz
 from databases.genequery import GeneDB
 from databases.translator import AssociationTranslator
@@ -178,7 +179,11 @@ class AssociationSelector(QWidget):
         return newbie
 
     def filterSelected(self):
-        topLevels = open(ap("godata/toplevel_function.txt")).read().split("\n")
+        flag = open(rp("outputs/resultparams.txt")).read().strip().split("-")[-1]
+
+        top_level_file = ap("godata/toplevel_%s.txt" % flag)
+        
+        topLevels = open(top_level_file).read().split("\n")
         selected_terms = sorted(map(lambda x:x.strip(), open(ap("godata/selected_terms.txt")).readlines()))
         united_terms = list(set(sorted(topLevels + selected_terms)))
 
