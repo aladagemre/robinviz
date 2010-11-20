@@ -25,6 +25,7 @@ class InputWizard(QWizard):
 	self.AssociationSelectionPage = AssociationSelectionPage()
 	self.GOSelectionPage = GOSelectionPage()
 	self.GEOSelectionPage = GEOSelectionPage()
+        self.BiclusteringSelectionPage = BiclusteringSelectionPage()
 
         self.setPage(0, self.ConfirmationSelectionPage )
         self.setPage(1, self.ColorSelectionPage )
@@ -34,6 +35,7 @@ class InputWizard(QWizard):
 	self.setPage(5, self.GOSelectionPage )
         self.setPage(6, self.AssociationSelectionPage )
 	self.setPage(7, self.GEOSelectionPage )
+        self.setPage(8, self.BiclusteringSelectionPage )
 	
 	self.setStartId(0)
 	#self.setWindowModality(QWidget.modal)
@@ -169,7 +171,7 @@ class GEOSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
 	self.setTitle("GEO data selection")
-	topLabel = QLabel("In this page, you need to select the Gene Expression sources you'd like to use for biclustering")
+	topLabel = QLabel("In this page, you need to select the Gene Expression source you'd like to use for biclustering")
 	topLabel.setWordWrap(True)
 	layout = QVBoxLayout()
 	self.selector = GEOSelector()
@@ -179,7 +181,21 @@ class GEOSelectionPage(QWizardPage):
     def validatePage(self):
 	self.selector.downloadCheckedGEOs()
 	return True
-	
+class BiclusteringSelectionPage(QWizardPage):
+    def __init__(self, parent=None):
+	QWizardPage.__init__(self, parent)
+	self.setTitle("GEO data selection")
+	topLabel = QLabel("In this page, you need to select the biclustering algoritm and define parameters to be applied on Gene Expression source you selected.")
+	topLabel.setWordWrap(True)
+	layout = QVBoxLayout()
+	self.selector = BiclusteringSelector()
+	layout.addWidget(self.selector)
+	self.setLayout(layout)
+
+    def validatePage(self):
+	self.selector.saveSettings()
+	return True
+
 def runWizard():
     app = QApplication(sys.argv)
     mainWindow = InputWizard()
