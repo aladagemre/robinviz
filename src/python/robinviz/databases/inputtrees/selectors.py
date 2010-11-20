@@ -9,6 +9,7 @@ from config.customwidgets import *
 import sys
 import os
 from utils.info import rp
+from utils.settingswrite import write_values
 import yaml
 
 class ConfirmationSelector(QWidget):
@@ -148,6 +149,7 @@ class BiclusteringSelector(QWidget):
         self.loadSettings()
         self.parameterWidgets = {}
         self.setupGUI()
+        self.setValues()
 
     def loadSettings(self):
         stream = file(rp('settings.yaml'), 'r')    # 'document.yaml' contains a single YAML document.
@@ -171,10 +173,13 @@ class BiclusteringSelector(QWidget):
                 #algorithm.flagValue = False
                 self.params["Confirmation"]["CoExpression"]["Algorithms"][algorithm.flagName] = 0
 
-        stream = file(rp('settings.yaml'), 'w')
+        """stream = file(rp('settings.yaml'), 'w')
         yaml.dump(self.params, stream, default_flow_style=False, indent=4)    # Write a YAML representation of data to 'document.yaml'.
-        stream.close()
-        
+        stream.close()"""
+        f = open(rp('settings.yaml'), "w")
+        f.write(write_values(self.params))
+        f.close()
+    
     def __getParameterWidget(self, parameter):
         """Returns label - value widget pair for the given parameter object."""
         labelWidget = QLabel(parameter.description + ":")
@@ -204,6 +209,18 @@ class BiclusteringSelector(QWidget):
             print "Unknown parameter type"
 
         return (labelWidget, valueWidget)
+
+    def setValues(self):
+        typeConversion = {QSpinBox       : int,
+                          CustomRadio    : int,
+                          CustomCheckBox : int,
+                          QDoubleSpinBox : float,
+                          QLineEdit      : str,
+                          FileBrowser    : abspath,}
+
+        for parameter, widget in self.parameterWidgets.items():
+            convert = typeConversion[type(widget)]
+            widget.setValue( convert( self.params["Confirmation"]["CoExpression"]["Biclustering"][parameter]  ) )
 
     def setupGUI(self):
     
