@@ -36,7 +36,8 @@ class InputWizard(QWizard):
         self.setPage(6, self.AssociationSelectionPage )
 	self.setPage(7, self.GEOSelectionPage )
         self.setPage(8, self.BiclusteringSelectionPage )
-	
+
+        #print self.ConfirmationSelectionPage.wizard()
 	self.setStartId(0)
 	#self.setWindowModality(QWidget.modal)
 	self.setModal(True)

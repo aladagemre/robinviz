@@ -59,7 +59,9 @@ exp= """Confirmation:
             hvalueWeighting: %(hvalueWeighting)s
             enrichmentWeighting_o: %(enrichmentWeighting_o)s
             enrichmentWeighting_f: %(enrichmentWeighting_f)s
-            ppihitratioWeighting: %(ppihitratioWeighting)s"""
+            ppihitratioWeighting: %(ppihitratioWeighting)s
+            is_ppi_directed: %(is_ppi_directed)s
+            """
 
 func="""
     CoFunctionality:
@@ -77,7 +79,8 @@ func="""
         Algorithms:
             go_info: %(go_info)s
             edgesBetween: %(edgesBetween)s
-            sharedGenes: %(sharedGenes)s"""
+            sharedGenes: %(sharedGenes)s
+"""
 
 	
 def get_exp(values):
