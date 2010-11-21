@@ -69,7 +69,11 @@ class AssociationSelector(QWidget):
             for c in range( topLevelItem.childCount() ):
 		child = topLevelItem.child(c)
 		traverse(child)
-	
+
+        if not checkedItems:
+            checkedItems = open(ap("assocdata/selected_assoc.txt")).read().split("\n")
+            return checkedItems
+
 	checkedItems = sorted(checkedItems)
 	f = open(ap("assocdata/selected_assoc.txt"), "w")
 	f.write("\n".join( checkedItems ) )
@@ -79,6 +83,7 @@ class AssociationSelector(QWidget):
         
     def downloadCheckedAssociation(self):
 	urls = self.getCheckedItems()
+        
 	uncompressed_files = []
 	for url in urls:
 	    # Find the uncompressed filename
@@ -282,69 +287,6 @@ class AssociationSelector(QWidget):
 
 
         self.filterSelected()
-            
-
-        """
-            print filename.split("/")[-1]
-	    atype = self.detectAnnotationType(filename)
-            if not atype:
-                print "Could not detect annotation type. Not using it."
-                print
-                continue
-                
-	    print "Annotation type:",atype
-            print
-            continue
-	    f = open(filename)
-	    for line in f:
-		if line[0] == "!":
-		    continue
-		cols = line.split("\t")
-		protein_name1 = cols[1]
-		protein_name2 = cols[2]
-		go_term = cols[4]
-		
-		l = go_dict.get(go_term)
-		if not l:
-		    l = []
-		if protein_name2:
-		    #protein_name2 = self.db.value2value(protein_name2,"OFFICIAL_SYMBOL") # to convert OFFICIAL_SYMBOL
-		    #protein_name2 = [record[0] for record in self.db.value2biogrids(protein_name2)] # to convert possible biogrids, we have to use l.extend for this.
-		    protein_name2 = self.db.value2biogrid(protein_name2, atype)
-		    if protein_name2:
-			converted+=1
-			l.append(protein_name2)
-		    else:
-			not_converted+=1
-		    
-		else:
-		    protein_name1 = self.db.value2biogrid(protein_name1, atype)
-		    if protein_name1:
-			converted+=1
-			l.append(protein_name1)
-		    else:
-			not_converted+=1
-		    
-		go_dict[go_term] = l
-	# ===============================================
-	
-	for key in sorted(go_dict.keys()):
-	    try:
-                genes = go_dict[key]
-                if genes:
-                    genes_str = "\t".join( map(str, genes) )
-                else:
-                    genes_str = "NULL"
-
-                
-		o.write("%s\t%s\n" % ( key,  genes_str) )
-	    except:
-		raise Exception, "problem here. key: %s; values = %s" % (key, go_dict[key])
-	o.close()
-    
-	print "Converted:",converted
-	print "Could not convert:",not_converted """
-	
 	
     def parseFile(self):
 	"""Parses the index file and generates TreeWidget."""
