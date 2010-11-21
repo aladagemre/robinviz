@@ -843,6 +843,8 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 			for( i = 0; i < inputGenes.size(); i++ ){
 				if( strcmp( temp[it2].GENE, inputGenes[ i ].genename ) == 0 ){
 					fprintf( fptr, "\t<tr>\n" );
+                                        if( inputGenes[ i ].index == 0 )
+                                            inputGenes[ i ].index = 1;
 					fprintf( fptr, "\t\t<td rowspan=%d>%s</td>\n", inputGenes[ i ].index, temp[it2].GENE );
 					fprintf( fptr, "\t\t<td>%s</td>\n", inputGenes[ i ].categories[ 0 ].catName );
 					fprintf( fptr, "\t\t<td>%s</td>\n", inputGenes[ i ].gos[ 0 ].goName );
@@ -1924,180 +1926,178 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 // 	wptr3 = fopen( "sources//graph_sources//graph_infos.txt", "w" );
 // #endif
 	for(int i = 0; i < biclusters.size(); i++ ){	
-                if( listOfGraphs[ i ].empty() != true ){
-		    pos.init( listOfGraphs[ i ] );
-		    bends.init( listOfGraphs[ i ] );   
-		    array<int> nodePar( listOfGraphs[ i ].number_of_nodes()+1 );
-		    int nPar = 0;
-		    forall_nodes( n, listOfGraphs[ i ] ){
-			  nodePar[ nPar ] = listOfGraphs[ i ][ n ];
+                    projectNode = PROJECT.new_node();
+                    pos.init( listOfGraphs[ i ] );
+                    bends.init( listOfGraphs[ i ] );
+                    array<int> nodePar( listOfGraphs[ i ].number_of_nodes()+1 );
+                    int nPar = 0;
+                    forall_nodes( n, listOfGraphs[ i ] ){
+                          nodePar[ nPar ] = listOfGraphs[ i ][ n ];
 // 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
-			  nPar++;
-		    }
-		    cout << " Graph " << i << " in process \n";
-			if( listOfGraphs[ i ].empty() != true ){
-				if( listOfGraphs[ i ].number_of_nodes() < 1500 ){
-					//H = RUN_CIRCLEALONE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100 );
-                                        H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 100.0 );
-				}
-				else
-                                        H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 2, 0.20 );
-			}
-		    cout << " Graph " << i << " in process \n";
-		    nPar = 0;
-		    forall_nodes( n, listOfGraphs[ i ] ){
-			  listOfGraphs[ i ][ n ] = nodePar[ nPar ];
+                          nPar++;
+                    }
+                    cout << " Graph " << i << " in process \n";
+                    if( listOfGraphs[ i ].empty() != true ){
+                            if( listOfGraphs[ i ].number_of_nodes() < 1500 ){
+                                    //H = RUN_CIRCLEALONE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100 );
+                                    H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 100.0 );
+                            }
+                            else
+                                    H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 2, 0.20 );
+                    }
+                    cout << " Graph " << i << " in process \n";
+                    nPar = 0;
+                    forall_nodes( n, listOfGraphs[ i ] ){
+                          listOfGraphs[ i ][ n ] = nodePar[ nPar ];
 // 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
-			  nPar++;
-		    }  
+                          nPar++;
+                    }
 
-			GraphList.append( listOfGraphs[ i ] );
+                    GraphList.append( listOfGraphs[ i ] );
 // #ifdef LINUX
 // 			sprintf( filename , "sources/graph_sources/Graph%d.txt" , i+1 );
 // #else
 // 			sprintf( filename , "sources//graph_sources//Graph%d.txt" , i+1 );
 // #endif
 // 			ofstream GRAPHS( filename , ios::in | ios::trunc );
-		    
-		        
+
+
 // 			fprintf( wptr3, "%s\n", "_________________________________" );
 // 			fprintf( wptr3, "%s\t%s\n", "File Name      :", filename ); 
 // 			fprintf( wptr3, "%s\t%d\n", "Number of Graph:", i );
 // 			fprintf( wptr3, "%s\n", "_________________________________" );
-			projectNode = PROJECT.new_node();
-			char nameS[ 10000 ][ 16 ];
-			list<Strings> nameGraph;
-		    
-			int nn = 0;
-			node_array<int> INDEX( listOfGraphs[ i ], 0 );
-			forall_nodes( n, listOfGraphs[ i ]){
-				ncount = 0;
-				INDEX[ n ] = nn;
-				STRINGS temp_S;
-				strcpy( temp_S.name, GenesNode[ listOfGraphs[ i ][ n ] ].GENE);
+                    char nameS[ 10000 ][ 16 ];
+                    list<Strings> nameGraph;
+
+                    int nn = 0;
+                    node_array<int> INDEX( listOfGraphs[ i ], 0 );
+                    forall_nodes( n, listOfGraphs[ i ]){
+                            ncount = 0;
+                            INDEX[ n ] = nn;
+                            STRINGS temp_S;
+                            strcpy( temp_S.name, GenesNode[ listOfGraphs[ i ][ n ] ].GENE);
 // 					cout << GenesNode[ listOfGraphs[ i ][ n ] ].GENE << endl;
-				nameGraph.append( temp_S  );
-				nn++;	
-			}
-			/*forall_items( it, nameGraph )
-				printf( "%s\n", (char*)nameGraph[ it ].name );*/
-			namesForEachGraph.append(nameGraph);
+                            nameGraph.append( temp_S  );
+                            nn++;
+                    }
+                    /*forall_items( it, nameGraph )
+                            printf( "%s\n", (char*)nameGraph[ it ].name );*/
+                    namesForEachGraph.append(nameGraph);
 // #ifdef LINUX
 // 			sprintf( filename , "sources/graph_sources/Relation%d.txt" , i+1 );
 // #else
 // 			sprintf( filename , "sources//graph_sources//Relation%d.txt" , i+1 );
 // #endif
 // 			wptr2 = fopen( filename, "w" );
-			forall_edges( e, listOfGraphs[ i ] ){
-				node source = listOfGraphs[ i ].source( e );
-				node target = listOfGraphs[ i ].target( e );
+                    forall_edges( e, listOfGraphs[ i ] ){
+                            node source = listOfGraphs[ i ].source( e );
+                            node target = listOfGraphs[ i ].target( e );
 // 				fprintf( wptr2, "%s\t=>\t%s\t|\t|\n", nameS[ INDEX[ source ] ], nameS[ INDEX[target] ] );
-			}
+                    }
 
 // 			fclose( wptr2 );
 
-			leda::string m = "";
+                    leda::string m = "";
 // 			listOfGraphs[ i ].write( GRAPHS );
 // 			GRAPHS.close();
 
-			/************************************************/
-			/*    Copy Graph as leda::string type Graph     */
-			/************************************************/
-			GRAPH<leda::string,int> HAsString;		
-			HAsString.clear();
-			leda::string temp;
-			int count = 0;
-			forall_nodes( n, listOfGraphs[ i ] ){
-				zzz = HAsString.new_node();
-				temp = leda::string( nameS[ INDEX[ n ] ][ count ] );
-				HAsString[ zzz ] = temp;
-			}
-			node_array<int> INDEX_S( HAsString, 0 );
-			count = 0;
-			forall_nodes( n, HAsString ){
-				INDEX_S[ n ] = count;
-				count++;
-			}
-			forall_edges( e, listOfGraphs[ i ] ){
-				int a = INDEX[ listOfGraphs[ i ].source( e ) ];
-				int b = INDEX[ listOfGraphs[ i ].target( e ) ];
+                    /************************************************/
+                    /*    Copy Graph as leda::string type Graph     */
+                    /************************************************/
+                    GRAPH<leda::string,int> HAsString;
+                    HAsString.clear();
+                    leda::string temp;
+                    int count = 0;
+                    forall_nodes( n, listOfGraphs[ i ] ){
+                            zzz = HAsString.new_node();
+                            temp = leda::string( nameS[ INDEX[ n ] ][ count ] );
+                            HAsString[ zzz ] = temp;
+                    }
+                    node_array<int> INDEX_S( HAsString, 0 );
+                    count = 0;
+                    forall_nodes( n, HAsString ){
+                            INDEX_S[ n ] = count;
+                            count++;
+                    }
+                    forall_edges( e, listOfGraphs[ i ] ){
+                            int a = INDEX[ listOfGraphs[ i ].source( e ) ];
+                            int b = INDEX[ listOfGraphs[ i ].target( e ) ];
 
-				forall_nodes( m1, HAsString ){
-					if( INDEX_S[ m1 ] == a )
-						break;
-				}
-				forall_nodes( m2, HAsString ){
-					if( INDEX_S[ m2 ] == b )
-						break;
-				}
-				//cout << m1 << " " << a << " - " << m2 << b << endl; 
-				HAsString.new_edge( m1, m2, 1 );
-			}
+                            forall_nodes( m1, HAsString ){
+                                    if( INDEX_S[ m1 ] == a )
+                                            break;
+                            }
+                            forall_nodes( m2, HAsString ){
+                                    if( INDEX_S[ m2 ] == b )
+                                            break;
+                            }
+                            //cout << m1 << " " << a << " - " << m2 << b << endl;
+                            HAsString.new_edge( m1, m2, 1 );
+                    }
 
-			node_array<point> pos_S(HAsString);
-			edge_array<list<point> > bends_S(HAsString);
-			array <list<node> > layer_S( layers.size());
-			/*forall_nodes( n1, HAsString ){
-			    cout << endl<< INDEX_S[ n1 ];
-			}
-			forall_nodes( n2, listOfGraphs[ i ] ){
-			    cout << endl<< INDEX[ n2 ];
-			}*/
-			forall_nodes( n1, HAsString ){
-			    forall_nodes( n2, listOfGraphs[ i ] ){
-				//cout << endl<< INDEX_S[ n1 ] << "  " << INDEX[ n2 ]<<endl;
-				if( INDEX_S[ n1 ] == INDEX[ n2 ] ){
-				    //cout << endl << pos_S[ n1 ] << "  " << pos[ n2 ] << endl;        
-				    pos_S[ n1 ] = pos[ n2 ];
-				}
-			    }
-			}
-			/*forall_edges( e1, HAsString ){
-			    forall_edges( e2, listOfGraphs[ i ] ){
-				if( INDEX_S[ HAsString.source( e1 ) ] == INDEX[ listOfGraphs[ i ].source( e2 ) ] &&
-				      INDEX_S[ HAsString.target( e1 ) ] == INDEX[ listOfGraphs[ i ].target( e2 )  ] )
-				      bends_S[ e1 ] = bends[ e2 ];
-			    }
-			}*/
-			int j;
-			for( j = 0; j < layers.size(); j++ ){
-			    list<node> layerTemp = layers[ j ];
-			    forall_items( it, layerTemp ){
-				forall_nodes( n1, HAsString ){
-				    if( INDEX_S[ n1 ] == INDEX[ layerTemp[ it ] ] ){
-				      layer_S[ j ].push_back( n1 );
-				    }
-				}
-			    }
-			}
-			for( j = 0; j < layer_S.size(); j++ ){
-			    list<node> layerTemp = layer_S[ j ];
+                    node_array<point> pos_S(HAsString);
+                    edge_array<list<point> > bends_S(HAsString);
+                    array <list<node> > layer_S( layers.size());
+                    /*forall_nodes( n1, HAsString ){
+                        cout << endl<< INDEX_S[ n1 ];
+                    }
+                    forall_nodes( n2, listOfGraphs[ i ] ){
+                        cout << endl<< INDEX[ n2 ];
+                    }*/
+                    forall_nodes( n1, HAsString ){
+                        forall_nodes( n2, listOfGraphs[ i ] ){
+                            //cout << endl<< INDEX_S[ n1 ] << "  " << INDEX[ n2 ]<<endl;
+                            if( INDEX_S[ n1 ] == INDEX[ n2 ] ){
+                                //cout << endl << pos_S[ n1 ] << "  " << pos[ n2 ] << endl;
+                                pos_S[ n1 ] = pos[ n2 ];
+                            }
+                        }
+                    }
+                    /*forall_edges( e1, HAsString ){
+                        forall_edges( e2, listOfGraphs[ i ] ){
+                            if( INDEX_S[ HAsString.source( e1 ) ] == INDEX[ listOfGraphs[ i ].source( e2 ) ] &&
+                                  INDEX_S[ HAsString.target( e1 ) ] == INDEX[ listOfGraphs[ i ].target( e2 )  ] )
+                                  bends_S[ e1 ] = bends[ e2 ];
+                        }
+                    }*/
+                    int j;
+                    for( j = 0; j < layers.size(); j++ ){
+                        list<node> layerTemp = layers[ j ];
+                        forall_items( it, layerTemp ){
+                            forall_nodes( n1, HAsString ){
+                                if( INDEX_S[ n1 ] == INDEX[ layerTemp[ it ] ] ){
+                                  layer_S[ j ].push_back( n1 );
+                                }
+                            }
+                        }
+                    }
+                    for( j = 0; j < layer_S.size(); j++ ){
+                        list<node> layerTemp = layer_S[ j ];
 // 				  forall_items( it, layerTemp ){
 // 					cout << INDEX_S[ layerTemp[ it ] ] << " ";
 // 				  }
-			}
+                    }
 #ifdef DEBUG_ROBINVIZ
-			cout << endl;
+                    cout << endl;
 #endif
-			for( j = 0; j < layers.size(); j++ ){
-			    list<node> layerTemp = layers[ j ];
+                    for( j = 0; j < layers.size(); j++ ){
+                        list<node> layerTemp = layers[ j ];
 // 				  forall_items( it, layerTemp ){
 // 					cout << INDEX[ layerTemp[ it ] ] << " ";
 // 				  }
-			}
+                    }
 
 
-			POS.push_back( pos_S );
-			BENDS.push_back( bends_S );
-			LAYERS.push_back( layer_S );
-			GraphList_S.append( HAsString );
-			//cout << " Size 1 : " << HAsString.number_of_nodes() << " Size 2 : " << listOfGraphs[ i ].number_of_nodes() << " Size 3 : " << nameGraph.size() << endl;
-			HAsString.clear();
-                }
-			    /************************************************/
-			    /* End of Copy Graph as leda::string type Graph */
-			    /************************************************/
-        }
+                    POS.push_back( pos_S );
+                    BENDS.push_back( bends_S );
+                    LAYERS.push_back( layer_S );
+                    GraphList_S.append( HAsString );
+                    //cout << " Size 1 : " << HAsString.number_of_nodes() << " Size 2 : " << listOfGraphs[ i ].number_of_nodes() << " Size 3 : " << nameGraph.size() << endl;
+                    HAsString.clear();
+            }
+            /************************************************/
+            /* End of Copy Graph as leda::string type Graph */
+            /************************************************/
 }
 
 

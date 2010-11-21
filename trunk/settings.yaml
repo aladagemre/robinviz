@@ -21,18 +21,18 @@ Confirmation:
             biclustering: 4
             bimax_low_dim1: 100
             bimax_low_dim2: 7
-            ther_disc: 0.10000
+            ther_disc: 0.1
             bic_num_bimax: 25
             bic_num_cc: 30
             maxScore_: 1
-            minHeight_: 1500
+            minHeight_: 1000
             minWidth_: 10
-            maxSizeSubMatrix_exp1_g: 1200
+            maxSizeSubMatrix_exp1_g: 1000
             maxSizeSubMatrix_exp1_c: 10
             minSizeSubMatrix_exp1_g: 1000
             minSizeSubMatrix_exp1_c: 5
             repeat: 50
-            hvaluemin: 250000.00
+            hvaluemin: 10000.0
             increment_exp1_g: 200
             increment_exp1_c: 5
         Algorithms:
@@ -58,8 +58,6 @@ Confirmation:
             enrichmentWeighting_o: 0
             enrichmentWeighting_f: 0
             ppihitratioWeighting: 0
-            is_ppi_directed: 0
-            
     CoFunctionality:
         Input:
             ppifilename_go: src/python/robinviz/databases/inputtrees/ppidata/ppi.txt
@@ -67,7 +65,7 @@ Confirmation:
             gofile_go: src/python/robinviz/databases/inputtrees/assocdata/go_slim.txt
             dataName_go: src/python/robinviz/databases/inputtrees/assocdata/input_go.txt
         Drawing:
-            removeRat: 0.01
+            removeRat: 0.05
             nodeSize: 50.0
             edgeBendImp: 35.0
             colorScale: 130.0
