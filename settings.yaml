@@ -58,6 +58,8 @@ Confirmation:
             enrichmentWeighting_o: 0
             enrichmentWeighting_f: 0
             ppihitratioWeighting: 0
+            is_ppi_directed: 0
+
     CoFunctionality:
         Input:
             ppifilename_go: src/python/robinviz/databases/inputtrees/ppidata/ppi.txt
