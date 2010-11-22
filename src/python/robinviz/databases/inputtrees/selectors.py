@@ -69,19 +69,28 @@ class ColorSelector(QWidget):
                 return result[key]
 
 class EdgeWeightSelector(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, confirmation, parent=None):
         QWidget.__init__(self, parent)
+        self.confirmation = confirmation
+        self.loadSettings()
         self.setupGUI()
         
     def setupGUI(self):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
-        self.heading = QLabel("Edge weights in Main Graph will be based on")
+        self.heading = QLabel("Edge weights in Central View will be based on")
         self.interactions = QRadioButton("Interactions from PPI Network")
         self.common = QRadioButton("Common Genes in Biclusters")
 
-        self.interactions.setChecked(True)
+        # Check the radio buttons
+        if self.params["Algorithms"]["edgesBetween"] == 1:
+            self.interactions.setChecked(True)
+        elif self.params["Algorithms"]["sharedGenes"] == 1:
+            self.common.setChecked(True)
+        else:
+            print "edgesBetween:", self.params["Algorithms"]["edgesBetween"]
+            print "sharedGenes:", self.params["Algorithms"]["sharedGenes"]
 
         # ======= EDGE REMOVAL RATIO ========
         self.label_removal = QLabel("Edge weight removal ratio:")
@@ -89,7 +98,7 @@ class EdgeWeightSelector(QWidget):
         self.removal_ratio.setRange(0.01, 0.99)
         self.removal_ratio.setDecimals(2)
         self.removal_ratio.setSingleStep(0.01)
-        self.removal_ratio.setValue(0.15)
+        self.removal_ratio.setValue(float(self.params["Drawing"]["removeRat"]))
 
 
         self.ratio_layout = QHBoxLayout()
@@ -103,7 +112,24 @@ class EdgeWeightSelector(QWidget):
         self.layout.addWidget(self.common, 2)
         self.layout.addLayout(self.ratio_layout, 3)
 
-        
+    def loadSettings(self):
+        stream = file(rp('settings.yaml'), 'r')
+        self.complete_params = yaml.load(stream)
+        self.params = self.complete_params["Confirmation"][self.confirmation]
+
+    def saveSettings(self):
+        self.params["Drawing"]["removeRat"] = float(self.removal_ratio.value())
+        if self.interactions.isChecked():
+            self.params["Algorithms"]["edgesBetween"] = 1
+            self.params["Algorithms"]["sharedGenes"] = 0
+        else:
+            self.params["Algorithms"]["edgesBetween"] = 0
+            self.params["Algorithms"]["sharedGenes"] = 1
+
+        self.complete_params["Confirmation"][self.confirmation] = self.params
+        f = open(rp('settings.yaml'), "w")
+        f.write(write_values(self.complete_params))
+        f.close()
 
     def getSelection(self):
         if self.interactions.isChecked():
