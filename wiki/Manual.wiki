@@ -5,9 +5,9 @@
 = Introduction =
 -------------------------
 
-Robinviz is implemented using both python( where we require PyQT and Python) and C( where we use C++ library LEDA and C++ compiler). Simply, the data retrieval processes are handled in Robinviz GUI and all remaining concepts and data usage are done at C-C++ side. There is an error reporting mechanism as well where you can follow the execution at the console and inform us about the possible error.
+Robinviz is implemented using both python( where we require PyQT and Python) and C( where we use C++ library LEDA and C++ compiler). Simply, the data retrieval processes are handled in Robinviz Graphical User Interface(GUI) using PyQT and Python. Remaining concepts and data usage are coded using C and Leda C++ library. Robinviz has several features hence makes the tool complicated. So, we try to follow and report errors. In case of unreported errors, you can follow the execution at the console and even you can inform us.
 
-Although we present binary packages for Linux and Windows operating systems, programmers can recompile and use the existing implementation. Through the manual, we first show source code compilation in both linux and windows. Then, we introduce GUI. Finally, we demonstrate a sample run for the first time users.
+Although we present binary packages for Linux and Windows operating systems, programmers can recompile and use the existing implementation. Through the manual, we first show source code compilation in both Linux( valid for well used distributions) and Windows. Then, we introduce GUI. Finally, we demonstrate a sample run for the first time users.
 
 -------------------------
 = Compilation =
@@ -15,14 +15,14 @@ Although we present binary packages for Linux and Windows operating systems, pro
 
 == @ Linux ==
 
-Requirements
-=================
+===Requirements===
+
 LEDA 5.1+ Library from Algorithmic Solutions
 libX11-dev
 g++
 
 
-Steps
+===Steps===
 
 # Add the following lines to your `~/.bashrc`
 
@@ -49,6 +49,10 @@ sh compile.sh
 All the executables should be compiled.
 
 == @ Windows ==
+
+===Requirements===
+
+===Steps===
 
 -------------------------
 = Graphical User Interface =
