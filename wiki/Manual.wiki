@@ -52,11 +52,26 @@ All the executables should be compiled.
 
 ===Requirements===
 
+LEDA 5.1+ Library from Algorithmic Solutions
+Visual Studio 2005 C++ or over
+
 ===Steps===
+
+1. Follow the instruction given at http://www.algorithmicsolutions.info/leda_manual/DLL_s_MS_Visual.html
+
+or
+
+1. Shall use sample Visual Studio 2005 Solution Template located at the main source distribution folder.
+2. Setup LEDA 5.1+ Library from Algorithmic Solutions
+3. Follow the instruction given at http://www.algorithmic-solutions.info/leda_manual/DLL_s_MS_Visual.html or if you use the template, you will need to 
+add library path and include folder from menu bar Tools->Options->Project and Solutions->VC++ Directories.
+
 
 -------------------------
 = Graphical User Interface =
 -------------------------
+
+
 
 -------------------------
 = Sample Demonstration =
