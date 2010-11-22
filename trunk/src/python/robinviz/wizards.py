@@ -103,6 +103,9 @@ class EdgeWeightSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
 
+    def initializePage(self):
+        self.selector.initialize()
+        
     def setupGUI(self):
 	self.setTitle("Edge Weights / Ratio")
 	layout = QVBoxLayout()
@@ -130,6 +133,9 @@ class EdgeWeightSelectionPage(QWizardPage):
 class NodeWeightSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
+
+    def initializePage(self):
+        self.selector.initialize()
         
     def setupGUI(self):
 	self.setTitle("Node Weights calculation method")
@@ -216,10 +222,15 @@ class GEOSelectionPage(QWizardPage):
 	self.selector = GEOSelector()
 	layout.addWidget(self.selector)
 	self.setLayout(layout)
-    
+
+    def initializePage(self):
+        self.selector.initialize()
+
     def validatePage(self):
 	self.selector.downloadCheckedGEOs()
+        self.selector.saveSettings()
 	return True
+
 class BiclusteringSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
@@ -231,6 +242,9 @@ class BiclusteringSelectionPage(QWizardPage):
 	layout.addWidget(self.selector)
 	self.setLayout(layout)
 
+    def initializePage(self):
+        self.selector.initialize()
+        
     def validatePage(self):
 	self.selector.saveSettings()
 	return True

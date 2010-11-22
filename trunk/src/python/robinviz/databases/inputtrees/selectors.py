@@ -72,6 +72,8 @@ class EdgeWeightSelector(QWidget):
     def __init__(self, confirmation, parent=None):
         QWidget.__init__(self, parent)
         self.confirmation = confirmation
+
+    def initialize(self):
         self.loadSettings()
         self.setupGUI()
         
@@ -141,9 +143,11 @@ class NodeWeightSelector(QWidget):
     def __init__(self, confirmation, parent=None):
         QWidget.__init__(self, parent)
         self.confirmation = confirmation
+        
+    def initialize(self):
         self.loadSettings()
         self.setupGUI()
-
+        
     def setupGUI(self):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
@@ -210,8 +214,10 @@ class NodeWeightSelector(QWidget):
 class BiclusteringSelector(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
-        self.loadSettings()
         self.parameterWidgets = {}
+
+    def initialize(self):
+        self.loadSettings()
         self.setupGUI()
         self.setValues()
 
