@@ -272,8 +272,8 @@ void process2LevelFromTxt( char queryGeneName[256] ){
             length = node_width * circle2.size();
             double radius2 = length / pi;
             tmp = pi;
-            if( radius1  >= radius2 )
-                radius2 = radius1 + 200;
+            if( radius2 < radius1 + 150 )
+                radius2 = radius1 + 250;
             circle C2( 0, 0, radius2 );
 
             array<double> slotsD( circle2.size() + 1 );

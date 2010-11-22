@@ -1629,9 +1629,9 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
 				TEMP( count, count2 ) = M( indexGenes[ it ] , indexCond[ it2 ]);
 				count2++;
 			}
-                //v.print();
-				count++;
-				count2 = 0;
+                        //v.print();
+                        count++;
+                        count2 = 0;
 		}
 
 		list<GENES> geness;

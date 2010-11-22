@@ -496,7 +496,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		char line[ 100000 ];
 		char *pc,*pend,*go,*cat;
 		const char *strDelim = " \t";
-		const char *strDelim2 = " ";
+                const char *strDelim2 = " \t";
 #ifdef LINUX
 		char filePath[256] = "sources/usr_sources/visualization_data/funcassociate_go_associations.txt";
 		char filePath2[256] = "sources/usr_sources/visualization_data/genenames.txt";
@@ -523,17 +523,15 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 				dataGenes.append( tempg );
 			}
 		}
-		fclose( f );
-//                system( "PAUSE" );
+                fclose( f );
 		array<GENEONTO> inputGenes( dataGenes.size()+1 );
 		for( int i = 0; i < dataGenes.size(); i++ ){
 			inputGenes[ i ].index = 0;
-			inputGenes[ i ].categories.resize( 18 );
-			inputGenes[ i ].gos.resize( 18 );
+                        inputGenes[ i ].categories.resize( 10 );
+                        inputGenes[ i ].gos.resize( 10 );
 			sprintf( inputGenes[ i ].genename, "%s", dataGenes[ dataGenes.get_item( i ) ].GENE );
 			
-		}
-//                system( "PAUSE" );
+                }
 		if( (f = fopen( filePath, "r" )) == NULL){
 			FILE *erptr;
 #ifdef LINUX
@@ -554,15 +552,15 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 			line_i++;
 		}
 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
-//                system( "PAUSE" );
 		rewind( f );
 		line_i = 0;
 		while( !feof( f ) ){
 			// count rows
 			fgets( line, 100000, f );
+//                        cout << "-" << line << endl;
 			pc = strtok( line, strDelim );
 
-cout << line_i << " : " << pc << endl;
+//                        cout << line_i << " : " << pc << endl;
 			go = pc;
 			if( feof( f ) )
 				break;
@@ -575,10 +573,12 @@ cout << line_i << " : " << pc << endl;
 				}
 				else{
 					pc = strtok( NULL, strDelim2 );
+//                                        cout << pc << " ";
 					for( int i = 0; i < dataGenes.size(); i++ ){
-						if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 18 ){
+                                                if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 10 ){
 							sprintf( inputGenes[ i ].categories[ inputGenes[ i ].index ].catName, "%s", cat );
 							sprintf( inputGenes[ i ].gos[ inputGenes[ i ].index++ ].goName, "%s", go );
+//                                                        cout << "|";
 							break;
 						}
 					}
@@ -590,13 +590,13 @@ cout << line_i << " : " << pc << endl;
 				count++;
 			}
 			line_i++;
-			if( line_i % 500 == 0 )
+                        if( line_i % 1 == 0 )
 				cout << "\n Line " << line_i << " is parsed ";
 		}
 		cout << "\n/**************************************************/" << endl;
 		cout << "\t" << " Parsing GO File ends " << endl;
 		cout << "/**************************************************/" << endl;
-		fclose( f );
+                fclose( f );
 		return inputGenes;
 }
 
@@ -621,8 +621,8 @@ array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes,
 		array<GENEONTO> inputGenes( dataGenes.size()+1 );
 		for( int i = 0; i < dataGenes.size(); i++ ){
 			inputGenes[ i ].index = 0;
-			inputGenes[ i ].categories.resize( 400 );
-			inputGenes[ i ].gos.resize( 400 );
+                        inputGenes[ i ].categories.resize( 10 );
+                        inputGenes[ i ].gos.resize( 10 );
 			sprintf( inputGenes[ i ].genename, "%s", dataGenes[ i ].GENE );			
 		}
 
@@ -645,13 +645,14 @@ array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes,
 //			line_i++;
 //		}
 //		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
-//		rewind( f );
+                rewind( f );
 //		line_i = 0;
 		while( !feof( f ) ){
 			// count rows
 			two_tuple<CATNAMES,int> tup;
 			tup.second() = 0;
 			fgets( line, 100000, f );
+                        cout << line << endl;
 			pc = strtok( line, strDelim );
 			go = pc;
 			if( feof( f ) )
@@ -668,9 +669,10 @@ array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes,
 					pc = strtok( NULL, strDelim2 );
 					tup.second()++;
 					for( int i = 0; i < dataGenes.size(); i++ ){
-						if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 400 ){
+                                                if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 10 ){
 							sprintf( inputGenes[ i ].categories[ inputGenes[ i ].index ].catName, "%s", cat );
 							sprintf( inputGenes[ i ].gos[ inputGenes[ i ].index++ ].goName, "%s", go );
+                                                        cout << "|";
 							break;
 						}
 					}
@@ -682,7 +684,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes,
 				count++;
 			}
 			line_i++;
-			if( line_i % 500 == 0 )
+                        if( line_i % 1 == 0 )
 				cout << "\n Line " << line_i << " is parsed ";
 			categories.append( tup );
 		}
