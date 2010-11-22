@@ -1,14 +1,17 @@
 #summary Robinviz V2 Tool Manual
 #labels Featured,Manual
 
+-------------------------
 = Introduction =
+-------------------------
 
 Robinviz is implemented using both python( where we require PyQT and Python) and C( where we use C++ library LEDA and C++ compiler). Simply, the data retrieval processes are handled in Robinviz GUI and all remaining concepts and data usage are done at C-C++ side. There is an error reporting mechanism as well where you can follow the execution at the console and inform us about the possible error.
 
 Although we present binary packages for Linux and Windows operating systems, programmers can recompile and use the existing implementation. Through the manual, we first show source code compilation in both linux and windows. Then, we introduce GUI. Finally, we demonstrate a sample run for the first time users.
 
-
+-------------------------
 = Compilation =
+-------------------------
 
 == @ Linux ==
 
@@ -47,6 +50,10 @@ All the executables should be compiled.
 
 == @ Windows ==
 
+-------------------------
 = Graphical User Interface =
+-------------------------
 
+-------------------------
 = Sample Demonstration =
+-------------------------
