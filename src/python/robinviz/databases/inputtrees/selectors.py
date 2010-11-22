@@ -179,7 +179,7 @@ class NodeWeightSelector(QWidget):
             if option.isChecked():
                 checked = response[option]
                 uncheckeds = set(response.values()) - set([checked])
-                return checked, unchecked
+                return checked, uncheckeds
 
 
     def loadSettings(self):

@@ -149,6 +149,7 @@ class NodeWeightSelectionPage(QWizardPage):
 	layout.addWidget(self.selector)
 
     def validatePage(self):
+        self.selector.saveSettings()
         return True
 
 class AssociationSelectionPage(QWizardPage):
@@ -161,7 +162,14 @@ class AssociationSelectionPage(QWizardPage):
 	self.selector = AssociationSelector()
 	layout.addWidget(self.selector)
 	self.setLayout(layout)
-    
+
+    def nextId(self):
+        n = QWizardPage.nextId(self)
+        if self.wizard().ConfirmationSelectionPage.confirmation == "Co-Expression":
+            return n
+        else:
+            return -1
+
     def validatePage(self):
 	self.selector.mergeSelectedAssociations()
 	return True
