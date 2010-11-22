@@ -72,6 +72,8 @@ class ConfirmationSelectionPage(QWizardPage):
             f.close()
 
         self.wizard().EdgeWeightSelectionPage.setupGUI()
+        if selection == "Co-Expression":
+            self.wizard().NodeWeightSelectionPage.setupGUI()
 	return True
 
 class ColorSelectionPage(QWizardPage):
@@ -110,9 +112,17 @@ class EdgeWeightSelectionPage(QWizardPage):
             confirmation = "CoExpression"
         elif confirmation == "Co-Ontology":
             confirmation = "CoFunctionality"
+
+        self.confirmation = confirmation
 	self.selector = EdgeWeightSelector(confirmation)
 	layout.addWidget(self.selector)
 
+    def nextId(self):
+        n = QWizardPage.nextId(self)
+        if self.confirmation == "CoFunctionality":
+            return n + 1
+        else:
+            return n
     def validatePage(self):
         self.selector.saveSettings()
 	return True
@@ -120,15 +130,26 @@ class EdgeWeightSelectionPage(QWizardPage):
 class NodeWeightSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
+        
+    def setupGUI(self):
 	self.setTitle("Node Weights calculation method")
 	layout = QVBoxLayout()
         self.setLayout(layout)
+        
+        # ==== SET CONFIRMATION ====
+        self.confirmation = confirmation = self.wizard().ConfirmationSelectionPage.confirmation
+        if confirmation == "Co-Expression":
+            confirmation = "CoExpression"
+        elif confirmation == "Co-Ontology":
+            confirmation = "CoFunctionality"
 
-	self.selector = NodeWeightSelector()
+        # ==== CREATE WIDGET =======
+	self.selector = NodeWeightSelector(confirmation)
+
 	layout.addWidget(self.selector)
 
     def validatePage(self):
-	return True
+        return True
 
 class AssociationSelectionPage(QWizardPage):
     def __init__(self, parent=None):
