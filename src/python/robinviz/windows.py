@@ -424,10 +424,6 @@ class MultiViewWindow(QMainWindow):
             return
         self.clearViews()
         
-        exe_files = {
-            'Co-Expression' : './co_expression.exe',
-            'Co-Functionality' : './co_functional.exe',
-        }
         print "Starting operation"
         self.setWindowTitle("RobinViz - Please wait, window might not respond for a while...")
         self.setCursor(Qt.WaitCursor)
