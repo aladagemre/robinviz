@@ -17,10 +17,10 @@ class InputWizard(QWizard):
 	
 	#os.chdir("src/python/robinviz/databases/inputtrees")
 
-        self.ConfirmationSelectionPage = ConfirmationSelectionPage()
+        self.ConfirmationSelectionPage = ConfirmationSelectionPage()        
         self.ColorSelectionPage = ColorSelectionPage()
-        self.EdgeWeightSelectorPage = EdgeWeightSelectorPage()
-        self.NodeWeightSelectorPage = NodeWeightSelectorPage()
+        self.EdgeWeightSelectionPage = EdgeWeightSelectionPage()
+        self.NodeWeightSelectionPage = NodeWeightSelectionPage()
 	self.PPISelectionPage = PPISelectionPage()
 	self.AssociationSelectionPage = AssociationSelectionPage()
 	self.GOSelectionPage = GOSelectionPage()
@@ -29,16 +29,17 @@ class InputWizard(QWizard):
 
         self.setPage(0, self.ConfirmationSelectionPage )
         self.setPage(1, self.ColorSelectionPage )
-        self.setPage(2, self.EdgeWeightSelectorPage)
-        self.setPage(3, self.NodeWeightSelectorPage)
+        self.setPage(2, self.EdgeWeightSelectionPage)
+        self.setPage(3, self.NodeWeightSelectionPage)
 	self.setPage(4, self.PPISelectionPage )
 	self.setPage(5, self.GOSelectionPage )
         self.setPage(6, self.AssociationSelectionPage )
 	self.setPage(7, self.GEOSelectionPage )
         self.setPage(8, self.BiclusteringSelectionPage )
 
+        #self.setStartId(0)
         #print self.ConfirmationSelectionPage.wizard()
-	self.setStartId(0)
+	
 	#self.setWindowModality(QWidget.modal)
 	self.setModal(True)
     def showHelp(self):
@@ -69,7 +70,8 @@ class ConfirmationSelectionPage(QWizardPage):
             f = open("outputs/resultparams.txt","w")
             f.write("co_ontologies.exe")
             f.close()
-            
+
+        self.wizard().EdgeWeightSelectionPage.setupGUI()
 	return True
 
 class ColorSelectionPage(QWizardPage):
@@ -95,20 +97,27 @@ class ColorSelectionPage(QWizardPage):
 	return True
 
 
-class EdgeWeightSelectorPage(QWizardPage):
+class EdgeWeightSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
+
+    def setupGUI(self):
 	self.setTitle("Edge Weights / Ratio")
 	layout = QVBoxLayout()
         self.setLayout(layout)
-        
-	self.selector = EdgeWeightSelector()
+        confirmation = self.wizard().ConfirmationSelectionPage.confirmation
+        if confirmation == "Co-Expression":
+            confirmation = "CoExpression"
+        elif confirmation == "Co-Ontology":
+            confirmation = "CoFunctionality"
+	self.selector = EdgeWeightSelector(confirmation)
 	layout.addWidget(self.selector)
 
     def validatePage(self):
+        self.selector.saveSettings()
 	return True
 
-class NodeWeightSelectorPage(QWizardPage):
+class NodeWeightSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
 	self.setTitle("Node Weights calculation method")
@@ -185,7 +194,7 @@ class GEOSelectionPage(QWizardPage):
 class BiclusteringSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
-	self.setTitle("GEO data selection")
+	self.setTitle("Biclustering settings")
 	topLabel = QLabel("In this page, you need to select the biclustering algoritm and define parameters to be applied on Gene Expression source you selected.")
 	topLabel.setWordWrap(True)
 	layout = QVBoxLayout()
