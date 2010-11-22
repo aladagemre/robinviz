@@ -90,7 +90,7 @@ def get_exp(values):
     for key in d.keys():
 	for k,v in d[key].iteritems():
 	    union[k] = v
-
+            
     return exp % union
 def get_ont(values):
     union = {}

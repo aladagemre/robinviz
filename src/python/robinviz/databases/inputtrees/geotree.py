@@ -3,23 +3,28 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
-import urllib
 import os
+
 
 if not "utils" in sys.path:
     sys.path.append("../..")
     
-from utils.info import ap
+from utils.info import ap, rp
 from utils.compression import download_file_to, ungz
+from utils.settingswrite import write_values
+import yaml
 
 class GEOSelector(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         self.filename = ap("geodata/geoTreeView.txt")
         self.radio2item = {}
+
+    def initialize(self):
+        self.loadSettings()
         self.checkIndex()
         self.setupGUI()
-        
+    
     def checkIndex(self):
 	if os.path.exists(self.filename):
 	    return
@@ -109,7 +114,7 @@ class GEOSelector(QWidget):
 		data = tuple(temp) # leave the first column (filename)
 		item = QTreeWidgetItem(parent, data )
 		item.filename = cols[0] # assign filename to the item object secretly.
-		
+
 		parent.addChild( item )
 		lastNodeAtLevel[numt] = item	# assign itself as the last root at its level
                 #item.setFlags( Qt.ItemIsSelectable | Qt.ItemIsEnabled)
@@ -122,9 +127,35 @@ class GEOSelector(QWidget):
                 radio = QRadioButton(self)
                 self.radio2item[radio] = item
                 self.treeWidget.setItemWidget(item, 0, radio)
-		if item.checkState(0) == Qt.Checked:
-		    checkedItems.add(str(item.filename))
+                if self.last_selected == item.filename:
+                    radio.setChecked(True)
 
+    def loadSettings(self):
+        stream = file(rp('settings.yaml'), 'r')
+        self.complete_params = yaml.load(stream)
+        self.params = self.complete_params["Confirmation"]["CoExpression"]
+        self.last_selected = self.params["Input"]["dataName_bic"].split("/")[-1]
+
+    def saveSettings(self):
+        # ==GET CHECKED INFORMATION===
+        checked = self.getCheckedItems()
+        print checked
+        """dataName_bic: src/python/robinviz/databases/inputtrees/geodata/GSE23741_series_matrix.txt
+            dataName2_bic: src/python/robinviz/databases/inputtrees/geodata/GSE23741_series_matrix.txt"""
+        self.params["Input"]["dataName_bic"] = "%s/%s" % ("src/python/robinviz/databases/inputtrees/geodata", checked[0])
+        self.params["Input"]["dataName2_bic"] = "%s/%s" % ("src/python/robinviz/databases/inputtrees/geodata", checked[0])
+        
+        # ===== PLACE PARAMETERS ====
+        # We put partial dict back to the complete dict.
+        self.complete_params["Confirmation"]["CoExpression"] = self.params
+        #print self.complete_params
+        # ==== WRITE PARAMETERS =====
+        f = open(rp('settings.yaml'), "w")
+        print "Starting to write"
+        f.write(write_values(self.complete_params))
+        print "Write ended"
+        f.close()
+        
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     mainWindow = GEOSelector()
