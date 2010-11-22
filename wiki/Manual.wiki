@@ -1,0 +1,52 @@
+#summary Robinviz V2 Tool Manual
+#labels Featured,Manual
+
+= Introduction =
+
+Robinviz is implemented using both python( where we require PyQT and Python) and C( where we use C++ library LEDA and C++ compiler). Simply, the data retrieval processes are handled in Robinviz GUI and all remaining concepts and data usage are done at C-C++ side. There is an error reporting mechanism as well where you can follow the execution at the console and inform us about the possible error.
+
+Although we present binary packages for Linux and Windows operating systems, programmers can recompile and use the existing implementation. Through the manual, we first show source code compilation in both linux and windows. Then, we introduce GUI. Finally, we demonstrate a sample run for the first time users.
+
+
+= Compilation =
+
+== @ Linux ==
+
+Requirements
+=================
+LEDA 5.1+ Library from Algorithmic Solutions
+libX11-dev
+g++
+
+
+Steps
+
+# Add the following lines to your `~/.bashrc`
+
+{{{
+export LEDAROOT=/path/to/LEDA
+export PATH=$PATH:$LEDAROOT/Manual/cmd
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LEDAROOT
+}}}
+
+Make sure that incl folder is inside this LEDA_ROOT.
+
+# Give the following command on console,
+
+{{{
+source ~/.bashrc
+}}}
+
+# Move to the robinviz directory on console and give the following command:
+
+{{{
+sh compile.sh
+}}}
+
+All the executables should be compiled.
+
+== @ Windows ==
+
+= Graphical User Interface =
+
+= Sample Demonstration =
