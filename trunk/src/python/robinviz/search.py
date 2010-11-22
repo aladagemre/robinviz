@@ -242,7 +242,7 @@ class ComprehensiveSearchWidget(QWidget):
     def listCategories(self):
         self.clearAll()
 
-        for category in self.multiView.keyList:
+        for category in sorted(self.multiView.keyList):
             category_id = self.index[category][0]
 
             item = QListWidgetItem(category)
