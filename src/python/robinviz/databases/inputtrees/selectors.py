@@ -138,21 +138,31 @@ class EdgeWeightSelector(QWidget):
             return "common", self.removal_ratio.value()
 
 class NodeWeightSelector(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, confirmation, parent=None):
         QWidget.__init__(self, parent)
+        self.confirmation = confirmation
+        self.loadSettings()
         self.setupGUI()
 
     def setupGUI(self):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
-        self.heading = QLabel("Node weights in Main Graph will be based on")
+        # ====== PREPARE ========
+        self.heading = QLabel("Node weights in Central Graph will be based on")
         self.hvalue = QRadioButton("H-Value")
         self.enrichment = QRadioButton("Functional Enrichment")
         self.hitratio = QRadioButton("PPI Hit Ratio")
 
-        self.hvalue.setChecked(True)
+        # ======= CHECK ==========
+        if self.params["Algorithms"]["hvalueWeighting"] == 1:
+            self.hvalue.setChecked(True)
+        elif self.params["Algorithms"]["enrichmentWeighting_f"] == 1:
+            self.enrichment.setChecked(True)
+        elif self.params["Algorithms"]["ppihitratioWeighting"] == 1:
+            self.hitratio.setChecked(True)
 
+        # ===== ADD TO LAYOUT ====
         self.layout.addWidget(self.heading, 0)
         self.layout.addWidget(self.hvalue, 1)
         self.layout.addWidget(self.enrichment, 2)
@@ -160,14 +170,42 @@ class NodeWeightSelector(QWidget):
 
     def getSelection(self):
         response = {
-            self.hvalue: "hvalue",
-            self.enrichment : "enrichment",
-            self.hitratio : "hitratio",
+            self.hvalue: "hvalueWeighting",
+            self.enrichment : "enrichmentWeighting_f",
+            self.hitratio : "ppihitratioWeighting",
         }
         
         for option in response.keys():
             if option.isChecked():
-                return response[option]
+                checked = response[option]
+                uncheckeds = set(response.values()) - set([checked])
+                return checked, unchecked
+
+
+    def loadSettings(self):
+        stream = file(rp('settings.yaml'), 'r')
+        self.complete_params = yaml.load(stream)
+        self.params = self.complete_params["Confirmation"][self.confirmation]
+        
+    def saveSettings(self):
+        # ==GET CHECKED INFORMATION===
+        checked, uncheckeds = self.getSelection()
+
+        # ====== SET VALUES ========
+        # for checked 1
+        self.params["Algorithms"][checked] = 1
+        # for uncheckeds 0
+        for unchecked in uncheckeds:
+            self.params["Algorithms"][unchecked] = 0
+
+        # ===== PLACE PARAMETERS ====
+        # We put partial dict back to the complete dict.
+        self.complete_params["Confirmation"][self.confirmation] = self.params
+
+        # ==== WRITE PARAMETERS =====
+        f = open(rp('settings.yaml'), "w")
+        f.write(write_values(self.complete_params))
+        f.close()
 
 class BiclusteringSelector(QWidget):
     def __init__(self, parent=None):
