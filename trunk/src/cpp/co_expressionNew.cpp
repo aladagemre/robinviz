@@ -150,7 +150,7 @@
 		int minHeight_ = 40;
 		int minWidth_ = 10;
 	/**
-	* RLEB parameters
+        * REAL parameters
 	**/
 		int maxSizeSubMatrix_exp1_g = 100;
 		int maxSizeSubMatrix_exp1_c = 20;
