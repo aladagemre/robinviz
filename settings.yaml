@@ -68,7 +68,7 @@ Confirmation:
             dataName_go: src/python/robinviz/databases/inputtrees/assocdata/input_go.txt
         Drawing:
             removeRat: 0.05
-            nodeSize: 25.0
+            nodeSize: 50.0
             edgeBendImp: 35.0
             colorScale: 130.0
             edgThicknessTher: 4.0
