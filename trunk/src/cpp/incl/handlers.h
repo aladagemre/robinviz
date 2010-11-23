@@ -2869,6 +2869,30 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 // 					}
 				}
 			}
+                        else{
+                                counter = 0;
+                                fprintf( reportScoring, "Scoring Scheme: Reliabilities\n" );
+                                double Hmax = 0;
+                                forall_nodes( n, PROJECT ){
+                                        HValues[ n ] = H_values[ H_values.get_item( counter )];
+                                        if( HValues[ n ] > Hmax )
+                                            Hmax = HValues[ n ];
+                                        counter++;
+                                }
+                                counter = 0;
+                                forall_nodes( n, PROJECT ){
+                                        //HValues[ n ] = (Hmax - HValues[ n ])+0.01;
+                                        HValues[ n ] = (HValues[ n ] / Hmax)+0.01;
+                                        cout << counter << " - " << HValues[ n ] << endl;
+                                        if( HValues[ n ] >= 0 ){
+                                                fprintf( reportScoring, "Bicluster %d %lf\n", counter, HValues[ n ] );
+                                        }
+                                        else{
+                                                fprintf( reportScoring, "Bicluster %d %lf\n", counter, 0.0 );
+                                        }
+                                        counter++;
+                                }
+                        }
 		}
 	}
 	cout << " AFTER SCORING\n";

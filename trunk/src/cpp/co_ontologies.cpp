@@ -65,7 +65,7 @@
 	/**
 	* variables for visualization clues
 	**/
-		double nodeSize=50.0;
+                double nodeSize=25.0;
 		double edgeBendImp=35.0;
 		double colorScale=130.0;
 		double edgThicknessTher=3.0;
@@ -499,10 +499,14 @@ int main(int argc, char **argv){
                                             count_i+=1.0;
                                 }
                         }
-                        bagMean = sqrt(count_i) * bagMean / (double)( newI2.dim1() * newI2.dim2() );
+                        if( count_i > 0 )
+                            bagMean = sqrt(count_i) * bagMean / (double)( newI2.dim1() * newI2.dim2() );
+                        else
+                            bagMean = 0;
                         H_values.append( bagMean );
                         if( Hmax < bagMean )
                                 Hmax = bagMean;
+                        cout << count_i << " - " << bagMean << endl;
                 }
 
                 cout << "/**************************************************/" << endl;
@@ -515,11 +519,11 @@ int main(int argc, char **argv){
                 mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, categories, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num );
                 cout << "\n Main Graph has " << PROJECT.number_of_nodes() << endl;
                 cout << "\n*******************************\n";
-                int count_i = 0;
-                forall_items( it, GraphList ){
-                    cout << endl << count_i << " - " << GraphList[it].number_of_nodes() << " - " << GraphList[it].number_of_edges() << endl;
-                    count_i++;
-                }
+//                int count_i = 0;
+//                forall_items( it, GraphList ){
+//                    cout << endl << count_i << " - " << GraphList[it].number_of_nodes() << " - " << GraphList[it].number_of_edges() << endl;
+//                    count_i++;
+//                }
                 cout << "\n*******************************\n";
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " End Running Layering Algorithm" << endl;
@@ -534,11 +538,12 @@ int main(int argc, char **argv){
                     mainGraph2( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
                                         increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
                     POS, BENDS, LAYERS, abbv, cat_num, Categories, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
-                else
+                else{
+                    hvalueWeighting = false;
                     mainGraph2( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
                                         increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
                     POS, BENDS, LAYERS, abbv, cat_num, CategoriesXL, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
-
+                }
                 cout << "\n Main Graph has " << PROJECT.number_of_nodes() << endl;
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " End Building High Level Graph " << endl;

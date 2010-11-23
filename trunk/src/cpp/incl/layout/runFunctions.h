@@ -2345,16 +2345,16 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 			ncount++;
 		}
 	}
-        double xpos1 = xmin - 200.0;
+        double xpos1 = xmin - 100.0;
 	double ypos1 = ymax + 100.0;
 	forall_nodes( n, G ){
 		if( G.degree( n ) == 0 ){
-                        if( xpos1 < xmax + 200.0 ){
+                        if( xpos1 < xmax + 100.0 ){
 				Xpos[ n ] = xpos1;
 				Ypos[ n ] = ypos1;
 			}
 			else{
-                                xpos1 = xmin - 200.0;
+                                xpos1 = xmin - 100.0;
 				ypos1 += 100.0;
 				Xpos[ n ] = xpos1;
 				Ypos[ n ] = ypos1;
@@ -2404,19 +2404,14 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 	}
 	// Arrange node sizes according to H-values for each nodes
 	forall_nodes( n, G ){
-		if( Hvalues[n] > 0 ){
-			if(  Hmax / Hvalues[n] > 1 ){
-				gw.set_width( n, nodeSize + Hvalues[n] / Hmax * 100 );
-				gw.set_height( n, nodeSize + Hvalues[n] / Hmax * 100 );
-			}
-			else{
-				gw.set_width( n, nodeSize );	
-				gw.set_height( n, nodeSize );	
-			}
+                // We use nodeSize / 2.0 since we do not want to see large nodes.
+                if( Hvalues[n] > 0 ){
+                    gw.set_width( n, nodeSize / 1.5 + Hvalues[n] / Hmax * 70 );
+                    gw.set_height( n, nodeSize / 1.5 + Hvalues[n] / Hmax * 70 );
 		}
 		else{
-				gw.set_width( n, nodeSize / 2.0 );	
-				gw.set_height( n, nodeSize / 2.0 );	
+                    gw.set_width( n, nodeSize / 1.5 );
+                    gw.set_height( n, nodeSize / 1.5 );
 		}
 	}
 	if( G.number_of_edges() != 0 ){
