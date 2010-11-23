@@ -97,7 +97,7 @@ http://robinviz.googlecode.com/svn/manual/images/5_2_after_clicks.png
 
 Robinviz has 16 empty screen views where we call them as "Peripheral Views", arround the "Central View" and a three tabbed search box. Using the search box, you can click and see "Central View" nodes and their labels from while "Cat" is on clicked. You can also query for proteins and observe the categories, that have the query protein, while "Pro" is on clicked. 
 
-|| http://robinviz.googlecode.com/svn/manual/images/4_2_category_search.png || http://robinviz.googlecode.com/svn/manual/images/3_2_protein_search_box.png ||
+|| http://robinviz.googlecode.com/svn/manual/images/4_2_category_search_box.png || http://robinviz.googlecode.com/svn/manual/images/3_2_protein_search_box.png ||
 || Search Box for Categories(Co-ontology) or Biclusters(Co-Expression) ||  Search Box for proteins ||
 
 Next, at the previous screenshot, you see the empty 16 screens. These screens are interactive and respond when you click on nodes(Categories,Biclusters) in "Central View". At each clicking on nodes, you shall see that a new graph appears at these empty screens. When you click 16 different nodes, you should obtain a similar snapshot;
