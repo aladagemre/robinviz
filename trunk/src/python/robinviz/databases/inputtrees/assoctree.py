@@ -212,10 +212,9 @@ class AssociationSelector(QWidget):
         for term in united_terms:
             name_dict[term] = get_name_of_term(int(term.split(":")[-1]))
 
-        for term in selected_terms: # only selected ones
-            catnames.write("%s\n" % name_dict[term])
-            catcodes.write("%s\n" % term)
-
+        catnames.write( "\n".join([ name_dict[term] for term in selected_terms]) )
+        catcodes.write( "\n".join([ term for term in selected_terms]) )
+        
         for term in united_terms:
             if term in self.go_dict:
                 genes = self.go_dict[term]
