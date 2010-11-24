@@ -62,17 +62,8 @@ class View(QGraphicsView):
         self.menu = menu = QMenu(self)
         newWindow = menu.addAction("Open in &new window")
 
-        menu.addSeparator()
-
-        saveAsImage = menu.addAction("Save as &Image")
-        saveAsGML= menu.addAction("Save as &GML")
-        printGraph = menu.addAction("&Print")
-        
         self._actionToFunction = actionToFunction = {newWindow       : self.newWindow,
-                            saveAsImage     : self.saveAsImage,
-                            printGraph      : self.printGraph,
-                            saveAsGML       : self.saveAsGML,
-                            }
+        }
 
         # ==== CUSTOM MENU ITEMS START ====
         self.addCustomMenuItems()
@@ -113,6 +104,22 @@ class View(QGraphicsView):
             actionToFunction[newLayoutAction] = self.switchToLayout
 
         switchToLayoutMenu.addMenu(othersMenu)
+
+        # =============SAVE / PRINT=============
+
+        menu.addSeparator()
+
+        saveAsImage = menu.addAction("Save as &Image")
+        saveAsGML= menu.addAction("Save as &GML")
+        printGraph = menu.addAction("&Print")
+        actionToFunction.update( {
+                                    saveAsImage     : self.saveAsImage,
+                            printGraph      : self.printGraph,
+                            saveAsGML       : self.saveAsGML,
+                            } )
+
+        # ========== EXECUTE MENU =============
+
 
         action = menu.exec_(self.mapToGlobal(event.pos()))
         if not action:
