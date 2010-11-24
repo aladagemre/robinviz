@@ -153,7 +153,6 @@ class NodeWeightSelector(QWidget):
         self.setLayout(self.layout)
 
         # ====== PREPARE ========
-        self.heading = QLabel("Node weights in Central Graph will be based on")
         self.hvalue = QRadioButton("H-Value")
         self.enrichment = QRadioButton("Functional Enrichment")
         self.hitratio = QRadioButton("PPI Hit Ratio")
@@ -167,10 +166,10 @@ class NodeWeightSelector(QWidget):
             self.hitratio.setChecked(True)
 
         # ===== ADD TO LAYOUT ====
-        self.layout.addWidget(self.heading, 0)
-        self.layout.addWidget(self.hvalue, 1)
-        self.layout.addWidget(self.enrichment, 2)
-        self.layout.addWidget(self.hitratio, 3)
+        
+        self.layout.addWidget(self.hvalue, 0)
+        self.layout.addWidget(self.enrichment, 1)
+        self.layout.addWidget(self.hitratio, 2)
 
     def getSelection(self):
         response = {

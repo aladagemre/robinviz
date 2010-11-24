@@ -48,7 +48,7 @@ class InputWizard(QWizard):
 class ConfirmationSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
-	self.setTitle("Confirmation type selection")
+	self.setTitle("Verification Concept")
 	topLabel = QLabel("In this page, you need to select the confirmation type.")
 	topLabel.setWordWrap(True)
 	layout = QVBoxLayout()
@@ -79,7 +79,7 @@ class ConfirmationSelectionPage(QWizardPage):
 class ColorSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
-	self.setTitle("Color selection")
+	self.setTitle("Color Assignment")
 	topLabel = QLabel("In this page, you need to select the way nodes are colored. \n" +
         "Nodes will have colors according to the category type you select.")
 	topLabel.setWordWrap(True)
@@ -138,7 +138,7 @@ class NodeWeightSelectionPage(QWizardPage):
         self.selector.initialize()
         
     def setupGUI(self):
-	self.setTitle("Node Weights calculation method")
+	self.setTitle("Central Node Weights")
 	layout = QVBoxLayout()
         self.setLayout(layout)
         
@@ -161,7 +161,7 @@ class NodeWeightSelectionPage(QWizardPage):
 class AssociationSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
-	self.setTitle("Gene Ontology Association source selection")
+	self.setTitle("GO Association Sources")
 	topLabel = QLabel("In this page, you need to select the association sources you'd like to use for Gene-Category mapping")
 	topLabel.setWordWrap(True)
 	layout = QVBoxLayout()
@@ -183,7 +183,7 @@ class AssociationSelectionPage(QWizardPage):
 class GOSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
-	self.setTitle("Gene Ontology data selection")
+	self.setTitle("Central Nodes from GO Categories")
 	topLabel = QLabel("In this page, you need to select the GO terms you would like to use.")
 	topLabel.setWordWrap(True)
 	layout = QVBoxLayout()
@@ -200,7 +200,7 @@ class GOSelectionPage(QWizardPage):
 class PPISelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
-	self.setTitle("PPI data selection")
+	self.setTitle("PPI Network")
 	topLabel = QLabel("In this page, you need to select the PPI sources you'd like to visualize")
 	topLabel.setWordWrap(True)
 	layout = QVBoxLayout()
@@ -215,7 +215,7 @@ class PPISelectionPage(QWizardPage):
 class GEOSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
-	self.setTitle("GEO data selection")
+	self.setTitle("GEO Expression Matrix")
 	topLabel = QLabel("In this page, you need to select the Gene Expression source you'd like to use for biclustering")
 	topLabel.setWordWrap(True)
 	layout = QVBoxLayout()
@@ -234,7 +234,7 @@ class GEOSelectionPage(QWizardPage):
 class BiclusteringSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
-	self.setTitle("Biclustering settings")
+	self.setTitle("Biclustering Algorithm")
 	topLabel = QLabel("In this page, you need to select the biclustering algoritm and define parameters to be applied on Gene Expression source you selected.")
 	topLabel.setWordWrap(True)
 	layout = QVBoxLayout()

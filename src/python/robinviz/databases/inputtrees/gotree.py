@@ -102,7 +102,7 @@ class GOSelector(QMainWindow):
 	
 	def traverse(item):
 	    # Add the term into checked items list if it's checked.
-	    if item.checkState(0) == Qt.Checked:
+	    if item.checkState(0) == Qt.Checked and item.parent():
 		checkedItems.add(str(item.text(0)))
 	    # For all children, traverse them too.
 	    for c in range( item.childCount() ):
@@ -118,6 +118,7 @@ class GOSelector(QMainWindow):
             print "No GO term selected, using the most recent preferences."
             return checkedItems
 
+        
 	checkedItems = sorted(checkedItems)
 	f = open(ap("godata/selected_terms.txt"), "w")
 	f.write("\n".join( checkedItems ) )
@@ -155,8 +156,8 @@ class GOSelector(QMainWindow):
 	parent = QTreeWidgetItem(self.treeWidget, ("GO:%07d"% record_id, name) )
 	self.treeWidget.insertTopLevelItem(0, parent)
 	
-	#parent.setFlags( Qt.ItemIsSelectable | Qt.ItemIsEnabled)
-	#parent.setCheckState(0, Qt.Unchecked)
+	parent.setFlags( Qt.ItemIsTristate | Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+	parent.setCheckState(0, Qt.Unchecked)
 	
 	for child in children.split(","):
 	    cid, cname, cchild = self.getRecord(int(child))
