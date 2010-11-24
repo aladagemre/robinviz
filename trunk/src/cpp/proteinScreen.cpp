@@ -513,11 +513,11 @@ int main(int argc, char** argv) {
             process2LevelFromGml( queryGeneName );
         }
         else{
-            if( strcmp( argv[2], "TXT1" ) == 0 ){
+            if( strcmp( argv[2], "TXT2" ) == 0 ){
                 process2LevelFromTxt( queryGeneName );
             }
             else{
-                if( strcmp( argv[2], "TXT2" ) == 0 ){
+                if( strcmp( argv[2], "TXT1" ) == 0 ){
                     process1LevelFromTxt( queryGeneName );
                 }
             }
