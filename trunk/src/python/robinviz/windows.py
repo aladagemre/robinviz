@@ -577,9 +577,9 @@ class MultiViewWindow(QMainWindow):
     def createActions(self):
 
         # FILE MENU
-        run = QAction('Run', self)
-        run.setShortcut('Ctrl+R')
-        run.setStatusTip('Confirmation by Co-Expression')
+        run = QAction('Execute', self)
+        run.setShortcut('Ctrl+X')
+        run.setStatusTip('Execute the operation')
         self.connect(run, SIGNAL('triggered()'), self.run)
 
         loadSession = QAction('L&oad Session', self)
@@ -592,20 +592,19 @@ class MultiViewWindow(QMainWindow):
         saveSession.setStatusTip('Save your session.')
         self.connect(saveSession, SIGNAL('triggered()'), self.saveSession)
 
-        displayLast = QAction('Display R&ecent Results', self)
-        displayLast.setShortcut('Ctrl+E')
+        displayLast = QAction('Display Last Session', self)
+        displayLast.setShortcut('Ctrl+D')
         displayLast.setStatusTip('Display Recent Results without running the program again.')
         self.connect(displayLast, SIGNAL('triggered()'), self.displayLast)
 
-        settings = QAction('Se&ttings', self)
+        """settings = QAction('Se&ttings', self)
         settings.setShortcut('Ctrl+T')
         settings.setStatusTip('Program Settings')
-        self.connect(settings, SIGNAL('triggered()'), self.displaySettings)
-
+        self.connect(settings, SIGNAL('triggered()'), self.displaySettings)"""
 
 	selectInput = QAction('&Input', self)
 	selectInput.setShortcut('Ctrl+I')
-	settings.setStatusTip('Input Selection Wizard')
+	selectInput.setStatusTip('Input Selection Wizard')
 	self.connect(selectInput, SIGNAL('triggered()'), self.selectInputs)
 	
         exit = QAction('E&xit', self)
@@ -618,7 +617,7 @@ class MultiViewWindow(QMainWindow):
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(run)
         fileMenu.addSeparator()
-        map(fileMenu.addAction, (loadSession, saveSession, displayLast, settings, selectInput))
+        map(fileMenu.addAction, (loadSession, saveSession, displayLast, selectInput))
         fileMenu.addSeparator()
         fileMenu.addAction(exit)
 
