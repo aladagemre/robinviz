@@ -309,8 +309,14 @@ class EdgeItem(QGraphicsItem):
         
         line = None
         for i in range( len(self.path) - 1 ): # take first n-1 line segments
-            s = self.path[i]                # starting point of the segment.	    
+
+            s = self.path[i]                # starting point of the segment.
             e = self.path[i+1]              # end point of the segment
+            if not e:
+                #print "self.path:", self.path
+                # TODO: fix here for 1st level neighbor, why are there 4 Points+None?
+                break
+
             lastLine = line                 # keeping the last line for placing arrow head
             line = QLineF(s.x(), s.y(), e.x(), e.y())
             painter.drawLine(line)
@@ -537,7 +543,7 @@ class CircleNode(NodeItem):
 
         # ======== EXECUTE ====================
         action = menu.exec_(event.screenPos())
-        if action == propertiesAction:
+        if action and action == propertiesAction:
             if not hasattr(self, 'biclusterWindow'):
                 self.biclusterWindow = BiclusterWindow(self.node.id)
 

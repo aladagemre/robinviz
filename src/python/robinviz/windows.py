@@ -577,7 +577,7 @@ class MultiViewWindow(QMainWindow):
     def createActions(self):
 
         # FILE MENU
-        run = QAction('Execute', self)
+        run = QAction('E&xecute', self)
         run.setShortcut('Ctrl+X')
         run.setStatusTip('Execute the operation')
         self.connect(run, SIGNAL('triggered()'), self.run)
@@ -592,7 +592,7 @@ class MultiViewWindow(QMainWindow):
         saveSession.setStatusTip('Save your session.')
         self.connect(saveSession, SIGNAL('triggered()'), self.saveSession)
 
-        displayLast = QAction('Display Last Session', self)
+        displayLast = QAction('&Display Last Session', self)
         displayLast.setShortcut('Ctrl+D')
         displayLast.setStatusTip('Display Recent Results without running the program again.')
         self.connect(displayLast, SIGNAL('triggered()'), self.displayLast)
