@@ -505,8 +505,15 @@ class MultiViewWindow(QMainWindow):
         self.settingsDialog = SettingsDialog()
         self.settingsDialog.show()
 
+    def act(self, result):
+        """Acts according to input wizard's result. Runs if wizard succeeds.
+        Does nothing if it does not."""
+        if result:
+            self.run()
+
     def selectInputs(self):
 	self.inputWizard = InputWizard()
+        self.inputWizard.finished.connect(self.act)
 	self.inputWizard.show()
 	
     ############### VIEW MENU ###################
@@ -580,7 +587,7 @@ class MultiViewWindow(QMainWindow):
         run = QAction('E&xecute', self)
         run.setShortcut('Ctrl+X')
         run.setStatusTip('Execute the operation')
-        self.connect(run, SIGNAL('triggered()'), self.run)
+        self.connect(run, SIGNAL('triggered()'), self.selectInputs)
 
         loadSession = QAction('L&oad Session', self)
         loadSession.setShortcut('Ctrl+O')
@@ -602,10 +609,10 @@ class MultiViewWindow(QMainWindow):
         settings.setStatusTip('Program Settings')
         self.connect(settings, SIGNAL('triggered()'), self.displaySettings)"""
 
-	selectInput = QAction('&Input', self)
+	"""selectInput = QAction('&Input', self)
 	selectInput.setShortcut('Ctrl+I')
 	selectInput.setStatusTip('Input Selection Wizard')
-	self.connect(selectInput, SIGNAL('triggered()'), self.selectInputs)
+	self.connect(selectInput, SIGNAL('triggered()'), self.selectInputs)"""
 	
         exit = QAction('E&xit', self)
         exit.setShortcut('Ctrl+Q')
@@ -617,7 +624,7 @@ class MultiViewWindow(QMainWindow):
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(run)
         fileMenu.addSeparator()
-        map(fileMenu.addAction, (loadSession, saveSession, displayLast, selectInput))
+        map(fileMenu.addAction, (loadSession, saveSession, displayLast))
         fileMenu.addSeparator()
         fileMenu.addAction(exit)
 
