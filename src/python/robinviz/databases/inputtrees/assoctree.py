@@ -319,7 +319,7 @@ class AssociationSelector(QWidget):
  
 	    item.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsTristate)
 	    item.setCheckState(0, Qt.Unchecked)
-	    
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     selector = AssociationSelector()

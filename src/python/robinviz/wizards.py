@@ -27,16 +27,21 @@ class InputWizard(QWizard):
 	self.GEOSelectionPage = GEOSelectionPage()
         self.BiclusteringSelectionPage = BiclusteringSelectionPage()
 
-        self.setPage(0, self.ConfirmationSelectionPage )
-        self.setPage(1, self.ColorSelectionPage )
-        self.setPage(2, self.EdgeWeightSelectionPage)
-        self.setPage(3, self.NodeWeightSelectionPage)
-	self.setPage(4, self.PPISelectionPage )
-	self.setPage(5, self.GOSelectionPage )
-        self.setPage(6, self.AssociationSelectionPage )
-	self.setPage(7, self.GEOSelectionPage )
-        self.setPage(8, self.BiclusteringSelectionPage )
+        self.addPage(self.PPISelectionPage )
+        
+        self.addPage(self.ConfirmationSelectionPage )
+        self.addPage(self.ColorSelectionPage )
 
+        # Co-Ontology
+        self.addPage(self.GOSelectionPage )
+        self.addPage(self.AssociationSelectionPage )
+
+
+        #self.addPage(self.EdgeWeightSelectionPage)
+        # Co-Expression
+	self.addPage(self.GEOSelectionPage )
+        self.addPage(self.BiclusteringSelectionPage )
+        self.addPage(self.NodeWeightSelectionPage)
         #self.setStartId(0)
         #print self.ConfirmationSelectionPage.wizard()
 	
@@ -71,7 +76,7 @@ class ConfirmationSelectionPage(QWizardPage):
             f.write("co_ontologies.exe")
             f.close()
 
-        self.wizard().EdgeWeightSelectionPage.setupGUI()
+        # self.wizard().EdgeWeightSelectionPage.setupGUI()
         if selection == "Co-Expression":
             self.wizard().NodeWeightSelectionPage.setupGUI()
 	return True
@@ -88,6 +93,14 @@ class ColorSelectionPage(QWizardPage):
 	layout.addWidget(self.selector)
 	self.setLayout(layout)
 
+    def nextId(self):
+        n = QWizardPage.nextId(self)
+        confirmation = self.wizard().ConfirmationSelectionPage.confirmation
+        if confirmation == "Co-Ontology":
+            return n # Move to GO Tree
+        else:  # Co-Expression
+            return n+1 # Move to Association part
+        
     def validatePage(self):
 	self.flag = flag = self.selector.getSelection()
         filename = rp("outputs/resultparams.txt")
