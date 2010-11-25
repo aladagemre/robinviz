@@ -1388,21 +1388,25 @@ void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNo
                         sprintf( tempx.GENE, "%s", sourceGene );
                         entered.append( tempx );
                 }
-
-                // FOR TARGET GENES
-                if( flag_t == 0 ){
-                        targetTemp = INTERACTIONS.new_node();
-                        INTERACTIONS[ targetTemp ] = nodeAdded;
-                        nodeAdded++;
-                        GenesNode.resize( nodeAdded );
-                        sprintf( GenesNode[ INTERACTIONS[ targetTemp ] ].GENE, "%s", targetGene );
-                        GENENAMES tempx;
-                        sprintf( tempx.GENE, "%s", targetGene );
-                        entered.append( tempx );
+                if( strcmp( sourceGene, targetGene ) == 0 ){
+                    e = INTERACTIONS.new_edge( sourceTemp, sourceTemp );
+                    INTERACTIONS[ e ] = (int)(value * 100.0);
                 }
-
-		e = INTERACTIONS.new_edge( sourceTemp, targetTemp );
-		INTERACTIONS[ e ] = (int)(value * 100.0);
+                else{
+                    // FOR TARGET GENES
+                    if( flag_t == 0 ){
+                            targetTemp = INTERACTIONS.new_node();
+                            INTERACTIONS[ targetTemp ] = nodeAdded;
+                            nodeAdded++;
+                            GenesNode.resize( nodeAdded );
+                            sprintf( GenesNode[ INTERACTIONS[ targetTemp ] ].GENE, "%s", targetGene );
+                            GENENAMES tempx;
+                            sprintf( tempx.GENE, "%s", targetGene );
+                            entered.append( tempx );
+                    }
+                    e = INTERACTIONS.new_edge( sourceTemp, targetTemp );
+                    INTERACTIONS[ e ] = (int)(value * 100.0);
+                }
 		if( INTERACTIONS[ e ] == 0 )
 			INTERACTIONS[ e ] = 1;
 // 		cout << GenesNode[ INTERACTIONS[ sourceTemp ] ].GENE << " - " << GenesNode[ INTERACTIONS[ targetTemp ] ].GENE << " : " << INTERACTIONS[ e ] << endl;
