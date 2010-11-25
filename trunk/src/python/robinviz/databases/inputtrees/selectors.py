@@ -43,18 +43,18 @@ class ColorSelector(QWidget):
     def setupGUI(self):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
-        self.heading = QLabel("Use one of the following option to color the nodes")
-        self.cofunctionality = QRadioButton("Co-Functionality: Molecular Function categories")
-        self.colocalization= QRadioButton("Co-Localization: Cellular Compartment categories")
-        self.coprocess = QRadioButton("Co-Process: Biological Process categories")
-        self.coontology = QRadioButton("Co-Ontology: All categories")
+        self.heading = QLabel("Assign node colors according to high-level categories in:")
+        self.cofunctionality = QRadioButton("Molecular Function")
+        self.colocalization= QRadioButton("Cellular Compartments")
+        self.coprocess = QRadioButton("Biological Process")
+        self.coontology = QRadioButton("All")
 
         self.cofunctionality.setChecked(True)
 
         self.layout.addWidget(self.heading)
-        self.layout.addWidget(self.cofunctionality)
-        self.layout.addWidget(self.colocalization)
         self.layout.addWidget(self.coprocess)
+        self.layout.addWidget(self.cofunctionality)
+        self.layout.addWidget(self.colocalization)        
         self.layout.addWidget(self.coontology)
 
     def getSelection(self):
