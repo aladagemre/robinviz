@@ -8,7 +8,7 @@
 void minHvalueErrorChecker( matrix &INPUT, double hvaluemin ){
 	double sum = 0;
 	for( int i = 0; i < INPUT.dim1(); i++ ){
-		for( int j = 0; j < INPUT.dim1(); j++ ){
+                for( int j = 0; j < INPUT.dim2(); j++ ){
 			sum += INPUT( i,j );
 		}
 	}

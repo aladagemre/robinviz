@@ -1652,63 +1652,65 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
                     if( listOfGraphs[ i ].empty() != true ){
                               cout << " Graph " << i << " is processed\n";
 			      H = RUN_SELF( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag );
-//                              node_array<bool> markDegreeZero( listOfGraphs[ i ], false );
-//                              list<node> justOnes;
-//                              forall_nodes( n, listOfGraphs[ i ] ){
-//                                  if( listOfGraphs[ i ].degree( n ) == 0 ){
-//                                      justOnes.append( n );
-////                                      markDegreeZero[ n ] = true;
-//                                  }
-//                              }
-//                              cout << "\ndone";
-//                              double averageDistance = 0;
-//                              forall_edges( e, listOfGraphs[ i ] ){
-//                                  point p( Xpos[ listOfGraphs[ i ].source( e ) ], Ypos[ listOfGraphs[ i ].source( e ) ] );
-//                                  point q( Xpos[ listOfGraphs[ i ].target( e ) ], Ypos[ listOfGraphs[ i ].target( e ) ] );
-//                                  averageDistance += p.distance( q );
-//                              }
-//                              averageDistance = averageDistance / (double)(listOfGraphs[ i ].number_of_edges());
-//
-//                              cout << "\ndone";
-//                              double xmin, xmax, ymin, ymax;
-//                              forall_nodes( n, listOfGraphs[ i ] ){
-////                                  if( markDegreeZero[ n ] != true ){
-//                                      if( ncount == 0 ){
-//                                              xmin = Xpos[ n ];
-//                                              xmax = Xpos[ n ];
-//                                              ymin = Ypos[ n ];
-//                                              ymax = Ypos[ n ];
-//                                      }
-//                                      else{
-//                                          if( Xpos[ n ] < xmin )
-//                                                xmin = Xpos[ n ];
-//                                          if( Xpos[ n ] > xmax )
-//                                                xmax = Xpos[ n ];
-//                                          if( Ypos[ n ] < ymin )
-//                                                ymin = Ypos[ n ];
-//                                          if( Ypos[ n ] > ymax )
-//                                                ymax = Ypos[ n ];
-//                                      }
-////                                  }
-//                              }
-//                              cout << "\ndone";
-//                              double xpos1 = xmin;
-//                              double ypos1 = ymin - space;
-//
-//                              forall_items( it, justOnes ){
-//                                  if( xpos1 < xmax ){
-//                                      Xpos[ justOnes[ it ] ] = xpos1;
-//                                      Ypos[ justOnes[ it ] ] = ypos1;
-//                                  }
-//                                  else{
-//                                      xpos1 = xmin;
-//                                      ypos1 -= space;
-//                                      Xpos[ justOnes[ it ] ] = xpos1;
-//                                      Ypos[ justOnes[ it ] ] = ypos1;
-//                                  }
-//                                  xpos1 += increment;
-//                              }
-//                              cout << "OK\n";
+                              node_array<bool> markDegreeZero( listOfGraphs[ i ], false );
+                              list<node> justOnes;
+                              forall_nodes( n, listOfGraphs[ i ] ){
+                                  if( listOfGraphs[ i ].degree( n ) == 0 ){
+                                      justOnes.append( n );
+//                                      markDegreeZero[ n ] = true;
+                                  }
+                              }
+                              cout << "\ndone";
+                              if( justOnes.size() > 0 ){
+                                  double averageDistance = 0;
+                                  forall_edges( e, listOfGraphs[ i ] ){
+                                      point p( Xpos[ listOfGraphs[ i ].source( e ) ], Ypos[ listOfGraphs[ i ].source( e ) ] );
+                                      point q( Xpos[ listOfGraphs[ i ].target( e ) ], Ypos[ listOfGraphs[ i ].target( e ) ] );
+                                      averageDistance += p.distance( q );
+                                  }
+                                  averageDistance = averageDistance / (double)(listOfGraphs[ i ].number_of_edges());
+
+                                  cout << "\ndone";
+                                  double xmin, xmax, ymin, ymax;
+                                  forall_nodes( n, listOfGraphs[ i ] ){
+    //                                  if( markDegreeZero[ n ] != true ){
+                                          if( ncount == 0 ){
+                                                  xmin = Xpos[ n ];
+                                                  xmax = Xpos[ n ];
+                                                  ymin = Ypos[ n ];
+                                                  ymax = Ypos[ n ];
+                                          }
+                                          else{
+                                              if( Xpos[ n ] < xmin )
+                                                    xmin = Xpos[ n ];
+                                              if( Xpos[ n ] > xmax )
+                                                    xmax = Xpos[ n ];
+                                              if( Ypos[ n ] < ymin )
+                                                    ymin = Ypos[ n ];
+                                              if( Ypos[ n ] > ymax )
+                                                    ymax = Ypos[ n ];
+                                          }
+    //                                  }
+                                  }
+                                  cout << "\ndone";
+                                  double xpos1 = xmin;
+                                  double ypos1 = ymin - space;
+
+                                  forall_items( it, justOnes ){
+                                      if( xpos1 < xmax ){
+                                          Xpos[ justOnes[ it ] ] = xpos1;
+                                          Ypos[ justOnes[ it ] ] = ypos1;
+                                      }
+                                      else{
+                                          xpos1 = xmin;
+                                          ypos1 -= space;
+                                          Xpos[ justOnes[ it ] ] = xpos1;
+                                          Ypos[ justOnes[ it ] ] = ypos1;
+                                      }
+                                      xpos1 += increment;
+                                  }
+                                  cout << "OK\n";
+                             }
                           }
 
 		    nPar = 0;
@@ -2199,7 +2201,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	char scoringFile[256] = "outputs//biclusters//scoring.txt";
 #endif
 
-// 	cout << " BEFORE SCORING\n";
+        cout << " BEFORE SCORING\n";
 
 	reportScoring = fopen( scoringFile, "w" );
 	if( hvalueWeighting == true ){
@@ -2317,7 +2319,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 			}
 		}
 	}
-// 	cout << " AFTER SCORING\n";
+        cout << " AFTER SCORING\n";
 	fclose( reportScoring );
 // 	cout << " E1 -  " << PROJECT.number_of_edges() << endl;
 	it2 = namesForEachGraph.first_item();
@@ -2652,11 +2654,24 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 	bends.init( PROJECT2 );
 	edgeNumbersForStr_ = edgeNumbersForStr;
 	edgeNumbersForInt_ = edgeNumbersForInt;
-// 	cout << " E4 -  " << PROJECT2.number_of_edges() << endl;
+        cout << " E4 -  " << PROJECT2.number_of_edges() << endl;
 	i = 0;
-// 	cout << " RUN LAYOUT\n";
-	RUN_SELF2( PROJECT2, PARS, max_weight, width, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
-// 	cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
+        cout << " RUN LAYOUT\n";
+        if( PROJECT2.number_of_edges() != 0 )
+            RUN_SELF2( PROJECT2, PARS, max_weight, width, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );
+        else{
+                    FILE *erptr;
+#ifdef LINUX
+                    erptr = fopen( "outputs/error.txt", "w" );
+#else
+                    erptr = fopen( "outputs//error.txt", "w" );
+#endif
+                    fprintf( erptr, "Error 302.1: central graph has no edges\n" );
+                    fclose( erptr );
+                    cout << "\nError 302.1: central graph has no edges\n";
+                    exit(1);
+        }
+        cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
 	return PROJECT2;
 }
 
@@ -2886,7 +2901,7 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
                                 counter = 0;
                                 forall_nodes( n, PROJECT ){
                                         //HValues[ n ] = (Hmax - HValues[ n ])+0.01;
-                                        HValues[ n ] = (HValues[ n ] / Hmax)+0.01;
+                                        HValues[ n ] = (HValues[ n ] / Hmax) + 0.01;
                                         cout << counter << " - " << HValues[ n ] << endl;
                                         if( HValues[ n ] >= 0 ){
                                                 fprintf( reportScoring, "Bicluster %d %lf\n", counter, HValues[ n ] );
@@ -3936,6 +3951,14 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
                 nodePar[ nPar ] = INTERACTIONS[ n ];
                 nPar++;
         }
+//        for( int i = 0; i < biclusters.size(); i++ ){
+//
+//        }
+
+        list<edge> list_E;
+        list_item it_b1 = biclusters.first_item(),it_b2;
+	/* For each gene list we detect its neigbors that are also in the gene group and we delete remaining edges
+	   and nodes from the original interaction graph obtained with ppihandler function */
         for( int i = 0; i < biclusters.size(); i++ ){
                 listOfGraphs[ i ] = INTERACTIONS;
                 nPar = 0;
@@ -3943,13 +3966,6 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
                         listOfGraphs[ i ][ n ] = nodePar[ nPar ];
                         nPar++;
                 }
-        }
-
-        list<edge> list_E;
-        list_item it_b1 = biclusters.first_item(),it_b2;
-	/* For each gene list we detect its neigbors that are also in the gene group and we delete remaining edges
-	   and nodes from the original interaction graph obtained with ppihandler function */
-        for( int i = 0; i < biclusters.size(); i++ ){
                 G = listOfGraphs[ i ];
                 list<GENES> tmp1 = biclusters[ it_b1 ];
 #ifdef DEBUG_ROBINVIZ

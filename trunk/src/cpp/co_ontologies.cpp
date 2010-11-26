@@ -499,10 +499,13 @@ int main(int argc, char **argv){
                                             count_i+=1.0;
                                 }
                         }
-                        if( count_i > 0 )
-                            bagMean = sqrt(count_i) * bagMean / (double)( newI2.dim1() * newI2.dim2() );
+                        if( count_i > 10 )
+                            bagMean = sqrt(newI2.dim1()) * count_i / (double)( newI2.dim1() * newI2.dim2() );
                         else
-                            bagMean = 0;
+                            if( count_i != 0 )
+                                bagMean = 0.01;
+                            else
+                                bagMean = 0;
                         H_values.append( bagMean );
                         if( Hmax < bagMean )
                                 Hmax = bagMean;
