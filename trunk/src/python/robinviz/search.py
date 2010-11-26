@@ -169,6 +169,7 @@ class ComprehensiveSearchWidget(QWidget):
         self.setupVariables()
         self.setupGUI()
         self.setAutoCompletion()
+        self.listCategories()
 
     def setupVariables(self):
         self.proteinNamePattern = compile('^\d+$')

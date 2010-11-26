@@ -113,23 +113,11 @@ class Scene(QGraphicsScene):
 
 	if not g.edges:
 	    return
-	    
-	edgeWidthMin = int(g.edges[0].parameter)
-        edgeWidthMax = int(g.edges[0].parameter)
+        
         for edge in g.edges:
             weight = int(edge.parameter)
             edge.weight = weight
-            if weight < edgeWidthMin:
-                edgeWidthMin = weight
-            elif weight > edgeWidthMax:
-                edgeWidthMax = weight
-        
-        for edge in g.edges:
-            edge.minWidth = edgeWidthMin
-            edge.maxWidth = edgeWidthMax
             self.addEdge(edge)
-
-        
 
     def addEdge(self, edge):
         source = edge.u
@@ -293,13 +281,8 @@ class EdgeItem(QGraphicsItem):
             else:
                 thickPen.setColor(QColor(0,0,0))
 
-        thicknessRange = 5
-        if self.edge.maxWidth == self.edge.minWidth:
-            newWidth = 2
-        else:
-            newWidth = 2 + thicknessRange * ( (self.edge.weight - self.edge.minWidth) / (self.edge.maxWidth - self.edge.minWidth) )
-            #newRatio = ((self.edge.parameter - self.edge.minWidth)/(self.edge.maxWidth - self.edge.minWidth)) * newRange + 30
-
+        thicknessRange = 15
+        newWidth = 2 + thicknessRange * self.edge.weight * 0.01
         thickPen.setWidthF(newWidth)
         #thickPen.setColor(QColor(0,0,0, newRatio))
         painter.setPen(thickPen)
@@ -532,7 +515,7 @@ class CircleNode(NodeItem):
         
         # ======== DETAILED INFORMATION =======
         detailedInformation = None
-        if self.label:
+        if self.noProperties and self.label:
             detailedInformation = menu.addAction("Detailed Information (Online)")
         
         # ======== GO TABLE ===================
@@ -545,7 +528,11 @@ class CircleNode(NodeItem):
 
         # ======== EXECUTE ====================
         action = menu.exec_(event.screenPos())
-        if action and action == propertiesAction:
+        if not action:
+            # if clicked on empty spaces, do nothing
+            return
+        
+        if action == propertiesAction:
             if not hasattr(self, 'biclusterWindow'):
                 self.biclusterWindow = BiclusterWindow(self.node.id)
 
@@ -560,6 +547,7 @@ class CircleNode(NodeItem):
         if os.path.exists(path):
             self.GOTable= QtWebKit.QWebView()
             self.GOTable.setUrl(QUrl(path))
+            self.GOTable.setWindowTitle("GO Table for %s" % (self.label if self.noProperties else ("Bicluster %d" % self.node.id)))
             self.GOTable.show()
         else:
             QMessageBox.information(None, 'GO Table not found.',
@@ -593,6 +581,7 @@ class CircleNode(NodeItem):
 
         self.detailBrowser = QtWebKit.QWebView()
         self.detailBrowser.setHtml(html)
+        self.detailBrowser.setWindowTitle("Detailed Online Information")
         self.detailBrowser.showMaximized()
 
     def updateEdges(self):
@@ -926,6 +915,7 @@ class PiechartNode(NodeItem):
             neihgboringFilename = "outputs/graphs/%s.gml" % self.node.label
             os.system("./proteinScreen.exe %s TXT%d" % (self.node.label,numHop))
             self.specialWindow.loadGraph(neihgboringFilename)
+            self.specialWindow.setWindowTitle("%s-hop Neighborhood" % ("One" if numHop==1 else "Two") )
             self.specialWindow.showMaximized()
             del self.specialWindow
 
@@ -937,6 +927,7 @@ class PiechartNode(NodeItem):
 	    url = "http://thebiogrid.org/search.php?search=%s&organism=all" % geneId
 	    self.detailBrowser = QtWebKit.QWebView()
             self.detailBrowser.setUrl(QUrl(url))
+            self.detailBrowser.setWindowTitle("Detailed Information for Protein %s" % geneId)
             self.detailBrowser.showMaximized()
     #----------- GUI / Geometric Methods ------------------
     def updateLabel(self):

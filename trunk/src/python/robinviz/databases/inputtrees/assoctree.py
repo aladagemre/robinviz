@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Gene Ontology Association Source selector dialog"""
-import shutil
 from PyQt4.QtGui import QWidget, QTreeWidget, QTreeWidgetItem, QApplication, QHBoxLayout
 from PyQt4.QtCore import Qt
 import sys
@@ -221,7 +220,8 @@ class AssociationSelector(QWidget):
                 if not genes:
                     genes = ["NULL"]
                 output.write("%s\t%s\t%s\n" % ( term, name_dict[term], "\t".join( genes ) ) )
-
+            else:
+                print term, "was not found in go dict"
         output.close()
         catnames.close()
     def mergeSelectedAssociations(self):
