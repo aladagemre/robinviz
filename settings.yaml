@@ -1,8 +1,8 @@
 Confirmation:
     CoExpression:
         Input:
-            dataName_bic: src/python/robinviz/databases/inputtrees/geodata/GSE23741_series_matrix.txt
-            dataName2_bic: src/python/robinviz/databases/inputtrees/geodata/GSE23741_series_matrix.txt
+            dataName_bic: src/python/robinviz/databases/inputtrees/geodata/GSE20752-GPL570_series_matrix.txt
+            dataName2_bic: src/python/robinviz/databases/inputtrees/geodata/GSE20752-GPL570_series_matrix.txt
             ppifilename_bic: src/python/robinviz/databases/inputtrees/ppidata/ppi.txt
             catfile_bic: sources/organisms/Yeast2993x173/category.txt
             gofile_bic: src/python/robinviz/databases/inputtrees/assocdata/go_slim.txt
@@ -12,7 +12,7 @@ Confirmation:
             width: 15
             space: 50
             increment: 300
-            removeRat: 0.25
+            removeRat: 0.1
             nodeSize: 50.0
             edgeBendImp: 35.0
             colorScale: 130.0
@@ -22,26 +22,26 @@ Confirmation:
             bimax_low_dim1: 100
             bimax_low_dim2: 7
             ther_disc: 0.1
-            bic_num_bimax: 25
-            bic_num_cc: 30
-            maxScore_: 1
-            minHeight_: 1000
-            minWidth_: 10
-            maxSizeSubMatrix_exp1_g: 1000
-            maxSizeSubMatrix_exp1_c: 10
-            minSizeSubMatrix_exp1_g: 1000
-            minSizeSubMatrix_exp1_c: 5
+            bic_num_bimax: 100
+            bic_num_cc: 50
+            maxScore_: 1000
+            minHeight_: 500
+            minWidth_: 5
+            maxSizeSubMatrix_exp1_g: 1800
+            maxSizeSubMatrix_exp1_c: 5
+            minSizeSubMatrix_exp1_g: 1200
+            minSizeSubMatrix_exp1_c: 4
             repeat: 50
-            hvaluemin: 10000.0
-            increment_exp1_g: 200
+            hvaluemin: 20000.0
+            increment_exp1_g: 100
             increment_exp1_c: 5
         Algorithms:
             ownFlag: 0
             lebFlag: 0
-            ccFlag: 1
+            ccFlag: 0
             msbeFlag: 0
             bimaxFlag: 0
-            rlebFlag: 0
+            rlebFlag: 1
             brandFlag: 1
             brandFlag2: 0
             ourMethodFlag: 0

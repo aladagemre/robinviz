@@ -514,14 +514,14 @@ int main( int argc, char **argv ){
 			INPUT = dataRead( dataName2, geneArray, condArray );
                         if( rlebFlag == true )
                             minHvalueErrorChecker( INPUT, hvaluemin );
-                         //cout << "\nDONE";
+//                         cout << "\nDONE";
 #ifdef LINUX
                          defaultRunTo = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
 #else
                          defaultRunTo = fopen( "sources//usr_sources//visualization_data//genenames.txt", "w" );
 #endif
                          for( int i = 0; i < INPUT.dim1(); i++ ){
-                             //cout << geneArray[ i ].GENE << "\t" << i << endl;
+//                             cout << geneArray[ i ].GENE << "\t" << i << endl;
                              fprintf( defaultRunTo, "%s\n", geneArray[ i ].GENE );
                          }
                          fclose( defaultRunTo );
@@ -728,7 +728,7 @@ int main( int argc, char **argv ){
 		cout << "/**************************************************/" << endl;
 
 		if( layered_layout ){
-			mainAlgHandlingForEachSubgraph( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, biclusters, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag );
+                        mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, biclusters, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, biclusters.size() );
 		}
 //                else{
 //                        if( ffd_layout && hasColor == false ){
@@ -750,9 +750,9 @@ int main( int argc, char **argv ){
 				  increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
                                   POS, BENDS, LAYERS, abbv, cat_num, Categories, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
                     else
-                        mainGraph( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
+                        mainGraph2( PROJECT,GraphList,GraphList_S,namesForEachGraph,GenesNode,H_values,Xpos,Ypos,pos,bends,algorithmFlag,brandFlag,brandFlag2,ourMethodFlag,space,
                                   increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
-                                  POS, BENDS, LAYERS, abbv, cat_num, CategoriesXL, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ, hasColor );
+                                  POS, BENDS, LAYERS, abbv, cat_num, CategoriesXL, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
 		}
 		else{
                         if( ffd_layout && hasColor == false ){

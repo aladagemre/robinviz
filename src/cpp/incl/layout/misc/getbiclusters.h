@@ -1503,21 +1503,21 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
                 fscanf( fptr, "%s", getGenes );
                 listOfFile.append( getGenes );
             }
-            forall_items( it, listOfFile ){
-#ifdef LINUX
-                FILE *xptr = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "r" );
-#else
-                FILE *xptr = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "r" );
-#endif
-                while( !feof( xptr ) ){
-                    fscanf( xptr, "%s%s", gene, realGeneName );
-                    if( strcmp( listOfFile[ it ], realGeneName ) == 0 ){
-                        listOfFile[ it ] = gene;
-                        break;
-                    }
-                }
-                fclose( xptr );
-            }
+//            forall_items( it, listOfFile ){
+//#ifdef LINUX
+//                FILE *xptr = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "r" );
+//#else
+//                FILE *xptr = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "r" );
+//#endif
+//                while( !feof( xptr ) ){
+//                    fscanf( xptr, "%s%s", gene, realGeneName );
+//                    if( strcmp( listOfFile[ it ], realGeneName ) == 0 ){
+//                        listOfFile[ it ] = gene;
+//                        break;
+//                    }
+//                }
+//                fclose( xptr );
+//            }
             forall_items( it, listOfFile ){
                 temp = listOfFile[ it ];
                 int count = 0;
