@@ -24,7 +24,7 @@ class BiclusterWindow(QMainWindow):
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
         self.setCentralWidget(self.widget)
-        self.setWindowTitle("RobinViz - Bicluster Properties")
+        self.setWindowTitle("RobinViz - Bicluster %d Properties" % id)
 
 
     def setupInformationTab(self):

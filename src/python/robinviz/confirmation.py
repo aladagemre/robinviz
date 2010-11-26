@@ -97,6 +97,7 @@ class CoExpressionMainView(MainView):
     def showEnrichmentTable(self):
         self.enrichmentTable= QtWebKit.QWebView()
         self.enrichmentTable.setUrl(QUrl(normcase("outputs/enrich/result.html")))
+        self.enrichmentTable.setWindowTitle("Enrichment Table")
         self.enrichmentTable.showMaximized()
 
      # ========= Additional Methods =============
@@ -131,6 +132,7 @@ class CoExpressionPeripheralView(PeripheralView):
         if os.path.exists(path):
             self.GOTable= QtWebKit.QWebView()
             self.GOTable.setUrl(QUrl(path))
+            self.GOTable.setWindowTitle("GO Table for Bicluster %d" % self.scene().id)
             self.GOTable.show()
         else:
             QMessageBox.information(self, 'GO Table not found.',
@@ -274,14 +276,18 @@ class CoFunctionalityPeripheralView(PeripheralView):
         self.specialWindow = None
 
     def showGOTable(self):
-        path = normcase("outputs/go/gobicluster%d.html" % self.scene().id)
+        scene_id = self.scene().id
+        path = normcase("outputs/go/gobicluster%d.html" % scene_id)
+        category_name = ap("assocdata/input_go.txt").readlines()[scene_id].strip()
+        
         if os.path.exists(path):
             self.GOTable= QtWebKit.QWebView()
             self.GOTable.setUrl(QUrl(path))
+            self.GOTable.setWindowTitle("GO Table for %s" % category_name)
             self.GOTable.show()
         else:
             QMessageBox.information(self, 'GO Table not found.',
-     "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
+     "An error encountered and GO table file could not be located: %s" % path)
 
     """def peripheralProperties(self):
         if not hasattr(self, 'biclusterWindow'):
