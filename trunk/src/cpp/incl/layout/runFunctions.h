@@ -617,53 +617,6 @@ cout << "\n Dummy Adding Done \n" ;
 
                 posx = pos;
                 bendsx = bends;
-
-
-                //ofstream NodePositions("C://GraphUnion//GraphPositions.txt", ios::in | ios::trunc);
-                //ofstream EdgePositions("C://GraphUnion//EdgePositions.txt", ios::in | ios::trunc);
-                //ofstream FirstEdgePositions("C://GraphUnion//FirstEdgePositions.txt", ios::in | ios::trunc );
-
-                //forall_nodes( n, G ){
-                //		NodePositions << xpos[ n ] << "\n" << ypos[ n ] << "\n";
-                //}
-
-                //forall_edges( e, G ){
-                //		list<point> tempPoints = bends[ e ];
-                //		int counter = 0;
-                //		node s = G.source( e );
-                //		node t = G.target( e );
-                //		EdgePositions << xpos[ s ] << "\n" << ypos[ s ] << "\n";
-                //
-
-                //		int melcount = 0;
-                //		forall_items( it, tempPoints ){
-                //				if( it == tempPoints.first_item() ){
-                //						FirstEdgePositions << xpos[ s ] << "\n" << ypos[ s ] << "\n";
-                //						FirstEdgePositions << tempPoints[ it ].xcoord()<< "\n" << tempPoints[ it ].ycoord() << "\n";
-                //						melcount = 1;
-                //				}
-                //				EdgePositions << tempPoints[ it ].xcoord()<< "\n" << tempPoints[ it ].ycoord() << "\n";
-                //				/*if( tempPoints.succ( it ) != NULL ){
-                //					list_item it2 = tempPoints.succ( it );
-                //					angles = tempPoints[ it ].angle( tempPoints[ it ], tempPoints[ it2 ] );
-                //					length = tempPoints[ it ].( tempPoints[ it ], tempPoints[ it2 ] );
-                //				}*/
-                //				counter = 1;
-                //		}
-                //		//if( counter != 0 )
-                //				//EdgePositions << (double)100000 << endl;
-                //		//else{
-                //				EdgePositions << xpos[ t ] << "\n" << ypos[ t ] << "\n" << 100000 << endl;
-                //		//}
-                //
-                //}
-                //EdgePositions << (double) 200000 << endl;
-                //FirstEdgePositions << 200000 << endl << 200000 << endl << 200000 << endl << 200000;
-                //NodePositions.close();
-                //FirstEdgePositions.close();
-                //EdgePositions.close();
-                ////draw_planets( G, Layers, max, dummyNodes, edgePositionsX , edgePositionsY, bends );
-
                 return G;
 }
 
@@ -715,17 +668,6 @@ GRAPH<int,int> RUN_SELF(  GRAPH<int,int> &G,
 	list_item it,it2;
 	node_array<bool> marked(G,false);
 
-/*
-	forall_edges( e1 ,G ){
-		forall_edges( e2, G ){
-			if( G.target( e1 ) == G.target( e2 ) && G.source( e1 ) == G.source( e2 ) && e1 != e2 ){
-					cout << " " << G[ e1 ] << " - " << G[ e2 ] << endl;
-					G.del_edge( e2 );
-			}
-		}
-	}
-*/
-	
 	list<edge> paralells;
 	// Leda function to arrange Graph like removing parallel edges
 	paralells = Make_Simple( G );
@@ -1026,40 +968,7 @@ cout << "\n Dummy Adding Done \n" ;
 		Layers2 = Layers;
 
 		integer cross_count = 0;
-		/*for( int i = max; i > 0; i-- ){
-			cross_count += crossing_numberG( G, Layers[ i ], Layers[ i - 1 ] );
-		}*/
-		//cout << " Crossings  Before : " << cross_count << endl;
 		cross1 = cross_count; 
-// 		G.rev_all_edges();
-// /*		//1st Way
-// 		for( int i = max; i > 0 && i - 2 > 0; i-=2 ){
-// 			wolf( G, Layers[ i - 1 ], Layers[ i ] );
-// 		}
-// */
-// 		//2nd Way
-// 		/*for( int i = max; i > 0; i-- ){
-// 			wolfBarycenter( G, Layers[ i - 1 ], Layers[ i ] );
-// 		}*/
-// 
-// 		for( int i = max; i > 0; i-- ){
-// 			median_graph( G, Layers[ i - 1 ], Layers[ i ] );
-// 		}
-// 		/*for( int i = max; i > 0; i-- ){
-// 			median_graph( G, Layers2[ i - 1 ], Layers2[ i ] );
-// 		}*/
-// 
-// /*		//3rd Way
-// 		for( int i = max; i > 0; i-- ){
-// 			wolf( G, Layers[ i ], Layers[ i - 1 ] );
-// 		}
-// */
-// /*		//4th Way
-// 		for( int i = max; i > 0 && i - 2 > 0; i-=2 ){
-// 			wolf( G, Layers[ i ], Layers[ i - 1 ] );
-// 		}
-// */
-// 		G.rev_all_edges();
 		
 		for( int repeat_i = 0; repeat_i < 20 ; repeat_i++ ){
 		      G.rev_all_edges();
@@ -1077,19 +986,6 @@ cout << "\n Dummy Adding Done \n" ;
 		}
 
 		cross_count = 0;
-// 		for( int i = max; i > 0; i-- ){
-// 			cross_count += crossing_numberG( G, Layers[ i ], Layers[ i - 1 ] );
-// 		}
-// // 		cout << " Crossings  After Wolf: " << cross_count << endl;
-// 		cross2 = cross_count; 
-// 
-// 		cross_count = 0;
-// 		for( int i = max; i > 0; i-- ){
-// 			cross_count += crossing_numberG( G, Layers2[ i ], Layers2[ i - 1 ] );
-// 		}
-// // 		cout << " Crossings  After Median: " << cross_count << endl;
-// 		cross3 = cross_count; 
-// 		cout << endl;
 
 /********************* END OF CROSSING REDUCTION ****************/
 /****************************************************************/
@@ -1244,52 +1140,6 @@ cout << "\n Dummy Adding Done \n" ;
 		posx = pos;
 		bendsx = bends;
 		
-
-		//ofstream NodePositions("C://GraphUnion//GraphPositions.txt", ios::in | ios::trunc);
-		//ofstream EdgePositions("C://GraphUnion//EdgePositions.txt", ios::in | ios::trunc);
-		//ofstream FirstEdgePositions("C://GraphUnion//FirstEdgePositions.txt", ios::in | ios::trunc );
-
-		//forall_nodes( n, G ){
-		//		NodePositions << xpos[ n ] << "\n" << ypos[ n ] << "\n";
-		//}
-
-		//forall_edges( e, G ){
-		//		list<point> tempPoints = bends[ e ];
-		//		int counter = 0;
-		//		node s = G.source( e );
-		//		node t = G.target( e );
-		//		EdgePositions << xpos[ s ] << "\n" << ypos[ s ] << "\n";
-		//		
-
-		//		int melcount = 0;
-		//		forall_items( it, tempPoints ){
-		//				if( it == tempPoints.first_item() ){
-		//						FirstEdgePositions << xpos[ s ] << "\n" << ypos[ s ] << "\n";
-		//						FirstEdgePositions << tempPoints[ it ].xcoord()<< "\n" << tempPoints[ it ].ycoord() << "\n";
-		//						melcount = 1;
-		//				}	
-		//				EdgePositions << tempPoints[ it ].xcoord()<< "\n" << tempPoints[ it ].ycoord() << "\n";
-		//				/*if( tempPoints.succ( it ) != NULL ){
-		//					list_item it2 = tempPoints.succ( it );
-		//					angles = tempPoints[ it ].angle( tempPoints[ it ], tempPoints[ it2 ] );
-		//					length = tempPoints[ it ].( tempPoints[ it ], tempPoints[ it2 ] );
-		//				}*/
-		//				counter = 1;
-		//		}
-		//		//if( counter != 0 )
-		//				//EdgePositions << (double)100000 << endl;
-		//		//else{
-		//				EdgePositions << xpos[ t ] << "\n" << ypos[ t ] << "\n" << 100000 << endl;
-		//		//}
-		//				
-		//}
-		//EdgePositions << (double) 200000 << endl;
-		//FirstEdgePositions << 200000 << endl << 200000 << endl << 200000 << endl << 200000;
-		//NodePositions.close();
-		//FirstEdgePositions.close();
-		//EdgePositions.close();
-		////draw_planets( G, Layers, max, dummyNodes, edgePositionsX , edgePositionsY, bends );
-
 		return G;
 }
 
@@ -1345,6 +1195,277 @@ GRAPH<int,int> RUN_FFD(  GRAPH<int,int> &G,
 		posx[ n ] = p;
 	}
 	return G;
+}
+
+/* Function is based for Force Directed Layout
+Inputs are straightforward, this procedure
+calculates the peripheral graphs */
+GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
+                                      node_array<double> &Xpos,
+                                      node_array<double> &Ypos,
+                                      node_array<point> &posx,
+                                      int node_width )
+{
+    list_item it;
+    edge e;
+
+    forall_edges( e, G )
+    {
+            if( G.source( e ) == G.target( e ) )
+                    G.del_edge( e );
+    }
+
+    double pi = 2.0 * 3.147;
+    double tmp = pi;
+    int count = 0,maxLayerIdNow;
+    double x0, y0, x1, y1;
+
+    node_array<int> neighbors( G );
+    node_array<int> indexs( G );
+    node_array<point> pos( G );
+    node_array<double> xpos( G );
+    node_array<double> ypos( G );
+    GRAPH<int,int> H = G;
+    node_array<double> xpos2( H );
+    node_array<double> ypos2( H );
+    node_array<int> indexs2( H );
+    node_array<int> nodeId( H, 3 );
+    array<node> nodes( G.number_of_nodes() + 1 );
+    node n,adj,source;
+    list<node> fixedNodes;
+
+    // FINDING COMPONENTS using LEDA function
+    node_array<int> comp( G, 0 );
+    COMPONENTS( G, comp );
+    int max = 0;
+    forall_nodes( n, G ){
+        if( max < comp[ n ] )
+            max = comp[ n ];
+    }
+    array<list<node> > COMPS( max + 1 );
+
+    int cnt = 0;
+    forall_nodes( n, G ){
+        indexs[ n ] = cnt;
+        nodes[ cnt ] = n;
+        COMPS[ comp[ n ] ].append( n );
+        cnt++;
+    }
+    list<int> notEnoughComponents;
+    int maxComp = 0;
+    for(int i = 0; i <= max; i++ ){
+        if( COMPS[ i ].size() > maxComp ){
+            maxComp = COMPS[ i ].size();
+        }
+    }
+//    cout << " -1 \n";
+    int election = 10;
+    if( maxComp < election )
+        election = maxComp;
+
+    // Smaller component should be hided before spring algorithm in order
+    // to obtain good visuals.
+    list<int> hidedIndexs;
+    for(int i = 0; i <= max; i++ ){
+        if( COMPS[ i ].size() < election ){
+            notEnoughComponents.append( i );
+            forall_items( it, COMPS[ i ] ){
+                hidedIndexs.append( indexs[ COMPS[ i ][ it ] ] );
+//                cout << indexs[ n ] << "-";
+                G.hide_node( COMPS[ i ][ it ] );
+            }
+        }
+    }
+
+//    cout << endl << "___________________" << endl;
+//    cout << " 0 \n";
+
+
+    cnt = 0;
+    forall_nodes( n, H ){
+        indexs2[ n ] = cnt;
+        cnt++;
+    }
+
+//    cout << " 0 \n";
+    forall_nodes( n, H ){
+        bool isHided = false;
+        forall_items( it, hidedIndexs ){
+            if( indexs2[ n ] == hidedIndexs[ it ] ){
+                isHided = true;
+            }
+        }
+        if( isHided == true ){
+            H.hide_node( n );
+//            cout << indexs2[ n ] << "-";
+        }
+    }
+//    cout << endl;
+//    cout << " 0 \n";
+    list<node> fixedNodes2;
+    if( G.number_of_nodes() < 30 )
+        SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, 0, 2000 ,0, 1000, 1000, nodeId );
+    else
+        SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, 0, 2000 + G.number_of_nodes()*13 ,0, 1000 + G.number_of_nodes()*5, 1000, nodeId );
+//    cout << " 0 \n";
+    forall_nodes( n, H ){
+        xpos[ nodes[ indexs2[ n ] ] ] = xpos2[ n ];
+        ypos[ nodes[ indexs2[ n ] ] ] = ypos2[ n ];
+//        point p( xpos2[ n ], ypos2[ n ] );
+//        cout << p << " - " << H.degree( n ) << endl;
+    }
+
+    cout << "\n_____________________\n";
+    cout << " G " << G.number_of_nodes() << " - " << G.number_of_edges() << endl;
+    cout << "\n_____________________\n";
+    cout << " H " << H.number_of_nodes() << " - " << H.number_of_edges() << endl;
+    cout << "\n_____________________\n";
+//    cout << " 0.5 \n";
+    double averageDistance = 0;
+    forall_edges( e, G ){
+        point p( xpos[ G.source( e ) ], ypos[ G.source( e ) ] );
+        point q( xpos[ G.target( e ) ], ypos[ G.target( e ) ] );
+        averageDistance += p.distance( q );
+    }
+    averageDistance = averageDistance / (double)(G.number_of_edges());
+    if( node_width > averageDistance )
+        averageDistance = node_width;
+    G.restore_all_nodes();
+    G.restore_all_edges();
+
+    list<node> justOnes;
+    // and handle self nodes
+    forall_nodes( n, G ){
+        if( G.degree( n ) == 0 ){
+            justOnes.append( n );
+            G.hide_node( n );
+        }
+    }
+    cout << " 1 \n";
+    // Discover the new layout, find limits
+    double xmin, xmax, ymin, ymax;
+    int ncount = 0;
+    forall_nodes( n, G ){
+            if( COMPS[ comp[ n ] ].size() >= election ){
+                    if( ncount == 0 ){
+                            xmin = xpos[ n ];
+                            xmax = xpos[ n ];
+                            ymin = ypos[ n ];
+                            ymax = ypos[ n ];
+                    }
+                    else{
+                        if( xpos[ n ] < xmin )
+                              xmin = xpos[ n ];
+                        if( xpos[ n ] > xmax )
+                              xmax = xpos[ n ];
+                        if( ypos[ n ] < ymin )
+                              ymin = ypos[ n ];
+                        if( ypos[ n ] > ymax )
+                              ymax = ypos[ n ];
+                    }
+                    ncount++;
+            }
+    }
+//    cout << " 2 \n";
+
+    // Handle smaller components that have not been placed yet.
+    xmax += node_width;
+    double xpos1 = xmin - node_width;
+    double ypos1 = ymax + node_width;
+    int maxDiam = 0;
+    //cout << max << " - " << election << endl;
+    for(int i = 0; i <= max; i++ ){
+            //cout << COMPS[ i ].size() << "\t";
+            int diam = 30;
+            if( COMPS[ i ].size() < election && COMPS[ i ].size() > 1 ){
+                    if( xpos1 < xmax ){
+                        if( COMPS[ i ].size() < 3 ){
+                            diam = averageDistance / 3.0;
+                        }
+                        else{
+                            diam = (COMPS[ i ].size() / averageDistance ) * 10.0 + averageDistance / 3.0;
+                        }
+                        if( maxDiam < diam )
+                            maxDiam = diam;
+                        circle C( xpos1 + diam, ypos1, diam );
+                        double min = pi / (double)COMPS[ i ].size();
+                        tmp = pi;
+                        forall_items( it, COMPS[ i ] ){
+                            pos[ COMPS[ i ][ it ]  ] = C.point_on_circle( tmp );
+
+                            //cout << pos[ COMPS[ i ][ it ]  ] << "\t";
+                            xpos[ COMPS[ i ][ it ] ] = pos[ COMPS[ i ][ it ] ].xcoord();
+                            ypos[ COMPS[ i ][ it ] ] = pos[ COMPS[ i ][ it ] ].ycoord();
+                            tmp -= min;
+                        }
+                    }
+                    else{
+                            xpos1 = xmin - node_width;
+                            ypos1 += maxDiam + node_width;
+                            maxDiam = 0;
+                            int diam = 30;
+                            if( COMPS[ i ].size() < 3 ){
+                                diam = averageDistance / 3.0;
+                            }
+                            else{
+                                diam = (COMPS[ i ].size() / averageDistance ) * 10.0 + averageDistance / 3.0;
+                            }
+                            if( maxDiam < diam )
+                                maxDiam = diam;
+                            circle C( xpos1 + diam, ypos1, diam );
+                            double min = pi / (double)COMPS[ i ].size();
+                            tmp = pi;
+                            forall_items( it, COMPS[ i ] ){
+                                pos[ COMPS[ i ][ it ]  ] = C.point_on_circle( tmp );
+                                //cout << pos[ COMPS[ i ][ it ]  ] << "\t";
+                                xpos[ COMPS[ i ][ it ] ] = pos[ COMPS[ i ][ it ] ].xcoord();
+                                ypos[ COMPS[ i ][ it ] ] = pos[ COMPS[ i ][ it ] ].ycoord();
+                                tmp -= min;
+                            }
+                    }
+                    xpos1 += diam * 2 + 25.0;
+            }
+    }
+    G.restore_all_nodes();
+    G.restore_all_edges();
+
+    xpos1 = xmin;
+//            cout << endl << xmin << " | " << xmax << endl;
+//                if( xmax - xmin < 400 )
+//                    xmax = xmin + 400;
+    ypos1 = ymin - node_width;
+    if( G.number_of_edges() < 5 )
+        averageDistance = averageDistance / 5;
+    else
+        averageDistance = averageDistance / 3;
+
+    forall_items( it, justOnes ){
+        if( xpos1 < xmax ){
+            xpos[ justOnes[ it ] ] = xpos1;
+            ypos[ justOnes[ it ] ] = ypos1;
+        }
+        else{
+            xpos1 = xmin;
+            ypos1 -= averageDistance;
+            xpos[ justOnes[ it ] ] = xpos1;
+            ypos[ justOnes[ it ] ] = ypos1;
+        }
+        xpos1 += averageDistance;
+    }
+
+    forall_nodes( n, G ){
+            pos[ n ] = point( xpos[n], ypos[n]);
+    }
+
+    Xpos = xpos;
+    Ypos = ypos;
+    forall_nodes( n, G ){
+            Xpos[ n ] = Xpos[ n ] * 3.4;
+            Ypos[ n ] = Ypos[ n ] * 1.8;
+            point p( Xpos[ n ], Ypos[ n ] );
+            posx[ n ] = p;
+    }
+    return G;
 }
 
 

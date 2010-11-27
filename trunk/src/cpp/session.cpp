@@ -111,6 +111,42 @@ int main(int argc, char** argv) {
                         fprintf( fptr, "%d\n", 0 );
                     }
                 }
+
+                for( int i = 0; i < numberOfBiclusters; i++ ){
+#ifdef LINUX
+                    sprintf( filename, "outputs/enrich/pie%d.txt", i );
+#else
+                    sprintf( filename, "outputs//enrich//pie%d.txt", i );
+#endif
+                    if( ( fptr2 = fopen( filename, "r") ) != NULL ){
+                        fprintf( fptr, "%d\t", i );
+                        int lines = 0;
+                        while( !feof( fptr2 ) ){
+                                fgets( line, 1000, fptr2 );
+                                lines++;
+                        }
+                        lines--;
+                        rewind( fptr2 );
+                        fprintf( fptr, "%d\n", lines );
+                        int k = 0;
+                        if( lines != 0 ){
+                            while( !feof( fptr2 ) ){
+                                    fgets( line, 1000, fptr2 );
+                                    fputs (line, fptr);
+                                    if( lines - 1== k )
+                                        break;
+                                    k++;
+                            }
+                        }
+                        fclose( fptr2 );
+                                                fprintf( fptr, "\n" );
+                    }
+                    else{
+                        fprintf( fptr, "%d\t", i );
+                        fprintf( fptr, "%d\n", 0 );
+                    }
+                }
+
 #ifdef LINUX
                     sprintf( filename, "outputs/enrich/result.html" );
 #else
@@ -257,6 +293,64 @@ int main(int argc, char** argv) {
 
                     ///////////////////////////////////////////////////////////
                     ///////////////////////////////////////////////////////////
+
+#ifdef LINUX
+                    sprintf( filename, "outputs/resultparams.txt" );
+#else
+                    sprintf( filename, "outputs//resultparams.txt" );
+#endif
+                    if( ( fptr2 = fopen( filename, "r") ) != NULL ){
+                        fprintf( fptr, "%s\t", filename );
+                        int lines = 0;
+                        while( !feof( fptr2 ) ){
+                                fgets( line, 1000, fptr2 );
+                                lines++;
+                        }
+                        rewind( fptr2 );
+                        fprintf( fptr, "%d\n", lines );
+                        while( !feof( fptr2 ) ){
+                                fgets( line, 1000, fptr2 );
+                                fputs (line, fptr);
+                        }
+                        fclose( fptr2 );
+                        fprintf( fptr, "\n" );
+                    }
+                    else{
+                        fprintf( fptr, "%s\t", filename );
+                        fprintf( fptr, "%d\n", 0 );
+                    }
+
+                    ///////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////
+
+#ifdef LINUX
+                    sprintf( filename, "outputs/graphs/ppigraph.txt" );
+#else
+                    sprintf( filename, "outputs//graphs//ppigraph.txt" );
+#endif
+                    if( ( fptr2 = fopen( filename, "r") ) != NULL ){
+                        fprintf( fptr, "%s\t", filename );
+                        int lines = 0;
+                        while( !feof( fptr2 ) ){
+                                fgets( line, 1000, fptr2 );
+                                lines++;
+                        }
+                        rewind( fptr2 );
+                        fprintf( fptr, "%d\n", lines );
+                        while( !feof( fptr2 ) ){
+                                fgets( line, 1000, fptr2 );
+                                fputs (line, fptr);
+                        }
+                        fclose( fptr2 );
+                        fprintf( fptr, "\n" );
+                    }
+                    else{
+                        fprintf( fptr, "%d\n", 0 );
+                    }
+
+                    ///////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////
+
                     fclose( fptr );
 
 		}
@@ -325,15 +419,37 @@ int main(int argc, char** argv) {
 #endif
                         fptr2 = fopen( filename, "w");
                             //cout << i << endl;
-							j = 0;
+                            j = 0;
                             fscanf( fptr, "%d", &lines );
                             while( j <= lines ){
                                     fgets( line, 1000, fptr );
-                                    fputs (line, fptr2 );
+                                    if( j != 0 )
+                                        fputs (line, fptr2 );
                                     j++;
                             }
                             fclose( fptr2 );
                     }
+                    
+                    for( int i = 0; i < numberOfBiclusters; i++ ){
+                        fscanf( fptr, "%d", &i );
+#ifdef LINUX
+                        sprintf( filename, "outputs/enrich/pie%d.txt", i );
+#else
+                        sprintf( filename, "outputs//enrich//pie%d.txt", i );
+#endif
+                        fptr2 = fopen( filename, "w");
+                            //cout << i << endl;
+                            j = 0;
+                            fscanf( fptr, "%d", &lines );
+                            while( j <= lines ){
+                                    fgets( line, 1000, fptr );                                    
+                                    if( j != 0 )
+                                        fputs (line, fptr2 );
+                                    j++;
+                            }
+                            fclose( fptr2 );
+                    }
+
 #ifdef LINUX
                     sprintf( filename, "outputs/enrich/result.html" );
 #else
@@ -345,11 +461,11 @@ int main(int argc, char** argv) {
                         fscanf( fptr, "%d", &lines );
                         while( j <= lines ){
                                 fgets( line, 1000, fptr );
-								if( j != 0 ){
-									//cout << line << endl;
-									fputs (line, fptr2 );
-								}
-								j++;
+                                if( j != 0 ){
+                                        //cout << line << endl;
+                                        fputs (line, fptr2 );
+                                }
+                                j++;
                         }
                         fclose( fptr2 );
 
@@ -456,6 +572,53 @@ int main(int argc, char** argv) {
                         fclose( fptr2 );
                     ///////////////////////////////////////////////////////////
                     ///////////////////////////////////////////////////////////
+#ifdef LINUX
+                    sprintf( filename, "outputs/resultparams.txt" );
+#else
+                    sprintf( filename, "outputs//resultparams.txt" );
+#endif
+                    fptr2 = fopen( filename, "w");
+                        //cout << filename << endl;
+                        fscanf( fptr, "%s", filename );
+                        //cout << filename << endl;
+                        j = 0;
+                        fscanf( fptr, "%d", &lines );
+                        while( j <= lines ){
+                            fgets( line, 1000, fptr );
+                            if( j != 0 ){
+                                //cout << line << endl;
+                                fputs (line, fptr2 );
+                            }
+                            j++;
+                        }
+                        fclose( fptr2 );
+
+                    ///////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////
+#ifdef LINUX
+                    sprintf( filename, "outputs/graphs/ppigraph.txt" );
+#else
+                    sprintf( filename, "outputs//graphs//ppigraph.txt" );
+#endif
+                    fptr2 = fopen( filename, "w");
+                        //cout << filename << endl;
+                        fscanf( fptr, "%s", filename );
+                        //cout << filename << endl;
+                        j = 0;
+                        fscanf( fptr, "%d", &lines );
+                        while( j <= lines ){
+                            fgets( line, 1000, fptr );
+                            if( j != 0 ){
+                                //cout << line << endl;
+                                fputs (line, fptr2 );
+                            }
+                            j++;
+                        }
+                        fclose( fptr2 );
+
+                    ///////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////
+
                     fclose( fptr );
         }
         else{
