@@ -1291,9 +1291,9 @@ void interactionHandling( node_array<GENENAMES> &temp, array<GENENAMES> &GenesNo
 	double value;
 	list<GENENAMES> entered;
 	int numberOfReleations = 0;
-	int nodeAdded = 0;
+        int nodeAdded = 0;
 	while( !feof( interactionsPtr ) ){
-		if( numberOfReleations % 1000 == 999 )
+                if( numberOfReleations % 5000 == 4999 )
 			cout << "* " << INTERACTIONS.number_of_edges() << " " << INTERACTIONS.number_of_nodes() << endl;
 
 		fscanf( interactionsPtr, "%s%s%lf", sourceGene, targetGene, &value );
@@ -1937,13 +1937,13 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
                     projectNode = PROJECT.new_node();
                     pos.init( listOfGraphs[ i ] );
                     bends.init( listOfGraphs[ i ] );
-                    array<int> nodePar( listOfGraphs[ i ].number_of_nodes()+1 );
-                    int nPar = 0;
-                    forall_nodes( n, listOfGraphs[ i ] ){
-                          nodePar[ nPar ] = listOfGraphs[ i ][ n ];
-// 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
-                          nPar++;
-                    }
+//                    array<int> nodePar( listOfGraphs[ i ].number_of_nodes()+1 );
+//                    int nPar = 0;
+//                    forall_nodes( n, listOfGraphs[ i ] ){
+//                          nodePar[ nPar ] = listOfGraphs[ i ][ n ];
+//// 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
+//                          nPar++;
+//                    }
                     cout << " Graph " << i << " in process \n";
                     if( listOfGraphs[ i ].empty() != true ){
 //                            if( listOfGraphs[ i ].number_of_nodes() < 1500 ){
@@ -1960,15 +1960,15 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
                         if( listOfGraphs[ i ].number_of_edges() < 1 )
                             H = RUN_CIRCLEALONE( listOfGraphs[ i ], Xpos, Ypos, pos, i, 100 );
                         else
-                            H = RUN_SPRING_EMBEDDER( listOfGraphs[ i ], Xpos, Ypos, pos, 50 );
+                            H = RUN_SPRING_EMBEDDER( listOfGraphs[ i ], Xpos, Ypos, pos, 50, i );
                     }
                     cout << " Graph " << i << " layout is done \n";
-                    nPar = 0;
-                    forall_nodes( n, listOfGraphs[ i ] ){
-                          listOfGraphs[ i ][ n ] = nodePar[ nPar ];
-// 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
-                          nPar++;
-                    }
+//                    nPar = 0;
+//                    forall_nodes( n, listOfGraphs[ i ] ){
+//                          listOfGraphs[ i ][ n ] = nodePar[ nPar ];
+//// 			  cout << nodePar[ nPar ] << " - " << listOfGraphs[ i ][ n ] << endl;
+//                          nPar++;
+//                    }
 
                     GraphList.append( listOfGraphs[ i ] );
 // #ifdef LINUX
@@ -3954,11 +3954,11 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 #endif
         TEMPINT = INTERACTIONS;
         array<int> nodePar( INTERACTIONS.number_of_nodes()+1 );
-        int nPar = 0;
-        forall_nodes( n, INTERACTIONS ){
-                nodePar[ nPar ] = INTERACTIONS[ n ];
-                nPar++;
-        }
+//        int nPar = 0;
+//        forall_nodes( n, INTERACTIONS ){
+//                nodePar[ nPar ] = INTERACTIONS[ n ];
+//                nPar++;
+//        }
 //        for( int i = 0; i < biclusters.size(); i++ ){
 //
 //        }
@@ -3969,11 +3969,11 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 	   and nodes from the original interaction graph obtained with ppihandler function */
         for( int i = 0; i < biclusters.size(); i++ ){
                 listOfGraphs[ i ] = INTERACTIONS;
-                nPar = 0;
-                forall_nodes( n,listOfGraphs[ i ] ){
-                        listOfGraphs[ i ][ n ] = nodePar[ nPar ];
-                        nPar++;
-                }
+//                nPar = 0;
+//                forall_nodes( n,listOfGraphs[ i ] ){
+//                        listOfGraphs[ i ][ n ] = nodePar[ nPar ];
+//                        nPar++;
+//                }
                 G = listOfGraphs[ i ];
                 list<GENES> tmp1 = biclusters[ it_b1 ];
 #ifdef DEBUG_ROBINVIZ
@@ -3986,7 +3986,7 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
                         }
                         bool isEnter = false;
                         forall_items( it_b2, tmp1 ){
-                                if( strcmp( GenesNode[  G[ m1 ] ].GENE, tmp1[ it_b2 ].GENE ) == 0 ){
+                                if( strcmp( GenesNode[ G[ m1 ] ].GENE, tmp1[ it_b2 ].GENE ) == 0 ){
                                         isEnter = true;
                                         break;
                                 }
@@ -4004,13 +4004,12 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 //                    if( (inedges.size() + outedges.size() ) == 0 )
 //                        G.del_node( m1 );
 //                }
-#ifdef DEBUG_ROBINVIZ
+//#ifdef DEBUG_ROBINVIZ
                 cout << endl;
                 forall_nodes( m1, G ){
-                        cout <<  GenesNode[  G[ m1 ] ].GENE << "-";
+                        cout << G[ m1 ] << " - " << GenesNode[  G[ m1 ] ].GENE << "\n";
                 }
-                cout << endl;
-#endif
+//#endif
                 listOfGraphs[ i ] = G;
                 it_b1 = biclusters.succ( it_b1 );
 #ifdef DEBUG_ROBINVIZ

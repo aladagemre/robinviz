@@ -1,8 +1,8 @@
 Confirmation:
     CoExpression:
         Input:
-            dataName_bic: src/python/robinviz/databases/inputtrees/geodata/GSE20752-GPL570_series_matrix.txt
-            dataName2_bic: src/python/robinviz/databases/inputtrees/geodata/GSE20752-GPL570_series_matrix.txt
+            dataName_bic: src/python/robinviz/databases/inputtrees/geodata/GSE15352_series_matrix.txt
+            dataName2_bic: src/python/robinviz/databases/inputtrees/geodata/GSE15352_series_matrix.txt
             ppifilename_bic: src/python/robinviz/databases/inputtrees/ppidata/ppi.txt
             catfile_bic: sources/organisms/Yeast2993x173/category.txt
             gofile_bic: src/python/robinviz/databases/inputtrees/assocdata/go_slim.txt
@@ -27,14 +27,14 @@ Confirmation:
             maxScore_: 1000
             minHeight_: 500
             minWidth_: 5
-            maxSizeSubMatrix_exp1_g: 1800
-            maxSizeSubMatrix_exp1_c: 5
-            minSizeSubMatrix_exp1_g: 1200
-            minSizeSubMatrix_exp1_c: 4
+            maxSizeSubMatrix_exp1_g: 1000
+            maxSizeSubMatrix_exp1_c: 6
+            minSizeSubMatrix_exp1_g: 900
+            minSizeSubMatrix_exp1_c: 2
             repeat: 50
-            hvaluemin: 20000.0
+            hvaluemin: 10000.0
             increment_exp1_g: 100
-            increment_exp1_c: 5
+            increment_exp1_c: 2
         Algorithms:
             ownFlag: 0
             lebFlag: 0
