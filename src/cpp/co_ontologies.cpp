@@ -520,7 +520,7 @@ int main(int argc, char **argv){
                 cout << "/**************************************************/" << endl;
 
                 mainAlgHandlingForEachSubgraph2( pos, bends, layers, GraphList, GraphList_S, Xpos, Ypos, POS, BENDS, LAYERS, PROJECT, GenesNode, listOfGraphs, namesForEachGraph, categories, width, algorithmFlag, space, ourMethodFlag, increment, ledaPostFlag, abbv, cat_num );
-                cout << "\n Main Graph has " << PROJECT.number_of_nodes() << endl;
+//                cout << "\n Main Graph has " << PROJECT.number_of_nodes() << endl;
                 cout << "\n*******************************\n";
 //                int count_i = 0;
 //                forall_items( it, GraphList ){

@@ -1204,7 +1204,8 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
                                       node_array<double> &Xpos,
                                       node_array<double> &Ypos,
                                       node_array<point> &posx,
-                                      int node_width )
+                                      int node_width,
+                                      int graphNo )
 {
     list_item it;
     edge e;
@@ -1458,6 +1459,9 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
             point p( Xpos[ n ], Ypos[ n ] );
             posx[ n ] = p;
     }
+    char filename_[64] = "outputs/graphs/graph_";
+    sprintf( filename_, "%s%d%s", filename_, graphNo, ".gml" );
+    G.write_gml( filename_ );
     return G;
 }
 
