@@ -1,4 +1,4 @@
-#summary Screenshots from First Version
+#summary Screenshots from Version 0.1.0 Beta
 
 = Screenshots =
 ===Main Screen with Layered Bicluster Graph and PPI Previews===
