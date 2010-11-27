@@ -478,7 +478,7 @@ class MultiViewWindow(QMainWindow):
     def saveSession(self):
         fileName = QFileDialog.getSaveFileName(self, "Save Session File",
                                                  "sessions/", "Session File (*.ses)");
-        if filename:
+        if fileName:
             os.system(normcase("./session.exe save %s %d" % ( fileName, len(self.mainView.scene().g.nodes) )))
 
     def detectLastConfirmationType(self):
