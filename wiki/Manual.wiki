@@ -8,7 +8,7 @@
 = Table of Contents=
 -------------------------
 
-<wiki:toc max_depth="3" />
+<wiki:toc max_depth="4" />
 
 -------------------------
 = Introduction =
@@ -195,4 +195,48 @@ http://robinviz.googlecode.com/svn/manual/images/11_5_scenario_120102_2.png
 = Sample Input Creation =
 -------------------------
 
-Hence our methodology works on the desired input requests, at this section, we provide how to create an input. Since Robinviz has Wizard style Input menu, it is easy to follow step by step requests.
+Hence our methodology works on the desired input requests, at this section, we provide how to create an input and make it meaningful for Robinviz. Since Robinviz has Wizard style Input menu, it is easy to follow step by step requests. In the paper, we mention two concepts of methodology to follow; *"Co-Expression"* and *"Co-Ontology"*. 
+
+
+== Co-Ontology ==
+
+Co-Ontology requires the selection of Protein-Protein Interaction Network, Coloring Methodology, Gene Ontology Category Selection and Association File Selection for GO category genes(We do all jobs under the existance of Biogrid id at each selections).
+
+For easy understanding step by step input submission for Co-Ontology is as follows;
+
+|| 1 ||http://robinviz.googlecode.com/svn/manual/images/1_ppi_selection.png || 
+
+|| First Select PPI data from Biogrid data from tree view. You are available to select multiple organisms. The tree view organized organism name and exprimental methodology(see http://wiki.thebiogrid.org/doku.php/experimental_systems). For this setup, we select Homo Sapiens and all its experiments. Note also that this screen is *must select* screen for both Co-Ontology and Co-Expression. Please press Next button to continue. ||
+
+|| 2 || http://robinviz.googlecode.com/svn/manual/images/2_select_concept.png ||
+
+|| This wizard step allows you to select Co-Expression or Co-Ontology. We select Co-Ontology since we are going over at its path. To continue, please press Next button||
+
+|| 3 || http://robinviz.googlecode.com/svn/manual/images/3_color_assignment.png  || 
+
+|| This screen allows you to select how all layouts in Robinviz should be colored. For details about the coloring see the paper. We select molecular Function at this step. Then, please press Next button  ||
+
+|| 4 ||http://robinviz.googlecode.com/svn/manual/images/4_category_selection.png||
+
+|| This screen is only for Co-Ontology. You must select at least one category among three main paths; Molecular Function, Cellular Component, Biological Process. We select several from each of these three main categorization. Please press Next button ||
+
+|| 5 || http://robinviz.googlecode.com/svn/manual/images/5_go_selection.png ||
+
+|| Since we require genes/proteins from GO categorization, we download GO associations, we extract genes from these associations and convert to Biogrid id. For this case we select unfiltered>Homo Sapiens. Finally, please press FinisH button ||
+
+Then, for your patience Robinviz works for a while. During the execution the top of Robinviz window should be;
+
+http://robinviz.googlecode.com/svn/manual/images/6_note.png
+
+Eventually, you will have following snapshot;
+
+http://robinviz.googlecode.com/svn/manual/images/7_result_self.png
+
+With some clicks on *Central Nodes*, obtain the following
+
+http://robinviz.googlecode.com/svn/manual/images/7_result.png
+
+
+
+
+
