@@ -3954,11 +3954,11 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 #endif
         TEMPINT = INTERACTIONS;
         array<int> nodePar( INTERACTIONS.number_of_nodes()+1 );
-//        int nPar = 0;
-//        forall_nodes( n, INTERACTIONS ){
-//                nodePar[ nPar ] = INTERACTIONS[ n ];
-//                nPar++;
-//        }
+        int nPar = 0;
+        forall_nodes( n, INTERACTIONS ){
+                nodePar[ nPar ] = INTERACTIONS[ n ];
+                nPar++;
+        }
 //        for( int i = 0; i < biclusters.size(); i++ ){
 //
 //        }
@@ -3969,11 +3969,11 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 	   and nodes from the original interaction graph obtained with ppihandler function */
         for( int i = 0; i < biclusters.size(); i++ ){
                 listOfGraphs[ i ] = INTERACTIONS;
-//                nPar = 0;
-//                forall_nodes( n,listOfGraphs[ i ] ){
-//                        listOfGraphs[ i ][ n ] = nodePar[ nPar ];
-//                        nPar++;
-//                }
+                nPar = 0;
+                forall_nodes( n,listOfGraphs[ i ] ){
+                        listOfGraphs[ i ][ n ] = nodePar[ nPar ];
+                        nPar++;
+                }
                 G = listOfGraphs[ i ];
                 list<GENES> tmp1 = biclusters[ it_b1 ];
 #ifdef DEBUG_ROBINVIZ
@@ -4004,12 +4004,12 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 //                    if( (inedges.size() + outedges.size() ) == 0 )
 //                        G.del_node( m1 );
 //                }
-//#ifdef DEBUG_ROBINVIZ
+#ifdef DEBUG_ROBINVIZ
                 cout << endl;
                 forall_nodes( m1, G ){
                         cout << G[ m1 ] << " - " << GenesNode[  G[ m1 ] ].GENE << "\n";
                 }
-//#endif
+#endif
                 listOfGraphs[ i ] = G;
                 it_b1 = biclusters.succ( it_b1 );
 #ifdef DEBUG_ROBINVIZ
