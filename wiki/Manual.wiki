@@ -71,7 +71,9 @@ Visual Studio 2005 C++ or over
 or
 
 1. Shall use sample Visual Studio 2005 Solution Template located at the main source distribution folder.
+
 2. Setup LEDA 5.1+ Library from Algorithmic Solutions
+
 3. Follow the instruction given at http://www.algorithmic-solutions.info/leda_manual/DLL_s_MS_Visual.html or if you use the template, you will need to 
 add library path and include folder from menu bar Tools->Options->Project and Solutions->VC++ Directories.
 
@@ -86,17 +88,20 @@ add library path and include folder from menu bar Tools->Options->Project and So
 
 === Central Visualizations ===
 
-We now introduce the GUI of Robinviz. We take all screenshots using the svn version 298.
+We now introduce the GUI of Robinviz. We take all screenshots using the *svn version 320*.
 
 If you double click on "robinviz.exe" in windows or run the command "./robinviz.exe", you shall see the following empty screen.
 
 ||http://robinviz.googlecode.com/svn/manual/images/1_first_time_opening.png||
 || When you open robinviz first time, you see this blank view ||
 
-Next, in order to view the visualizations, you are required to follow input operations where is at the File menu and then you are required to click "File>Run(Ctrl+R)". On the other hand, if you desire to see the last session or previous sessions, you can load your last session by pressing "Ctrl+E" or "File>Display Recent Results", also, loading previous sessions can be done via clicking on "File>load session" option. After, you are done with one of these three options, you simply see the following snapshot.
+Next, in order to view the visualizations, you are required to follow input operations where is at the File menu and then you are required to click *"File>Execute(Ctrl+X)"*. On the other hand, if you desire to see the last session or previous sessions, you can load your last session by pressing *"Ctrl+D"* or *"File>Display Last Session"*, also, loading older sessions can be done via clicking on *"File>Load Session"* option. After, you are done with one of these three options, you simply see the following snapshot.
 
 ||http://robinviz.googlecode.com/svn/manual/images/2_after_execution.png||
 || Snapshot after run or any load operation with Central View||
+
+
+====Central View====
 
 You now have graph at the center where we call "Central View" and search box;
 
@@ -116,14 +121,17 @@ We call all these 16 views as "Peripheral Views";
 
 http://robinviz.googlecode.com/svn/manual/images/5_1_after_clicks.png
 
-where you see the Protein-Protein Interaction sub network created via proteins of the clicked category node.
+"Peripheral Views" are the visualizations where you see the Protein-Protein Interaction sub-network created via proteins of the clicked category node.
+
+
+====Gene Ontology(GO) Table====
 
 In Robinviz we have also, some supporting tables and visualizations. Since we process over Gene Ontology categories, we form a table where we show each genes/proteins belongs to which categories as well. The following screen shows this table;
 
 ||http://robinviz.googlecode.com/svn/manual/images/6_go_view.png ||
 || GO Table when you right click on nodes and select "Go Table" or when you right click anywhere of "Peripheral View" and again select "Go Table"||
 
-If you right click on "Central View", you are allowed to see several other options. You may open the view in a new window for clear visibility, print the visualization, save the graph of visualization in GML format and try another layouts. For example, if you try our "Spring Embedder on Circular Tracks" for "Central View", the layout changes with nice animation.
+If you right click on "Central View", you are allowed to see several other options. You may open the view in a new window for clear visibility, *print the visualization*, *save the graph of visualization in GML format* and *see the graph in another layout*. For example, if you try "Spring Embedder on Circular Tracks" for "Central View", the layout changes with nice animation.
 
 ||http://robinviz.googlecode.com/svn/manual/images/7_run_layout.png ||
 || Sample demonstration of "Spring Embedder on Circular Tracks" for "Central View" ||
@@ -132,14 +140,13 @@ We should now be comfortable with main visualization screen. We now show how per
 
 === Peripheral Visualizations ===
 
-For "Peripheral Views" and their visualizations, we have new options and inherited options from "Central View". In "Peripheral Views", you now see proteins. We mention that you can click on nodes inside "Central View" and each nodes appears as a peripheral view around the "Central View". When you right click over
-the first peripheral view and select "Open in a new Window". Robinviz creates another window and show larger snapshot of clicked peripheral view.
+For "Peripheral Views" and their visualizations, we have new options and inherited options from "Central View". In "Peripheral Views", you now see proteins. We mention that you can click on nodes inside "Central View" and each nodes appears as a peripheral view around the "Central View". When you *right click* over
+the first peripheral view and select *"Open in a new Window"*. Robinviz creates another window and show larger snapshot of clicked peripheral view.
 
 ||http://robinviz.googlecode.com/svn/manual/images/8_open_peripherals.png ||
 || A peripheral view opened with a new window ||
 
-Similarly, you can change layouts in that windows as well. For example, if you run "Spring Embedder", you will have,
-
+Similarly, you can change layouts in that windows as well. For example, if you run "Spring Embedder on Circular Tracks", you will have,
 
 ||http://robinviz.googlecode.com/svn/manual/images/8_open_peripherals_spring.png ||
 || A peripheral view after "Spring Embedder"||
@@ -154,11 +161,17 @@ and you complete three level views of Robinviz and the snapshot is as follows;
 ||http://robinviz.googlecode.com/svn/manual/images/10_three_level_view.png ||
 || Central View at the background, a peripheral view on the left, a clicked node from peripheral view and its two hop neighborhood at the right ||
 
+We told that you can change any view into any supported layouts. For demonstration, we apply different layout algorithms for all 16 peripherals and central view.
+
+The snapshot is;
+
+http://robinviz.googlecode.com/svn/manual/images/11_change_layouts.png
+
 Particularly, we complete the important GUI operations for Robinviz. However, to have well understanding, we present a real case scenario at the next section.
 
 === A Real Peripheral Scenario ===
 
-In this real scenario, we first take a peripheral view where it is called as "RNA Polymerase I Transcription Factor Activity"(GO Category)
+In this real scenario, we first take a peripheral view where it is called as "Viral Reproduction"(GO Category) on top left of the whole view.
 
 http://robinviz.googlecode.com/svn/manual/images/11_1_scenario_120102_main.png
 
@@ -166,21 +179,17 @@ Then we right click on peripheral area of that category and select "Open in New 
 
 http://robinviz.googlecode.com/svn/manual/images/11_2_scenario_perip.png
 
-We select protein with Biogrid id "120102". We right click on the empty area of the view and select "Go table" option. We observe "120102" at the GO table as well.
-
-http://robinviz.googlecode.com/svn/manual/images/11_3scenario_perip_go.png
-
-Then, we right click on protein node "120102" and open the online information page from Biogrid.
+We select protein with Biogrid id *"120795"*. Then, we right click on protein node *"120795"* and open the online information page from Biogrid.
 
 http://robinviz.googlecode.com/svn/manual/images/11_4_scenario_120102_online.png
 
-We close this window and again right click on protein node "120102". We select two hop neighborhood and observe.
+We close this window and again right click on protein node *"120795"*. We select two hop neighborhood and observe.
 
-http://robinviz.googlecode.com/svn/manual/images/11_5_scenario_120102_2.png
+http://robinviz.googlecode.com/svn/manual/images/11_2_scenario_perip.png
 
 We right click on empty area of two hop neighborhood and select another layout "Spring Embedder on Circular Tracks",
 
-http://robinviz.googlecode.com/svn/manual/images/11_6_scenario_120102.png
+http://robinviz.googlecode.com/svn/manual/images/11_5_scenario_120102_2.png
 
 -------------------------
 = Sample Input Creation =
