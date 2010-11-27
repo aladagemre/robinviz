@@ -617,7 +617,7 @@ void layoutHandler::runSpringEmbedder( void ){
 //                cout << endl << "D\n";
             xpos[ maxDegNode ] = gw.get_xmin() + ( abs( gw.get_xmin() ) + abs( gw.get_xmax() ) ) / 2.0;
             ypos[ maxDegNode ] = gw.get_ymin() + ( abs( gw.get_ymin() ) + abs( gw.get_ymax() ) ) / 2.0;
-            fixedNodes.append( maxDegNode );
+
             list<node> N = G.adj_nodes( maxDegNode );
             circle C( 0, 0, abs( abs( gw.get_ymax() ) - gw.get_ymin() ) / 3.0 );
             double min = pi / (double)count;
@@ -625,7 +625,6 @@ void layoutHandler::runSpringEmbedder( void ){
                   pos[ n ] = C.point_on_circle( tmp );
                   xpos[ n ] = pos[ n ].xcoord();
                   ypos[ n ] = pos[ n ].ycoord();
-//                      fixedNodes.append( n );
                   tmp -= min;
             }
 
@@ -646,9 +645,6 @@ void layoutHandler::runSpringEmbedder( void ){
                 S2 >> y1_;
                 ypos[v]=y1_;
             }
-
-// 		cout << gw.get_xmin() << "\t" << gw.get_xmax() << "\t" << gw.get_ymin() << "\t" << gw.get_ymax() << endl;
-            //SPRING_EMBEDDING( G, fixedNodes, xpos, ypos, gw.get_xmin(), gw.get_xmax(), gw.get_ymin(), gw.get_ymax(), 500 );
 
             // FINDING COMPONENTS using LEDA function
             node_array<int> comp( G, 0 );

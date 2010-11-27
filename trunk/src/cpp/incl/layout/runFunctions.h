@@ -1209,12 +1209,6 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
     list_item it;
     edge e;
 
-    forall_edges( e, G )
-    {
-            if( G.source( e ) == G.target( e ) )
-                    G.del_edge( e );
-    }
-
     double pi = 2.0 * 3.147;
     double tmp = pi;
     int count = 0,maxLayerIdNow;
@@ -1315,11 +1309,11 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
 //        cout << p << " - " << H.degree( n ) << endl;
     }
 
-    cout << "\n_____________________\n";
-    cout << " G " << G.number_of_nodes() << " - " << G.number_of_edges() << endl;
-    cout << "\n_____________________\n";
-    cout << " H " << H.number_of_nodes() << " - " << H.number_of_edges() << endl;
-    cout << "\n_____________________\n";
+//    cout << "\n_____________________\n";
+//    cout << " G " << G.number_of_nodes() << " - " << G.number_of_edges() << endl;
+//    cout << "\n_____________________\n";
+//    cout << " H " << H.number_of_nodes() << " - " << H.number_of_edges() << endl;
+//    cout << "\n_____________________\n";
 //    cout << " 0.5 \n";
     double averageDistance = 0;
     forall_edges( e, G ){
@@ -1341,7 +1335,6 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
             G.hide_node( n );
         }
     }
-    cout << " 1 \n";
     // Discover the new layout, find limits
     double xmin, xmax, ymin, ymax;
     int ncount = 0;
@@ -1757,22 +1750,11 @@ GRAPH<int,int> RUN_FFDANDCIRCLE(  GRAPH<int,int> &G,
 /* Function is based for Force Directed Layout 
 Inputs are straightforward, this procedure 
 calculates the peripheral graphs */
-GRAPH<int,int> RUN_CIRCLEALONE(  GRAPH<int,int> &G, 
-			  array<list<node> > &layers, 
-			  int W, 
+GRAPH<int,int> RUN_CIRCLEALONE(  GRAPH<int,int> &G,
 			  node_array<double> &Xpos, 
-			  node_array<double> &Ypos, 
-			  int graphNo, 
-			  node_array<point> &posx,
-			  edge_array<list<point> > &bendsx, 
-			  int algorithmFlag, 
-			  int space, 
-			  bool xCoordFlag, 
-			  int increment,
-			  bool ledaPostFlag,
-			  array<char> &abbv,
-			  int cat_num,
-			  array<char> &Categories,
+                          node_array<double> &Ypos,
+                          node_array<point> &posx,
+                          int graphNo,
 			  int nodeWidth
 ){	
 	edge e;

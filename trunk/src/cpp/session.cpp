@@ -373,7 +373,7 @@ int main(int argc, char** argv) {
 					//cout << i << "\t";
                     fscanf( fptr, "%d", &lines );
 					//cout << lines << "\n";
-					j = 0;
+                    j = 0;
 #ifdef LINUX
                     sprintf( filename, "outputs/graphs/graph%d.gml", i );
 #else
@@ -381,12 +381,13 @@ int main(int argc, char** argv) {
 #endif
                     fptr2 = fopen( filename, "w");
                         //cout << i << endl;
-                        while( j <= lines ){
+                        while( j < lines ){
                                 fgets( line, 1000, fptr );
 								//cout << line << "\n";
                                 fputs (line, fptr2 );
                                 j++;
                         }
+                        fgets( line, 1000, fptr );
                         fclose( fptr2 );
                 }
 #ifdef LINUX
@@ -399,11 +400,12 @@ int main(int argc, char** argv) {
 						j = 0;
                         //cout << i << endl;
                         fscanf( fptr, "%d", &lines );
-                        while( j <= lines ){
+                        while( j < lines ){
                                 fgets( line, 1000, fptr );
                                 fputs (line, fptr2 );
                                 j++;
                         }
+                        fgets( line, 1000, fptr );
                         fclose( fptr2 );
 
                     ///////////////////////////////////////////////////////////
