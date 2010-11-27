@@ -515,7 +515,7 @@ void mainGraph2( GRAPH<leda::string,int> &PROJECT,
                         node_array<point> pos_ = POS[ POS.get_item( count )];                        
                         edge_array<list<point> > bends_ = BENDS[ BENDS.get_item( count )];
                         G = GraphList[ GraphList.get_item( count ) ];
-                        cout << endl << count << " - " << G.number_of_nodes() << " - " << G.number_of_edges() << endl;
+//                        cout << endl << count << " - " << G.number_of_nodes() << " - " << G.number_of_edges() << endl;
 //                        if( G.number_of_edges() > 0 ){
                             RUN_FFD_AGAIN2_COLOR( G, filename, count, namesForEachGraph, pos_, bends_, abbv, cat_num, CategoriesXL, edgeBendImp, colorScale, edgThicknessTher  );
 //                        }

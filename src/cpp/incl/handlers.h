@@ -1952,8 +1952,13 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 //                            }
 //                            else
 //                                    H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 2, 0.20 );
-                        if( listOfGraphs[ i ].number_of_nodes() < 1 )
-                            H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 2, 0.20 );
+                            forall_edges( e, listOfGraphs[ i ] )
+                            {
+                                    if( listOfGraphs[ i ].source( e ) == listOfGraphs[ i ].target( e ) )
+                                            listOfGraphs[ i ].del_edge( e );
+                            }
+                        if( listOfGraphs[ i ].number_of_edges() < 1 )
+                            H = RUN_CIRCLEALONE( listOfGraphs[ i ], Xpos, Ypos, pos, i, 100 );
                         else
                             H = RUN_SPRING_EMBEDDER( listOfGraphs[ i ], Xpos, Ypos, pos, 50 );
                     }
@@ -2771,7 +2776,7 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 	char scoringFile[256] = "outputs//biclusters//scoring.txt";
 #endif
 
-	cout << " BEFORE SCORING\n";
+//	cout << " BEFORE SCORING\n";
 
 	reportScoring = fopen( scoringFile, "w" );
 	if( hvalueWeighting == true ){
@@ -2906,7 +2911,7 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
                                 forall_nodes( n, PROJECT ){
                                         //HValues[ n ] = (Hmax - HValues[ n ])+0.01;
                                         HValues[ n ] = (HValues[ n ] / Hmax) + 0.01;
-                                        cout << counter << " - " << HValues[ n ] << endl;
+//                                        cout << counter << " - " << HValues[ n ] << endl;
                                         if( HValues[ n ] >= 0 ){
                                                 fprintf( reportScoring, "Bicluster %d %lf\n", counter, HValues[ n ] );
                                         }
@@ -2918,7 +2923,7 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
                         }
 		}
 	}
-	cout << " AFTER SCORING\n";
+//	cout << " AFTER SCORING\n";
 	fclose( reportScoring );
 // 	cout << " E1 -  " << PROJECT.number_of_edges() << endl;
 	it2 = namesForEachGraph.first_item();
@@ -3141,7 +3146,7 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 			}
 		}
 	}
-	cout << " FORM MAIN GRAPH\n";
+//	cout << " FORM MAIN GRAPH\n";
 // 	cout << " E2 -  " << PROJECT.number_of_edges() << endl;
 	list<int> old_edges;
 	list<edge> old_edges_e;
@@ -3251,10 +3256,9 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 	edgeNumbersForInt_ = edgeNumbersForInt;
 // 	cout << " E4 -  " << PROJECT2.number_of_edges() << endl;
 	i = 0;
-	cout << " RUN LAYOUT\n";
+//	cout << " RUN LAYOUT\n";
 	RUN_FFD_SELF( PROJECT2, PARS, max_weight, width, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );	
 // 	cout << " E5 -  " << PROJECT2.number_of_edges() << endl;
-
 	return PROJECT2;
 }
 

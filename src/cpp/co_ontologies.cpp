@@ -509,7 +509,7 @@ int main(int argc, char **argv){
                         H_values.append( bagMean );
                         if( Hmax < bagMean )
                                 Hmax = bagMean;
-                        cout << count_i << " - " << bagMean << endl;
+//                        cout << count_i << " - " << bagMean << endl;
                 }
 
                 cout << "/**************************************************/" << endl;
@@ -547,7 +547,6 @@ int main(int argc, char **argv){
                                         increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher,G1,G2,TEMPINT,G,simplify,removeRat,sharedGenes,Hmax,edgesBetween,
                     POS, BENDS, LAYERS, abbv, cat_num, CategoriesXL, width, hvalueWeighting, enrichmentWeighting_o, enrichmentWeighting_f, ppihitratioWeighting, categ );
                 }
-                cout << "\n Main Graph has " << PROJECT.number_of_nodes() << endl;
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " End Building High Level Graph " << endl;
                 cout << "/**************************************************/" << endl;
