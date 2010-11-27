@@ -1,1 +1,1 @@
-co_ontologies.exe -f
+co_ontologies.exe -foutputs//graphs//ppigraph.txt	11337

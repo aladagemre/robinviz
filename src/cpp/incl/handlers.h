@@ -1946,14 +1946,18 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
                     }
                     cout << " Graph " << i << " in process \n";
                     if( listOfGraphs[ i ].empty() != true ){
-                            if( listOfGraphs[ i ].number_of_nodes() < 1500 ){
-                                    //H = RUN_CIRCLEALONE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100 );
-                                    H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 100.0 );
-                            }
-                            else
-                                    H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 2, 0.20 );
+//                            if( listOfGraphs[ i ].number_of_nodes() < 1500 ){
+//                                    //H = RUN_CIRCLEALONE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i + 1, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, Categories, 100 );
+//                                    H = RUN_FFDANDCIRCLE( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 100.0 );
+//                            }
+//                            else
+//                                    H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 2, 0.20 );
+                        if( listOfGraphs[ i ].number_of_nodes() < 1 )
+                            H = RUN_CIRCULARKC( listOfGraphs[ i ], layers, width, Xpos, Ypos, i, pos, bends, algorithmFlag, space, xCoordFlag, increment, ledaPostFlag, abbv, cat_num, 100, 2, 0.20 );
+                        else
+                            H = RUN_SPRING_EMBEDDER( listOfGraphs[ i ], Xpos, Ypos, pos, 50 );
                     }
-                    cout << " Graph " << i << " in process \n";
+                    cout << " Graph " << i << " layout is done \n";
                     nPar = 0;
                     forall_nodes( n, listOfGraphs[ i ] ){
                           listOfGraphs[ i ][ n ] = nodePar[ nPar ];
