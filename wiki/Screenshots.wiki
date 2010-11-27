@@ -1,4 +1,4 @@
-#summary Screenshots from the program
+#summary Screenshots from First Version
 
 = Screenshots =
 ===Main Screen with Layered Bicluster Graph and PPI Previews===
