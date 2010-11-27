@@ -1,4 +1,4 @@
-#summary Robinviz 2.0 Tool Manual
+#summary Robinviz 1.0 Tool Manual
 #labels Featured,Manual
 
 
@@ -235,8 +235,6 @@ http://robinviz.googlecode.com/svn/manual/images/7_result_self.png
 With some clicks on *Central Nodes*, obtain the following
 
 http://robinviz.googlecode.com/svn/manual/images/7_result.png
-
-
 
 
 
