@@ -677,6 +677,7 @@ int main( int argc, char **argv ){
                         //printf( "%s %d %d %d\n",categoriesOfGenes[cit].categ, colors[colorCount][0], colors[colorCount][1], colors[colorCount][2] );
                         colorCount++;
                     }
+                    fprintf( cfptr, "%s %d %d %d\n","None", colors[colorCount][0], colors[colorCount][1], colors[colorCount][2] );
                     fclose( cfptr );
                 }
                 interactionRead( temp, GenesNode, INTERACTIONS, TEMPINT, ppifilename );

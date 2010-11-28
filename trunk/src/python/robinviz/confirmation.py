@@ -75,7 +75,8 @@ class CoExpressionMainScene(MainScene):
         for line in f:
             ( biclusterstr, id, value ) = line.strip().split()
             item = self.nodeDict[int(id)]
-            tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
+            #tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
+            tip = "%s: %s" % (self.scoringName, value )
             item.setToolTip(tip)
 
 class CoExpressionMainView(MainView):
@@ -220,7 +221,8 @@ class CoFunctionalityMainScene(MainScene):
         for line in f:
             ( biclusterstr, id, value ) = line.strip().split()
             item = self.nodeDict[int(id)]
-            tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
+            #tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
+            tip = "%s: %s" % (self.scoringName, value )
             item.setToolTip(tip)
 
 # TODO: Rewrite this!
