@@ -648,9 +648,9 @@ class MultiViewWindow(QMainWindow):
         refresh.setStatusTip('Refresh the view')
         self.connect(refresh, SIGNAL('triggered()'), self.refreshAll)
 
-        legend = QAction('Legend', self)
+        legend = QAction('Color Legend', self)
         legend.setShortcut('F6')
-        legend.setStatusTip('Display the legend')
+        legend.setStatusTip('Display the Color Legend')
         self.connect(legend, SIGNAL('triggered()'), self.legend)
 
         clearViews = QAction("C&lear Views", self)
@@ -665,10 +665,10 @@ class MultiViewWindow(QMainWindow):
         self.connect(showFullscreen, SIGNAL('toggled(bool)'), self.setFullScreen)
 
         self.viewMenu = viewMenu = menubar.addMenu('&View')
+        viewMenu.addAction(legend)
         viewMenu.addAction(goto)
         viewMenu.addAction(refresh)
         viewMenu.addAction(clearViews)
-        viewMenu.addAction(legend)
         viewMenu.addAction(showFullscreen)
 
 
