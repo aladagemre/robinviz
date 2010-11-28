@@ -8,7 +8,7 @@ rp = lambda x: "%s/%s" % (root, x) # root path
 database_root = os.path.normpath( os.path.join(root, "src/python/robinviz/databases") )
 tree_root = os.path.join(database_root, "inputtrees")
 ap = lambda x: os.path.normpath( os.path.join(tree_root, x) )
-
+id2cat = lambda id: open( ap("assocdata/input_go.txt") ).readlines()[id].strip()
 #import ConfigParser
 """config = ConfigParser.ConfigParser()
 config.readfp(open(root+'/config.txt'))"""
