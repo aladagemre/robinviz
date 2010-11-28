@@ -2793,6 +2793,27 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 			}
 			counter++;
 		}
+                double max = 0,min;
+                forall_nodes( n, PROJECT ){
+                        if( max < HValues[ n ] )
+                                max = HValues[ n ];
+                }
+                min = max;
+                forall_nodes( n, PROJECT ){
+                    if( min > HValues[ n ] )
+                        min = HValues[ n ];
+                }
+
+                counter = 0;
+// 					cout << " Hmax - "<< Hmax << endl;
+                forall_nodes( n, PROJECT ){
+                        if( max - HValues[ n ] >= 0 )
+                            HValues[ n ] = ( max - HValues[ n ] )/ (max - min);
+                        else
+                            HValues[ n ] = 0;
+                        H_values[ H_values.get_item( counter )] = HValues[ n ];
+                        counter++;
+                }
 	}
 	else{
 		if( ppihitratioWeighting == true ){
