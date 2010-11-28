@@ -33,7 +33,7 @@ Schizosaccharomyces pombe	4896
 	GSE10901_series_matrix.txt	GSE10901	GPL1932	"Altered genes expression profile of Rep2 mutants in Fission Yeast upon HU treatment."
 
 Saccharomyces cerevisiae	4932
-	YEAST1_2993_173.txt.gz*	YEAST1	NONE	"Yeast dataset of 2993 genes over 173 experiments from Gasch et al"
+	YEAST1_2993_173.txt.gz	YEAST1	NONE	"Yeast dataset of 2993 genes over 173 experiments from Gasch et al"
 	GSE15352_series_matrix.txt	GSE15352	GPL2529	"Dynamic transcriptional and metabolic responses in yeast adapting to temperature stress."
 
 Canis lupus familiaris	9615
