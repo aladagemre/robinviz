@@ -895,7 +895,11 @@ class PiechartNode(NodeItem):
         return QVariant(value)
 
     def boundingRect(self):
-        return QRectF(0, 0, self.w, self.w)
+        try:
+            return QRectF(0, 0, self.w, self.w)
+        except:
+            print "self.w for PiechartNode does not exist, using 20 as default width"
+            return QRectF(0, 0, 20, 20)
 
     def contextMenuEvent(self, event):
         menu = QMenu()

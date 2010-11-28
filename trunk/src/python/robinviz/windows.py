@@ -12,6 +12,7 @@ from misc.legend import LegendWidget
 import os
 from os.path import normcase
 from wizards import InputWizard
+from utils.info import id2cat
 
 class SingleMainViewWindow(QMainWindow):
     def __init__(self, mainViewType, mainSceneType, scene=None):
@@ -45,7 +46,7 @@ class SingleMainViewWindow(QMainWindow):
         self.widget.setLayout(layout)
 
         self.setCentralWidget(self.widget)
-        self.setWindowTitle("RobinViz - Single View")
+        self.setWindowTitle("RobinViz - Central View")
 
         self.createActions()
         self.statusBar()
@@ -115,6 +116,10 @@ class SinglePeripheralViewWindow(SingleMainViewWindow):
             self.view.setPreview(False)
             self.setupGUI()
             self.createDockWindows()
+            if peripheralViewType == CoExpressionPeripheralView:
+                self.setWindowTitle("Robinviz - Bicluster %s" % self.scene.id )
+            else:
+                self.setWindowTitle("Robinviz - %s" % id2cat(self.scene.id))
 
     def setPeripheralViewType(self, peripheralViewType):
         """Sets the peripheral view type like:
