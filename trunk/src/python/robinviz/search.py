@@ -13,6 +13,7 @@ class HighlightEllipse(QGraphicsItem):
         self.rx = rx
         self.ry = ry
         self.parent = parent
+        self.setZValue(-10)
         #self.scene = scene
 
     def boundingRect(self):
@@ -30,7 +31,7 @@ class HighlightEllipse(QGraphicsItem):
         painter.setPen(pen)
         painter.setBrush(yellow)
         
-        painter.setOpacity(0.2)
+        #painter.setOpacity(0.2)
         painter.drawEllipse(QPointF(self.x,self.y),self.rx, self.ry)
 
 class ProteinSearchWidget(QWidget):
