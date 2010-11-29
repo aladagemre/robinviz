@@ -8,11 +8,9 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 from os.path import split
-from os.path import normcase
 
-from utils.info import rp # root path function
+from utils.info import rp, runcommand
 from misc.legend import LegendWidget
-import os
 
 GRAPH_LAYOUTS = {}
 layoutFile = open(rp("layouts.ini"))
@@ -218,9 +216,7 @@ class View(QGraphicsView):
             # Run the exe
             exe, flag = action.split(" ")
             command = "%s %s %s" % (exe, self.originalFileName, flag)
-            if os.name == "posix":
-                command = "./" + command
-            os.system(normcase(command))
+            runcommand(command)
 
             if not self.useAnimation:
                 self.scene().reloadGraph("%s%s.gml" % (self.originalFileName.split(".")[0], action.split("-")[-1]) )
