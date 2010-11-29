@@ -458,8 +458,8 @@ class MultiViewWindow(QMainWindow):
                 resultparams.write(self.confirmationType)
             
         else:
-            if os.path.exists(rp(errorFile)):
-                message = open(rp(errorFile)).read()
+            if os.path.exists(errorFile):
+                message = open(errorFile).read()
             else:
                 message = "Unknown error occured. Please report the debug messages on the console."
 
