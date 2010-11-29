@@ -59,9 +59,15 @@ class PreSelectionPage(QWizardPage):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
+
         self.last= QRadioButton("Use the last settings")
-        self.preconfigured = QRadioButton("Use preconfigured settings")
         self.manual = QRadioButton("Define your manual settings")
+        self.preconfigured = QRadioButton("Use preconfigured settings")
+
+        self.settingsbox = QComboBox()
+        self.conf_layout = QHBoxLayout()
+        self.conf_layout.addWidget(self.preconfigured)
+        self.conf_layout.addWidget(self.settingsbox)
 
         self.last.toggled.connect(self.emitChange)
         self.preconfigured.toggled.connect(self.emitChange)
@@ -69,10 +75,17 @@ class PreSelectionPage(QWizardPage):
         
         self.manual.setChecked(True)
 
+        self.layout.addLayout(self.conf_layout)
         self.layout.addWidget(self.last)
-        self.layout.addWidget(self.preconfigured)
         self.layout.addWidget(self.manual)
 
+        self.loadConfigurations()
+
+    def loadConfigurations(self):
+        directory = rp("sources/preconfigurations")
+        files = sorted(os.listdir(directory))
+        self.settingsbox.addItems(files)
+        
     def emitChange(self):
         if self.manual.isChecked():
             self.setFinalPage(False)
