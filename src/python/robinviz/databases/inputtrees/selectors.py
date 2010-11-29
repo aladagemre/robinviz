@@ -12,6 +12,35 @@ from utils.info import rp
 from utils.settingswrite import write_values
 import yaml
 
+class PreSelector(QWidget):
+    def __init__(self, parent=None):
+        QWidget.__init__(self, parent)
+        self.setupGUI()
+
+    def setupGUI(self):
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.last= QRadioButton("Use the last settings")
+        self.preconfigured = QRadioButton("Use preconfigured settings")
+        self.manual = QRadioButton("Define your manual settings")
+
+        self.last.setChecked(True)
+
+        self.layout.addWidget(self.last)
+        self.layout.addWidget(self.preconfigured)
+        self.layout.addWidget(self.manual)
+
+    def getSelection(self):
+        if self.last.isChecked():
+            return "Last"
+        elif self.preconfigured.isChecked():
+            return "Preconfigured"
+        else:
+            return "Manual"
+
+
+
 class ConfirmationSelector(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
