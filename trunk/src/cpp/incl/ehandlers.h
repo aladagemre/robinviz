@@ -4,22 +4,26 @@
 
 #define ERROR 1
 
-// REAL max H-value should not be larger than 10 times bigger than the mean of an input matrix
+// REAL max H-value should not be larger than 1000 times bigger than the mean of an input matrix
 void minHvalueErrorChecker( matrix &INPUT, double hvaluemin ){
 	double sum = 0;
 	for( int i = 0; i < INPUT.dim1(); i++ ){
                 for( int j = 0; j < INPUT.dim2(); j++ ){
-			sum += INPUT( i,j );
+                    if( INPUT( i,j ) < 0 )
+                        sum += (double)(INPUT( i,j )*-1.0);
+                    else
+                        sum += (double)(INPUT( i,j ));
 		}
 	}
-	if( sum * 10.0 < hvaluemin ){
+        sum /= (double)( INPUT.dim1() * INPUT.dim2() );
+        if( sum * 1000.0 < hvaluemin ){
 		FILE *erptr;
 #ifdef LINUX
 		erptr = fopen( "outputs/error.txt", "w" );
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
 #endif
-		fprintf( erptr, "Error 201: Error in minHvalueErrorChecker of ehandlers.h: You are runnning REAL with large max Hvalue parameter\n" );
+                fprintf( erptr, "Error 201: Error in minHvalueErrorChecker of ehandlers.h: You are runnning REAL with large max Hvalue parameter, data mean is %lf\n", sum);
 		fclose( erptr );
 		cout << "\nError 201: Error in minHvalueErrorChecker of ehandlers.h: You are runnning REAL with large max Hvalue parameter\n";
 		exit(1);

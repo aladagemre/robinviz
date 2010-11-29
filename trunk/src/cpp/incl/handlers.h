@@ -3192,8 +3192,13 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 		if( PROJECT[ e1 ] > max )
 			max = PROJECT[ e1 ];
 	}
-	double multiply = 100.0 / (double)( max );
-	
+        //double multiply = 100.0 / (double)( max );
+        int min = max;
+        forall_edges( e1, PROJECT ){
+            if( PROJECT[ e1 ] < min )
+                    min = PROJECT[ e1 ];
+        }
+
 	node_array<int> indexsP( PROJECT, 0 );
 	count1 = 0;
 	forall_nodes( projectNode, PROJECT ){
@@ -3210,7 +3215,10 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 // 		cout << PROJECT[ e1 ] << " - " << " old " << endl;	
 		n = PROJECT.source( e1 );
 		list<edge> edges_l = G.out_edges( n );
-		PROJECT[ e1 ] = (int)((double)PROJECT[ e1 ] * multiply);
+                if( max - min != 0 )
+                    PROJECT[ e1 ] = (int)((double)( PROJECT[ e1 ] - min + 1 ) / (double)( max - min ) * 100.0);
+                else
+                    PROJECT[ e1 ] = 1;
 		if( PROJECT[ e1 ] < (int)(removeRat * 100.0) /*&& edges_l.size() > 2*/ ){
 // 			cout << multiply << " Deleted Since - " << PROJECT[ e1 ] << " < " << (removeRat * 100.0) << endl;
 			PROJECT.del_edge( e1 );
