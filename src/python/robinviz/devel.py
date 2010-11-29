@@ -3,6 +3,43 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import qFuzzyCompare
 import sys
 
+class Wizard(QWizard):
+    def __init__(self, parent=None):
+	QWizard.__init__(self, parent)
+        self.addPage(PreSelectionPage())
+        self.addPage(NextPage())
+
+class NextPage(QWizardPage):
+    def __init__(self, parent=None):
+        QWizardPage.__init__(self, parent)
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.layout.addWidget(QLabel("Test"))
+        
+class PreSelectionPage(QWizardPage):
+    def __init__(self, parent=None):
+	QWizardPage.__init__(self, parent)
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.last= QRadioButton("Use the last settings")
+        self.manual = QRadioButton("Define your manual settings")
+
+        self.manual.setChecked(True)
+
+        self.layout.addWidget(self.last)
+        self.layout.addWidget(self.manual)
+
+    def validatePage(self):
+        return True
+
+    def nextId(self):
+        if self.manual.isChecked():
+            return 1
+        elif self.last.isChecked():
+            return -1
+
 
 class View(QGraphicsView):
     def __init__(self, parent=None):
@@ -151,7 +188,7 @@ class ItemDisplayer(QWidget):
 
 def main():
     app = QApplication(sys.argv)
-    displayer= ItemDisplayer()
+    """    displayer= ItemDisplayer()
     displayer.addItem(PiechartNode2())
 
     elips = QGraphicsEllipseItem(10,10,20,20)
@@ -159,7 +196,10 @@ def main():
     elips.setFlag(QGraphicsItem.ItemIsMovable, True)
     elips.setFlag(QGraphicsItem.ItemIsSelectable, True)
     #displayer.addItem(elips)
-    displayer.show()
+    displayer.show()"""
+
+    ps = Wizard()
+    ps.show()
     sys.exit(app.exec_())
 
 if __name__ == "__main__":

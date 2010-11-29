@@ -56,23 +56,39 @@ class PreSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
 	self.setTitle("Start Page")
-	layout = QVBoxLayout()
-	self.selector = PreSelector()
-	layout.addWidget(self.selector)
-	self.setLayout(layout)
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
 
-    def validatePage(self):
-        return True
-    
-    def nextId(self):
-        n = QWizardPage.nextId(self)
-        selection = self.selector.getSelection()
-        if selection == "Last":
-            return -1 # Finish the wizard and directly skip to run.
-        elif selection == "Preconfigured":
-            return -1 # Use a preconfigured settings.yaml file and run
+        self.last= QRadioButton("Use the last settings")
+        self.preconfigured = QRadioButton("Use preconfigured settings")
+        self.manual = QRadioButton("Define your manual settings")
+
+        self.last.toggled.connect(self.emitChange)
+        self.preconfigured.toggled.connect(self.emitChange)
+        self.manual.toggled.connect(self.emitChange)
+        
+        self.manual.setChecked(True)
+
+        self.layout.addWidget(self.last)
+        self.layout.addWidget(self.preconfigured)
+        self.layout.addWidget(self.manual)
+
+    def emitChange(self):
+        if self.manual.isChecked():
+            self.setFinalPage(False)
         else:
-            return n
+            self.setFinalPage(True)
+        
+    def validatePage(self):
+        if self.preconfigured.isChecked():
+            pass
+        return True
+
+    def nextId(self):        
+        if self.manual.isChecked():
+            return 1
+        else:
+            return -1
 
 
 class ConfirmationSelectionPage(QWizardPage):
