@@ -156,6 +156,11 @@ class Scene(QGraphicsScene):
 class MainScene(Scene):
     def __init__(self, parent=None):
         Scene.__init__(self, parent)
+        
+    def stopSelectedAnimation(self):
+        for item in self.selectedItems():
+            #item.setSelected(False)
+            item.stopAnimation()
 
     def mouseDoubleClickEvent(self, event):
         """When double clicked on a node, signals the node id so that

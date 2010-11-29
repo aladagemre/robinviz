@@ -292,6 +292,7 @@ class MultiViewWindow(QMainWindow):
         self.connect(self.searchPane, SIGNAL('graphDoubleClicked'), self.nodeDoubleClicked)
         for view in self.pViews:
             self.connect(view, SIGNAL('viewSelected'), self.viewSelected)
+            self.connect(view, SIGNAL('newWindowOpened'), self.mainScene.stopSelectedAnimation)
 
     def viewSelected(self, id):
         self.mainScene.clearSelection()

@@ -44,7 +44,7 @@ class View(QGraphicsView):
     def wheelEvent(self, event):
         coords = self.mapToScene(event.pos())
 
-        self.centerOn(coords.x(), coords.y())
+        #self.centerOn(coords.x(), coords.y())
         #factor = 1.41 ** (event.delta() / 240.0)
         factor = 1.05 ** (event.delta() / 240.0)
         self.scale(factor, factor)
