@@ -439,7 +439,7 @@ void mainGraph2( GRAPH<leda::string,int> &PROJECT,
 		array<edge> edgeNumbersForInt;
 		edge e;
 		list_item it,it2;
-		cout << " BEFORE MAIN LAYOUT FORM\n";
+//		cout << " BEFORE MAIN LAYOUT FORM\n";
 		GRAPH<int,int> PROJECT2 = mainGraphHandling2(  PROJECT,
 							      nodesOfProjectStr,
 							      nodesOfProjectInt,

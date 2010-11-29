@@ -1957,7 +1957,7 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
                                     if( listOfGraphs[ i ].source( e ) == listOfGraphs[ i ].target( e ) )
                                             listOfGraphs[ i ].del_edge( e );
                             }
-                        if( listOfGraphs[ i ].number_of_edges() < 1 )
+                        if( listOfGraphs[ i ].number_of_edges() < 5 )
                             H = RUN_CIRCLEALONE( listOfGraphs[ i ], Xpos, Ypos, pos, i, 100 );
                         else
                             H = RUN_SPRING_EMBEDDER( listOfGraphs[ i ], Xpos, Ypos, pos, 50, i );
@@ -3113,8 +3113,10 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 									}
 								}
 							}
-							e = PROJECT.new_edge( f1 ,f2 );
-							PROJECT[ e ] = edgeCount;
+                                                        if( edgeCount != 0 ){
+                                                            e = PROJECT.new_edge( f1 ,f2 );
+                                                            PROJECT[ e ] = edgeCount;
+                                                        }
 						}	
 						countIN++;
 						if( countIN == GraphList_S.size() )
@@ -3153,8 +3155,10 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 									}
 								}
 							}
-							e = PROJECT.new_edge( f1 ,f2 );
-							PROJECT[ e ] = edgeCount;
+                                                        if( edgeCount != 0 ){
+                                                            e = PROJECT.new_edge( f1 ,f2 );
+                                                            PROJECT[ e ] = edgeCount;
+                                                        }
 						}
 						countIN++;
 						if( countIN == GraphList_S.size() )
@@ -3175,15 +3179,10 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 // 	PROJECT.hide_edges( old_edges_e );
 	//cout << endl << " Comparison Number " << comparisonNumber << endl;
 	int max = 0;
-// 	forall_edges( e1, PROJECT ){
-// 		forall_edges( e2, PROJECT ){
-// 			if( e1 != e2 ){
-// 				if( PROJECT.source( e1 ) == PROJECT.source( e2 ) && PROJECT.target( e1 ) == PROJECT.target( e2 ) ){
-// 					PROJECT.del_edge( e1 );
-// 				}
-// 			}
-// 		}
-// 	}
+        forall_edges( e, PROJECT ){
+            if( PROJECT.source( e ) == PROJECT.target( e ) )
+                PROJECT.del_edge( e );
+        }
 
 	forall_edges( e1, PROJECT ){
 // 		cout << "- " << PROJECT[ e1 ] << " - " <<  ( 1.0 / ( HValues[ PROJECT.source( e1 ) ] / Hmax * HValues[ PROJECT.target( e1 ) ] / Hmax  ) ) <<endl;
@@ -3211,22 +3210,15 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 	/*	Make some filtrations					    */
 	/*								    */
 	/********************************************************************/
-	forall_edges( e1, PROJECT ){
-// 		cout << PROJECT[ e1 ] << " - " << " old " << endl;	
-		n = PROJECT.source( e1 );
-		list<edge> edges_l = G.out_edges( n );
+        forall_edges( e1, PROJECT ){
                 if( max - min != 0 )
-                    PROJECT[ e1 ] = (int)((double)( PROJECT[ e1 ] - min + 1 ) / (double)( max - min ) * 100.0);
+                    PROJECT[ e1 ] = (int)((double)( PROJECT[ e1 ] - min) / (double)( max - min ) * 100.0);
                 else
                     PROJECT[ e1 ] = 1;
-		if( PROJECT[ e1 ] < (int)(removeRat * 100.0) /*&& edges_l.size() > 2*/ ){
+                if( PROJECT[ e1 ] < (int)(removeRat * 100.0) || PROJECT[ e1 ] == 0 ){
 // 			cout << multiply << " Deleted Since - " << PROJECT[ e1 ] << " < " << (removeRat * 100.0) << endl;
 			PROJECT.del_edge( e1 );
-		}
-		else{
-			old_edges.append( PROJECT[ e1 ] );			
-// 			cout << PROJECT[ e1 ] << " - " << " new " << endl;
-		}
+                }
 	}
 
 	list<node> hided;
@@ -3236,6 +3228,7 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 				PROJECT.del_node( n );
 				//hided.append( n );//PROJECT.del_node( n );
 		}
+                cout << " S Done\n";
 	}
 // 	cout << " E3 -  " << PROJECT.number_of_edges() << endl;
 	nodesOfProjectStr.init( PROJECT );
