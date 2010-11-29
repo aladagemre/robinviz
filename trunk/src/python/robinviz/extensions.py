@@ -42,8 +42,9 @@ class PeripheralView(View):
             view.fitInView(view.sceneRect())
             self.specialWindow.show()
 
+        self.emit(SIGNAL("newWindowOpened"))
 
-    
+
     def focusInEvent(self, event):
         """Highlights the view with color yellow when focused."""
         View.focusInEvent(self, event)

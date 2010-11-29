@@ -14,7 +14,7 @@ import os
 class InputWizard(QWizard):
     def __init__(self, parent=None):
 	QWizard.__init__(self, parent)
-	
+	self.setWindowTitle("Execution Wizard")
 	#os.chdir("src/python/robinviz/databases/inputtrees")
 
         self.ConfirmationSelectionPage = ConfirmationSelectionPage()        
