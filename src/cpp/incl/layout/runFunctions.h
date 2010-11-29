@@ -2521,69 +2521,69 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
                     gw.set_height( n, nodeSize / 1.5 );
 		}
 	}
-	if( G.number_of_edges() != 0 ){
-		array<color> color_l( 20 );
-		int count = colorScale;
-		for( int j = 0; j < color_l.size(); j++ ){
-			color el( count, count, count );
-			color_l[ j ] = el;
-			count -= 7;
-		}
-		list<int> weights;
-		forall_edges( e, G ){
-
-		}
-		list<two_tuple<color,int> > variations;
-		list<int> edgeWeights;
-// 		cout << " 4 " << endl;
-		// Store Edge weights
-		forall_edges( e, G ){
-			int flag = 0;
-// 			cout << " 2.2 " << endl;
-			forall_items( it, edgeWeights ){
-				if( edgeWeights[ it ] == G[ e ] ){
-					flag = 1;
-					break;
-				}
-			}
-			if( flag == 0 ){
-				edgeWeights.push_back( G[ e ] );
-			}
-// 			cout << " 4.1 " << endl;
-		}
-		edgeWeights.sort();
-		count = 0;
-		// Found the variation of edge weights in the graph
-		for( int x = edgeWeights[edgeWeights.first()]; x <= edgeWeights[edgeWeights.last()]; x++ ){	
-			for( int j = 0; j < color_l.size(); j++ ){
-				two_tuple<color,int> Tp( color_l[ j ], x );
-	// 			cout << Tp << endl;
-				variations.push_back( Tp );
-			}
-			count++;
-// 			cout << " 4.2 " << endl;
-		}
-// 		cout << " 5 " << endl;
-	// 	int increase = (int) ((double)variations.size() / (double)edgeWeights.size() );
-		int increase = (int) ((double)variations.size() / (double)color_l.size() );
-
-	// 	cout << " increase : " << increase << endl;
-		// Form first coloring scheme
-		forall_edges( e, G ){              
-			count = 0;
-			forall_items( it, edgeWeights ){
-			      if( edgeWeights[ it ] == G[ e ] ){
-				    break;
-			      }
-			      count++;
-			}
-			two_tuple<color,int> Tp = variations[ variations.get_item( increase / edgThicknessTher * count ) ] ;
-			gw.set_thickness( e, Tp.second() / edgThicknessTher );
-			gw.set_color( e, Tp.first() );
-	// 		cout << Tp << endl;
-	// 		cout << " increase : " << increase << endl;
-		}
-	}
+//	if( G.number_of_edges() != 0 ){
+//		array<color> color_l( 20 );
+//		int count = colorScale;
+//		for( int j = 0; j < color_l.size(); j++ ){
+//			color el( count, count, count );
+//			color_l[ j ] = el;
+//			count -= 7;
+//		}
+//		list<int> weights;
+//		forall_edges( e, G ){
+//
+//		}
+//		list<two_tuple<color,int> > variations;
+//		list<int> edgeWeights;
+//// 		cout << " 4 " << endl;
+//		// Store Edge weights
+//		forall_edges( e, G ){
+//			int flag = 0;
+//// 			cout << " 2.2 " << endl;
+//			forall_items( it, edgeWeights ){
+//				if( edgeWeights[ it ] == G[ e ] ){
+//					flag = 1;
+//					break;
+//				}
+//			}
+//			if( flag == 0 ){
+//				edgeWeights.push_back( G[ e ] );
+//			}
+//// 			cout << " 4.1 " << endl;
+//		}
+//		edgeWeights.sort();
+//		count = 0;
+//		// Found the variation of edge weights in the graph
+//		for( int x = edgeWeights[edgeWeights.first()]; x <= edgeWeights[edgeWeights.last()]; x++ ){
+//			for( int j = 0; j < color_l.size(); j++ ){
+//				two_tuple<color,int> Tp( color_l[ j ], x );
+//	// 			cout << Tp << endl;
+//				variations.push_back( Tp );
+//			}
+//			count++;
+//// 			cout << " 4.2 " << endl;
+//		}
+//// 		cout << " 5 " << endl;
+//	// 	int increase = (int) ((double)variations.size() / (double)edgeWeights.size() );
+//		int increase = (int) ((double)variations.size() / (double)color_l.size() );
+//
+//	// 	cout << " increase : " << increase << endl;
+//		// Form first coloring scheme
+//		forall_edges( e, G ){
+//			count = 0;
+//			forall_items( it, edgeWeights ){
+//			      if( edgeWeights[ it ] == G[ e ] ){
+//				    break;
+//			      }
+//			      count++;
+//			}
+//			two_tuple<color,int> Tp = variations[ variations.get_item( increase / edgThicknessTher * count ) ] ;
+//			gw.set_thickness( e, Tp.second() / edgThicknessTher );
+//			gw.set_color( e, Tp.first() );
+//	// 		cout << Tp << endl;
+//	// 		cout << " increase : " << increase << endl;
+//		}
+//	}
 
 	//gw.set_edge_thickness( 3, true );
 	//gw.set_node_height(50,true);
@@ -2592,7 +2592,7 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 	//gw.set_node_width( 100, true );
 	gw.set_node_shape( leda::circle_node, true );
 // 	gw.set_edge_label_type( leda::data_label , true);
-	gw.set_edge_label_font( leda::roman_font, 42);
+//	gw.set_edge_label_font( leda::roman_font, 42);
 	gw.set_edge_shape( leda::poly_edge, true );
 	gw.set_layout( pos );
 	char filename4[128];
