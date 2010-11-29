@@ -17,7 +17,7 @@ def clean(param=None):
     
     
     # Remove series of files.
-    for directory in ("sources/graph_sources", "outputs/heatmap", "outputs/bicgenes", "outputs/graphs", "outputs/psfiles", "outputs/enrich", "outputs/parallel", "outputs/go"):
+    for directory in ( "outputs/heatmap", "outputs/bicgenes", "outputs/graphs", "outputs/psfiles", "outputs/enrich", "outputs/parallel", "outputs/go"):
 	fileList = os.listdir(directory)
 	for filename in fileList:
 	    if filename and "." in filename and filename[0] != ".":
