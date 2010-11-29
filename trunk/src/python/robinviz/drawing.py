@@ -245,8 +245,12 @@ class EdgeItem(QGraphicsItem):
         """Returns the point which is the last point of a line
         drawn from 'the second element from the end of the path'. Aim
         is to avoid the edge, crossing the target node border."""
-        return self.end.intersectionPoint(self.path[-2])
-
+        try:
+            return self.end.intersectionPoint(self.path[-2])
+        except:
+            print "DEBUG: Edge path:"
+            print self.path
+            return self.end.intersectionPoint(self.path[-2])
     def __avoidCrossingNodeBorder(self):
         """Updates the edge path so that no node border crossing occurs."""
         intersectionPoint = self.startPoint()
