@@ -17,6 +17,7 @@ class InputWizard(QWizard):
 	self.setWindowTitle("Execution Wizard")
 	#os.chdir("src/python/robinviz/databases/inputtrees")
 
+        self.PreSelectionPage = PreSelectionPage()
         self.ConfirmationSelectionPage = ConfirmationSelectionPage()        
         self.ColorSelectionPage = ColorSelectionPage()
         self.EdgeWeightSelectionPage = EdgeWeightSelectionPage()
@@ -27,6 +28,7 @@ class InputWizard(QWizard):
 	self.GEOSelectionPage = GEOSelectionPage()
         self.BiclusteringSelectionPage = BiclusteringSelectionPage()
 
+        self.addPage(self.PreSelectionPage)
         self.addPage(self.PPISelectionPage )
         
         self.addPage(self.ConfirmationSelectionPage )
@@ -49,6 +51,29 @@ class InputWizard(QWizard):
 	self.setModal(True)
     def showHelp(self):
 	pass
+
+class PreSelectionPage(QWizardPage):
+    def __init__(self, parent=None):
+	QWizardPage.__init__(self, parent)
+	self.setTitle("Start Page")
+	layout = QVBoxLayout()
+	self.selector = PreSelector()
+	layout.addWidget(self.selector)
+	self.setLayout(layout)
+
+    def validatePage(self):
+        return True
+    
+    def nextId(self):
+        n = QWizardPage.nextId(self)
+        selection = self.selector.getSelection()
+        if selection == "Last":
+            return -1 # Finish the wizard and directly skip to run.
+        elif selection == "Preconfigured":
+            return -1 # Use a preconfigured settings.yaml file and run
+        else:
+            return n
+
 
 class ConfirmationSelectionPage(QWizardPage):
     def __init__(self, parent=None):
