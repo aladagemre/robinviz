@@ -10,9 +10,8 @@ from settings import SettingsDialog
 from search import ComprehensiveSearchWidget, ProteinSearchWidget
 from misc.legend import LegendWidget
 import os
-from os.path import normcase
 from wizards import InputWizard
-from utils.info import id2cat
+from utils.info import id2cat, runcommand, rp
 
 class SingleMainViewWindow(QMainWindow):
     def __init__(self, mainViewType, mainSceneType, scene=None):
@@ -263,13 +262,14 @@ class MultiViewWindow(QMainWindow):
 
     def loadMainScene(self):
         """Loads the main scene after the results are found."""
-        if not os.path.exists(normcase("outputs/graphs/maingraph.gml")):
+        path = rp("outputs/graphs/maingraph.gml")
+        if not os.path.exists(path):
             QMessageBox.information(self, 'No recent results',
      "Results not found. Please report this issue.")
             return
         self.pScenes = {} # Peripheral scenes
         self.mainScene = self.mainSceneType()
-        self.mainScene.loadGraph(normcase("outputs/graphs/maingraph.gml"))
+        self.mainScene.loadGraph(rp("outputs/graphs/maingraph.gml"))
         self.mainView.setScene(self.mainScene)
         self.mainView.setSceneRect(self.mainScene.sceneRect().adjusted(-10, -10, 10, 10))
         #self.mainView.fitInView(self.mainScene.sceneRect(),Qt.KeepAspectRatio)
@@ -322,7 +322,7 @@ class MultiViewWindow(QMainWindow):
         if not scene:
             try:
                 scene = PeripheralScene()
-                scene.loadGraph(normcase('outputs/graphs/graph%d.gml' % id ))
+                scene.loadGraph(rp('outputs/graphs/graph%d.gml' % id ))
                 scene.setId(id)
                 self.pScenes[id] = scene
             except IOError:
@@ -435,7 +435,7 @@ class MultiViewWindow(QMainWindow):
         self.setCursor(Qt.WaitCursor)
 
         # ======= CLEANUP ==========
-        errorFile = "outputs/error.txt"
+        errorFile = rp("outputs/error.txt")
         if os.path.exists(errorFile):
             os.remove(errorFile)
         import clean
@@ -444,9 +444,7 @@ class MultiViewWindow(QMainWindow):
 	# ======= INPUT SELECTION ===
 
         # ======== RUN ==============
-        path = normcase("./"+self.confirmationType)
-        print "Running", path
-        failed = os.system(path) # returns 0 for success
+        failed = runcommand(self.confirmationType) #returns 0 for success
 
         # ======== DISPLAY ==========
         if not failed:
@@ -455,13 +453,13 @@ class MultiViewWindow(QMainWindow):
 
             # Write the confirmation type so that we can recognize what type
             # of confirmation has been applied.
-            with open("outputs/resultparams.txt", "w") as resultparams:
+            with open(rp("outputs/resultparams.txt"), "w") as resultparams:
                 print "Writing conftype", self.confirmationType
                 resultparams.write(self.confirmationType)
             
         else:
-            if os.path.exists(normcase(errorFile)):
-                message = open(normcase(errorFile)).read()
+            if os.path.exists(rp(errorFile)):
+                message = open(rp(errorFile)).read()
             else:
                 message = "Unknown error occured. Please report the debug messages on the console."
 
@@ -478,14 +476,14 @@ class MultiViewWindow(QMainWindow):
 
         if fileName:
             self.clearViews()
-            os.system(normcase("./session.exe load %s" % fileName))
+            runcommand("session.exe load %s" % fileName)
             QMessageBox.information(self, "Session loaded", "The session you provided has been loaded. You may now start working.")
 
     def saveSession(self):
         fileName = QFileDialog.getSaveFileName(self, "Save Session File",
                                                  "sessions/", "Session File (*.ses)");
         if fileName:
-            os.system(normcase("./session.exe save %s %d" % ( fileName, len(self.mainView.scene().g.nodes) )))
+            runcommand("session.exe save %s %d" % ( fileName, len(self.mainView.scene().g.nodes) ))
 
     def detectLastConfirmationType(self):
         
@@ -499,7 +497,7 @@ class MultiViewWindow(QMainWindow):
     def displayLast(self):
         self.clearViews()
 
-        if not os.path.exists(normcase("outputs/graphs/maingraph.gml")):
+        if not os.path.exists(rp("outputs/graphs/maingraph.gml")):
             QMessageBox.information(self, 'No recent results',
             "No recent results not found. Please run the program.")
         else:

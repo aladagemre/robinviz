@@ -10,7 +10,7 @@ import os
 from PyQt4 import QtWebKit
 from bicluster import BiclusterWindow
 import math
-from utils.info import root, ap
+from utils.info import root, ap, runcommand
 
 COLORS18 = {
 "A": "#CB2838",
@@ -922,7 +922,7 @@ class PiechartNode(NodeItem):
             from windows import SinglePeripheralViewWindow
             self.specialWindow = SinglePeripheralViewWindow(self.scene().views()[0].__class__ , scene=None)
             neihgboringFilename = "outputs/graphs/%s.gml" % self.node.label
-            os.system("./proteinScreen.exe %s TXT%d" % (self.node.label,numHop))
+            runcommand("proteinScreen.exe %s TXT%d" % (self.node.label,numHop))
             self.specialWindow.loadGraph(neihgboringFilename)
             self.specialWindow.setWindowTitle("%s-hop Neighborhood" % ("One" if numHop==1 else "Two") )
             self.specialWindow.showMaximized()

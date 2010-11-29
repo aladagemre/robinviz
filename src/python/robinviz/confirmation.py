@@ -8,7 +8,7 @@ from os.path import normcase
 import os
 from bicluster import *
 import yaml
-from utils.info import rp # root path function
+from utils.info import rp,ap # root path function
 CATEGORY_COLORS = {}
 colorFile = open(rp("outputs/colors_func.txt"))
 lineNum = 0
@@ -17,6 +17,7 @@ for line in colorFile:
     CATEGORY_COLORS[str(lineNum)] = name.replace("_", " ")
     lineNum+=1
 
+#print CATEGORY_COLORS
 
 
 class CoExpressionMainScene(MainScene):
@@ -75,6 +76,7 @@ class CoExpressionMainScene(MainScene):
         for line in f:
             ( biclusterstr, id, value ) = line.strip().split()
             item = self.nodeDict[int(id)]
+            #print item.node.parameter
             #tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
             tip = "%s: %s" % (self.scoringName, value )
             item.setToolTip(tip)
@@ -279,8 +281,8 @@ class CoFunctionalityPeripheralView(PeripheralView):
 
     def showGOTable(self):
         scene_id = self.scene().id
-        path = normcase("outputs/go/gobicluster%d.html" % scene_id)
-        category_name = ap("assocdata/input_go.txt").readlines()[scene_id].strip()
+        path = rp("outputs/go/gobicluster%d.html" % scene_id)
+        category_name = open(ap("assocdata/input_go.txt")).readlines()[scene_id].strip()
         
         if os.path.exists(path):
             self.GOTable= QtWebKit.QWebView()
