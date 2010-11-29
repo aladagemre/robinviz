@@ -298,8 +298,8 @@ void runExtraction( int repeat, int data_dim2, int data_dim1, int maxSizeSubMatr
 //                                cout << "|";
 				random_source G( 0, data_dim1 - randomSubmatrixIndexs[ it ].first() - 1 );
 				random_source C( 0, data_dim2 - randomSubmatrixIndexs[ it ].second() - 1 );
-				G.set_seed(count);
-				C.set_seed(count);
+                                G.set_seed(count*repeat*randomSubmatrixIndexs[ it ].first()*randomSubmatrixIndexs[ it ].second() );
+                                C.set_seed(count*repeat*randomSubmatrixIndexs[ it ].first()*randomSubmatrixIndexs[ it ].second() );
 				int t_g, t_c;
 				G >> t_g;
 				C >> t_c;
