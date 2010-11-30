@@ -6,20 +6,35 @@ from os.path import exists, normcase
 import shelve
 
 class HighlightEllipse(QGraphicsItem):
-    def __init__(self, x, y, rx, ry, parent = None, scene=None):
+    def __init__(self, x, y, rx, ry, parent = None):
         QGraphicsItem.__init__(self, parent)
         self.x = x
         self.y = y
         self.rx = rx
         self.ry = ry
-        self.parent = parent
         self.setZValue(-10)
-        #self.scene = scene
+        self.visible = True
 
     def boundingRect(self):
         return QRectF(self.x-self.rx, self.y-self.ry, self.rx*2, self.ry*2)
 
+    def setPos(self, position):
+        self.x = position.x()
+        self.y = position.y()
+        self.update()
+
+    def show(self):
+        self.visible = True
+        self.update()
+        
+    def hide(self):
+        self.visible = False
+        self.setPos(QPointF(0,0))
+        
     def paint(self, painter, option, widget=None):
+        if not self.visible:
+            return
+
         painter.setCompositionMode(QPainter.CompositionMode_SourceAtop)
         pen = QPen()
 
@@ -45,8 +60,12 @@ class ProteinSearchWidget(QWidget):
         self.index = None
         self.setupGUI()
         self.setAutoCompletion()
-
-
+        topleft = self.scene.itemsBoundingRect().topLeft()
+        self.focusEllipse = HighlightEllipse(topleft.x(), topleft.y(), 100, 100)
+        self.scene.addItem(self.focusEllipse)
+        self.scene.selectionChanged.connect(self.focusEllipse.hide)
+        #self.scene.focusEllipse =
+        
     def setupGUI(self):
         # ========= Buttons ===========
         self.proteinButton = QPushButton("Pro")
@@ -78,21 +97,17 @@ class ProteinSearchWidget(QWidget):
         self.setMaximumWidth(150)
 
     def focusInNode(self, nodeItem):
-        if getattr(self, 'focusEllipse', None):
-            self.scene.removeItem(self.focusEllipse)
-            self.update()
         nodeItem.setSelected(True)
         position = nodeItem.centerPos()
-        self.scene.focusEllipse = self.focusEllipse = HighlightEllipse(position.x(), position.y(), 100, 100, scene=self.scene)
-        self.scene.addItem(self.focusEllipse)
+        self.focusEllipse.setPos(position)
+        self.focusEllipse.show()
         self.scene.update()
+
     def focusOutNode(self, nodeItem):
-        nodeItem.setSelected(False)
-        if hasattr(self, 'focusEllipse'):
-            if self.focusEllipse.scene() == self.scene:
-                self.listWidget.setCurrentItem(None)
-                self.scene.removeItem(self.focusEllipse)
-                self.scene.update()
+        nodeItem.setSelected(False)    
+        self.listWidget.setCurrentItem(None)
+        self.focusEllipse.hide()
+        self.scene.update()
         
     # ========= BUTTON EVENTS ==================
     def listProteins(self):
@@ -108,6 +123,9 @@ class ProteinSearchWidget(QWidget):
 
     # ========== LIST WIDGET EVENTS ===============
     def itemChanged(self, current, previous):
+        for item in self.scene.selectedItems():
+            item.setSelected(False)
+            
         if previous:
             nodeItem = self.index.get(str(previous.text()))
             self.focusOutNode(nodeItem)

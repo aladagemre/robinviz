@@ -6,7 +6,7 @@ from pygml import Graph
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-
+#from PyQt4.QtOpenGL import *
 from os.path import split
 
 from utils.info import rp, runcommand
@@ -38,9 +38,12 @@ class View(QGraphicsView):
         #self.printer.setFullPage(True)
         self.printer.setPageMargins(10, 10, 10, 10, QPrinter.Millimeter)
         self.useAnimation = True # TODO: Add this as an option
-        
+        # TODO: For OpenGL Rendering, consider this in the future
+        #self.setRenderHint(QPainter.Antialiasing)
+        #self.setViewport(QGLWidget(QGLFormat(QGL.DepthBuffer)))
+
     def wheelEvent(self, event):
-        coords = self.mapToScene(event.pos())
+        #coords = self.mapToScene(event.pos())
 
         #self.centerOn(coords.x(), coords.y())
         #factor = 1.41 ** (event.delta() / 240.0)
