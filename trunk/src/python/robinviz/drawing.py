@@ -34,6 +34,9 @@ COLORS18 = {
 "X": "#808080",
 }
 
+CHARS = map(chr, range(65, 88)) + map(chr, range(89, 91)) + map(chr, range(48, 56))
+CATEGORY_NAMES = dict(zip ( CHARS, open(ap("godata/highlevels.txt")).read().split("\n")))
+
 GRAPH_LAYOUTS = {}
 layoutFile = open("%s/layouts.ini" % root)
 for line in layoutFile:
@@ -984,26 +987,9 @@ class PiechartNode(NodeItem):
         self.node = node
 
 	self.setSize(50)
-	try:
-	    self.setCategoryInformation()
-	except:
-	    pass # do nothing if category information shall not be provided.
-
-
-        """# Set Color
-        self.defaultColor = QColor(node.graphics.outline)
-        self.currentColor = self.defaultColor
-        self.highlightedColor = self.defaultColor.lighter(150)
-        self.setBrush(self.defaultColor)"""
 
         # Set position of the node:
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
-
-        # Construct the text.
-        #self.text = QGraphicsTextItem(node.label, None, self._scene)
-        #self.text.root = self
-        #self.text.contextMenuEvent = self.contextMenuEvent
-        # Define bounding rect
 
         if node.label:
             label, colors = node.label.split("_")
@@ -1015,10 +1001,14 @@ class PiechartNode(NodeItem):
             self.labelText.setFont(labelFont)
             self.labelText.setPlainText(label)
              # find hex codes for colors
-            letters = colors.split(":")
+            letters = filter(lambda letter: letter, colors.split(":"))
             codes = filter(lambda color: color is not None, map(COLORS18.get, letters) )
-            colors = map(QColor, codes)
-            self.setColors(colors)
+            qcolors = map(QColor, codes)
+            self.setColors(qcolors)
+
+            # define category names
+            categories = map ( lambda key: CATEGORY_NAMES[key], letters)
+            self.setCategoryInformation(categories)
         else:
             print "no label"
         
@@ -1028,7 +1018,10 @@ class PiechartNode(NodeItem):
     def setSize(self, width=20):
 	self.w = self.h = width
 
-    def setCategoryInformation(self):
+    def setCategoryInformation(self, categories):
         """Sets category information to the node as tooltip."""
-        tip = "Category: %s" % CATEGORY_COLORS[self.node.parameter]
-        self.setToolTip(tip)
+        if not categories:
+            self.setToolTip("No category information is available")
+        else:
+            tip = "High Level Categories:\n%s" % "\n".join(sorted(categories))
+            self.setToolTip(tip)
