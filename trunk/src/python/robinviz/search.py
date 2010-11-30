@@ -13,7 +13,7 @@ class HighlightEllipse(QGraphicsItem):
         self.rx = rx
         self.ry = ry
         self.setZValue(-10)
-        self.visible = True
+        self.visible = False
 
     def boundingRect(self):
         return QRectF(self.x-self.rx, self.y-self.ry, self.rx*2, self.ry*2)
@@ -64,7 +64,6 @@ class ProteinSearchWidget(QWidget):
         self.focusEllipse = HighlightEllipse(topleft.x(), topleft.y(), 100, 100)
         self.scene.addItem(self.focusEllipse)
         self.scene.selectionChanged.connect(self.focusEllipse.hide)
-        #self.scene.focusEllipse =
         
     def setupGUI(self):
         # ========= Buttons ===========

@@ -504,7 +504,8 @@ class CircleNode(NodeItem):
         self.edges = []
         self.setOpacity(0.5)
         self.noProperties = False
-
+        self.useAnimation = True
+        
         # Setup Operations
         # ---------------------
         self.associateWithNode(node)
