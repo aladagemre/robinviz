@@ -165,11 +165,27 @@ class NodeWeightSelector(QWidget):
         elif self.params["Algorithms"]["ppihitratioWeighting"] == 1:
             self.hitratio.setChecked(True)
 
+
+        # ======= EDGE REMOVAL RATIO ========
+        self.label_removal = QLabel("Ratio of hidden central edges:")
+        self.removal_ratio = QDoubleSpinBox()
+        self.removal_ratio.setRange(0.01, 0.99)
+        self.removal_ratio.setDecimals(2)
+        self.removal_ratio.setSingleStep(0.01)
+        self.removal_ratio.setValue(float(self.params["Drawing"]["removeRat"]))
+
+
+        self.ratio_layout = QHBoxLayout()
+        self.ratio_layout.addWidget(self.label_removal, 3)
+        self.ratio_layout.addWidget(self.removal_ratio, 3)
+
+
         # ===== ADD TO LAYOUT ====
         
         self.layout.addWidget(self.hvalue, 0)
         self.layout.addWidget(self.enrichment, 1)
         self.layout.addWidget(self.hitratio, 2)
+        self.layout.addLayout(self.ratio_layout, 3)
 
     def getSelection(self):
         response = {
