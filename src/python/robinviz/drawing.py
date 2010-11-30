@@ -616,6 +616,9 @@ class CircleNode(NodeItem):
         self.toggleAnimation()
         
     def toggleAnimation(self):
+        if not self.useAnimation:
+            return
+        
         action = {
                     QTimeLine.Running : self.stopAnimation,
                     QTimeLine.NotRunning: self.startAnimation
@@ -773,8 +776,13 @@ class CircleNode(NodeItem):
 
     def setupAnimation(self):
         """Sets up how the animation shall be. Calculates positions."""
+        numElements = self._scene.numElements
+        if numElements > 200:
+            self.useAnimation = False
+            return
+
         self.originalPos = self.scenePos()
-        animationPeriod = 1500 + (self._scene.numElements - 50) * 3
+        animationPeriod = 1500 + (numElements - 50) * 3
         self.timeline = QTimeLine(animationPeriod)
         self.timeline.setCurveShape(QTimeLine.SineCurve)
         self.timeline.setFrameRange(0, 24)
@@ -802,12 +810,17 @@ class CircleNode(NodeItem):
 
     def startAnimation(self):
         """Starts the selected node animation."""
+        if not self.useAnimation:
+            return
         for edge in self.edges:
             edge.prepareGeometryChange()
         self.timeline.start()
 
     def stopAnimation(self):
         """Stops the selected node animation."""
+        if not self.useAnimation:
+            return
+        
         if hasattr(self, 'animation'):
             # to avoid fake nodes (TODO: should remove these lines later)
             self.animation.setStep(0)
