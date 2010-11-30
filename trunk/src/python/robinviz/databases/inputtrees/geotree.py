@@ -139,7 +139,7 @@ class GEOSelector(QWidget):
     def saveSettings(self):
         # ==GET CHECKED INFORMATION===
         checked = self.getCheckedItems()
-        print checked
+        
         """dataName_bic: src/python/robinviz/databases/inputtrees/geodata/GSE23741_series_matrix.txt
             dataName2_bic: src/python/robinviz/databases/inputtrees/geodata/GSE23741_series_matrix.txt"""
         self.params["Input"]["dataName_bic"] = "%s/%s" % ("src/python/robinviz/databases/inputtrees/geodata", checked[0])
@@ -151,9 +151,7 @@ class GEOSelector(QWidget):
         #print self.complete_params
         # ==== WRITE PARAMETERS =====
         f = open(rp('settings.yaml'), "w")
-        print "Starting to write"
         f.write(write_values(self.complete_params))
-        print "Write ended"
         f.close()
         
 if __name__ == "__main__":
