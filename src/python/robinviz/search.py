@@ -243,8 +243,12 @@ class ComprehensiveSearchWidget(QWidget):
 
     def listCategories(self):
         self.clearAll()
-
-        for category in sorted(self.multiView.keyList):
+        if self.multiView.keyList[0].startswith("Bicluster"):
+            keyList = self.multiView.keyList
+        else:
+            keyList = sorted(self.multiView.keyList)
+            
+        for category in keyList:
             category_id = self.index[category][0]
 
             item = QListWidgetItem(category)
