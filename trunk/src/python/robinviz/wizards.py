@@ -8,6 +8,8 @@ from databases.inputtrees.geotree import GEOSelector
 from databases.inputtrees.assoctree import AssociationSelector
 from databases.inputtrees.selectors import *
 from utils.info import ap, rp
+from utils.compression import untar
+import shutil
 import os
 
 
@@ -83,8 +85,9 @@ class PreSelectionPage(QWizardPage):
 
     def loadConfigurations(self):
         directory = rp("sources/preconfigurations")
-        files = sorted(os.listdir(directory))
-        self.settingsbox.addItems(files)
+        files = filter( lambda name: name.endswith(".tar.gz"), os.listdir(directory) )
+        names = map ( lambda filename : filename[:-7] , files)
+        self.settingsbox.addItems(sorted(names))
         
     def emitChange(self):
         if self.manual.isChecked():
@@ -94,7 +97,13 @@ class PreSelectionPage(QWizardPage):
         
     def validatePage(self):
         if self.preconfigured.isChecked():
-            pass
+            selected = self.settingsbox.currentText() + ".tar.gz"
+            source_file = rp("sources/preconfigurations/" + selected)
+            target_file = rp(selected)
+            shutil.copy( source_file, target_file)
+            untar( target_file )
+            os.remove( target_file )
+            
         return True
 
     def nextId(self):        
