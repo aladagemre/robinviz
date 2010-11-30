@@ -13,10 +13,9 @@
 -------------------------
 = Introduction =
 -------------------------
+RobinViz (Reliability Oriented Bioinformatic Networks Visualization) is a protein-protein interaction (PPI) network visualization system designed to visually aid the prediction and verification processes of such networks. Embedding both the reliability (confirmation) values associated with the interactions and the verification data pertaining to them within a visualization model is a novel feature of the system. RobinViz is a free, open-source software protected under GPL. It is written in C++ and Python, and consists of almost 30,000 lines of code, excluding the employed libraries. 
 
-Robinviz is implemented using both python( where we require PyQT and Python) and C( where we use C++ library LEDA and C++ compiler). Simply, the data retrieval processes are handled in Robinviz Graphical User Interface(GUI) using PyQT and Python. Remaining concepts and data usage are coded using C and Leda C++ library. Robinviz has several features hence makes the tool complicated. So, we try to follow and report errors. In case of unreported errors, you can follow the execution at the console and even you can inform us.
-
-Although we present binary packages for Linux and Windows operating systems, programmers can recompile and use the existing implementation. Through the manual, we first show source code compilation in both Linux( valid for well used distributions) and Windows. Then, we introduce GUI. Finally, we demonstrate a sample run for the first time users.
+Although we present binary packages for Linux and Windows operating systems, programmers can recompile and use the existing source code implementation as well. This manual provides instructions for downloading, compiling, and executing RobinViz. We next introduce the main GUI features. Finally we provide snapshots of a sample run. 
 
 -------------------------
 = Compilation =
@@ -43,19 +42,19 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LEDAROOT
 
 Make sure that incl folder is inside this LEDA_ROOT.
 
-# Give the following command on console,
+# Enter the following terminal command,
 
 {{{
 source ~/.bashrc
 }}}
 
-# Move to the robinviz directory on console and give the following command:
+# Move to the robinviz directory and give the following command:
 
 {{{
 sh compile.sh
 }}}
 
-All the executable should be compiled.
+Source codes should be compiled and main executable robinviz.exe should be produced.
 
 == @ Windows ==
 
@@ -66,15 +65,15 @@ Visual Studio 2005 C++ or over
 
 ===Steps===
 
-1. Follow the instruction given at http://www.algorithmicsolutions.info/leda_manual/DLL_s_MS_Visual.html
+1. Follow the instructions at http://www.algorithmicsolutions.info/leda_manual/DLL_s_MS_Visual.html
 
 or
 
-1. Shall use sample Visual Studio 2005 Solution Template located at the main source distribution folder.
+1. Use sample Visual Studio 2005 Solution Template located at the main source distribution folder.
 
 2. Setup LEDA 5.1+ Library from Algorithmic Solutions
 
-3. Follow the instruction given at http://www.algorithmic-solutions.info/leda_manual/DLL_s_MS_Visual.html or if you use the template, you will need to 
+3. Follow the instructions at http://www.algorithmic-solutions.info/leda_manual/DLL_s_MS_Visual.html or if you use the template, you will need to 
 add library path and include folder from menu bar Tools->Options->Project and Solutions->VC++ Directories.
 
 -------------------------
