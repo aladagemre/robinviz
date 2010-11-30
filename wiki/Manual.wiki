@@ -25,8 +25,8 @@ We provide executable binaries of the system at the main page. These binaries ca
 
 ===Requirements===
 
-LEDA 5.1+ Library from Algorithmic Solutions
-libX11-dev
+LEDA 5.1+ (Library from Algorithmic Solutions), 
+libX11-dev, and 
 g++
 
 
