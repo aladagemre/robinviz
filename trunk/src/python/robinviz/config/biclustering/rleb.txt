@@ -1,4 +1,4 @@
-RLEB
+REAL
 rlebFlag 0
 maxSizeSubMatrix_exp1_g 200 int 2,1000,1 Max Size in dim1
 maxSizeSubMatrix_exp1_c 50 int 2,1000,1 Max Size in dim2
