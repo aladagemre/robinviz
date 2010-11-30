@@ -1258,6 +1258,7 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
     if( maxComp < election )
         election = maxComp;
 
+
     // Smaller component should be hided before spring algorithm in order
     // to obtain good visuals.
     list<int> hidedIndexs;
@@ -1298,8 +1299,8 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
 //    cout << endl;
 //    cout << " 0 \n";
     list<node> fixedNodes2;
-    if( G.number_of_nodes() < 30 )
-        SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, 0, 2000 ,0, 1000, 1000, nodeId );
+    if( G.number_of_edges() < 10 )
+        SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, 0, 1400 ,0, 900, 1000, nodeId );
     else
         SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, 0, 2000 + G.number_of_nodes()*13 ,0, 1000 + G.number_of_nodes()*5, 1000, nodeId );
 //    cout << " 0 \n";
@@ -1423,16 +1424,19 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
     G.restore_all_nodes();
     G.restore_all_edges();
 
-    xpos1 = xmin;
 //            cout << endl << xmin << " | " << xmax << endl;
 //                if( xmax - xmin < 400 )
 //                    xmax = xmin + 400;
     ypos1 = ymin - node_width;
-    if( G.number_of_edges() < 5 )
-        averageDistance = averageDistance / 5;
+    if( G.number_of_edges() < 10 ){
+        averageDistance = averageDistance;
+        xmin -= G.number_of_edges() * 2 * node_width;
+        xmax += G.number_of_edges() * 2 * node_width;
+    }
     else
         averageDistance = averageDistance / 3;
 
+    xpos1 = xmin;
     forall_items( it, justOnes ){
         if( xpos1 < xmax ){
             xpos[ justOnes[ it ] ] = xpos1;
