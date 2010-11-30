@@ -1957,7 +1957,7 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
                                     if( listOfGraphs[ i ].source( e ) == listOfGraphs[ i ].target( e ) )
                                             listOfGraphs[ i ].del_edge( e );
                             }
-                        if( listOfGraphs[ i ].number_of_edges() < 5 )
+                        if( listOfGraphs[ i ].number_of_edges() < 1 )
                             H = RUN_CIRCLEALONE( listOfGraphs[ i ], Xpos, Ypos, pos, i, 100 );
                         else
                             H = RUN_SPRING_EMBEDDER( listOfGraphs[ i ], Xpos, Ypos, pos, 50, i );
