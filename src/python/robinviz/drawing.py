@@ -12,30 +12,11 @@ from bicluster import BiclusterWindow
 import math
 from utils.info import root, ap, runcommand
 
-COLORS18 = {
-"A": "#CB2838",
-"B": "#FEC9BD",
-"C": "#5EF6DA",
-"D": "#321B28",
-"E": "#CD9BB4",
-"F": "#28E4F2",
-"G": "#BEF98A",
-"H": "#6C9627",
-"I": "#F481F0",
-"J": "#8B7F82",
-"K": "#4003C0",
-"L": "#499411",
-"M": "#E6C8BE",
-"N": "#DB26B2",
-"O": "#E4C645",
-"P": "#87D29A",
-"R": "#BC34F3",
-"S": "#5D9154",
-"X": "#808080",
-}
-
 CHARS = map(chr, range(65, 88)) + map(chr, range(89, 91)) + map(chr, range(48, 56))
-CATEGORY_NAMES = dict(zip ( CHARS, open(ap("godata/highlevels.txt")).read().split("\n")))
+CATEGORY_NAMES = dict(zip ( CHARS, open(ap("godata/highlevel_categories.txt")).read().split("\n")))
+
+CATEGORY_COLORS = open(ap("godata/highlevel_colors.txt")).read().split("\n")
+CHAR_COLOR_DICT = dict( zip(CHARS, CATEGORY_COLORS) )
 
 GRAPH_LAYOUTS = {}
 layoutFile = open("%s/layouts.ini" % root)
@@ -677,8 +658,8 @@ class CircleNode(NodeItem):
             self.percentColors = colors
             self.lighterColors = [ ( color[0].lighter(), color[1] ) for color in colors]
         else:
-            self.percentColors = [ ( QColor(COLORS18.get("X")) , 100) ]
-            self.lighterColors = [ ( QColor(COLORS18.get("X")).lighter() , 100)]
+            self.percentColors = [ ( QColor(CHAR_COLOR_DICT.get("X")) , 100) ]
+            self.lighterColors = [ ( QColor(CHAR_COLOR_DICT.get("X")).lighter() , 100)]
 
         self.num_colors = len(self.percentColors)
 
@@ -720,9 +701,9 @@ class CircleNode(NodeItem):
         for line in f:
             letter, percentage = line.split(" ")
             percentage = float(percentage)
-            code = COLORS18.get(letter)
+            code = CHAR_COLOR_DICT.get(letter)
             if not code:
-                code = COLORS18.get("X")
+                code = CHAR_COLOR_DICT.get("X")
             colors.append( (QColor(code), percentage) )
         self.setPercentageColors(colors)
 
@@ -862,7 +843,7 @@ class PiechartNode(NodeItem):
             self.colors = colors
         else:
             # if no color provided, assume that's an X. (unknown)
-            self.colors = [ QColor(COLORS18.get("X")) ]
+            self.colors = [ QColor(CHAR_COLOR_DICT.get("X")) ]
             
         self.num_colors = len(self.colors)
         if len(self.colors) > 1:
@@ -1002,7 +983,7 @@ class PiechartNode(NodeItem):
             self.labelText.setPlainText(label)
              # find hex codes for colors
             letters = filter(lambda letter: letter, colors.split(":"))
-            codes = filter(lambda color: color is not None, map(COLORS18.get, letters) )
+            codes = filter(lambda color: color is not None, map(CHAR_COLOR_DICT.get, letters) )
             qcolors = map(QColor, codes)
             self.setColors(qcolors)
 
