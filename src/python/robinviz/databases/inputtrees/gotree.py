@@ -42,6 +42,7 @@ class GOSelector(QMainWindow):
 	treeWidget.setColumnCount(2)
 	treeWidget.setHeaderLabels(("Accession", "Name"))
 	treeWidget.setSortingEnabled(True)
+        treeWidget.sortItems(1, Qt.AscendingOrder)
 	treeWidget.itemDoubleClicked.connect(self.itemDoubleClicked) # Define what shall happen when double clicked on an item.
 	treeWidget.itemExpanded.connect(self.itemExpanded) # Define what shall happen when double clicked on an item.
 	
