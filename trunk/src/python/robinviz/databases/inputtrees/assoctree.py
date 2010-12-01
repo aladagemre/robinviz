@@ -36,7 +36,7 @@ class AssociationSelector(QWidget):
 	treeWidget.setHeaderLabels(("Organism", "Source DB", "Gene #",))
 	treeWidget.itemExpanded.connect(self.resizeColumns)
 	treeWidget.setSortingEnabled(True)
-	
+	treeWidget.sortItems(0, Qt.AscendingOrder)
 	self.parseFile()	    
 	layout.addWidget(treeWidget)
 	
