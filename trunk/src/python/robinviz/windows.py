@@ -567,8 +567,9 @@ class MultiViewWindow(QMainWindow):
     ############### HELP MENU ###################
     def displayManualDialog(self):
         self.manualDialog= QtWebKit.QWebView()
-        self.manualDialog.setUrl(QUrl("http://hacivat.khas.edu.tr/~robinviz/manuals/manual.html"))
-        self.manualDialog.show()
+        self.manualDialog.setUrl(QUrl("http://code.google.com/p/robinviz/wiki/Manual"))
+        self.manualDialog.setWindowTitle("Robinviz Manual")
+        self.manualDialog.showMaximized()
 
     def displayUpdateDialog(self):
         from misc.updatergui import UpdaterDialog
