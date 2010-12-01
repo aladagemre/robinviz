@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'about.ui'
 #
-# Created: Sun Feb 14 18:17:36 2010
-#      by: PyQt4 UI code generator 4.5.4
+# Created: Wed Dec  1 20:24:44 2010
+#      by: PyQt4 UI code generator 4.7.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,13 +12,14 @@ from PyQt4 import QtCore, QtGui
 class Ui_AboutDialog(object):
     def setupUi(self, AboutDialog):
         AboutDialog.setObjectName("AboutDialog")
-        AboutDialog.resize(343, 399)
+        AboutDialog.resize(389, 414)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(AboutDialog.sizePolicy().hasHeightForWidth())
         AboutDialog.setSizePolicy(sizePolicy)
         AboutDialog.setMouseTracking(False)
+        AboutDialog.setStyleSheet("")
         AboutDialog.setSizeGripEnabled(False)
         self.gridLayout_2 = QtGui.QGridLayout(AboutDialog)
         self.gridLayout_2.setObjectName("gridLayout_2")
@@ -62,6 +63,8 @@ class Ui_AboutDialog(object):
         self.label_5.setObjectName("label_5")
         self.gridLayout.addWidget(self.label_5, 1, 1, 1, 1)
         self.label_6 = QtGui.QLabel(AboutDialog)
+        self.label_6.setText("")
+        self.label_6.setPixmap(QtGui.QPixmap(":/pic/logo.jpg"))
         self.label_6.setObjectName("label_6")
         self.gridLayout.addWidget(self.label_6, 1, 0, 2, 1)
         self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
@@ -88,10 +91,15 @@ class Ui_AboutDialog(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">RobinViz is an integrated visualization</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">tool for bioinformatics networks.</p>\n"
+"<table border=\"0\" style=\"-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;\">\n"
+"<tr>\n"
+"<td style=\"border: none;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Reliability Oriented Bioinformatic</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Network Visualization</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">A Visualization tool for PPI Networks</p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://hacivat.khas.edu.tr/~robinviz\"><span style=\" text-decoration: underline; color:#0000ff;\">http://hacivat.khas.edu.tr/~robinviz</span></a></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://code.google.com/p/robinviz\"><span style=\" text-decoration: underline; color:#0000ff;\">http://code.google.com/p/robinviz</span></a></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://code.google.com/p/robinviz\"><span style=\" text-decoration: underline; color:#0000ff;\">http://code.google.com/p/robinviz</span></a></p></td></tr></table></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("AboutDialog", "Authors", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("AboutDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -118,14 +126,12 @@ class Ui_AboutDialog(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">v 0.1.0 - Beta</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("AboutDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><img src=\":/pic/robin.jpg\" /></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+"<table style=\"-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;\">\n"
+"<tr>\n"
+"<td style=\"border: none;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">v 1.0-Beta</span></p></td></tr></table></body></html>", None, QtGui.QApplication.UnicodeUTF8))
 
-import resources_rc # do not delete this. it's for icon.
+import resources_rc
 
 if __name__ == "__main__":
     import sys
