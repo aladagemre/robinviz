@@ -3845,23 +3845,24 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 					if( Categories[ G[ n ] ][ it ] == abbv[ i ] ){
 						catid[ n ].append( abbv[ i ] );
                                                 abbv_i[ i ]++;
+                                                geneCount++;
 					}
 				}
-			}
-                        geneCount++;
+                        }
 			gw2.set_color( n, red );
 		}
 
-                double dsum = 0;
-                for( int i = 0; i < cat_num; i++ ){
-                    if( (double)abbv_i[ i ] / (double)geneCount > 0 ){
-                        fprintf( pieNode, "%c %lf\n", abbv[ i ], (double)((double)abbv_i[ i ] / (double)geneCount ) );
-                        dsum += (double)abbv_i[ i ] / (double)geneCount;
+                if( geneCount > 0 ){
+                    double dsum = 0;
+                    for( int i = 0; i < cat_num; i++ ){
+                        if( (double)abbv_i[ i ] / (double)geneCount > 0 ){
+                            fprintf( pieNode, "%c %lf\n", abbv[ i ], (double)((double)abbv_i[ i ] / (double)geneCount ) );
+                            dsum += (double)abbv_i[ i ] / (double)geneCount;
+                        }
                     }
+                    if( dsum < 0.99 )
+                        fprintf( pieNode, "%c %lf\n", 'X', 1.0 - dsum );
                 }
-                if( dsum < 1.0 )
-                    fprintf( pieNode, "%c %lf\n", 'X', 1.0 - dsum );
-
                 fclose( pieNode );
 
 //                cout << "1:";
