@@ -220,6 +220,7 @@ class NodeWeightSelector(QWidget):
         for unchecked in uncheckeds:
             self.params["Algorithms"][unchecked] = 0
 
+        self.params["Drawing"]["removeRat"] = float(self.removal_ratio.value())
         # ===== PLACE PARAMETERS ====
         # We put partial dict back to the complete dict.
         self.complete_params["Confirmation"][self.confirmation] = self.params
