@@ -10,31 +10,53 @@ if not "utils" in sys.path:
     
 from utils.info import ap
 from utils.compression import *
+from utils.downloader import Downloader
 from databases.translator import BiogridOspreyTranslator
 from ppi_downloader import download_organism
+
 
 class PPISelector(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         self.assureOspreyDirExists()
-        
+
+    def setup(self, result):
+        ziplocation = "BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip"
+        dirlocation = ap("ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey")
+        if os.path.exists(ziplocation):
+            unzip_file_into_dir(ziplocation, dirlocation)
+            os.remove(ziplocation)
+
         dir_prefix = "BIOGRID-OSPREY_DATASETS"
         #print os.listdir("ppidata")
         biogrid_dirname = filter(lambda filename: filename.startswith(dir_prefix), os.listdir(ap("ppidata")) )[0]
         
         self.biogridVersion = biogrid_dirname[len(dir_prefix)+1:-7]
         self.osprey_dir = ap("ppidata/%s-%s.osprey" % (dir_prefix, self.biogridVersion))
-        self.setupGUI()
+
+
+        self.readPPIData()
+	self.useDictionary(self.organism_experiments)
+        
     def assureOspreyDirExists(self):
 	dir_prefix = "BIOGRID-OSPREY_DATASETS"
         dirs = filter(lambda filename: filename.startswith(dir_prefix), os.listdir(ap("ppidata")) )
         if len(dirs) == 0:
+            # ============================
 	    if not os.path.exists(ap("ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey")):
-		download_file("http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.0.68/BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip")
-	    unzip_file_into_dir("BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip", ap("ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey"))
-	    
-	    os.remove("BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip")
-	
+		url = "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.0.68/BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip"
+                print "Osprey dataset does not exist. Downloading it..."
+                self.d = Downloader(url)
+                self.d.finished.connect(self.setup)
+                qApp.processEvents()
+                self.d.exec_()
+                self.setupGUI()
+            else:
+                self.setupGUI()
+                self.setup(1)
+        else:
+            self.setupGUI()
+            self.setup(1)
     def setupGUI(self):	
 	layout = QVBoxLayout()
 	self.treeWidget = treeWidget = QTreeWidget()
@@ -49,9 +71,6 @@ class PPISelector(QWidget):
 	self.setLayout(layout)
         self.setWindowTitle("PPI Selection Tree")
         self.setMinimumSize(300,400)
-        
-        self.readPPIData()
-	self.useDictionary(self.organism_experiments)
         
     def readPPIData(self):
 	

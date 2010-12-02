@@ -281,12 +281,16 @@ class PPISelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
 	self.setTitle("PPI Network")
-	topLabel = QLabel("In this page, you need to select the PPI sources you'd like to visualize")
-	topLabel.setWordWrap(True)
-	layout = QVBoxLayout()
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+        
+    def initializePage(self):
+        for i in range(self.layout.count()):
+            self.layout.removeItem( self.layout.takeAt(i) )
+            
 	self.selector = PPISelector()
-	layout.addWidget(self.selector)
-	self.setLayout(layout)
+	self.layout.addWidget(self.selector)
+	
     
     def validatePage(self):
 	self.selector.getCheckedItems()
