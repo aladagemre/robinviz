@@ -7,6 +7,28 @@ import os
 import tarfile
 import shutil
 import zipfile
+from PyQt4.QtCore import QString
+from urllib2 import Request, urlopen, URLError, HTTPError
+
+def download_file2(url):
+    filename = url.split('/')[-1]
+    print "Downloading", url
+    
+    req = Request(url)
+    try:
+        response = urlopen(req)
+    except HTTPError, e:
+        message = 'The server couldn\'t fulfill the request.\nError code: %d' % e.code
+        return QString(message)
+    except URLError, e:
+        message = 'We failed to reach a server.\n+Reason: %s' % e.reason
+        return QString(message)
+    else:
+        localFile = open(filename, 'w')
+        localFile.write(response.read())
+        response.close()
+        localFile.close()
+        return str(filename)
 
 def download_file(url):
     filename = url.split('/')[-1]

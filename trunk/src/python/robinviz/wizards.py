@@ -259,14 +259,18 @@ class AssociationSelectionPage(QWizardPage):
 class GOSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
-	self.setTitle("Central Nodes from GO Categories")
-	topLabel = QLabel("In this page, you need to select the GO terms you would like to use.")
-	topLabel.setWordWrap(True)
-	layout = QVBoxLayout()
+        self.setTitle("Central Nodes from GO Categories")
+	#topLabel = QLabel("In this page, you need to select the GO terms you would like to use.")
+	#topLabel.setWordWrap(True)
+	self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+        
+    def initializePage(self):
+        for i in range(self.layout.count()):
+            self.layout.removeItem( self.layout.takeAt(i) )
 	self.selector = GOSelector()
-	layout.addWidget(self.selector)
-	self.setLayout(layout)
-    
+	self.layout.addWidget(self.selector)
+	
     def validatePage(self):
 	self.selector.getCheckedItems()
 	# TODO: Do this after last page

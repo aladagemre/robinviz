@@ -2,16 +2,17 @@
 
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-import sys, os, re
+import sys
+import os
+import re
 import sqlite3
-import shutil
 
 if not "utils" in sys.path:
     sys.path.append("../..")
     
 from utils.info import ap
 from utils.compression import *
-from gene2goparser import Gene2GOParser
+from utils.downloader import Downloader
 #from termdbparser import generateTermDict
 
 def grep(string,list):
@@ -25,11 +26,23 @@ class GOSelector(QMainWindow):
         if not os.path.exists(self.filename):
 	    print self.filename, "does not exist. Downloading it..."
 	    #generateTermDict()
-	    download_file("http://www.emrealadag.com/dosyalar/goinfo.sqlite3")
-	    shutil.move("goinfo.sqlite3", self.filename)
-	    
-        self.connectDB()
-        self.setupGUI()
+            url = "http://robinviz.googlecode.com/svn/data2/go/goinfo.sqlite3"
+            self.d = Downloader(url, filename)
+            self.d.finished.connect(self.setup)
+            qApp.processEvents()
+            self.d.exec_()
+            self.setupGUI()
+                 
+        else:
+            self.setupGUI()
+            self.setup(1)
+        
+    def setup(self, result):
+        if result:
+            print "Download result is positive, loading the list."
+            self.loadData()
+        else:
+            print "Download result is negative, not loading the list."
         
     def connectDB(self):
 	self.conn = sqlite3.connect(self.filename)
@@ -45,11 +58,6 @@ class GOSelector(QMainWindow):
         treeWidget.sortItems(1, Qt.AscendingOrder)
 	treeWidget.itemDoubleClicked.connect(self.itemDoubleClicked) # Define what shall happen when double clicked on an item.
 	treeWidget.itemExpanded.connect(self.itemExpanded) # Define what shall happen when double clicked on an item.
-	
-	self.loadTopLevelGO(3674) # Load first level
-        self.loadTopLevelGO(5575) # Load first level
-        self.loadTopLevelGO(8150) # Load first level
-	self.resizeFirstColumn()
 
         layout.addWidget(treeWidget)
 
@@ -58,7 +66,14 @@ class GOSelector(QMainWindow):
 
         self.setCentralWidget(self.widget)
         self.setWindowTitle("Gene Ontology Tree")
-    
+        
+    def loadData(self):
+        self.connectDB()
+        self.loadTopLevelGO(3674) # Load first level
+        self.loadTopLevelGO(5575) # Load first level
+        self.loadTopLevelGO(8150) # Load first level
+	self.resizeFirstColumn()
+        
     def resizeFirstColumn(self):
 	self.treeWidget.resizeColumnToContents(0)
 	
@@ -123,29 +138,7 @@ class GOSelector(QMainWindow):
 	checkedItems = sorted(checkedItems)
 	f = open(ap("godata/selected_terms.txt"), "w")
 	f.write("\n".join( checkedItems ) )
-	f.close()
-
-        """
-        # Now use complete go mapping to produce a sub-go mapping
-        if not os.path.exists(ap("godata/go_mapping.txt")):
-	    # if go mapping has not been created yet, do it.
-	    ggp = Gene2GOParser(input_file=ap("godata/gene2go"),output_file=ap("godata/go_mapping.txt"), terms=None)
-
-        
-	# filter complete go mapping.
-	go_term_list = open(ap("godata/go_mapping.txt")).readlines()
-	output = open(ap("godata/sub_go_mapping.txt"),"w")
-	for checkedItem in checkedItems:
-	    x = grep(checkedItem, go_term_list)
-	    #print checkedItem, x
-	    if x:
-		output.write(x[0])
-	    else:
-		output.write(checkedItem+"\tNULL\n")
-		
-	output.close()"""
-	    
-        
+	f.close()        
         
     def getRecord(self, record_id):
 	self.curs.execute("SELECT * FROM terms WHERE id=%d;" % record_id)
