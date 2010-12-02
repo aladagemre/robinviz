@@ -583,7 +583,24 @@ int main( int argc, char **argv ){
 				if( rlebFlag == true ){
                                         if( maxSizeSubMatrix_exp1_g > INPUT.dim1() || minSizeSubMatrix_exp1_g > INPUT.dim1()  || minSizeSubMatrix_exp1_c > INPUT.dim2() || maxSizeSubMatrix_exp1_c > INPUT.dim2() || maxSizeSubMatrix_exp1_g < minSizeSubMatrix_exp1_g || maxSizeSubMatrix_exp1_c < minSizeSubMatrix_exp1_c ){
                                             sprintf( algName, "REAL" );
-                                            dimensionChecker( algName );
+                                            if( maxSizeSubMatrix_exp1_g > INPUT.dim1()  ){
+                                                int maxSizeSubMatrix_exp1_g_t = maxSizeSubMatrix_exp1_g;
+                                                int minSizeSubMatrix_exp1_g_t = minSizeSubMatrix_exp1_g;
+                                                maxSizeSubMatrix_exp1_g = INPUT.dim1();
+                                                if( maxSizeSubMatrix_exp1_g - minSizeSubMatrix_exp1_g_t > 0 )
+                                                    minSizeSubMatrix_exp1_g = maxSizeSubMatrix_exp1_g - minSizeSubMatrix_exp1_g_t;
+                                                else
+                                                    minSizeSubMatrix_exp1_g = 2;
+                                            }
+                                            if( maxSizeSubMatrix_exp1_c > INPUT.dim2()  ){
+                                                int maxSizeSubMatrix_exp1_c_t = maxSizeSubMatrix_exp1_c;
+                                                int minSizeSubMatrix_exp1_c_t = minSizeSubMatrix_exp1_c;
+                                                maxSizeSubMatrix_exp1_c = INPUT.dim2();
+                                                if( maxSizeSubMatrix_exp1_c - minSizeSubMatrix_exp1_c_t > 0 )
+                                                    minSizeSubMatrix_exp1_c = maxSizeSubMatrix_exp1_c - minSizeSubMatrix_exp1_c_t;
+                                                else
+                                                    minSizeSubMatrix_exp1_c = 2;
+                                            }
                                         }
 					biclustering = 4;
                                         rlebmain_m( INPUT, maxSizeSubMatrix_exp1_g, maxSizeSubMatrix_exp1_c, minSizeSubMatrix_exp1_g, minSizeSubMatrix_exp1_c, repeat, hvaluemin, increment_exp1_g, increment_exp1_c );
