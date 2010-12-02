@@ -28,7 +28,7 @@ def clean(param=None):
 		try:
 		    lastdigit = int(lastdigit)
 		    #print "Removing:", filename
-		    os.remove(directory+"/"+filename)		
+		    os.remove(os.path.join(directory, filename))
 		except:
 		    pass
 
@@ -38,7 +38,7 @@ def clean(param=None):
 	for filename in os.listdir(directory):
 	    try:
 		#print "Removing", filename
-		os.remove(directory+'/'+filename)
+		os.remove(os.path.join(directory, filename))
 	    except:
 		#print "Could not remove", filename
 		pass
