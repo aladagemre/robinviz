@@ -8,7 +8,7 @@ from config.customwidgets import *
 
 import sys
 import os
-from utils.info import rp
+from utils.info import rp,ap
 from utils.settingswrite import write_values
 import yaml
 
@@ -21,8 +21,8 @@ class ConfirmationSelector(QWidget):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
-        self.coexpression = QRadioButton("Co-Expression: Use biclustering to analyse PPI Network")
-        self.coontology = QRadioButton("Co-Ontology: Use Gene Ontology to analyse PPI Network")
+        self.coexpression = QRadioButton("Co-&Expression: Use biclustering to analyse PPI Network")
+        self.coontology = QRadioButton("Co-&Ontology: Use Gene Ontology to analyse PPI Network")
 
         self.coontology.setChecked(True)
 
@@ -241,6 +241,9 @@ class BiclusteringSelector(QWidget):
         self.params = yaml.load(stream)
         #print self.params
 
+        filename = open(ap("geodata/selected_geo.txt")).readline().strip()
+        self.gene, self.cond=open(ap("geodata/%s" % filename) ).readline().strip().split()
+        
     def saveSettings(self):
 
         # Update parameter dictionary from the widgets.
@@ -311,7 +314,12 @@ class BiclusteringSelector(QWidget):
     
         self.bicLayout = QGridLayout(self)
 
+
         algorithmSelectionLayout = QHBoxLayout()
+        self.labelInfo = QLabel("This matrix contains %s genes and %s conditions" % (self.gene, self.cond))
+        self.bicLayout.addWidget(self.labelInfo)
+
+
         self.labelUseAlgorithm = QLabel("    Use:")
         self.comboAlgorithm = QComboBox(self)
 
