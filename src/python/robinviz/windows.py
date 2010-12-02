@@ -519,7 +519,29 @@ class MultiViewWindow(QMainWindow):
 	self.inputWizard = InputWizard()
         self.inputWizard.finished.connect(self.act)
 	self.inputWizard.show()
-	
+
+
+    def updateData(self):
+        response= QMessageBox.warning(self, 'Update Local Data',
+     "This operation will remove the local data and the data will be restored when you perform another execution.\n\n"+
+     "Are you sure you want to do this?", buttons=QMessageBox.Yes|QMessageBox.No)
+        
+        if response == QMessageBox.Yes:
+            # do the operation
+            data = [ ap('ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey'),
+                     ap('godata/goinfo.sqlite3')
+            ]
+            data += map( lambda x: ap('assocdata')+"/"+ x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('assocdata') )  ) )
+            data += map( lambda x: ap('ppidata/hitpredict')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('ppidata/hitpredict') )  ) )
+            data += map( lambda x: ap('geodata')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('geodata') )  ) )
+
+            for i in data:
+                print "Removing",i
+                try:
+                    os.remove(i)
+                except:
+                    print "Could not remove",i
+        
     ############### VIEW MENU ###################
     def goto(self):
         value, ok = QInputDialog.getInt(self, "Go to bicluster/category",
@@ -618,6 +640,11 @@ class MultiViewWindow(QMainWindow):
 	selectInput.setShortcut('Ctrl+I')
 	selectInput.setStatusTip('Input Selection Wizard')
 	self.connect(selectInput, SIGNAL('triggered()'), self.selectInputs)"""
+
+        updateData = QAction('&Update local data', self)
+        updateData.setShortcut('Ctrl+U')
+        updateData.setStatusTip('Remove local data to be updated at the next run')
+        self.connect(updateData, SIGNAL('triggered()'), self.updateData)
 	
         exit = QAction('E&xit', self)
         exit.setShortcut('Ctrl+Q')
@@ -631,6 +658,7 @@ class MultiViewWindow(QMainWindow):
         fileMenu.addSeparator()
         map(fileMenu.addAction, (loadSession, saveSession, displayLast))
         fileMenu.addSeparator()
+        fileMenu.addAction(updateData)
         fileMenu.addAction(exit)
 
 

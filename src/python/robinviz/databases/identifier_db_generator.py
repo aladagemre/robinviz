@@ -6,8 +6,14 @@ http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.0.67/BIOGRI
 import sqlite3
 import urllib
 import os
-import zipfile
+import sys
+from PyQt4 import QtGui
 
+
+sys.path.append("..")
+sys.path.append("../..")
+from utils.downloader import Downloader
+from utils.compression import unzip
 
 # ==================================
 # ============ METHODS =============
@@ -28,48 +34,59 @@ fileurl = "http://thebiogrid.org/downloads/archives/Release Archive/BIOGRID-%s/%
 
 # =======================================
 # ============ INITIALIZATION ===========
-if not os.path.exists(filename):
-    print "txt file not found, zip file downloading..."
-    download_file(fileurl)
-    print "zip file downloaded. Now extracting..."
-    zf = zipfile.ZipFile(zipname)
-    zf.extractall()
-    print "Extracted."
 
-print "SQL conversion starts..."
-conn = sqlite3.connect("identifier.db")
-curs = conn.cursor()
-curs.execute("DROP TABLE IF EXISTS translation;")
-curs.execute("""
-CREATE TABLE "translation" (
-    "biogrid_id" INTEGER NOT NULL,
-    "identifier_value" TEXT NOT NULL,
-    "identifier_type" TEXT NOT NULL
-)
-""")
 
-curs.execute('CREATE INDEX "biogrid_index" on translation (biogrid_id ASC);')
-curs.execute('CREATE INDEX "identifier_index" on translation (identifier_value ASC)')
+   
 
-# identifier_value is not UNIQUE!
-# INSERT INTO translation VALUES (1, '26556996', 'GENBANK_GENOMIC_DNA_GI');
-# INSERT INTO translation VALUES (2, '26556996', 'GENBANK_GENOMIC_DNA_GI');
+def start():
+    if not os.path.exists(filename):
+        print "zip file downloaded. Now extracting..."
+        unzip(zipname)
 
-input_stream = open(filename)
-#output_stream = open("sqlstatements.txt","w")
+    print "SQL conversion starts..."
+    conn = sqlite3.connect("identifier.db")
+    curs = conn.cursor()
+    curs.execute("DROP TABLE IF EXISTS translation;")
+    curs.execute("""
+    CREATE TABLE "translation" (
+        "biogrid_id" INTEGER NOT NULL,
+        "identifier_value" TEXT NOT NULL,
+        "identifier_type" TEXT NOT NULL
+    )
+    """)
 
-for line in input_stream: 
-    try:
-	l = line.strip().split("\t")
-	biogrid_id = int(l[0])
-    except:
-	continue
+    curs.execute('CREATE INDEX "biogrid_index" on translation (biogrid_id ASC);')
+    curs.execute('CREATE INDEX "identifier_index" on translation (identifier_value ASC)')
+
+    # identifier_value is not UNIQUE!
+    # INSERT INTO translation VALUES (1, '26556996', 'GENBANK_GENOMIC_DNA_GI');
+    # INSERT INTO translation VALUES (2, '26556996', 'GENBANK_GENOMIC_DNA_GI');
+
+    input_stream = open(filename)
+    #output_stream = open("sqlstatements.txt","w")
+
+    for line in input_stream:
+        try:
+            l = line.strip().split("\t")
+            biogrid_id = int(l[0])
+        except:
+            continue
+        else:
+            #output_stream.write("INSERT INTO translation VALUES (%d, '%s', '%s');\n" % (int(l[0]), l[1], l[2]) )
+            statement = 'INSERT INTO translation VALUES (%d, "%s", "%s");\n' % (biogrid_id, l[1], l[2])
+            curs.execute(statement)
+
+    conn.commit()
+
+    #output_stream.close()
+    print "SQL operation complete"
+
+if __name__ == "__main__":
+    if not os.path.exists(filename):
+        print "txt file not found, zip file downloading..."
+        app = QtGui.QApplication(sys.argv)
+        d = Downloader(fileurl, zipname)
+        d.finished.connect(start)
+        sys.exit(app.exec_())
     else:
-	#output_stream.write("INSERT INTO translation VALUES (%d, '%s', '%s');\n" % (int(l[0]), l[1], l[2]) )
-	statement = 'INSERT INTO translation VALUES (%d, "%s", "%s");\n' % (biogrid_id, l[1], l[2]) 
-	curs.execute(statement)
-	
-conn.commit()
-
-#output_stream.close()
-    
+        start()
