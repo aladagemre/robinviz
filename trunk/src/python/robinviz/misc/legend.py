@@ -24,21 +24,28 @@ class ColorPair(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
+        painter.drawText(60, 10, self.text)
+        painter.setOpacity(0.5)
         painter.setBrush(QBrush(QColor(self.color)))
         painter.drawRect(0,0,50,12)
-        painter.drawText(60, 10, self.text)
+        
 
 class LegendWidget(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
         self.setupGUI()
-
+        self.setWindowTitle("Color Legend for Highlevel Categories")
 
     def setupGUI(self):
+        p = self.palette()
+        p.setColor(QPalette.Background, Qt.white)
+        self.setPalette(p)
+
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)        
-# metabolic : (A, "#FFAABB")
+        # metabolic : (A, "#FFAABB")
 
+        self.layout.addWidget(ColorPair ( ( QColor(None), "Unknown",)  ))
         for name in sorted(COLOR_DICT.keys()):
             letter_n_color = COLOR_DICT[name]
             self.layout.addWidget(ColorPair( ( letter_n_color[1], name, ) ))
