@@ -322,11 +322,14 @@ class BiclusteringSelectionPage(QWizardPage):
 	topLabel = QLabel("In this page, you need to select the biclustering algoritm and define parameters to be applied on Gene Expression source you selected.")
 	topLabel.setWordWrap(True)
 	layout = QVBoxLayout()
-	self.selector = BiclusteringSelector()
-	layout.addWidget(self.selector)
 	self.setLayout(layout)
 
     def initializePage(self):
+        for i in range(self.layout().count()):
+            self.layout().removeItem( self.layout().takeAt(i) )
+
+        self.selector = BiclusteringSelector()
+	self.layout().addWidget(self.selector)
         self.selector.initialize()
         
     def validatePage(self):
