@@ -2,22 +2,23 @@
 
 import os
 import sys
+from utils.info import rp
 
 def clean(param=None):
     print "Performing cleaning of the leftover files."
     # Revert some files
     if param == "rv":
-	files = ("sources/usr_sources/visualization_data/genenames.txt",
+	files = map(rp, ("sources/usr_sources/visualization_data/genenames.txt",
 		 "sources/usr_sources/visualization_data/geneNameConversion.txt",
 		 "settings.ini",
 		 "src/cpp/incl/bicalg/bimax/matrix_robin.txt",
-		 "outputs/colors_func.txt", )
+		 "outputs/colors_func.txt", ))
 	for filename in files:
 	    os.system("svn revert %s" % filename)
     
     
     # Remove series of files.
-    for directory in ( "outputs/heatmap", "outputs/bicgenes", "outputs/graphs", "outputs/psfiles", "outputs/enrich", "outputs/parallel", "outputs/go"):
+    for directory in map(rp, ( "outputs/heatmap", "outputs/bicgenes", "outputs/graphs", "outputs/psfiles", "outputs/enrich", "outputs/parallel", "outputs/go")):
 	fileList = os.listdir(directory)
 	for filename in fileList:
 	    if filename and "." in filename and filename[0] != ".":
@@ -32,7 +33,7 @@ def clean(param=None):
 		    pass
 
     # Remove completely
-    directories = ("outputs/graphs",)
+    directories = map(rp, ("outputs/graphs",))
     for directory in directories:
 	for filename in os.listdir(directory):
 	    try:
@@ -42,7 +43,7 @@ def clean(param=None):
 		#print "Could not remove", filename
 		pass
     # Remove individual files.
-    files = ("src/python/xcoord/gmls/pyt_inp.gml", 
+    files = map(rp, ("src/python/xcoord/gmls/pyt_inp.gml",
     "src/python/xcoord/gmls/pyt_out.gml",
     "positionsAfter.txt","positionsAfterPostProcess.txt", 
     "positions.txt", 
@@ -60,7 +61,7 @@ def clean(param=None):
     "outputs/biclusters/scoring.txt",
     "outputs/localization/localized_input.txt",
     "outputs/gene_index.shelve",
-    )
+    ))
     for filename in files:
 	try:
 	    #print "Removing:", filename
