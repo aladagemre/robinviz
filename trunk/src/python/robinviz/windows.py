@@ -706,9 +706,9 @@ class MultiViewWindow(QMainWindow):
         manualDialog.setStatusTip('RobinViz Documentation')
         self.connect(manualDialog, SIGNAL('triggered()'), self.displayManualDialog)
 
-        updateDialog = QAction('&Update', self)
+        """updateDialog = QAction('&Update', self)
         updateDialog.setStatusTip('Update RobinViz')
-        self.connect(updateDialog, SIGNAL('triggered()'), self.displayUpdateDialog)
+        self.connect(updateDialog, SIGNAL('triggered()'), self.displayUpdateDialog)"""
 
         aboutDialog = QAction('&About', self)
         aboutDialog.setStatusTip('About RobinViz')
@@ -716,7 +716,7 @@ class MultiViewWindow(QMainWindow):
 
         helpMenu = menubar.addMenu('&Help')
         helpMenu.addAction(manualDialog)
-        helpMenu.addAction(updateDialog)
+        #helpMenu.addAction(updateDialog)
         helpMenu.addSeparator()
         helpMenu.addAction(aboutDialog)
 
