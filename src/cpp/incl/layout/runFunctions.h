@@ -1463,9 +1463,11 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
             point p( Xpos[ n ], Ypos[ n ] );
             posx[ n ] = p;
     }
-    char filename_[64] = "outputs/graphs/graph_";
-    sprintf( filename_, "%s%d%s", filename_, graphNo, ".gml" );
-    G.write_gml( filename_ );
+    if( graphNo != -1 ){
+        char filename_[64] = "outputs/graphs/graph_";
+        sprintf( filename_, "%s%d%s", filename_, graphNo, ".gml" );
+        G.write_gml( filename_ );
+    }
     return G;
 }
 
