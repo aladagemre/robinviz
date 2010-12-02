@@ -24,7 +24,10 @@ class ConfirmationSelector(QWidget):
         self.coexpression = QRadioButton("Co-&Expression: Use biclustering to analyse PPI Network")
         self.coontology = QRadioButton("Co-&Ontology: Use Gene Ontology to analyse PPI Network")
 
-        self.coontology.setChecked(True)
+        if open(rp("outputs/resultparams.txt")).readline()[3]=="e":
+            self.coexpression.setChecked(True)
+        else:
+            self.coontology.setChecked(True)
 
         self.layout.addWidget(self.coexpression)
         self.layout.addWidget(self.coontology)
@@ -44,10 +47,10 @@ class ColorSelector(QWidget):
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
         self.heading = QLabel("Assign node colors according to high-level categories in:")
-        self.cofunctionality = QRadioButton("Molecular Function")
-        self.colocalization= QRadioButton("Cellular Compartments")
-        self.coprocess = QRadioButton("Biological Process")
-        self.coontology = QRadioButton("All")
+        self.cofunctionality = QRadioButton("&Molecular Function")
+        self.colocalization= QRadioButton("&Cellular Compartments")
+        self.coprocess = QRadioButton("Biological &Process")
+        self.coontology = QRadioButton("&All")
 
         self.cofunctionality.setChecked(True)
 
@@ -82,8 +85,8 @@ class EdgeWeightSelector(QWidget):
         self.setLayout(self.layout)
 
         self.heading = QLabel("Edge weights in Central View will be based on")
-        self.interactions = QRadioButton("Interactions from PPI Network")
-        self.common = QRadioButton("Common Genes in Biclusters")
+        self.interactions = QRadioButton("&Interactions from PPI Network")
+        self.common = QRadioButton("&Common Genes in Biclusters")
 
         # Check the radio buttons
         if self.params["Algorithms"]["edgesBetween"] == 1:
@@ -153,9 +156,9 @@ class NodeWeightSelector(QWidget):
         self.setLayout(self.layout)
 
         # ====== PREPARE ========
-        self.hvalue = QRadioButton("H-Value")
-        self.enrichment = QRadioButton("Functional Enrichment")
-        self.hitratio = QRadioButton("PPI Hit Ratio")
+        self.hvalue = QRadioButton("&H-Value")
+        self.enrichment = QRadioButton("&Functional Enrichment")
+        self.hitratio = QRadioButton("&PPI Hit Ratio")
 
         # ======= CHECK ==========
         if self.params["Algorithms"]["hvalueWeighting"] == 1:
