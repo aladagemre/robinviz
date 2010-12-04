@@ -29,7 +29,7 @@ def generateTermDict():
     input_file = ap("godata/go_daily-termdb.rdf-xml")
     print "Input: %s" % input_file
     if not os.path.exists(input_file):
-	download_file("http://archive.geneontology.org/latest-termdb/go_daily-termdb.rdf-xml.gz")
+	download_file("http://archive.geneontology.org/latest-termdb/go_daily-termdb.rdf-xml.gz", binary=True)
 	ungz("go_daily-termdb.rdf-xml.gz")
 	shutil.move("go_daily-termdb.rdf-xml", input_file)
     # "go_daily-termdb.rdf-xml/slim.xml"
