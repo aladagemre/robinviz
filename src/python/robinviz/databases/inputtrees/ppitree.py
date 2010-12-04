@@ -25,7 +25,7 @@ class PPISelector(QWidget):
     def setup(self, result):
         ziplocation = "BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip"
         dirlocation = ap("ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey")
-        if os.path.exists(ziplocation):
+        if not os.path.exists(dirlocation) and os.path.exists(ziplocation):
             unzip_file_into_dir(ziplocation, dirlocation)
             os.remove(ziplocation)
 
@@ -37,7 +37,7 @@ class PPISelector(QWidget):
         self.osprey_dir = ap("ppidata/%s-%s.osprey" % (dir_prefix, self.biogridVersion))
 
         # ======IDENTIFIERS========
-        if os.path.exists("identifier.db.tar.gz"):
+        if not os.path.exists(self.IDENTIFIER_PATH) and os.path.exists("identifier.db.tar.gz"):
             print "Uncompressing identifier.db.tar.gz"
             untar("identifier.db.tar.gz")
             shutil.move("identifier.db", self.IDENTIFIER_PATH)
