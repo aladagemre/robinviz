@@ -8,7 +8,7 @@ import os
 if not "utils" in sys.path:
     sys.path.append("../..")
     
-from utils.info import ap
+from utils.info import ap,rp
 from utils.compression import *
 from utils.downloader import Downloader
 from databases.translator import BiogridOspreyTranslator
@@ -16,9 +16,11 @@ from ppi_downloader import download_organism
 
 
 class PPISelector(QWidget):
+    IDENTIFIER_PATH = rp("src/python/robinviz/databases/identifier.db")
+    
     def __init__(self):
         QWidget.__init__(self)
-        self.assureOspreyDirExists()
+        self.assureIdentifiersExists()
 
     def setup(self, result):
         ziplocation = "BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip"
@@ -34,6 +36,13 @@ class PPISelector(QWidget):
         self.biogridVersion = biogrid_dirname[len(dir_prefix)+1:-7]
         self.osprey_dir = ap("ppidata/%s-%s.osprey" % (dir_prefix, self.biogridVersion))
 
+        # ======IDENTIFIERS========
+        if os.path.exists("identifier.db.tar.gz"):
+            print "Uncompressing identifier.db.tar.gz"
+            untar("identifier.db.tar.gz")
+            shutil.move("identifier.db", self.IDENTIFIER_PATH)
+
+        # =========================
 
         self.readPPIData()
 	self.useDictionary(self.organism_experiments)
@@ -50,13 +59,25 @@ class PPISelector(QWidget):
                 self.d.finished.connect(self.setup)
                 qApp.processEvents()
                 self.d.exec_()
-                self.setupGUI()
             else:
-                self.setupGUI()
                 self.setup(1)
         else:
-            self.setupGUI()
             self.setup(1)
+
+    def assureIdentifiersExists(self):
+	if not os.path.exists(self.IDENTIFIER_PATH):
+            #url = "http://www.emrealadag.com/dosyalar/goinfo.sqlite3"
+            url = "https://sourceforge.net/projects/robinviz/files/identifier/identifier.db.tar.gz/download"
+            print "Identifiers DB does not exist. Downloading it..."
+            self.d = Downloader(url)
+            self.d.finished.connect(self.assureOspreyDirExists)
+            qApp.processEvents()
+            self.d.exec_()
+            self.setupGUI()
+        else:
+            self.setupGUI()
+            self.assureOspreyDirExists()
+    
     def setupGUI(self):	
 	layout = QVBoxLayout()
 	self.treeWidget = treeWidget = QTreeWidget()
