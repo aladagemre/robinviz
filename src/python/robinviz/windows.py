@@ -3,15 +3,16 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
 import os.path
-#from extensions import *
-#from core import MainScene, PeripheralScene
 from confirmation import CoExpressionMainView, CoExpressionMainScene
 from settings import SettingsDialog
 from search import ComprehensiveSearchWidget, ProteinSearchWidget
 from misc.legend import LegendWidget
 import os
+import shutil
+
 from wizards import InputWizard
 from utils.info import id2cat, runcommand, rp
+from utils.compression import compressdir, untar
 
 class SingleMainViewWindow(QMainWindow):
     def __init__(self, mainViewType, mainSceneType, scene=None):
@@ -475,15 +476,33 @@ class MultiViewWindow(QMainWindow):
                                                  "sessions/", "Session File (*.ses)");
 
         if fileName:
+            # Init part
             self.clearViews()
-            runcommand("session.exe load %s" % fileName)
-            QMessageBox.information(self, "Session loaded", "The session you provided has been loaded. You may now start working.")
+            shutil.rmtree(rp("outputs"))
+            shutil.copy(fileName, rp("outputs.tar.gz"))
+            untar("outputs.tar.gz")
 
+            # Afterwards
+            os.remove("outputs.tar.gz")
+            shutil.move(rp("outputs/input_go.txt"), ap("assocdata/input_go.txt"))
+
+            # Load part
+            self.detectLastConfirmationType()
+            print "Detected:", self.confirmationType
+            QMessageBox.information(self, "Session loaded", "The session you provided has been loaded. You may now start working.")
+            self.displayLast()
+            
     def saveSession(self):
         fileName = QFileDialog.getSaveFileName(self, "Save Session File",
-                                                 "sessions/", "Session File (*.ses)");
+                                                 "sessions", "Session File (*.ses)");
+
+        # Copy two files
+        # =======================
+        shutil.copy(ap("assocdata/input_go.txt"), rp("outputs/input_go.txt"))
+        # =======================
         if fileName:
-            runcommand("session.exe save %s %d" % ( fileName, len(self.mainView.scene().g.nodes) ))
+            #runcommand("session.exe save %s %d" % ( fileName, len(self.mainView.scene().g.nodes) ))
+            compressdir("outputs", fileName)
 
     def detectLastConfirmationType(self):
         
