@@ -203,7 +203,7 @@ class EdgeItem(QGraphicsItem):
         self.end   = end            # Target GraphicsItem (node)
         self.path  = path           # path contains all the points of an edge.
         self.edge = edge            # corresponding graph edge
-
+        
         # Object creation
         self.arrowHead = QPolygonF()    # arrow head
 
@@ -229,7 +229,7 @@ class EdgeItem(QGraphicsItem):
         """Returns the point which is the last point of a line
         drawn from 'the second element from the end of the path'. Aim
         is to avoid the edge, crossing the target node border."""
-        
+
         return self.end.intersectionPoint(self.path[-2])
     
     def __avoidCrossingNodeBorder(self):
@@ -638,21 +638,21 @@ class CircleNode(NodeItem):
         xdiff = self.centerPos().x() - startPoint.x()
         ydiff = self.centerPos().y() - startPoint.y()
 
-        if ydiff == 0:
-            return
 
         intersectPoint = QPointF()
 
         # End point
         r = self.w/2
 
-        a = (r * ydiff) / (math.sqrt(ydiff**2 + xdiff**2))
-        c = (a * xdiff) / ydiff
+        r_over_h = r / (math.sqrt(ydiff**2 + xdiff**2))
 
-        intersectPoint = self.centerPos() + QPointF(-c,-a)
+        a = xdiff * r_over_h
+        c = ydiff * r_over_h
+
+        intersectPoint = self.centerPos() + QPointF(-a,-c)
 
         return intersectPoint
-    
+
     def setPercentageColors(self, colors):
         if colors:
             self.percentColors = colors
