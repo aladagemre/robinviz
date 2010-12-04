@@ -30,12 +30,16 @@ def download_file2(url):
         localFile.close()
         return str(filename)
 
-def download_file(url):
+def download_file(url, binary=False):
     filename = url.split('/')[-1]
     print "Downloading", url
     webFile = urllib.urlopen(url)
-    
-    localFile = open(filename, 'w')
+
+    if binary:
+        mode = 'wb'
+    else:
+        mode = 'w'
+    localFile = open(filename, mode)
     localFile.write(webFile.read())
     webFile.close()
     localFile.close()
@@ -74,7 +78,7 @@ def untar(filename):
 
 def download_targz(url):
     
-    filename = download_file(url)
+    filename = download_file(url, binary=True)
     if filename:
 	extracted_files = untar(filename)
     else:
@@ -85,10 +89,7 @@ def download_targz(url):
     
 def without_targz(filename):
     return ".".join(filename.split(".")[:-2])
-    
-#download_file("http://www.google.com/test.tar.gz")
-#untar("test.tar.gz")
-#ungz("test.gz")
+
 def unzip(zipname):
     zf = zipfile.ZipFile(zipname)
     zf.extractall()
@@ -144,3 +145,9 @@ if __name__ == "__main__":
 	print "Usage:"
 	print "python ungz.py http://www.site.com/file.tar.gz [/home/emre/Desktop]"
 	print "python ungz.py file.tar.gz [/home/emre/Desktop]"
+
+
+
+    #download_file("http://hintdb.hgc.jp/htp/download/4932_hc_interactions.tar.gz")
+    #untar("4932_hc_interactions.tar.gz")
+    #ungz("test.gz")
