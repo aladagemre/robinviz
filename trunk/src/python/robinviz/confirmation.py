@@ -177,9 +177,7 @@ class CoFunctionalityMainScene(MainScene):
         MainScene.loadGraph(self, filename)
         #self.determineScoring()
 
-    def addNode(self, node):
-        print self.category_names
-        
+    def addNode(self, node):        
 	try:
 	    item = CircleNode(node, parent=None, scene=self, label=self.category_names[node.id])
 	    item.setNoProperties()
