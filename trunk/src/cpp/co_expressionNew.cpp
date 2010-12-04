@@ -555,10 +555,13 @@ int main( int argc, char **argv ){
 		}
                 char algName[64];
 		if( bimaxFlag == true ){
+                        if( bimax_low_dim2 > INPUT.dim2() )
+                            bimax_low_dim2 = INPUT.dim2();
 			dataWriteBimax( INPUT, bimax_low_dim1, bimax_low_dim2, ther_disc );
 			biclustering = 2;
-                        if( bimax_low_dim1 > INPUT.dim1() || bimax_low_dim2 > INPUT.dim2() ){
-                            sprintf( algName, "BIMAX" );
+
+                        sprintf( algName, "BIMAX" );
+                        if( bimax_low_dim1 > INPUT.dim1() ){
                             dimensionChecker( algName );
                         }
 			#ifdef LINUX
@@ -569,7 +572,9 @@ int main( int argc, char **argv ){
 		}else{
 			if( ccFlag == true ){
 				dataWriteCC( INPUT ); 
-                                if( minHeight_ > INPUT.dim1() || minWidth_ > INPUT.dim2() ){
+                                if( minWidth_ > INPUT.dim2() )
+                                    minWidth_ = INPUT.dim2();
+                                if( minHeight_ > INPUT.dim1() ){
                                     sprintf( algName, "ChengAndChurch" );
                                     dimensionChecker( algName );
                                 }
