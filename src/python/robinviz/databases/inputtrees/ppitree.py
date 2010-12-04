@@ -66,13 +66,12 @@ class PPISelector(QWidget):
 
     def assureIdentifiersExists(self):
 	if not os.path.exists(self.IDENTIFIER_PATH):
-            #url = "http://www.emrealadag.com/dosyalar/goinfo.sqlite3"
-            url = "https://sourceforge.net/projects/robinviz/files/identifier/identifier.db.tar.gz/download"
+            url = "http://garr.dl.sourceforge.net/project/robinviz/identifier/identifier.db.tar.gz"
             print "Identifiers DB does not exist. Downloading it..."
-            self.d = Downloader(url)
-            self.d.finished.connect(self.assureOspreyDirExists)
+            self.iden = Downloader(url)
+            self.iden.finished.connect(self.assureOspreyDirExists)
             qApp.processEvents()
-            self.d.exec_()
+            self.iden.exec_()
             self.setupGUI()
         else:
             self.setupGUI()
