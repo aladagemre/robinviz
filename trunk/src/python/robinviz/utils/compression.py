@@ -75,6 +75,10 @@ def untar(filename):
     
     return names
 
+def compressdir(directory, tarname):
+    tar = tarfile.open(str(tarname), "w:gz")
+    tar.add(str(directory))
+    tar.close()
 
 def download_targz(url):
     

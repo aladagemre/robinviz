@@ -260,6 +260,7 @@ class ComprehensiveSearchWidget(QWidget):
 
     def listCategories(self):
         self.clearAll()
+        #print "Keylist:", self.multiView.keyList
         if self.multiView.keyList[0].startswith("Bicluster"):
             keyList = self.multiView.keyList
         else:
