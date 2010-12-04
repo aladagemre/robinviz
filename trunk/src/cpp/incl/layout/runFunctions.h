@@ -1338,7 +1338,7 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
         }
     }
     // Discover the new layout, find limits
-    double xmin, xmax, ymin, ymax;
+    double xmin=0.0, xmax=200.0, ymin=0.0, ymax=200.0;
     int ncount = 0;
     forall_nodes( n, G ){
             if( COMPS[ comp[ n ] ].size() >= election ){
@@ -3833,21 +3833,27 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
                 sprintf( pie, "%s%d.txt", "outputs//enrich//pie", graphNo );
                 pieNode = fopen( pie, "w" );
 #endif
-                array<int> abbv_i( abbv.size() );
+                array<int> abbv_i( abbv.size() + 1 );
                 int geneCount = 0;
-                for( int i = 0; i < cat_num; i++ ){
+                for( int i = 0; i <= cat_num; i++ ){
                     abbv_i[ i ] = 0;
                 }
 
 		forall_nodes( n, G ){
+                        int colCount_n = 0;
 			for( int i = 0; i < cat_num; i++ ){
 				forall_items( it, Categories[ G[ n ] ] ){
 					if( Categories[ G[ n ] ][ it ] == abbv[ i ] ){
 						catid[ n ].append( abbv[ i ] );
                                                 abbv_i[ i ]++;
                                                 geneCount++;
+                                                colCount_n++;
 					}
 				}
+                        }
+                        if( colCount_n == 0 ){
+                            abbv_i[ cat_num ]++;
+                            geneCount++;
                         }
 			gw2.set_color( n, red );
 		}
@@ -3860,8 +3866,8 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
                             dsum += (double)abbv_i[ i ] / (double)geneCount;
                         }
                     }
-                    if( dsum < 0.99 )
-                        fprintf( pieNode, "%c %lf\n", 'X', 1.0 - dsum );
+                    if( abbv_i[ cat_num ] > 0 )
+                        fprintf( pieNode, "%c %lf\n", 'X', (double)abbv_i[ cat_num ] / (double)geneCount );
                 }
                 fclose( pieNode );
 
