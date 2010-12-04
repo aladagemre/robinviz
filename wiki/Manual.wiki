@@ -80,8 +80,15 @@ add library path and include folder from menu bar Tools->Options->Project and So
 = Graphical User Interface(GUI) =
 -------------------------
 
-
 == Menu ==
+
+Robinviz menu is simple. We have three menu tabs; File, View and Help.
+
+From *File* menu, you can execute(Ctrl+X), save(Ctrl+S) and load(Ctrl+O) sessions, display last execution(Ctrl+D) if you run before and update(Ctrl+U) Robinviz.
+
+From *View* menu, you can view color legend, clear view, pass to full screen, go to desired peripheral view and refresh views.
+
+From *Help* menu, you can in Robinviz access to these manual pages and see the developer information.
 
 == Visualizations and Tabs ==
 
@@ -191,6 +198,22 @@ We right click on empty area of two hop neighborhood and select another layout "
 http://robinviz.googlecode.com/svn/manual/images/11_5_scenario_120102_2.png
 
 -------------------------
+= Preconfigurations =
+-------------------------
+
+We included some pre-configured files for the first time users. You need to select the first option named *Use preconfigured settings* as shown below
+
+http://robinviz.googlecode.com/svn/manual/images/0_starting_options3.png
+
+Then from selection box, 
+
+http://robinviz.googlecode.com/svn/manual/images/0_starting_options2.png
+
+you can select any configurations you want and press *Finish* button. If you select, _HomoSapiens-CoOntology_ , after some time consuming operations, you will see similar outputs as;
+
+http://robinviz.googlecode.com/svn/manual/images/0_starting_options4.png
+
+-------------------------
 = Sample Input Creation =
 -------------------------
 
@@ -202,6 +225,10 @@ Hence our methodology works on the desired input requests, at this section, we p
 Co-Ontology requires the selection of Protein-Protein Interaction Network, Coloring Methodology, Gene Ontology Category Selection and Association File Selection for GO category genes(We do all jobs under the existence of Biogrid id at each selections).
 
 For easy understanding step by step input submission for Co-Ontology is as follows;
+
+|| 0 ||http://robinviz.googlecode.com/svn/manual/images/0_starting_options1.png ||
+
+|| First you must select among three starting options. Among these, please select *Define your manual settings* option to continue with PPI wizard. ||
 
 || 1 ||http://robinviz.googlecode.com/svn/manual/images/1_ppi_selection.png ||
 
@@ -241,6 +268,11 @@ http://robinviz.googlecode.com/svn/manual/images/7_result.png
 Co-Expression requires the selection of Protein-Protein Interaction Network, Coloring Methodology, Association File Selection for GO category genes(We do all jobs under the existence of Biogrid id at each selections), GEO File, Node weigh selection.
 
 For easy understanding step by step input submission for Co-Expression is as follows;
+
+
+|| 0 ||http://robinviz.googlecode.com/svn/manual/images/0_starting_options1.png ||
+
+|| First you must select your options as we do in Co-Ontology. Please select *Define your manual settings* option to continue with PPI wizard. ||
 
 || 1 ||http://robinviz.googlecode.com/svn/manual/images/1_ppi_selection_2.png ||
 
