@@ -26,7 +26,7 @@ class Gene2GOParser:
 
     def check_and_download(self):
 	if not os.path.exists(self.input_file):
-	    download_file("ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2go.gz")
+	    download_file("ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2go.gz", binary=True)
 	    ungz("gene2go.gz")
 	    shutil.move("gene2go", self.input_file)
 	    
