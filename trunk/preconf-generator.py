@@ -55,7 +55,11 @@ def prepare():
 if __name__ == '__main__':
     if len(sys.argv) > 1:
 	prepare()
-	compress_files( sys.argv[1], ['temp/src', 'temp/outputs','temp/settings.yaml'] )
-	clean()
+	os.chdir("temp")
+	compress_files( sys.argv[1], ['src', 'outputs','settings.yaml'] )
+	shutil.move(sys.argv[1], "../sources/preconfigurations/%s" % sys.argv[1] )
+	os.chdir("..")
+	#clean()
+	
     else:
 	print "Usage: python preconf-generator.py PreConfigName.tar.gz"
