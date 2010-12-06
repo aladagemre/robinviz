@@ -340,7 +340,7 @@ class MultiViewWindow(QMainWindow):
                 traceback.print_stack()
                 traceback.print_exc()
                 del scene
-
+     
         # Now try to place/unplace the scene in peripheral views.
         for view in self.pViews:
             # Look in order,
@@ -352,19 +352,19 @@ class MultiViewWindow(QMainWindow):
                 view.setScene(None)
                 view.specialWindow = None
                 break
-            elif not view.scene():
-                # If t
-                view.setScene(scene)
-                #view.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
-                view.refresh()
-                break
         else:
-            # If no break occurs, means no place left :(
-            QMessageBox.information(self, 'No space left',
-     "You need to clear one of the peripheral views to add a new one.")
-
-
-
+            # means no instance of that scene has been found in any of the views.
+            # so we'll place the scene in the first empty view
+            for view in self.pViews:
+                if not view.scene():
+                    view.setScene(scene)
+                    #view.fitInView(scene.sceneRect(), Qt.KeepAspectRatio)
+                    view.refresh()
+                    break
+            else:
+                # If no break occurs, means no place left :(
+                QMessageBox.information(self, 'No space left',
+         "You need to clear one of the peripheral views to add a new one.")
 
     def createTopView(self, id):
 
