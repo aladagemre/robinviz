@@ -5,9 +5,11 @@
 
 == Windows ==
 
-* Bug id W001: 
+* Bug id W001: Gene search indexing bug
 
-_Solution_: No Solution
+_Definition_ This bug may occur when a user runs Robinviz consequtively, where Robinviz may not delete _outputs/gene_index.txt_ file results with an error at the GUI loading phase of a erroneous run.
+
+_Solution_: Close Robinviz GUI, start with Robinviz.exe and use "Ctrl+D" shortcut. The last run should be loaded without any error.
 
 == Linux ==
 
