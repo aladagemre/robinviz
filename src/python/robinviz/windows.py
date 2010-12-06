@@ -297,6 +297,9 @@ class MultiViewWindow(QMainWindow):
             self.connect(view, SIGNAL('newWindowOpened'), self.mainScene.stopSelectedAnimation)
 
     def viewSelected(self, id):
+        if not hasattr(self, 'mainScene'):
+            return
+        
         self.mainScene.clearSelection()
         try:
             self.mainScene.nodeDict[id].setSelected(True)
