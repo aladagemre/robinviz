@@ -61,6 +61,9 @@ def clean(param=None):
     "outputs/biclusters/scoring.txt",
     "outputs/localization/localized_input.txt",
     "outputs/gene_index.shelve",
+    "outputs/gene_index.shelve.dir",
+    "outputs/gene_index.shelve.dat",
+    "outputs/gene_index.shelve.bak",
     ))
     for filename in files:
 	try:
