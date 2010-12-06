@@ -12,11 +12,24 @@ from bicluster import BiclusterWindow
 import math
 from utils.info import root, ap, runcommand
 
-CHARS = map(chr, range(65, 88)) + map(chr, range(89, 91)) + map(chr, range(48, 56))
-CATEGORY_NAMES = dict(zip ( CHARS, open(ap("godata/highlevel_categories.txt")).read().split("\n")))
+CATEGORY_COLORS = []
+CATEGORY_NAMES = []
+CHARS = []
+CHAR_COLOR_DICT = []
 
-CATEGORY_COLORS = open(ap("godata/highlevel_colors.txt")).read().split("\n")
-CHAR_COLOR_DICT = dict( zip(CHARS, CATEGORY_COLORS) )
+def read_category_information():
+    global CATEGORY_COLORS, CATEGORY_NAMES, CHARS, CHAR_COLOR_DICT
+    
+    CHARS = map(chr, range(65, 88)) + map(chr, range(89, 91)) + map(chr, range(48, 56))
+    #CATEGORY_NAMES = dict(zip ( CHARS, open(ap("godata/highlevel_categories.txt")).read().split("\n")))
+    CATEGORY_NAMES = dict(zip ( CHARS, [ line.strip().split()[0].replace("_"," ") for line in open("%s/outputs/colors_func.txt" % root).readlines()[:-1] ] ))
+
+    CATEGORY_COLORS = open(ap("godata/highlevel_colors.txt")).read().split("\n")
+    CHAR_COLOR_DICT = dict( zip(CHARS, CATEGORY_COLORS) )
+
+read_category_information()
+
+print CATEGORY_NAMES
 
 GRAPH_LAYOUTS = {}
 layoutFile = open("%s/layouts.ini" % root)
@@ -26,13 +39,13 @@ for line in layoutFile:
     name, filename = line.strip().split(":")
     GRAPH_LAYOUTS[name] = filename
 
-CATEGORY_COLORS = {}
+"""CATEGORY_COLORS = {}
 colorFile = open("%s/outputs/colors_func.txt" % root)
 lineNum = 0
 for line in colorFile:
     name, r, g, b = line.strip().split()
     CATEGORY_COLORS[str(lineNum)] = name.replace("_", " ")
-    lineNum+=1
+    lineNum+=1"""
     
 
 class Scene(QGraphicsScene):
@@ -698,13 +711,23 @@ class CircleNode(NodeItem):
         # =============== COLORS ===================
         f = open("outputs/enrich/pie%d.txt" % node.id)
         colors = []
+        categories = []
         for line in f:
             letter, percentage = line.split(" ")
             percentage = float(percentage)
             code = CHAR_COLOR_DICT.get(letter)
-            if not code:
-                code = CHAR_COLOR_DICT.get("X")
+            """if not code:
+                code = CHAR_COLOR_DICT.get("X")"""
+            category = CATEGORY_NAMES.get(letter)
+            if category:
+                categories.append(category)
+                
             colors.append( (QColor(code), percentage) )
+
+        if categories:
+            self.setToolTip("Highlevel Categories:\n%s" % "\n".join(categories))
+        else:
+            self.setToolTip("No highlevel category information available")
         self.setPercentageColors(colors)
 
         # Set position of the node:

@@ -4,15 +4,26 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import sys
 import os
-from utils.info import ap
+from utils.info import ap,rp
 
-CHARS = map(chr, range(65, 88)) + map(chr, range(89, 91)) + map(chr, range(48, 56))
-CATEGORY_COLORS = open(ap("godata/highlevel_colors.txt")).read().split("\n")
-CATEGORY_NAMES = open(ap("godata/highlevel_categories.txt")).read().split("\n")
 
-CHAR_COLOR_ZIP = zip(CHARS, CATEGORY_COLORS)
-COLOR_DICT = dict ( zip ( CATEGORY_NAMES, CHAR_COLOR_ZIP ) )
-# metabolic : (A, "#FFAABB")
+CATEGORY_COLORS = None
+CATEGORY_NAMES = None
+CHARS = None
+CHAR_COLOR_ZIP = None
+
+COLOR_DICT = None
+
+def read_cat_info():
+    global CHARS, CATEGORY_COLORS, CATEGORY_NAMES, COLOR_DICT, CHAR_COLOR_ZIP
+    
+    CHARS = map(chr, range(65, 88)) + map(chr, range(89, 91)) + map(chr, range(48, 56))
+    CATEGORY_COLORS = open(ap("godata/highlevel_colors.txt")).read().split("\n")
+    CATEGORY_NAMES = [ line.strip().split()[0].replace("_"," ") for line in open(rp("outputs/colors_func.txt")).readlines()[:-1] ]
+
+    CHAR_COLOR_ZIP = zip(CHARS, CATEGORY_COLORS)
+    COLOR_DICT = dict ( zip ( CATEGORY_NAMES, CHAR_COLOR_ZIP ) )
+    # metabolic : (A, "#FFAABB")
 
 
 
@@ -33,6 +44,7 @@ class ColorPair(QWidget):
 class LegendWidget(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
+        read_cat_info()
         self.setupGUI()
         self.setWindowTitle("Color Legend for Highlevel Categories")
 
@@ -52,7 +64,7 @@ class LegendWidget(QWidget):
 
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         self.setSizePolicy(sizePolicy)
-        self.resize(380,620)
+        self.resize(380,len(COLOR_DICT.keys()) * 20)
 
 def main():
     app = QApplication(sys.argv)
