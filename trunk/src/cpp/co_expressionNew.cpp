@@ -411,7 +411,7 @@ int main( int argc, char **argv ){
                                 else{
                                     if( strcmp( argv[1], "-o" ) == 0 ){
                                         cout << "/**************************************************/" << endl;
-                                        cout << "\t" << " Color Processing based on Wholo Ontology " << endl;
+                                        cout << "\t" << " Color Processing based on Whole Ontology " << endl;
                                         cout << "/**************************************************/" << endl;
                                         char molecularF[33][128] = {
                                         "biological regulation",
