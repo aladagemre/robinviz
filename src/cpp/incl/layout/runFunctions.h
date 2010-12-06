@@ -1300,7 +1300,7 @@ GRAPH<int,int> RUN_SPRING_EMBEDDER(  GRAPH<int,int> &G,
 //    cout << " 0 \n";
     list<node> fixedNodes2;
     if( G.number_of_edges() < 5 )
-        SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, 0, 800 ,0, 600, 1000, nodeId );
+        SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, 0, 1000 ,0, 800, 1000, nodeId );
     else
         SPRING_EMBEDDING_our2( H, fixedNodes2, xpos2, ypos2, 0, 2000 + G.number_of_nodes()*13 ,0, 1000 + G.number_of_nodes()*5, 1000, nodeId );
 //    cout << " 0 \n";
