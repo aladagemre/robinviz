@@ -7,6 +7,7 @@ from confirmation import CoExpressionMainView, CoExpressionMainScene
 from settings import SettingsDialog
 from search import ComprehensiveSearchWidget, ProteinSearchWidget
 from misc.legend import LegendWidget
+from drawing import read_category_information
 import os
 import shutil
 
@@ -449,6 +450,7 @@ class MultiViewWindow(QMainWindow):
 
         # ======== DISPLAY ==========
         if not failed:
+            read_category_information()
             self.loadMainScene()
             self.connectSlots()
 
