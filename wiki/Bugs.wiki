@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Bug Reports
 #labels Phase-Support
 
 = Known Bugs in Version 1.0.0 =
@@ -6,9 +6,11 @@
 == Windows ==
 
 * Bug id W001: 
+
 _Solution_: No Solution
 
 == Linux ==
 
 * Bug id L001:
+
 _Solution_: No Solution
