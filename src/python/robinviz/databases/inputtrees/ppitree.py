@@ -20,7 +20,7 @@ class PPISelector(QWidget):
     
     def __init__(self):
         QWidget.__init__(self)
-        self.assureIdentifiersExists()
+        self.assureOspreyDirExists()
 
     def setup(self, result):
         ziplocation = "BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip"
@@ -56,26 +56,27 @@ class PPISelector(QWidget):
 		url = "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.0.68/BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip"
                 print "Osprey dataset does not exist. Downloading it..."
                 self.d = Downloader(url)
-                self.d.finished.connect(self.setup)
+                self.d.finished.connect(self.assureIdentifiersExists)
                 qApp.processEvents()
                 self.d.exec_()
+                self.setupGUI()
             else:
-                self.setup(1)
+                self.setupGUI()
+                self.assureIdentifiersExists()
         else:
-            self.setup(1)
+            self.setupGUI()
+            self.assureIdentifiersExists()
 
     def assureIdentifiersExists(self):
 	if not os.path.exists(self.IDENTIFIER_PATH):
-            url = "http://garr.dl.sourceforge.net/project/robinviz/identifier/identifier.db.tar.gz"
+            url = "http://garr.dl.sourceforge.net/project/robinviz/identifier/identifier.db.tar.gz"            
             print "Identifiers DB does not exist. Downloading it..."
             self.iden = Downloader(url)
-            self.iden.finished.connect(self.assureOspreyDirExists)
+            self.iden.finished.connect(self.setup)
             qApp.processEvents()
             self.iden.exec_()
-            self.setupGUI()
         else:
-            self.setupGUI()
-            self.assureOspreyDirExists()
+            self.setup(1)
     
     def setupGUI(self):	
 	layout = QVBoxLayout()
