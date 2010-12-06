@@ -29,8 +29,6 @@ def read_category_information():
 
 read_category_information()
 
-print CATEGORY_NAMES
-
 GRAPH_LAYOUTS = {}
 layoutFile = open("%s/layouts.ini" % root)
 for line in layoutFile:
