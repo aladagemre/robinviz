@@ -529,6 +529,10 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 			inputGenes[ i ].index = 0;
                         inputGenes[ i ].categories.resize( 10 );
                         inputGenes[ i ].gos.resize( 10 );
+			for( int k = 0; k < 10; k++ ){
+				sprintf( inputGenes[ i ].categories[k].catName, "%s", "" );
+				sprintf( inputGenes[ i ].gos[k].goName, "%s", "" );
+			}
 			sprintf( inputGenes[ i ].genename, "%s", dataGenes[ dataGenes.get_item( i ) ].GENE );
 			
                 }
@@ -623,6 +627,10 @@ array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes,
 			inputGenes[ i ].index = 0;
                         inputGenes[ i ].categories.resize( 10 );
                         inputGenes[ i ].gos.resize( 10 );
+			for( int k = 0; k < 10; k++ ){
+				sprintf( inputGenes[ i ].categories[k].catName, "%s", "" );
+				sprintf( inputGenes[ i ].gos[k].goName, "%s", "" );
+			}
 			sprintf( inputGenes[ i ].genename, "%s", dataGenes[ i ].GENE );			
 		}
 
@@ -716,6 +724,10 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
                         inputGenes[ i ].categories.resize( 25 );
                         inputGenes[ i ].gos.resize( 25 );
 			sprintf( inputGenes[ i ].genename, "%s", GenesNode[ i ].GENE );
+			for( int k = 0; k < 25; k++ ){
+				sprintf( inputGenes[ i ].categories[k].catName, "%s", "" );
+				sprintf( inputGenes[ i ].gos[k].goName, "%s", "" );
+			}
 		}
 
 		if( (f = fopen( gofile, "r" )) == NULL){
