@@ -744,5 +744,11 @@ class MultiViewWindow(QMainWindow):
         helpMenu.addSeparator()
         helpMenu.addAction(aboutDialog)
 
+    def resizeEvent(self, event):
+        if self.mainView.scene():
+            self.mainView.fitInView(self.mainView.scene().itemsBoundingRect(),Qt.KeepAspectRatio)
+        for view in self.pViews:
+            if view.scene():
+                view.fitInView(view.scene().itemsBoundingRect(),Qt.KeepAspectRatio)
 from confirmation import * # to avoid circular import. Need to fix it.
 # windows requires confirmation->extensions. extensions requires windows (to open a new window)
