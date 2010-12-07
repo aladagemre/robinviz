@@ -159,7 +159,7 @@ class ProteinSearchWidget(QWidget):
         keyword = self.lineEdit.text()
         self.listWidget.clear()
         if not self.index:
-            #self.index = shelve.open("outputs/gene_index.txt")
+            #self.index = shelve.open("outputs/gene_index.shelve")
             self.generateIndex()
 
         
@@ -326,8 +326,8 @@ class ComprehensiveSearchWidget(QWidget):
         self.graphFiles = filter(pattern.match, fileList)
 
         # Create index file.
-        if not exists(normcase("outputs/gene_index.txt")):
-            self.index = shelve.open(normcase("outputs/gene_index.txt"))
+        if not exists(normcase("outputs/gene_index.shelve")):
+            self.index = shelve.open(normcase("outputs/gene_index.shelve"))
         
             # Now fetch the labels in each file.
             pattern = compile('label "\d+_?[A-Z:]*"')
@@ -361,10 +361,10 @@ class ComprehensiveSearchWidget(QWidget):
                 self.index[groupName] = [ index ]
 
             self.index.close()
-            self.index = shelve.open(normcase("outputs/gene_index.txt"))
+            self.index = shelve.open(normcase("outputs/gene_index.shelve"))
         else:
             # open the existing file.
-            self.index = shelve.open(normcase("outputs/gene_index.txt"))
+            self.index = shelve.open(normcase("outputs/gene_index.shelve"))
 
             
         
@@ -374,7 +374,7 @@ class ComprehensiveSearchWidget(QWidget):
         if not self.index:
             self.generateIndex()
 
-        self.index = shelve.open(normcase("outputs/gene_index.txt"))
+        self.index = shelve.open(normcase("outputs/gene_index.shelve"))
         graphs = self.index.get(str(keyword))
 
         if not hasattr(self, 'category_dict'):
