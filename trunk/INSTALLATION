@@ -3,13 +3,13 @@
 This document explains how to install & run Robinviz under Linux. In order to use this software, you have to be an academic user.
 You may not use or distribute this software for commercial purposes.
 
-If you are not going to use this software for academic research/teaching purposes, please delete this software now.
+If you are not going to use this software for academic research/teaching purposes, please remove this software now.
 
 
 Requirements
 ===============
 Python 2.6
-PyQt4.5+
+PyQt4.6+
 Bash
 
 Installation Steps
@@ -27,12 +27,7 @@ Running
 Running the executable robinviz.exe in the robinviz directory shall start the program. This program is just a starter, calling the PyQt4 GUI:
 ./robinviz.exe
 
-Other executables:
-================
-layered.exe : This is the backbone of our program. Most of the scientific calculation is done by this program. It produces outputs in the robinviz/outputs/ directory.
-circular.exe, force.exe, etc. are for producing graphs with other layouts. They can be used as following:
-./circular input.gml output.gml
-
+#######################################################################
 
 COMPILATION FROM SOURCE CODE
 ================================
@@ -52,6 +47,7 @@ export PATH=$PATH:$LEDAROOT/Manual/cmd
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LEDAROOT
 
 Make sure that incl folder is inside this LEDA_ROOT.
+
 2. Give the following command on console: 
 
 source ~/.bashrc
