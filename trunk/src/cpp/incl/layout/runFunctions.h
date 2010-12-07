@@ -2433,7 +2433,7 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 // 	cout << " 2 " << G.number_of_edges() << " - " << G.number_of_nodes() <<endl;
 	SPRING_EMBEDDING2_( G, Xpos, Ypos, 0, 2000 + G.number_of_nodes()*20 ,0, 700 + G.number_of_nodes()*7, 500, PARS, Hvalues );
 
-	double xmin, xmax, ymin, ymax;
+        double xmin=0.0, xmax=200.0, ymin=0.0, ymax=200.0;
 	int ncount = 0;
 	forall_nodes( n, G ){
                 Xpos[ n ] = Xpos[ n ] * 2.5;
