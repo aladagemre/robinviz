@@ -41,6 +41,7 @@ class PPISelector(QWidget):
             print "Uncompressing identifier.db.tar.gz"
             untar("identifier.db.tar.gz")
             shutil.move("identifier.db", self.IDENTIFIER_PATH)
+            os.remove("identifier.db.tar.gz")
 
         # =========================
 
