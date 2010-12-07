@@ -506,7 +506,9 @@ class MultiViewWindow(QMainWindow):
         shutil.copy(ap("assocdata/input_go.txt"), rp("outputs/input_go.txt"))
         # =======================
         if fileName:
-            #runcommand("session.exe save %s %d" % ( fileName, len(self.mainView.scene().g.nodes) ))
+            # saving window doesnt put extension automatically on Gnome. So ensure the extension:
+            if not str(fileName).endswith(".ses"):
+                fileName = str(filename) + ".ses"
             compressdir("outputs", fileName)
 
     def detectLastConfirmationType(self):
