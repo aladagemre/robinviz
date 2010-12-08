@@ -1,4 +1,0 @@
-4.1.Star Style:runLayouts.exe -sl
-4.2.Circular Track:runLayouts.exe -ct
-4.3.Double Circular Tracks(Inside):runLayouts.exe -ci
-4.4.Double Circular Tracks(Outside):runLayouts.exe -co
