@@ -46,7 +46,7 @@ class GOAParser:
 	    
     
     def download_organism(self, organism_name):
-	filename = download_file_to(self.file_urls[organism_name], ap("godata"))
+	filename = download_file_to(self.file_urls[organism_name], ap("godata"), binary=True)
 	ap("godata/%s" % filename)
 	ungz(ap("godata/%s" % filename))
 

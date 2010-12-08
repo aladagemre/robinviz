@@ -78,7 +78,7 @@ class GEOSelector(QWidget):
 	    if not os.path.exists( local_path ):
 		remote_gz = "%s/%s.gz" % (base_url, filename)
 		local_gz = "%s.gz" % local_path
-		download_file_to(remote_gz, local_gz)
+		download_file_to(remote_gz, local_gz, binary=True)
 		ungz(local_gz)
 	
     def parseFile(self):
