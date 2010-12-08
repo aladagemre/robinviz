@@ -97,7 +97,7 @@ class AssociationSelector(QWidget):
 		print local_path, "does not exist, will download it."
 		remote_gz = url
 		local_gz = "%s.gz" % local_path
-		download_file_to(remote_gz, local_gz)
+		download_file_to(remote_gz, local_gz, binary=True)
 		ungz(local_gz)
 		# now we have local_path!
 	    else:

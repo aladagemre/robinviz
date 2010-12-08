@@ -31,7 +31,7 @@ def download_file2(url):
         return str(filename)
 
 def download_file(url, binary=False):
-    filename = url.split('/')[-1]
+    filename = url.split('/')[-1].split("?")[0]
     print "Downloading", url
     webFile = urllib.urlopen(url)
 
@@ -45,8 +45,8 @@ def download_file(url, binary=False):
     localFile.close()
     return filename
 
-def download_file_to(url, path):
-    filename = download_file(url)
+def download_file_to(url, path, binary=False):
+    filename = download_file(url, binary)
     shutil.move(filename, path)
     return filename
     
