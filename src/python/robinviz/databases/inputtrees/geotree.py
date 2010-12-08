@@ -10,7 +10,7 @@ if not "utils" in sys.path:
     sys.path.append("../..")
     
 from utils.info import ap, rp
-from utils.compression import download_file_to, ungz
+from utils.compression import download_file_to
 from utils.settingswrite import write_values
 import yaml
 
@@ -70,16 +70,6 @@ class GEOSelector(QWidget):
         print "No Gene Expression data source selected, using the most recent preferences."
         return []
         
-    def downloadCheckedGEOs(self):
-	files = self.getCheckedItems()
-	base_url = "http://robinviz.googlecode.com/svn/data2/expressions/gse"
-	for filename in files:
-	    local_path = ap("geodata/%s" % filename)
-	    if not os.path.exists( local_path ):
-		remote_gz = "%s/%s.gz" % (base_url, filename)
-		local_gz = "%s.gz" % local_path
-		download_file_to(remote_gz, local_gz, binary=True)
-		ungz(local_gz)
 	
     def parseFile(self):
 	lastNodeAtLevel = {}
