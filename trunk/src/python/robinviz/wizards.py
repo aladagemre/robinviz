@@ -311,7 +311,7 @@ class GEOSelectionPage(QWizardPage):
         self.selector.initialize()
 
     def validatePage(self):
-	self.selector.downloadCheckedGEOs()
+	#self.selector.downloadCheckedGEOs()
         self.selector.saveSettings()
 	return True
 

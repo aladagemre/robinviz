@@ -10,6 +10,8 @@ import sys
 import os
 from utils.info import rp,ap
 from utils.settingswrite import write_values
+from utils.compression import ungz
+from utils.downloader import Downloader
 import yaml
 
 class ConfirmationSelector(QWidget):
@@ -236,17 +238,34 @@ class BiclusteringSelector(QWidget):
         self.parameterWidgets = {}
 
     def initialize(self):
+        self.downloadCheckedGEO()
         self.loadSettings()
         self.setupGUI()
         self.setValues()
+        
+    def ungz(self):
+        ungz(self.local_gz)
+        filename = open(ap("geodata/selected_geo.txt")).readline().strip()
+        self.gene, self.cond=open(ap("geodata/%s" % filename) ).readline().strip().split()
+        self.labelInfo.setText("This matrix contains %s genes and %s conditions" % (self.gene, self.cond))
+        
+    def downloadCheckedGEO(self):
+        filename = open(ap("geodata/selected_geo.txt")).readline().strip()
+	base_url = "http://robinviz.googlecode.com/svn/data2/expressions/gse"
+        local_path = ap("geodata/%s" % filename)
+        if not os.path.exists( local_path ):
+            remote_gz = "%s/%s.gz" % (base_url, filename)
+            self.local_gz = "%s.gz" % local_path
+            #download_file_to(remote_gz, local_gz, binary=True)
+            self.d = Downloader(remote_gz, self.local_gz)
+            self.d.finished.connect(self.ungz)
+            qApp.processEvents()
+            self.d.show()
 
     def loadSettings(self):
         stream = file(rp('settings.yaml'), 'r')    # 'document.yaml' contains a single YAML document.
         self.params = yaml.load(stream)
         #print self.params
-
-        filename = open(ap("geodata/selected_geo.txt")).readline().strip()
-        self.gene, self.cond=open(ap("geodata/%s" % filename) ).readline().strip().split()
         
     def saveSettings(self):
 
@@ -320,7 +339,7 @@ class BiclusteringSelector(QWidget):
 
 
         algorithmSelectionLayout = QHBoxLayout()
-        self.labelInfo = QLabel("This matrix contains %s genes and %s conditions" % (self.gene, self.cond))
+        self.labelInfo = QLabel("")
         self.bicLayout.addWidget(self.labelInfo)
 
 
