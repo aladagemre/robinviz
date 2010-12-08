@@ -1,5 +1,5 @@
 #summary Bug Reports
-#labels Phase-Support
+#labels Phase-Support,Featured
 
 = Known Bugs in Version 1.0.0 =
 
@@ -13,6 +13,4 @@ _Solution_: Close Robinviz GUI, start with Robinviz.exe and use "Ctrl+D" shortcu
 
 == Linux ==
 
-* Bug id L001:
-
-_Solution_: No Solution
+* No known bugs.
