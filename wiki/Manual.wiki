@@ -18,6 +18,11 @@ RobinViz (Reliability Oriented Bioinformatic Networks Visualization) is a protei
 We provide executable binaries of the system at the main page. These binaries can be downloaded and executed directly without any problems on most of the systems. Additionaly we provide the source code implementations of the system. If the user wants to compile these sources and prepare her own executables we provide the necessary instructions in the following section. We next introduce the main GUI features. Finally, we provide snapshots of a sample run. 
 
 -------------------------
+= Precautions =
+-------------------------
+In the wizard, the program might look like frozen when you click on Next button. This means the program is downloading some data, extracting an archive or processing some data. Please be patient until this process ends. You can follow the debug logs on the console if this case happens.
+
+-------------------------
 = Graphical User Interface(GUI) =
 -------------------------
 
