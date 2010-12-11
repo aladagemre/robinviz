@@ -218,6 +218,9 @@ class View(QGraphicsView):
             assert action is not None, "Could not find layout exe for %s" % layoutName
             # Run the exe
             exe, flag = action.split(" ")
+            if flag == "-se" and not self.scene().g.edges:
+                QMessageBox.information(self, "No edges", "There are no edges in this graph, spring embedder will not work.")
+                return False
             command = "%s %s %s" % (exe, self.originalFileName, flag)
             runcommand(command)
 
