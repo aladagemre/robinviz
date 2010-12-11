@@ -26,5 +26,4 @@ For some reason, if you'd like to re-run the latest configuration, you can check
 ==Manual Settings==
 If you want to define your own parameters for custom execution, check *Define your manual settings* radio button and click on *Next* button to follow the next steps of the wizard.
 
-===PPI Network===
-In this dialog, you have to select the PPI Network files you'd like to use. Data are categorized according to species and then experiment type. You can check one specie to use all its experiment types, or you can check cross-species data files.
+For visual examples for manual settings, follow [Manual#Sample_Input_Creation this link].
