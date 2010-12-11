@@ -26,8 +26,11 @@ Binary
       cp robinviz-1.0-beta-linux-binary ~/robinviz
 
    3. Add the following line to your ~/.bashrc file:
-
-      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/robinviz
+	  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/robinviz/bin
+	  
+	  If you put robinviz in your home directory, then this will be:
+      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/robinviz/bin
+      
 
    4. Give the following command on console:
 

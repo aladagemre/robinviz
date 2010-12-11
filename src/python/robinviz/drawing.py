@@ -669,8 +669,8 @@ class CircleNode(NodeItem):
             self.percentColors = colors
             self.lighterColors = [ ( color[0].lighter(), color[1] ) for color in colors]
         else:
-            self.percentColors = [ ( QColor(CHAR_COLOR_DICT.get("X")) , 100) ]
-            self.lighterColors = [ ( QColor(CHAR_COLOR_DICT.get("X")).lighter() , 100)]
+            self.percentColors = [ ( QColor("#000000") , 100) ]
+            self.lighterColors = [ ( QColor("#000000").lighter() , 100)]
 
         self.num_colors = len(self.percentColors)
 
@@ -714,8 +714,8 @@ class CircleNode(NodeItem):
             letter, percentage = line.split(" ")
             percentage = float(percentage)
             code = CHAR_COLOR_DICT.get(letter)
-            """if not code:
-                code = CHAR_COLOR_DICT.get("X")"""
+            if not code:
+                code = "#000000"
             category = CATEGORY_NAMES.get(letter)
             if category:
                 categories.append(category)
@@ -864,7 +864,7 @@ class PiechartNode(NodeItem):
             self.colors = colors
         else:
             # if no color provided, assume that's an X. (unknown)
-            self.colors = [ QColor(CHAR_COLOR_DICT.get("X")) ]
+            self.colors = [ QColor("#000000") ]
             
         self.num_colors = len(self.colors)
         if len(self.colors) > 1:
