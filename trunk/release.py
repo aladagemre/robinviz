@@ -36,7 +36,7 @@ os.rmdir( os.path.join(BINARY_DIR, "bin"))
 os.rmdir(os.path.join(BINARY_DIR, "src/python/robinviz/databases/inputtrees/ppidata/hitpredict"))
 copy_paths = """bin
 src/python/robinviz/databases/inputtrees/ppidata/hitpredict
-src/python/robinviz/databases/inputtrees/ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey
+src/python/robinviz/databases/inputtrees/ppidata/BIOGRID-OSPREY_DATASETS-3.1.71.osprey
 src/python/robinviz/databases/inputtrees/godata/goinfo.sqlite3
 src/python/robinviz/databases/inputtrees/assocdata/gene_association.goa_human
 src/python/robinviz/databases/inputtrees/assocdata/gene_association.goa_human-BIOGRID
