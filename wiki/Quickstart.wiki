@@ -14,6 +14,17 @@ Start a terminal/konsole. Change directory to robinviz installation dir. Then ru
 ./robinviz.exe
 }}}
 
-==Running Preconfigured Settings==
-To have a quick run without messing with detailed configuration, you can run our preconfigured parameter settings. To do this, follow the File Menu->Execute path. In the Execution dialog, check Preconfigured Settings radio button and select a configuration from the dropdown menu. Then click on Finish button. Please wait for a while, this may take a few minutes. 
+==Running the Wizard==
+Follow the File Menu->Execute path.
 
+===Preconfigured Settings===
+To have a quick run without messing with detailed configuration, you can run our preconfigured parameter settings. In the *Execution Wizard* opened, check *Use preconfigured settings* radio button and select a configuration from the dropdown menu. For example you can select *PaperFigure* to see the figure we used in our paper. Then click on *Finish* button. Please wait for a while, this may take a few minutes. 
+
+==Last Settings==
+For some reason, if you'd like to re-run the latest configuration, you can check the *Use the last settings* radio button and click on *Finish* button.
+
+==Manual Settings==
+If you want to define your own parameters for custom execution, check *Define your manual settings* radio button and click on *Next* button to follow the next steps of the wizard.
+
+===PPI Network===
+In this dialog, you have to select the PPI Network files you'd like to use. Data are categorized according to species and then experiment type. You can check one specie to use all its experiment types, or you can check cross-species data files.
