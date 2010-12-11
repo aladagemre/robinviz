@@ -1,0 +1,19 @@
+#summary In this page, you can find the first steps in discovering Robinviz. We assume [Installation installation] has been done before performing these steps.
+
+= Quickstart =
+
+==Starting the program==
+When robinviz starts, you can follow debug information on the terminal (black window) that is opened aside. If you encounter any freeze or problems, you can figure out the reason for that from this terminal window. If you'd like to report any problems/bugs, please include debug information you see here.
+
+===Windows===
+From Start Menu->Programs->Robinviz, click on Robinviz. A black window (terminal) and graphical user interface (GUI) of Robinviz will start.
+
+===Linux===
+Start a terminal/konsole. Change directory to robinviz installation dir. Then run this command:
+{{{
+./robinviz.exe
+}}}
+
+==Running Preconfigured Settings==
+To have a quick run without messing with detailed configuration, you can run our preconfigured parameter settings. To do this, follow the File Menu->Execute path. In the Execution dialog, check Preconfigured Settings radio button and select a configuration from the dropdown menu. Then click on Finish button. Please wait for a while, this may take a few minutes. 
+
