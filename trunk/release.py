@@ -82,4 +82,4 @@ for path in delete_paths.split("\n"):
 	
 	
 # 7) Bundle the binary directory as installer
-os.system("/home/%s/bin/installjammer/installjammer --build /home/emre/%s/InstallJammerProjects/Robinviz/Robinviz.mpi" % (USER , USER) )
+os.system("/home/%s/bin/installjammer/installjammer --build /home/%s/InstallJammerProjects/Robinviz/Robinviz.mpi" % (USER , USER) )
