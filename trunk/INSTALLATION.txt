@@ -21,23 +21,13 @@ Binary
 
       sudo apt-get install python-qt4
 
-   2. Copy the distribution folder to anywhere you like (for example inside your home dir)
-
-      cp robinviz-1.0-beta-linux-binary ~/robinviz
-
-   3. Add the following line to your ~/.bashrc file:
-	  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/robinviz/bin
-	  
-	  If you put robinviz in your home directory, then this will be:
-      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/robinviz/bin
+   2. Run the installer file: Robinviz-1.0-beta-Linux-x86-Install
+   If it doesn't work, use the following command to give it executable rights:
+   
+      chmod +x Robinviz-1.0-beta-Linux-x86-Install
+      ./Robinviz-1.0-beta-Linux-x86-Install
       
-
-   4. Give the following command on console:
-
-      source ~/.bashrc
-
-   5. Run the robinviz.exe
-
+   3. Run the robinviz.exe
       cd ~/robinviz
       ./robinviz.exe
 

@@ -105,7 +105,7 @@ class AssociationTranslator:
 
 	# ===============================================
 	filename = self.filename
-        print filename.split("/")[-1]
+        print "Translating ", filename.split("/")[-1]
         f = open(filename)
         for line in f:
             if line[0] == "!":
