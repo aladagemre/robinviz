@@ -92,6 +92,7 @@ class PPISelector(QWidget):
         else:
             self.setupGUI()
             self.directory = latest_osprey_dir()
+            self.version = self.directory.split("-")[-1][:-7]
             self.assureIdentifiersExists()
 
     def assureIdentifiersExists(self):

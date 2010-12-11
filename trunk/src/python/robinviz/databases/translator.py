@@ -111,6 +111,7 @@ class AssociationTranslator:
             if line[0] == "!":
                 continue
             cols = line.split("\t")
+            """
             protein_name1 = cols[1]
             protein_name2 = cols[2]
             go_term = cols[4]
@@ -118,7 +119,7 @@ class AssociationTranslator:
             l = go_dict.get(go_term)
             if not l:
                 l = []
-
+            
             if protein_name2:
                 candidate_name = protein_name2
             else:
@@ -133,10 +134,39 @@ class AssociationTranslator:
                     not_converted+=1
 
             else:
-                not_converted += 1
+                not_converted += 1"""
 
+            # Get the information from the line
+            go_term = cols[4]
+            db_object_id = cols[1].strip()
+            db_object_symbol = cols[2].strip()
+            db_object_name = cols[9].strip()
+            db_object_synonym = cols[10].strip().split("|")
 
+            # Gather the genes
+            genes = []
+            for object in [db_object_id, db_object_symbol, db_object_name]:
+                if object:
+                    genes.append(object)
+            if db_object_synonym:
+                genes.extend(db_object_synonym)
 
+            # Get the Association list
+            l = go_dict.get(go_term)
+            if not l:
+                l = []
+
+            # Translate and extend association list.
+            for gene in genes:
+                bids = self.db.value2biogrids(gene, only_ids=True)
+                
+                if bids:
+                    converted += 1
+                    l.extend(bids)
+                else:
+                    not_converted += 1
+                    
+            #print genes
             go_dict[go_term] = l
         # ===============================================
 
@@ -231,3 +261,9 @@ class AssociationTranslator:
         print "Could not convert:",not_converted
         return True
 
+
+
+if __name__ == "__main__":
+    t = AssociationTranslator()
+    t.set_filename("assocdata/gene_association.tair")
+    t.translate_biogrids()
