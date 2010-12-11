@@ -1,5 +1,5 @@
-#summary FAQ
-
+#labels Featured,FAQ
+=FAQ=
  * Installation
    * [FAQ#I_have_a_64_bit_machine,_what_should_I_do? I have a 64 bit machine, what should I do?]
  * Running First Time
