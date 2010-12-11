@@ -1,0 +1,24 @@
+#summary FAQ
+
+ * Installation
+   * [FAQ#I_have_a_64_bit_machine,_what_should_I_do? I have a 64 bit machine, what should I do?]
+ * Running First Time
+ * Running the program
+ * Troubleshooting
+
+Add your content here.
+
+
+= Frequently Asked Questions =
+
+==Installation==
+===I have a 64 bit machine, what should I do?===
+If you have 64 bit operating system installed on your 64 bit machine, you will not be able to run this program. Because
+ # Our binary packages are not compatible with your OS.
+ # PyQt4 library we use is not compatible with 64 bit yet.
+
+If you can install a 32-bit OS on your machine, you will be able to run this software.
+
+==Running First Time==
+==Running the program==
+==Troubleshooting==
