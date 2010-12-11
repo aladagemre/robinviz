@@ -221,8 +221,10 @@ class View(QGraphicsView):
             command = "%s %s %s" % (exe, self.originalFileName, flag)
             runcommand(command)
 
+            newFileName = "%s%s.gml" % (self.originalFileName.strip(".gml"), action.split("-")[-1])
+
             if not self.useAnimation:
-                self.scene().reloadGraph("%s%s.gml" % (self.originalFileName.split(".")[0], action.split("-")[-1]) )
+                self.scene().reloadGraph(newFileName)
                 return False
             
             # Load the graph
@@ -230,7 +232,7 @@ class View(QGraphicsView):
             """if str(layoutName) == "Layered":
                 newFileName = filename
             else:""" # this part is for animation to layered in the future.
-            newFileName = "%s%s.gml" % (self.originalFileName.split(".")[0], action.split("-")[-1])
+
             self.newGraph.read_gml(newFileName)
             newGraph.prepare()
             self.scene().filename = newFileName
