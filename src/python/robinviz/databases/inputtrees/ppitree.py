@@ -8,12 +8,18 @@ import os
 if not "utils" in sys.path:
     sys.path.append("../..")
     
-from utils.info import ap,rp
+from utils.info import ap,rp, latest_osprey_dir
 from utils.compression import *
 from utils.downloader import Downloader
 from databases.translator import BiogridOspreyTranslator
 from ppi_downloader import download_organism
+from utils.BeautifulSoup import BeautifulSoup
+import urllib
 
+def get_soup(url):
+    html = urllib.urlopen(url).read()
+    soup = BeautifulSoup(html)
+    return soup
 
 class PPISelector(QWidget):
     IDENTIFIER_PATH = rp("src/python/robinviz/databases/identifier.db")
@@ -21,20 +27,14 @@ class PPISelector(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         self.assureOspreyDirExists()
-
-    def setup(self, result):
-        ziplocation = "BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip"
-        dirlocation = ap("ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey")
-        if not os.path.exists(dirlocation) and os.path.exists(ziplocation):
-            unzip_file_into_dir(ziplocation, dirlocation)
-            os.remove(ziplocation)
-
-        dir_prefix = "BIOGRID-OSPREY_DATASETS"
-        #print os.listdir("ppidata")
-        biogrid_dirname = filter(lambda filename: filename.startswith(dir_prefix), os.listdir(ap("ppidata")) )[0]
         
-        self.biogridVersion = biogrid_dirname[len(dir_prefix)+1:-7]
-        self.osprey_dir = ap("ppidata/%s-%s.osprey" % (dir_prefix, self.biogridVersion))
+    def setup(self, result):
+        self.osprey_dir = ap("ppidata/%s" % self.directory )
+        ziplocation = "%s.zip" % self.directory
+        
+        if not os.path.exists(self.osprey_dir) and os.path.exists(ziplocation):
+            unzip_file_into_dir(ziplocation, self.osprey_dir)
+            os.remove(ziplocation)      
 
         # ======IDENTIFIERS========
         if not os.path.exists(self.IDENTIFIER_PATH) and os.path.exists("identifier.db.tar.gz"):
@@ -47,25 +47,51 @@ class PPISelector(QWidget):
 
         self.readPPIData()
 	self.useDictionary(self.organism_experiments)
+
+    def detectLatestVersionOnline(self):
+        try:
+            soup = get_soup("http://thebiogrid.org/")
+            main_div = soup.findAll(id='maintext')
+            try:
+                strongs = main_div[0].findAll('strong')
+                for strong in strongs:
+                    if strong.text.count(".") == 2:
+                        # 3.1.71
+                        return str(strong.text)
+            except:
+                print "HTML structure of thebiogrid.org has changed. No div tag with maintext id!"
+        except:
+            print "Could not connect to the biogrid web site. Please try again later."
+
+        # if any error is to happen, return 3.1.71
+        print "Will use 3.1.71 as the default version"
+        return "3.1.71"
         
+        
+    
     def assureOspreyDirExists(self):
 	dir_prefix = "BIOGRID-OSPREY_DATASETS"
         dirs = filter(lambda filename: filename.startswith(dir_prefix), os.listdir(ap("ppidata")) )
         if len(dirs) == 0:
             # ============================
-	    if not os.path.exists(ap("ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey")):
-		url = "http://thebiogrid.org/downloads/archives/Release%20Archive/BIOGRID-3.0.68/BIOGRID-OSPREY_DATASETS-3.0.68.osprey.zip"
-                print "Osprey dataset does not exist. Downloading it..."
-                self.d = Downloader(url)
-                self.d.finished.connect(self.assureIdentifiersExists)
-                qApp.processEvents()
-                self.d.exec_()
+            self.version = version = self.detectLatestVersionOnline()
+            self.directory = "BIOGRID-OSPREY_DATASETS-%s.osprey" % version
+	    #if not os.path.exists(ap("ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey")):
+            url = "http://thebiogrid.org/downloads/archives/Release%20Archive/" + \
+            "BIOGRID-%s/BIOGRID-OSPREY_DATASETS-%s.osprey.zip" % (version, version)
+            print "Osprey dataset does not exist. Downloading it..."
+            self.d = Downloader(url)
+            self.d.finished.connect(self.assureIdentifiersExists)
+            qApp.processEvents()
+            self.d.exec_()
+            self.setupGUI()
+            
+            """else:
                 self.setupGUI()
-            else:
-                self.setupGUI()
-                self.assureIdentifiersExists()
+                self.assureIdentifiersExists()"""
         else:
             self.setupGUI()
+            self.directory = latest_osprey_dir()
             self.assureIdentifiersExists()
 
     def assureIdentifiersExists(self):
@@ -126,7 +152,7 @@ class PPISelector(QWidget):
 		{ "osprey_dir": self.osprey_dir,
 		  "organism": str(item.parent().text(0)),
 		  "experiment": str(item.text(0)),
-		  "version": self.biogridVersion,
+		  "version": self.version,
 		}
 													
 		checkedItems.add(ap(filename))

@@ -22,5 +22,23 @@ config.readfp(open(root+'/config.txt'))"""
 #print config.get("Paths","databases")
 
 
+def latest_osprey_dir():
+    dir_prefix = "BIOGRID-OSPREY_DATASETS"
+    dirs = filter(lambda filename: filename.startswith(dir_prefix), os.listdir(ap("ppidata")) )
+    
+    latest = dirs[0]
+    for directory in dirs:
+        major, mid, minor = map(int, latest.split("-")[-1].split(".")[:-1])
+        dmajor, dmid, dminor = map(int, directory.split("-")[-1].split(".")[:-1])
+
+        if dmajor > major:
+            latest = directory
+        elif dmid > mid:
+            latest = directory
+        elif dminor > minor:
+            latest = directory
+
+    return latest
+
 if __name__ == "__main__":
     print rp("layouts.ini")

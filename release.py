@@ -79,3 +79,7 @@ for path in delete_paths.split("\n"):
     except Exception,e:
 	print "Did not work:", e
 	print command
+	
+	
+# 7) Bundle the binary directory as installer
+os.system("/home/%s/bin/installjammer/installjammer --build /home/emre/%s/InstallJammerProjects/Robinviz/Robinviz.mpi" % (USER , USER) )
