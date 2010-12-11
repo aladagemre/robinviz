@@ -1,0 +1,33 @@
+biological regulation
+cellular component organization or biogenesis
+cellular process
+developmental process
+localization
+metabolic process
+multi-organism process
+multicellular organismal process
+negative regulation of biological process
+positive regulation of biological process
+regulation of biological process
+reproductive process
+response to stimulus
+signaling process
+cell part
+extracellular region part
+macromolecular complex
+membrane-enclosed lumen
+organelle part
+symplast
+synapse
+synapse part
+virion part
+binding
+catalytic activity
+electron carrier activity
+enzyme regulator activity
+metallochaperone activity
+molecular transducer activity
+nutrient reservoir activity
+structural molecule activity
+transcription regulator activity
+transporter activity
