@@ -39,6 +39,7 @@ class GEOSelector(QWidget):
 	treeWidget.setHeaderLabels(("", "Accession", "Series Platform ID","Description",))
 	treeWidget.setSortingEnabled(True)
         treeWidget.setSelectionMode(QAbstractItemView.SingleSelection)
+        treeWidget.sortItems(1, Qt.AscendingOrder)
 
 	self.parseFile()
         self.setItemWidgets()

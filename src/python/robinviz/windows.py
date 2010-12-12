@@ -12,7 +12,7 @@ import os
 import shutil
 
 from wizards import InputWizard
-from utils.info import id2cat, runcommand, rp
+from utils.info import id2cat, runcommand, rp, latest_osprey_dir
 from utils.compression import compressdir, untar
 
 class SingleMainViewWindow(QMainWindow):
@@ -554,7 +554,7 @@ class MultiViewWindow(QMainWindow):
         
         if response == QMessageBox.Yes:
             # do the operation
-            data = [ ap('ppidata/BIOGRID-OSPREY_DATASETS-3.0.68.osprey'),
+            data = [ latest_osprey_dir(),
                      ap('godata/goinfo.sqlite3')
             ]
             data += map( lambda x: ap('assocdata')+"/"+ x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('assocdata') )  ) )
