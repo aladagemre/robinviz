@@ -25,6 +25,8 @@ config.readfp(open(root+'/config.txt'))"""
 def latest_osprey_dir():
     dir_prefix = "BIOGRID-OSPREY_DATASETS"
     dirs = filter(lambda filename: filename.startswith(dir_prefix), os.listdir(ap("ppidata")) )
+    if not dirs:
+        return None
     
     latest = dirs[0]
     for directory in dirs:

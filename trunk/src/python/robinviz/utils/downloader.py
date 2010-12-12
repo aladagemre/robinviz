@@ -71,10 +71,10 @@ class Downloader(QProgressDialog):
             self.reply.deleteLater()
             self.manager.deleteLater()
         reply.deleteLater()
-        
+
         self.accept()
         
-    
+
     def cancelDownload(self):
         self.reply.abort()
 

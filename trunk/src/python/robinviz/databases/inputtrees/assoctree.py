@@ -224,6 +224,13 @@ class AssociationSelector(QWidget):
                 print term, "was not found in go dict"
         output.close()
         catnames.close()
+
+    def translate_files(self, files):
+        translator = AssociationTranslator()
+        for filename in files:
+            translator.set_filename(filename)
+            translator.translate_biogrids()
+        
     def mergeSelectedAssociations(self):
 	"""Merges selected association data files into one single assocdata/input_go.txt"""
 	files = self.downloadCheckedAssociation()
