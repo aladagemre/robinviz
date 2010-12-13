@@ -186,13 +186,22 @@ class OspreyManager(Manager):
 class DataManager(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
-        self.o = OspreyManager()
+        self.setWindowTitle("Data Manager")
         self.setupGUI()
 
     def setupGUI(self):
         self.layout = QVBoxLayout()
-        self.mybutton = QPushButton("Run Managers")
+        self.info = QLabel("""This tool will download the essential data from the databases and process
+them afterwards:
+* Osprey PPI Network
+* Hitpredict PPI data
+* Gene Ontology Tree
+* Identifier translation database
+        """)
+        self.mybutton = QPushButton("Start operation")
         self.mybutton.clicked.connect(self.download_all)
+
+        self.layout.addWidget(self.info)
         self.layout.addWidget(self.mybutton)
         self.setLayout(self.layout)
 
@@ -206,63 +215,15 @@ class DataManager(QWidget):
         self.o = OspreyManager()
 
         self.g = GOManager()
-        self.g.setForce(False)
+        #self.g.setForce(False)
 
         self.i = IdentifierManager()
         
         self.run_managers([self.o, self.g, self.i])
-        """
-        self.download_goinfo()
-        self.download_identifiers()
-        self.download_osprey()
-        self.download_hitpredicts()
-        self.download_associations()"""
-
-    def download_goinfo(self):
-        pass
-
-    def download_identifiers(self):
-        pass
-
-
 
     def download_hitpredicts(self):
         organisms = os.listdir(latest_osprey_dir())
         map (download_organism, organisms)
-
-    def download_associations(self):
-        pass
-
-    def setup(self, result):
-        self.osprey_dir = ap("ppidata/%s" % self.directory )
-        ziplocation = "%s.zip" % self.directory
-
-        if not os.path.exists(self.osprey_dir) and os.path.exists(ziplocation):
-            unzip_file_into_dir(ziplocation, self.osprey_dir)
-            os.remove(ziplocation)
-
-        # ======IDENTIFIERS========
-        if not os.path.exists(self.IDENTIFIER_PATH) and os.path.exists("identifier.db.tar.gz"):
-            print "Uncompressing identifier.db.tar.gz"
-            untar("identifier.db.tar.gz")
-            shutil.move("identifier.db", self.IDENTIFIER_PATH)
-            os.remove("identifier.db.tar.gz")
-
-        # =========================
-
-        self.readPPIData()
-	self.useDictionary(self.organism_experiments)
-
-    def assureIdentifiersExists(self):
-	if not os.path.exists(self.IDENTIFIER_PATH):
-            url = "http://garr.dl.sourceforge.net/project/robinviz/identifier/identifier.db.tar.gz"
-            print "Identifiers DB does not exist. Downloading it..."
-            self.iden = Downloader(url)
-            self.iden.finished.connect(self.setup)
-            qApp.processEvents()
-            self.iden.exec_()
-        else:
-            self.setup(1)
 
 
 def main():
