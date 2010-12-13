@@ -5,7 +5,7 @@ import shutil
 sys.path.append("..")
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-from utils.info import rp, ap, dp, latest_osprey_dir
+from utils.info import rp, ap, pp, latest_osprey_dir
 from utils.compression import unzip_file_into_dir, untar, Extractor
 from utils.BeautifulSoup import BeautifulSoup
 from utils.downloader import Downloader
@@ -224,20 +224,21 @@ them afterwards.""")
         self.label_all = QLabel("All data sources")
 
         self.button_refresh_all= QToolButton()
-        self.button_refresh_all.setIcon(QIcon(dp("images/refresh.png")))
+        print pp("misc/images/refresh.png")
+        self.button_refresh_all.setIcon(QIcon(pp("misc/images/refresh.png")))
         self.button_refresh_all.setIconSize(QSize(32,32))
         self.button_refresh_all.setToolTip("Refresh the status of all the databases")
         #self.button_refresh_all.clicked.connect(self.refresh_all)
 
 
         self.button_download_all= QToolButton()
-        self.button_download_all.setIcon(QIcon(dp("images/download.png")))
+        self.button_download_all.setIcon(QIcon(pp("misc/images/download.png")))
         self.button_download_all.setIconSize(QSize(32,32))
         self.button_download_all.setToolTip("Download all the databases")
         self.button_download_all.clicked.connect(self.download_all)
 
         self.button_delete_all= QToolButton()
-        self.button_delete_all.setIcon(QIcon(dp("images/delete.png")))
+        self.button_delete_all.setIcon(QIcon(pp("misc/images/delete.png")))
         self.button_delete_all.setIconSize(QSize(32,32))
         self.button_delete_all.setToolTip("Delete all the databases")
 
@@ -306,7 +307,7 @@ them afterwards.""")
         self.a_download = QToolButton()
 
         for i, download in enumerate( [self.i_download, self.o_download, self.g_download, self.h_download, self.a_download] ):
-            download.setIcon(QIcon(dp("images/download.png")))
+            download.setIcon(QIcon(pp("misc/images/download.png")))
             download.setIconSize(QSize(32,32))
             download.setToolTip("Download this data")
             self.layout.addWidget(download, i+3, 3)
@@ -321,7 +322,7 @@ them afterwards.""")
         self.a_delete = QToolButton()
 
         for i, delete in enumerate( [self.i_delete, self.o_delete, self.g_delete, self.h_delete, self.a_delete] ):
-            delete.setIcon(QIcon(dp("images/delete.png")))
+            delete.setIcon(QIcon(pp("misc/images/delete.png")))
             delete.setIconSize(QSize(32,32))
             delete.setToolTip("Delete this data")
             self.layout.addWidget(delete, i+3, 4)
