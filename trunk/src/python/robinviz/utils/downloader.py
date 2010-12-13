@@ -29,21 +29,35 @@ class Downloader(QProgressDialog):
 
     def download(self):
         print "Downloading: %s" % self.url
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        self.timer.timeout.connect(self.updateSpeed)
+        self.last_done_size = 0
+        self.speed = 0.0
+        
         self.url = QUrl(self.url)
         self.reply = self.manager.get(QNetworkRequest(self.url))
         self.reply.downloadProgress.connect(self.updateDataReadProgress)
 
+        self.timer.start()
+        
+    def updateSpeed(self):
+        current_size = self.value()
+        self.speed = (current_size - self.last_done_size)/1024
+        self.last_done_size = current_size
+        
     def updateDataReadProgress(self, done, total):
         #print "UPDATE: " + str(done) + " of " + str(total)
         self.setMaximum(total)
         self.setValue(done)
+        
         d = done/1024
         t = total/1024
 
         if total == -1:
             t = "Unknown"
 
-        self.setLabelText(self.text + "%s KB out of %s KB" % (d, t))
+        self.setLabelText(self.text + "%s KB / %s KB (%s KB/s)" % (d, t, self.speed))
 
     def downloadFinished(self, reply):
         redirect = reply.attribute(QNetworkRequest.RedirectionTargetAttribute).toUrl()
