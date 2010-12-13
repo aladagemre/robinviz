@@ -7,6 +7,7 @@ from confirmation import CoExpressionMainView, CoExpressionMainScene
 from settings import SettingsDialog
 from search import ComprehensiveSearchWidget, ProteinSearchWidget
 from misc.legend import LegendWidget
+from databases.datamanager import DataManager
 from drawing import read_category_information
 import os
 import shutil
@@ -548,25 +549,8 @@ class MultiViewWindow(QMainWindow):
 
 
     def updateData(self):
-        response= QMessageBox.warning(self, 'Update Local Data',
-     "This operation will remove the local data and the data will be restored when you perform another execution.\n\n"+
-     "Are you sure you want to do this?", buttons=QMessageBox.Yes|QMessageBox.No)
-        
-        if response == QMessageBox.Yes:
-            # do the operation
-            data = [ latest_osprey_dir(),
-                     ap('godata/goinfo.sqlite3')
-            ]
-            data += map( lambda x: ap('assocdata')+"/"+ x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('assocdata') )  ) )
-            data += map( lambda x: ap('ppidata/hitpredict')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('ppidata/hitpredict') )  ) )
-            data += map( lambda x: ap('geodata')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('geodata') )  ) )
-
-            for i in data:
-                print "Removing",i
-                try:
-                    os.remove(i)
-                except:
-                    print "Could not remove",i
+        self.data_manager = DataManager()
+        self.data_manager.show()
         
     ############### VIEW MENU ###################
     def goto(self):
