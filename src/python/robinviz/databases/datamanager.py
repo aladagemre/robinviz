@@ -74,6 +74,14 @@ class IdentifierManager(Manager):
         else:
             self.fail()
 
+    def succeed(self):
+        Manager.succeed(self)
+        os.remove(self.TARNAME)
+
+    def fail(self):
+        Manager.fail(self)
+        os.remove(self.TARNAME)
+        
     def download(self):
         #url = "http://garr.dl.sourceforge.net/project/robinviz/identifier/identifier.db.tar.gz"
         url = "http://www.emrealadag.com/dosyalar/identifier.db.tar.gz"
