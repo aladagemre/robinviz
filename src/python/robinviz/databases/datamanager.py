@@ -224,11 +224,10 @@ them afterwards.""")
         self.label_all = QLabel("All data sources")
 
         self.button_refresh_all= QToolButton()
-        print pp("misc/images/refresh.png")
         self.button_refresh_all.setIcon(QIcon(pp("misc/images/refresh.png")))
         self.button_refresh_all.setIconSize(QSize(32,32))
         self.button_refresh_all.setToolTip("Refresh the status of all the databases")
-        #self.button_refresh_all.clicked.connect(self.refresh_all)
+        self.button_refresh_all.clicked.connect(self.refresh_all)
 
 
         self.button_download_all= QToolButton()
@@ -241,7 +240,9 @@ them afterwards.""")
         self.button_delete_all.setIcon(QIcon(pp("misc/images/delete.png")))
         self.button_delete_all.setIconSize(QSize(32,32))
         self.button_delete_all.setToolTip("Delete all the databases")
+        self.button_delete_all.clicked.connect(self.delete_all)
 
+        
         hr = QFrame(self )
         hr.setFrameStyle( QFrame.Sunken + QFrame.HLine )
         hr.setFixedHeight( 12 )
@@ -341,7 +342,33 @@ them afterwards.""")
         self.button_download_all.setEnabled(True)
         self.button_delete_all.setEnabled(True)
         self.button_refresh_all.setEnabled(True)
-    
+
+    def refresh_all(self):
+        # TODO: implement this
+        pass
+
+    def delete_all(self):
+        response= QMessageBox.warning(self, 'Update Local Data',
+     "This operation will remove the local data. You will have to perform a re-download.\n\n"+
+     "Are you sure you want to do this?", buttons=QMessageBox.Yes|QMessageBox.No)
+
+        if response == QMessageBox.Yes:
+            # do the operation
+            data = [ latest_osprey_dir(),
+                     ap('godata/goinfo.sqlite3')
+            ]
+            data += map( lambda x: ap('assocdata')+"/"+ x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('assocdata') )  ) )
+            data += map( lambda x: ap('ppidata/hitpredict')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('ppidata/hitpredict') )  ) )
+            data += map( lambda x: ap('geodata')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('geodata') )  ) )
+
+            for i in data:
+                print "Removing",i
+                try:
+                    os.remove(i)
+                except:
+                    print "Could not remove",i
+
+
     def download_all(self):
         self.button_download_all.setEnabled(False)
         self.button_delete_all.setEnabled(False)
@@ -382,4 +409,5 @@ def main():
     mainWindow.show()
     sys.exit(app.exec_())
 
-main()
+if __name__ == "__main__":
+    main()
