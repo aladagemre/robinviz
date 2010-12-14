@@ -61,7 +61,7 @@ GRAPH<int,int> RUN_SELFGD(  GRAPH<int,int> &G,
                           bool ledaPostFlag
 ){
 
-	cout << " We are in now\n";
+//	cout << " We are in now\n";
         GRAPH<int,int> H;
 
         edge e;
@@ -124,7 +124,7 @@ GRAPH<int,int> RUN_SELFGD(  GRAPH<int,int> &G,
 /****************************************************************/
 /*********************** ACYCLIC PHASE I ************************/
 /****************************************************************/
-	cout << " We are in now acyclic\n";
+//	cout << " We are in now acyclic\n";
         node_array<int> ord(G);
         bool acyclicBool = TOPSORTG(G,ord);
         list<edge> cycleFinder;
@@ -284,7 +284,7 @@ cout << "\n Acyclic Done \n" ;
 #endif
 /****************************************************************/
 /******************** LAYER ASSIGNMENT **************************/
-	cout << " We are in now Layering\n";
+//	cout << " We are in now Layering\n";
         /****** Transitive Edges Removal **************/
 
                 list<edge> transitives;
@@ -340,7 +340,7 @@ cout << "\n Layering Done \n" ;
 #endif
 /****************************************************************/
 /******************** ADD DUMMY VERTICES ************************/
-		cout << " We are in now dummy\n";
+//		cout << " We are in now dummy\n";
                 node target,source;
                 edge_array<bool> eMarked( G, false );
                 list<edge> allEdges;
@@ -394,45 +394,12 @@ cout << "\n Dummy Adding Done \n" ;
 #endif
 /****************************************************************/
 /********************* CROSSING REDUCTION ***********************/
-		cout << " We are in now crossing\n";
+//		cout << " We are in now crossing\n";
                 array<list<node> > Layers2( max + 1 );
                 Layers2 = Layers;
 
                 integer cross_count = 0;
-                /*for( int i = max; i > 0; i-- ){
-                        cross_count += crossing_numberG( G, Layers[ i ], Layers[ i - 1 ] );
-                }*/
-                //cout << " Crossings  Before : " << cross_count << endl;
-                cross1 = cross_count;
-// 		G.rev_all_edges();
-// /*		//1st Way
-// 		for( int i = max; i > 0 && i - 2 > 0; i-=2 ){
-// 			wolf( G, Layers[ i - 1 ], Layers[ i ] );
-// 		}
-// */
-// 		//2nd Way
-// 		/*for( int i = max; i > 0; i-- ){
-// 			wolfBarycenter( G, Layers[ i - 1 ], Layers[ i ] );
-// 		}*/
-//
-// 		for( int i = max; i > 0; i-- ){
-// 			median_graph( G, Layers[ i - 1 ], Layers[ i ] );
-// 		}
-// 		/*for( int i = max; i > 0; i-- ){
-// 			median_graph( G, Layers2[ i - 1 ], Layers2[ i ] );
-// 		}*/
-//
-// /*		//3rd Way
-// 		for( int i = max; i > 0; i-- ){
-// 			wolf( G, Layers[ i ], Layers[ i - 1 ] );
-// 		}
-// */
-// /*		//4th Way
-// 		for( int i = max; i > 0 && i - 2 > 0; i-=2 ){
-// 			wolf( G, Layers[ i ], Layers[ i - 1 ] );
-// 		}
-// */
-// 		G.rev_all_edges();
+
 
                 for( int repeat_i = 0; repeat_i < 40 ; repeat_i++ ){
                       G.rev_all_edges();
@@ -607,7 +574,7 @@ cout << "\n Dummy Adding Done \n" ;
                         pos[ n ] = p;
                 }
 
-		cout << " We are in now final process\n";
+//		cout << " We are in now final process\n";
                 //runWithMenu( G );
                 layers = Layers;
                 if( xCoordFlag == true )
