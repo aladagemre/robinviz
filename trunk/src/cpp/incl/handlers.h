@@ -3125,9 +3125,23 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 									}
 								}
 							}
-                                                        if( edgeCount != 0 ){
-                                                            e = PROJECT.new_edge( f1 ,f2 );
-                                                            PROJECT[ e ] = edgeCount;
+
+                                                        edge ee;
+                                                        int flag_e = 0;
+                                                        forall_edges( ee, PROJECT ){
+                                                                if( (PROJECT.source( ee ) == f1 && PROJECT.target( ee ) == f2) || (PROJECT.source( ee ) == f2 && PROJECT.target( ee ) == f1)  ){
+                                                                        flag_e = 1;
+                                                                        e = ee;
+                                                                        break;
+                                                                }
+                                                        }
+                                                        if( flag_e == 0 && f1 != NULL && f2 != NULL ){
+                                                                e = PROJECT.new_edge( f1 ,f2 );
+                                                                PROJECT[ e ] = edgeCount;
+                                                        }
+                                                        else{
+                                                                if( e != NULL )
+                                                                        PROJECT[ e ] += edgeCount;
                                                         }
 						}	
 						countIN++;
