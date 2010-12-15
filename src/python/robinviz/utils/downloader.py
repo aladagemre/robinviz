@@ -4,7 +4,6 @@ http://sourceforge.net/projects/python-jake
 """
 
 import sys, os
-from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtNetwork import *
@@ -22,7 +21,7 @@ class Downloader(QProgressDialog):
         self.text = "Downloading:\n%s\n" % url
         self.setLabelText(self.text)
         self.manager = QNetworkAccessManager()
-        self.resize(self.size().width()*2, self.size().height())
+        self.resize(self.size().width(), self.size().height())
         self.manager.finished.connect(self.downloadFinished)
         self.canceled.connect(self.cancelDownload)
         self.download()
@@ -48,6 +47,7 @@ class Downloader(QProgressDialog):
         
     def updateDataReadProgress(self, done, total):
         #print "UPDATE: " + str(done) + " of " + str(total)
+        self.total = total
         self.setMaximum(total)
         self.setValue(done)
         
@@ -69,6 +69,7 @@ class Downloader(QProgressDialog):
             errorDialog = QErrorMessage()
             errorDialog.showMessage("File does not exist:\n%s" % str(self.url.toString()))
             errorDialog.exec_()
+            reply.deleteLater()
             self.reject()
             return
 
@@ -77,6 +78,8 @@ class Downloader(QProgressDialog):
             print "REDIRECT: " + str(redirect)
             self.reply = self.manager.get(QNetworkRequest(redirect))
             self.reply.downloadProgress.connect(self.updateDataReadProgress)
+            reply.deleteLater()
+            self.reject()
         else:
             self.updateFile = QFile(self.downloadPath)
             self.updateFile.open(QIODevice.WriteOnly)
@@ -84,15 +87,29 @@ class Downloader(QProgressDialog):
             self.updateFile.close()
             self.reply.deleteLater()
             self.manager.deleteLater()
-        reply.deleteLater()
-
-        self.accept()
+            reply.deleteLater()
+            downloaded_size = os.path.getsize(self.downloadPath)
+            if downloaded_size and self.total != -1 and downloaded_size == self.total:
+                self.accept()
+            else:
+                self.reject()
+        
         
 
     def cancelDownload(self):
+        print "Download aborted."
         self.reply.abort()
+        try:
+            os.remove(self.downloadPath)
+        except IOError,e :
+            print "%s was not saved, won't delete it." % self.downloadPath
 
+def test(sonuc):
+    print sonuc
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    window = Downloader("http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD", "/home/emre/Desktop/gene_association.jcvi_Aphagocytophilum.gz")
+    app = QApplication(sys.argv)
+    #window = Downloader("http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD", "/home/emre/Desktop/gene_association.jcvi_Aphagocytophilum.gz")
+    #window = Downloader("http://sourceforge.net/projects/python-jake/files/betas/Jake-PyQT4-0.1.zip/download", "test.zip")
+    window = Downloader("http://localhost/~emre/identifier.db.tar.gz")
+    window.finished.connect(test)
     sys.exit(app.exec_())
