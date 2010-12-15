@@ -11,6 +11,7 @@ from utils.BeautifulSoup import BeautifulSoup
 from utils.downloader import Downloader
 from inputtrees.assoctree import *
 from inputtrees.ppi_downloader import download_organism
+from functools import partial
 #import urllib
 
 # TODO: uncomment above, fix urls
@@ -32,11 +33,12 @@ class Manager(QWidget):
         self.force = value
         
     def setupGUI(self):
-        self.layout = QVBoxLayout()
+        """self.layout = QVBoxLayout()
         self.setLayout(self.layout)
         self.mybutton = QPushButton("Download %s Data" % self.name)
         self.mybutton.clicked.connect(self.download)
-        self.layout.addWidget(self.mybutton)
+        self.layout.addWidget(self.mybutton)"""
+        pass
         
     def isNeeded(self):
         if self.filename and os.path.exists(self.filename):
@@ -70,6 +72,8 @@ class IdentifierManager(Manager):
         self.download()
 
     def downloaded(self, successful):
+        print "Successful:", successful
+
         if successful and os.path.exists(self.TARNAME):
             self.status.emit("Downloaded...")
             self.downloadFinished.emit(1)
@@ -141,19 +145,27 @@ class OspreyManager(Manager):
         
     def run(self):
         self.download()
-        
+
+    def succeed(self):
+        Manager.succeed(self)
+        os.remove(self.ziplocation)
+
+    def fail(self):
+        Manager.fail(self)
+        os.remove(self.ziplocation)
+
     def downloaded(self, successful):
         self.osprey_dir = ap("ppidata/%s" % self.directory )
-        ziplocation = "%s.zip" % self.directory
+        self.ziplocation = "%s.zip" % self.directory
 
-        if successful and os.path.exists(ziplocation):
+        if successful and os.path.exists(self.ziplocation):
             self.status.emit("Downloaded")
             self.downloadFinished.emit(1)
 
             if os.path.exists(self.osprey_dir):
                 shutil.rmtree(self.osprey_dir)
 
-            self.extractor_thread.setup(ziplocation, self.osprey_dir)
+            self.extractor_thread.setup(self.ziplocation, self.osprey_dir)
             self.extractor_thread.extract()
             self.status.emit("Extracting...")
         else:
@@ -197,7 +209,7 @@ class OspreyManager(Manager):
 class StatusLight(QLabel):
     def __init__(self, parent=None):
         QLabel.__init__(self,parent)
-        self.setFixedSize(40, 40)
+        self.setFixedSize(32, 32)
         
     def fill_color(self, color):
         pixmap = QPixmap(self.size())
@@ -213,8 +225,26 @@ class DataManager(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
         self.setWindowTitle("Data Manager")
-        self.setupGUI()
+        self.createManagers()
 
+        # TODO: Move this part into the managers as attributes
+        self.data_dict = {
+            'i': [self.i.IDENTIFIER_PATH],
+            'o': [ap("ppidata/%s" % latest_osprey_dir())],
+            'g': [ap('godata/goinfo.sqlite3')],
+            'h': map( lambda x: ap('ppidata/hitpredict')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('ppidata/hitpredict')))),
+            'a': map( lambda x: ap('assocdata')+"/"+ x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('assocdata') )  ) ),
+            'geo': map( lambda x: ap('geodata')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('geodata') )  ) ),
+        }
+        self.setupGUI()
+        self.refresh_all()
+
+    def createManagers(self):
+        self.i = IdentifierManager()
+        self.o = OspreyManager()
+        self.g = GOManager()
+        self.h = GOManager()
+        self.a = GOManager()
     def setupGUI(self):
         self.layout = QGridLayout()
         # ========= HEADER =========================
@@ -262,11 +292,8 @@ them afterwards.""")
 
 
         # ========== LIGHTS =======================
-        self.i_light = StatusLight()
-        self.o_light = StatusLight()
-        self.g_light = StatusLight()
-        self.h_light = StatusLight()
-        self.a_light = StatusLight()
+        # Create 5 light objects
+        self.i_light, self.o_light, self.g_light, self.h_light, self.a_light = map(StatusLight, [None]*5 )
 
         for i, status in enumerate( [self.i_light, self.o_light, self.g_light, self.h_light, self.a_light] ):
             status.go_red()
@@ -284,30 +311,24 @@ them afterwards.""")
 
         # =========================================
         
-        # ========== STATUS INFORMATION ===========        
-        self.i_status = QLabel()
-        self.o_status = QLabel()
-        self.g_status = QLabel()
-        self.h_status = QLabel()
-        self.a_status = QLabel()
-
-
+        # ========== STATUS INFORMATION ===========
+        # Create 5 status label objects
+        self.i_status, self.o_status, self.g_status, self.h_status, self.a_status = map(QLabel, [None]*5 )
 
         for i, status in enumerate( [self.i_status, self.o_status, self.g_status, self.h_status, self.a_status] ):
             status.setStyleSheet("QLabel { color : blue; }");
-
             self.layout.addWidget(status, i+3, 2)
             
         # =========================================
 
         # ======= Download Buttons ===============
-        self.i_download = QToolButton()
-        self.o_download = QToolButton()
-        self.g_download = QToolButton()
-        self.h_download = QToolButton()
-        self.a_download = QToolButton()
-
-        for i, download in enumerate( [self.i_download, self.o_download, self.g_download, self.h_download, self.a_download] ):
+        # Create 5 download button objects
+        self.i_download, self.o_download, self.g_download, self.h_download, self.a_download = map(QToolButton, [None]*5 )
+        
+        for i, letter in enumerate( ["i","o","g","h","a"] ):
+            download = self.__dict__["%s_download" % letter]
+            slot = partial(self.download_one, letter=letter)
+            download.clicked.connect(slot)
             download.setIcon(QIcon(pp("misc/images/download.png")))
             download.setIconSize(QSize(32,32))
             download.setToolTip("Download this data")
@@ -316,13 +337,13 @@ them afterwards.""")
         # =========================================
 
         # ======= Delete Buttons ===============
-        self.i_delete = QToolButton()
-        self.o_delete = QToolButton()
-        self.g_delete = QToolButton()
-        self.h_delete = QToolButton()
-        self.a_delete = QToolButton()
+        # Create 5 delete button objects
+        self.i_delete, self.o_delete, self.g_delete, self.h_delete, self.a_delete = map(QToolButton, [None]*5 )
 
-        for i, delete in enumerate( [self.i_delete, self.o_delete, self.g_delete, self.h_delete, self.a_delete] ):
+        for i, letter in enumerate( ["i","o","g","h","a"] ):
+            delete = self.__dict__["%s_delete" % letter]
+            slot = partial(self.delete_one, letter=letter)
+            delete.clicked.connect(slot)
             delete.setIcon(QIcon(pp("misc/images/delete.png")))
             delete.setIconSize(QSize(32,32))
             delete.setToolTip("Delete this data")
@@ -332,20 +353,66 @@ them afterwards.""")
 
         self.setLayout(self.layout)
 
-    def run_managers(self, managers):
-        for i in range(len(managers) - 1):
-            managers[i].finished.connect(managers[i+1].run)
 
-        managers[0].run()
+    def download_one(self, letter):
+        manager = self.__dict__[letter]
+        light = self.__dict__["%s_light" % letter]
+        status = self.__dict__["%s_status" % letter]
 
+        manager.finished.connect(light.go_green)
+        manager.status.connect(status.setText)
+        manager.run()
+
+    def delete_one(self, letter):
+        #manager = self.__dict__[letter]
+        light = self.__dict__["%s_light" % letter]
+        status = self.__dict__["%s_status" % letter]
+
+        files = self.data_dict[letter]
+
+        
+        for file in files:
+            try:
+                if os.path.isdir(file):
+                    shutil.rmtree(file)
+                else:
+                    os.remove(file)
+            except:
+                print "Could not remove", file
+
+        light.go_red()
+        status.setText("Deleted.")
+
+        
     def operation_finished(self):
+        self.i.finished.connect(lambda: None)
+        self.o.finished.connect(lambda: None)
+        self.g.finished.connect(lambda: None)
+        self.i.downloadFinished.connect(lambda: None)
+        self.o.downloadFinished.connect(lambda: None)
+        self.g.finished.connect(lambda: None)
+
         self.button_download_all.setEnabled(True)
         self.button_delete_all.setEnabled(True)
         self.button_refresh_all.setEnabled(True)
 
+
     def refresh_all(self):
-        # TODO: implement this
-        pass
+        for letter, files in self.data_dict.iteritems():
+            light = self.__dict__.get("%s_light" % letter)
+            if not light:
+                return
+            status = self.__dict__["%s_status" % letter]
+
+            if letter in ("i", "o", "g"):
+                if os.path.exists(files[0]):
+                    light.go_green()
+                else:
+                    light.go_red()
+            elif letter == "h":
+                pass
+            elif letter == "a":
+                pass
 
     def delete_all(self):
         response= QMessageBox.warning(self, 'Update Local Data',
@@ -373,10 +440,6 @@ them afterwards.""")
         self.button_download_all.setEnabled(False)
         self.button_delete_all.setEnabled(False)
         self.button_refresh_all.setEnabled(False)
-        
-        self.i = IdentifierManager()
-        self.o = OspreyManager()
-        self.g = GOManager()
 
         self.i.finished.connect(self.i_light.go_green)
         self.o.finished.connect(self.o_light.go_green)
