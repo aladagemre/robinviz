@@ -156,7 +156,6 @@ class Extractor(QThread):
     def extract(self):
         print "Extraction starts..."
         self.start()
-        print "Leaving Extraction thread."
 
     def run(self):
         if self.archive_path.endswith(".tar.gz"):

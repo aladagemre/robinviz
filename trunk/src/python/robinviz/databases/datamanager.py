@@ -90,7 +90,7 @@ class IdentifierManager(Manager):
 
     def fail(self):
         Manager.fail(self)
-        os.remove(self.TARNAME)
+        #os.remove(self.TARNAME)
         
     def download(self):
         self.status.emit("Downloading...")
@@ -220,6 +220,12 @@ class StatusLight(QLabel):
         self.fill_color(Qt.green)
     def go_red(self):
         self.fill_color(Qt.red)
+
+    def reflect_result(self, result):
+        if result:
+            self.go_green()
+        else:
+            self.go_red()
         
 class DataManager(QWidget):
     def __init__(self, parent=None):
@@ -359,7 +365,7 @@ them afterwards.""")
         light = self.__dict__["%s_light" % letter]
         status = self.__dict__["%s_status" % letter]
 
-        manager.finished.connect(light.go_green)
+        manager.finished.connect(light.reflect_result)
         manager.status.connect(status.setText)
         manager.run()
 
