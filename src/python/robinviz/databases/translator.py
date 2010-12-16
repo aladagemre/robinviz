@@ -12,13 +12,16 @@ class BiogridOspreyTranslator:
     def __init__(self, filename=None):
         if filename:
             self.set_filename(filename)
+        
         self.db = GeneDB()
+        if not self.db.db_exists():
+            raise Exception("Identifier database file not available")
         
     def set_filename(self, filename):
         self.filename = filename
 
     def translate(self):
-        print "Translating %s to biogrid ids" % self.filename
+        #print "Translating %s to biogrid ids" % self.filename
         lines = open(self.filename).readlines()
         output = open("%s-BIOGRID" % self.filename, "w")
         for line in lines[1:]:
@@ -36,9 +39,13 @@ class BiogridOspreyTranslator:
             
 class AssociationTranslator:
     def __init__(self, filename=None):
-        self.db = GeneDB()
         if filename:
             self.set_filename(filename)
+        
+        self.db = GeneDB()
+
+        if not self.db.db_exists():
+            raise Exception("Identifier database file not available")
         
     def set_filename(self, filename):
         self.filename = ap(filename)
@@ -111,30 +118,6 @@ class AssociationTranslator:
             if line[0] == "!":
                 continue
             cols = line.split("\t")
-            """
-            protein_name1 = cols[1]
-            protein_name2 = cols[2]
-            go_term = cols[4]
-
-            l = go_dict.get(go_term)
-            if not l:
-                l = []
-            
-            if protein_name2:
-                candidate_name = protein_name2
-            else:
-                candidate_name = protein_name1
-
-            if candidate_name:
-                bids = self.db.value2biogrids(candidate_name, only_ids=True)
-                if bids:
-                    converted+=1
-                    l.extend(bids)
-                else:
-                    not_converted+=1
-
-            else:
-                not_converted += 1"""
 
             # Get the information from the line
             go_term = cols[4]
@@ -189,6 +172,9 @@ class AssociationTranslator:
         return True
 
     def translate(self, from_type, to_type):
+        if not self.db.db_exists():
+            return
+
         if not from_type:
             from_type = self.detect_annotation_type()
         if not from_type:

@@ -14,12 +14,20 @@ import sys
 import os
 sys.path.append("..")
 sys.path.append("../..")
-from utils.info import database_root
+from utils.info import dp
 
 class GeneDB:
+    IDENTIFIER_PATH = dp("identifier.db")
     def __init__(self):
-	self.conn = sqlite3.connect(os.path.join(database_root, "identifier.db"))
-	self.cursor = self.conn.cursor()
+        if self.db_exists():
+            self.conn = sqlite3.connect(self.IDENTIFIER_PATH)
+            self.cursor = self.conn.cursor()
+        else:
+            print "Identifier Database could not be found:", self.IDENTIFIER_PATH
+            print "Stopping. Please download this source."
+
+    def db_exists(self):
+        return os.path.exists(self.IDENTIFIER_PATH) and os.path.getsize(self.IDENTIFIER_PATH)
 
     def value2biogrids(self, value, types=None, only_ids = False):
 	"""Converts a given value of an UNKNOWN TYPE to corresponding biogrid ids.
