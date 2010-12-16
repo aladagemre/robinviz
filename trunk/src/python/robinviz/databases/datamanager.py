@@ -1,20 +1,25 @@
 import os
 import sys
 import shutil
+#import urllib
+# TODO: uncomment above, fix urls
+from functools import partial
 
 sys.path.append("..")
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
+
 from utils.info import rp, ap, pp, latest_osprey_dir
-from utils.compression import unzip_file_into_dir, untar, Extractor
+from utils.compression import Extractor
 from utils.BeautifulSoup import BeautifulSoup
 from utils.downloader import Downloader
+
 from inputtrees.assoctree import *
 from inputtrees.ppi_downloader import download_organism
-from functools import partial
-#import urllib
 
-# TODO: uncomment above, fix urls
+from databases.osprey2biogrid import ConverterThread
+
+
 
 
 import shutil
@@ -148,12 +153,29 @@ class OspreyManager(Manager):
 
     def succeed(self):
         Manager.succeed(self)
-        os.remove(self.ziplocation)
+        try:
+            os.remove(self.ziplocation)
+        except:
+            pass
 
     def fail(self):
         Manager.fail(self)
-        os.remove(self.ziplocation)
+        try:
+            os.remove(self.ziplocation)
+        except:
+            pass
 
+    def convert2biogrid(self):
+        if os.path.exists(IdentifierManager.IDENTIFIER_PATH):
+            self.status.emit("Converting PPI data to Biogrid annotation...")
+            self.converter_thread = ConverterThread()
+            self.converter_thread.status.connect(self.status.emit)
+            self.converter_thread.done.connect(self.succeed)
+            self.converter_thread.start()
+            self.status.emit("Conversion Finished...")
+        else:
+            self.status.emit("Could not convert PPI data to Biogrid annotation. Install Identifier DB first.")
+        
     def downloaded(self, successful):
         self.osprey_dir = ap("ppidata/%s" % self.directory )
         self.ziplocation = "%s.zip" % self.directory
@@ -166,6 +188,7 @@ class OspreyManager(Manager):
                 shutil.rmtree(self.osprey_dir)
 
             self.extractor_thread.setup(self.ziplocation, self.osprey_dir)
+            self.extractor_thread.finished.connect(self.convert2biogrid)
             self.extractor_thread.extract()
             self.status.emit("Extracting...")
         else:
@@ -323,6 +346,7 @@ them afterwards.""")
 
         for i, status in enumerate( [self.i_status, self.o_status, self.g_status, self.h_status, self.a_status] ):
             status.setStyleSheet("QLabel { color : blue; }");
+            status.setWordWrap(True)
             self.layout.addWidget(status, i+3, 2)
             
         # =========================================
