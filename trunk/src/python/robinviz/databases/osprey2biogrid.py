@@ -33,7 +33,7 @@ def convert_organism(organism):
 
 def convert_all_organisms():
     #start_time = time.time()
-    pool = Pool(processes = 2)
+    pool = Pool(processes = 4)
     pool.map(convert_organism, OSPREY_ORGANISMS)
     
     #print "Time elapsed: ", time.time() - start_time, "s"

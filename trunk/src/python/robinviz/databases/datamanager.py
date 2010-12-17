@@ -4,6 +4,7 @@ import shutil
 #import urllib
 # TODO: uncomment above, fix urls
 from functools import partial
+from multiprocessing import Pool
 
 sys.path.append("..")
 from PyQt4.QtGui import *
@@ -12,13 +13,13 @@ from PyQt4.QtCore import *
 from utils.info import rp, ap, pp, latest_osprey_dir
 from utils.compression import Extractor
 from utils.BeautifulSoup import BeautifulSoup
-from utils.downloader import Downloader
+from utils.downloader import Downloader, MultiDownloader
 
 from inputtrees.assoctree import *
-from inputtrees.ppi_downloader import download_organism
+from inputtrees.ppi_downloader import get_hc_url, get_lc_url, get_ss_url
+from inputtrees.hp_to_tabbedppi import tabify
 
-from databases.osprey2biogrid import ConverterThread
-
+from databases.osprey2biogrid import ConverterThread, OSPREY_ORGANISMS
 
 
 
@@ -30,20 +31,12 @@ class Manager(QWidget):
     status = pyqtSignal(QString)
     
     def __init__(self, parent=None):
-        QWidget.__init__(self, parent)
+        QWidget.__init__(self, parent=None)
         self.force = True
         self.name = "the"
     
     def setForce(self, value):
         self.force = value
-        
-    def setupGUI(self):
-        """self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
-        self.mybutton = QPushButton("Download %s Data" % self.name)
-        self.mybutton.clicked.connect(self.download)
-        self.layout.addWidget(self.mybutton)"""
-        pass
         
     def isNeeded(self):
         if self.filename and os.path.exists(self.filename):
@@ -64,11 +57,10 @@ class IdentifierManager(Manager):
     TARNAME = "identifier.db.tar.gz"
     DATABASE_PATH = rp("src/python/robinviz/databases")
     
-    def __init__(self):
-        Manager.__init__(self)
+    def __init__(self, parent=None):
+        Manager.__init__(self, parent=None)
         self.filename = self.IDENTIFIER_PATH
         self.name = "Identifier"
-        self.setupGUI()
         self.extractor_thread = Extractor()
         self.extractor_thread.finished.connect(self.succeed)
         self.extractor_thread.terminated.connect(self.fail)
@@ -108,10 +100,9 @@ class IdentifierManager(Manager):
 
 class GOManager(Manager):
     def __init__(self):
-        Manager.__init__(self)
+        Manager.__init__(self, parent=None)
         self.filename = ap("godata/goinfo.sqlite3")
         self.name = "GO"
-        self.setupGUI()
         
     def run(self):
         if not self.force and not self.isNeeded():
@@ -139,10 +130,9 @@ class GOManager(Manager):
 
 class OspreyManager(Manager):
     def __init__(self):
-        Manager.__init__(self)
+        Manager.__init__(self, parent=None)
         self.filename = latest_osprey_dir()
         self.name = "Osprey PPI"
-        self.setupGUI()
         
         self.extractor_thread = Extractor()
         self.extractor_thread.finished.connect(self.succeed)
@@ -228,6 +218,64 @@ class OspreyManager(Manager):
         print "Will use 3.1.71 as the default version"
         return "3.1.71"
 
+class HitpredictManager(Manager):
+    HITPREDICT_DIR = ap("ppidata/hitpredict")
+    
+    def __init__(self, parent=None):
+        Manager.__init__(self, parent=None)
+        self.extractor_thread = Extractor()
+
+    def run(self):
+        """pool = Pool(processes = 4)
+        pool.map(download_organism, OSPREY_ORGANISMS)"""
+        self.download_organism(OSPREY_ORGANISMS[0])
+        
+    def download_organism(self, organism_name):
+        targzs = []
+        urls = []
+        for function in (get_hc_url, get_lc_url, get_ss_url):
+            # Small scale should be last! hc will define max confidence. ss will take that value instead of t
+            url = function(organism_name)
+            urls.append(url)
+            targzs.append(url.split("/")[-1])
+
+        self.md = MultiDownloader()
+        self.md.set_files(urls)
+        self.md.finished.connect(lambda files: self.process_organism(files, organism_name))
+        self.md.start()
+
+    def process_organism(self, files, organism_name):
+        self.status.emit("Downloaded %s, extracting..." % organism_name)
+        for file in files:
+            self.extractor_thread.setup(file)
+            self.extractor_thread.extract()
+
+    def tabify(self):
+        self.status.emit("Processing %s..." % organism_name)
+        # TODO: make tabify a process and connect finished/terminated to succeeded and failed
+        tabify(map(lambda f: f[:-7], files), organism_name)
+        self.status.emit("Processing %s finished." % organism_name)
+        
+    def succeed(self):
+        Manager.succeed(self)
+        self.cleanup()
+    def fail(self):
+        Manager.fail(self)
+        self.cleanup()
+        
+    def cleanup(self):
+        files = os.listdir(self.HITPREDICT_DIR)
+        residues = filter(lambda filename: filename.endswith("_interactions") or filename.endswith(".tar.gz"), files)
+        for residue in residues:
+            os.remove(residue)
+        
+    def delete(self):
+        try:
+            files = os.listdir(self.HITPREDICT_DIR)
+            map(os.remove, files)
+        except:
+            pass
+
 
 class StatusLight(QLabel):
     def __init__(self, parent=None):
@@ -252,7 +300,7 @@ class StatusLight(QLabel):
         
 class DataManager(QWidget):
     def __init__(self, parent=None):
-        QWidget.__init__(self, parent)
+        QWidget.__init__(self, parent=None)
         self.setWindowTitle("Data Manager")
         self.createManagers()
 
@@ -272,7 +320,7 @@ class DataManager(QWidget):
         self.i = IdentifierManager()
         self.o = OspreyManager()
         self.g = GOManager()
-        self.h = GOManager()
+        self.h = HitpredictManager()
         self.a = GOManager()
     def setupGUI(self):
         self.layout = QGridLayout()
@@ -491,15 +539,13 @@ them afterwards.""")
         self.g.finished.connect(self.operation_finished)
         self.i.run()
 
-    def download_hitpredicts(self):
-        organisms = os.listdir(latest_osprey_dir())
-        map (download_organism, organisms)
-
 
 def main():
     app = QApplication(sys.argv)
     mainWindow = DataManager()
     mainWindow.show()
+    """hp = HitpredictManager()
+    hp.run()"""
     sys.exit(app.exec_())
 
 if __name__ == "__main__":

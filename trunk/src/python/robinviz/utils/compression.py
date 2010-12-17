@@ -8,8 +8,9 @@ import os
 import tarfile
 import shutil
 import zipfile
-from PyQt4.QtCore import QString, QThread
+from PyQt4.QtCore import QString, QThread, QObject, pyqtSignal
 from urllib2 import Request, urlopen, URLError, HTTPError
+from functools import partial
 
 def download_file2(url):
     filename = url.split('/')[-1]
@@ -141,7 +142,11 @@ class Extractor(QThread):
         print self.target_path
         
         if self.archive_path.endswith(".tar.gz"):
-            self.tar = tarfile.open(self.archive_path, "r:gz")
+            try:
+                self.tar = tarfile.open(self.archive_path, "r:gz")
+            except tarfile.ReadError,e:
+                print "r:gz mode did not work, opening in r mode."
+                self.tar = tarfile.open(self.archive_path, "r")
             
         elif self.archive_path.endswith(".gz"):
             self.ungz_name = new_filename = ".".join(self.archive_path.split('.')[:-1])
@@ -175,6 +180,38 @@ class Extractor(QThread):
         elif self.archive_path.endswith(".zip"):
             self.zip.extractall(path=self.target_path)
 
+class MultiExtractor(QObject):
+    finished = pyqtSignal('QList<QString>')
+
+    def __init__(self):
+        QObject.__init__(self)
+        self.pairs = []
+        self.d = None
+
+    def setup(self, file_target_pairs):
+        self.pairs = file_target_pairs
+
+    def extract(self, index):
+        del self.d
+        print index
+        try:
+            pair = self.pairs[index]
+        except:
+            self.finished.emit([pair[0].split("/")[-1] for pair in self.pairs] )
+            return
+
+        self.d = Extractor()
+        print "setupping:", (pair[0], pair[1])
+        self.d.setup(pair[0], pair[1])
+        print "creating func"
+        func = partial(self.extract, index=index+1)
+        print "connecting"
+        self.d.finished.connect(func)
+        print "connected"
+        self.d.extract()
+
+    def start(self):
+        self.extract(0)
 
         
 def handle_param(param):
@@ -229,3 +266,11 @@ if __name__ == "__main__":
     #download_file("http://hintdb.hgc.jp/htp/download/4932_hc_interactions.tar.gz")
     #untar("4932_hc_interactions.tar.gz")
     #ungz("test.gz")
+
+    thread = MultiExtractor()
+    thread.setup( ( ("/home/emre/robinviz/trunk/src/python/robinviz/databases/3702_hc_interactions.tar.gz", "/home/emre/Desktop/test") , ) )
+    thread.start()
+
+    #thread = Extractor()
+    #thread.setup("/home/emre/robinviz/trunk/src/python/robinviz/databases/3702_hc_interactions.tar.gz", "/home/emre/Desktop/test")
+    #thread.extract()
