@@ -3,7 +3,10 @@
 http://sourceforge.net/projects/python-jake
 """
 
-import sys, os
+import sys, os, urllib
+from threading import Thread
+from functools import partial
+
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtNetwork import *
@@ -60,11 +63,12 @@ class Downloader(QProgressDialog):
         self.setLabelText(self.text + "%s KB / %s KB (%s KB/s)" % (d, t, self.speed))
 
     def downloadFinished(self, reply):
+        print "downloadFinished"
         redirect = reply.attribute(QNetworkRequest.RedirectionTargetAttribute).toUrl()
         error = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute).toInt()
         #print "ERROR: " + str(error)
         #print "HEADER: " + str(reply.header(2).toString())
-        
+
         if error[0] == 404:
             errorDialog = QErrorMessage()
             errorDialog.showMessage("File does not exist:\n%s" % str(self.url.toString()))
@@ -90,12 +94,11 @@ class Downloader(QProgressDialog):
             reply.deleteLater()
             downloaded_size = os.path.getsize(self.downloadPath)
             if downloaded_size and self.total != -1 and downloaded_size == self.total:
+                print "Finished."
                 self.accept()
             else:
                 self.reject()
         
-        
-
     def cancelDownload(self):
         print "Download aborted."
         self.reply.abort()
@@ -104,12 +107,48 @@ class Downloader(QProgressDialog):
         except IOError,e :
             print "%s was not saved, won't delete it." % self.downloadPath
 
+class MultiDownloader(QObject):
+    finished = pyqtSignal('QList<QString>')
+    
+    def __init__(self):
+        QObject.__init__(self)
+        self.files = []
+        self.d = None
+        
+    def set_files(self, files):
+        self.files = files
+
+    def download(self, index):
+        del self.d
+        print index
+        try:
+            file = self.files[index]
+        except:
+            self.finished.emit([file.split("/")[-1] for file in self.files] )
+            return
+        self.d = Downloader(file)
+        self.d.show()
+        print "creating func"
+        func = partial(self.download, index=index+1)
+        print "connecting"
+        self.d.finished.connect(func)
+        print "connected"
+        
+    def start(self):
+        self.download(0)
+
 def test(sonuc):
     print sonuc
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     #window = Downloader("http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD", "/home/emre/Desktop/gene_association.jcvi_Aphagocytophilum.gz")
     #window = Downloader("http://sourceforge.net/projects/python-jake/files/betas/Jake-PyQT4-0.1.zip/download", "test.zip")
-    window = Downloader("http://localhost/~emre/identifier.db.tar.gz")
-    window.finished.connect(test)
+    #window = Downloader("http://localhost/~emre/identifier.db.tar.gz")
+    #window = MultiDownloader()
+    #window.download("http://localhost/~emre/identifier.db.tar.gz", "/home/emre/Desktop/identifier.db.tar.gz")
+    #window.finished.connect(test)
+
+    m = MultiDownloader()
+    m.set_files(["http://localhost/~emre/identifier.db.tar.gz", "http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD"])
+    m.start()
     sys.exit(app.exec_())

@@ -23,7 +23,9 @@ def tabify(files, organism_name):
     hitpredict_combined_ppi = ap("ppidata/hitpredict/%s.txt" % organism_name)
     lines = []
     for filename in files:
-	lines.extend( open(filename).readlines() )
+        l = open(filename).readlines()
+        print l
+	lines.extend( l )
     
     output = open(hitpredict_combined_ppi, "w")
     confs = set()
@@ -60,7 +62,7 @@ def tabify(files, organism_name):
 		pass
 	    else:
 		fields = line.split("|")
-                #print fields
+                print fields
                 # ======PROTEIN1===============
 		protein1 = fields[2]
                 #value = db.value2biogrids(protein1, types=["SWISSPROT", "GENBANK_PROTEIN_ACCESSION"], only_ids=True)
