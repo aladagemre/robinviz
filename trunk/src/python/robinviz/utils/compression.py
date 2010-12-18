@@ -131,6 +131,7 @@ class Extractor(QThread):
 
 
     def __del__(self):
+        print "deleting extractor thread"
         self.wait()
 
     def setup(self, path, target="."):
@@ -179,6 +180,8 @@ class Extractor(QThread):
                 
         elif self.archive_path.endswith(".zip"):
             self.zip.extractall(path=self.target_path)
+
+        print "end of run"
 
 class MultiExtractor(QObject):
     finished = pyqtSignal('QList<QString>')

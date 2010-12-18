@@ -6,6 +6,7 @@ http://sourceforge.net/projects/python-jake
 import sys, os, urllib
 from threading import Thread
 from functools import partial
+from compression import Extractor
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -107,6 +108,32 @@ class Downloader(QProgressDialog):
         except IOError,e :
             print "%s was not saved, won't delete it." % self.downloadPath
 
+class DownloadAndExtract(QThread):
+    def __init__(self, parent = None):
+        QThread.__init__(self, parent)
+        self.d = None
+        self.e = Extractor()
+
+    def __del__(self):
+        print "deleting d&e"
+        self.e.wait()
+        #self.wait()
+
+    def run(self):
+        self.d = Downloader(self.url)
+        self.d.finished.connect(self.extract)
+        self.d.show()
+
+    def extract(self, successful):
+        if successful:
+            filename = self.url.split("/")[-1].split("?")[0]
+            self.e.setup(filename)
+            self.e.extract()
+        
+    def start(self, url):
+        self.url = url
+        self.run()
+
 class MultiDownloader(QObject):
     finished = pyqtSignal('QList<QString>')
     
@@ -148,7 +175,10 @@ if __name__ == "__main__":
     #window.download("http://localhost/~emre/identifier.db.tar.gz", "/home/emre/Desktop/identifier.db.tar.gz")
     #window.finished.connect(test)
 
-    m = MultiDownloader()
-    m.set_files(["http://localhost/~emre/identifier.db.tar.gz", "http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD"])
-    m.start()
+    #m = MultiDownloader()
+    #m.set_files(["http://localhost/~emre/identifier.db.tar.gz", "http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD"])
+    #m.start()
+
+    d = DownloadAndExtract()
+    d.start("http://localhost/~emre/identifier.db.tar.gz")
     sys.exit(app.exec_())
