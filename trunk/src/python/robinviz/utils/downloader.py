@@ -17,7 +17,7 @@ class Downloader(QProgressDialog):
         self.parent = parent
         self.url = url
         if not target:
-            target = url.split("/")[-1]
+            target = url.split("/")[-1].split("?")[0]
         self.downloadPath = target
 
         self.setWindowModality(Qt.ApplicationModal)
@@ -164,6 +164,29 @@ class MultiDownloader(QObject):
     def start(self):
         self.download(0)
 
+class MultiDownloadAndExtract(QThread):
+    finished = pyqtSignal('QList<QString>')
+
+    def __init__(self, parent = None):
+        QThread.__init__(self, parent)
+        self.files = []
+        self.threads = []
+
+    def set_files(self, files):
+        self.files = files
+
+    def run(self):
+        for file in self.files:
+            d = DownloadAndExtract()
+            self.threads.append(d)
+            d.start(file)
+
+    def __del__(self):
+        for thread in self.threads:
+            thread.wait()
+
+
+
 def test(sonuc):
     print sonuc
 if __name__ == "__main__":
@@ -175,10 +198,10 @@ if __name__ == "__main__":
     #window.download("http://localhost/~emre/identifier.db.tar.gz", "/home/emre/Desktop/identifier.db.tar.gz")
     #window.finished.connect(test)
 
-    #m = MultiDownloader()
-    #m.set_files(["http://localhost/~emre/identifier.db.tar.gz", "http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD"])
-    #m.start()
+    m = MultiDownloadAndExtract()
+    m.set_files(["http://localhost/~emre/identifier.db.tar.gz", "http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD"])
+    m.run()
 
-    d = DownloadAndExtract()
-    d.start("http://localhost/~emre/identifier.db.tar.gz")
+    #d = DownloadAndExtract()
+    #d.start("http://localhost/~emre/identifier.db.tar.gz")
     sys.exit(app.exec_())
