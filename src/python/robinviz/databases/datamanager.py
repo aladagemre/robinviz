@@ -4,7 +4,6 @@ import shutil
 #import urllib
 # TODO: uncomment above, fix urls
 from functools import partial
-from multiprocessing import Pool
 
 sys.path.append("..")
 from PyQt4.QtGui import *
@@ -20,10 +19,6 @@ from inputtrees.ppi_downloader import get_hc_url, get_lc_url, get_ss_url
 from inputtrees.hp_to_tabbedppi import tabify
 
 from databases.osprey2biogrid import ConverterThread, OSPREY_ORGANISMS
-
-
-
-import shutil
 
 class Manager(QWidget):
     finished = pyqtSignal(int)
@@ -57,10 +52,11 @@ class IdentifierManager(Manager):
     TARNAME = "identifier.db.tar.gz"
     DATABASE_PATH = rp("src/python/robinviz/databases")
     
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, datamanager=None):
         Manager.__init__(self, parent=None)
         self.filename = self.IDENTIFIER_PATH
         self.name = "Identifier"
+        self.datamanager = datamanager
         self.extractor_thread = Extractor()
         self.extractor_thread.finished.connect(self.succeed)
         self.extractor_thread.terminated.connect(self.fail)
@@ -69,12 +65,11 @@ class IdentifierManager(Manager):
         self.download()
 
     def downloaded(self, successful):
-        print "Successful:", successful
-
         if successful and os.path.exists(self.TARNAME):
             self.status.emit("Downloaded...")
             self.downloadFinished.emit(1)
             self.extractor_thread.setup(self.TARNAME, self.DATABASE_PATH)
+            self.extractor_thread.finished.connect(self.datamanager.o.convert2biogrid)
             self.extractor_thread.extract()
             self.status.emit("Extracting...")
         else:
@@ -113,7 +108,8 @@ class GOManager(Manager):
 
     def download(self):
         self.status.emit("Downloading...")
-        url = "http://robinviz.googlecode.com/svn/data2/go/goinfo.sqlite3"
+        #url = "http://robinviz.googlecode.com/svn/data2/go/goinfo.sqlite3"
+        url = "http://localhost/~emre/goinfo.sqlite3"
         self.d = Downloader(url, self.filename)
         self.d.finished.connect(self.downloaded)
         self.d.exec_()
@@ -129,13 +125,14 @@ class GOManager(Manager):
 
 
 class OspreyManager(Manager):
-    def __init__(self):
+    def __init__(self, parent=None, datamanager=None):
         Manager.__init__(self, parent=None)
         self.filename = latest_osprey_dir()
         self.name = "Osprey PPI"
-        
+        self.datamanager = datamanager
+
         self.extractor_thread = Extractor()
-        self.extractor_thread.finished.connect(self.succeed)
+        #self.extractor_thread.finished.connect(self.succeed)
         self.extractor_thread.terminated.connect(self.fail)
         
     def run(self):
@@ -156,15 +153,18 @@ class OspreyManager(Manager):
             pass
 
     def convert2biogrid(self):
-        if os.path.exists(IdentifierManager.IDENTIFIER_PATH):
+        if latest_osprey_dir() and os.path.exists(IdentifierManager.IDENTIFIER_PATH):
             self.status.emit("Converting PPI data to Biogrid annotation...")
             self.converter_thread = ConverterThread()
             self.converter_thread.status.connect(self.status.emit)
             self.converter_thread.done.connect(self.succeed)
             self.converter_thread.start()
             self.status.emit("Conversion Finished...")
+            self.succeed()
         else:
-            self.status.emit("Could not convert PPI data to Biogrid annotation. Install Identifier DB first.")
+            self.fail()
+            self.status.emit("Could not convert PPI data to Biogrid annotation. Check Identifier and Osprey data.")
+            
         
     def downloaded(self, successful):
         self.osprey_dir = ap("ppidata/%s" % self.directory )
@@ -178,13 +178,19 @@ class OspreyManager(Manager):
                 shutil.rmtree(self.osprey_dir)
 
             self.extractor_thread.setup(self.ziplocation, self.osprey_dir)
-            self.extractor_thread.finished.connect(self.convert2biogrid)
+            self.extractor_thread.finished.connect(self.extracted)
             self.extractor_thread.extract()
             self.status.emit("Extracting...")
         else:
             self.status.emit("Could not download")
             self.fail()
 
+    def extracted(self):
+        self.status.emit("Extracted.")
+        if not self.datamanager.i.extractor_thread.isRunning():
+            self.status.emit("Converting PPI data to Biogrid annotation...")
+            self.convert2biogrid()
+        
     def download(self):
         self.status.emit("Determining the latest version...")
         self.version = version = self.detectLatestVersionOnline()
@@ -309,19 +315,17 @@ class DataManager(QWidget):
             'i': [self.i.IDENTIFIER_PATH],
             'o': [ap("ppidata/%s" % latest_osprey_dir())],
             'g': [ap('godata/goinfo.sqlite3')],
-            'h': map( lambda x: ap('ppidata/hitpredict')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('ppidata/hitpredict')))),
-            'a': map( lambda x: ap('assocdata')+"/"+ x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('assocdata') )  ) ),
-            'geo': map( lambda x: ap('geodata')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('geodata') )  ) ),
+            #'h': map( lambda x: ap('ppidata/hitpredict')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('ppidata/hitpredict')))),
+            #'a': map( lambda x: ap('assocdata')+"/"+ x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('assocdata') )  ) ),
+            #'geo': map( lambda x: ap('geodata')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('geodata') )  ) ),
         }
         self.setupGUI()
         self.refresh_all()
 
     def createManagers(self):
-        self.i = IdentifierManager()
-        self.o = OspreyManager()
+        self.i = IdentifierManager(datamanager=self)
+        self.o = OspreyManager(datamanager=self)
         self.g = GOManager()
-        self.h = HitpredictManager()
-        self.a = GOManager()
     def setupGUI(self):
         self.layout = QGridLayout()
         # ========= HEADER =========================
@@ -369,10 +373,10 @@ them afterwards.""")
 
 
         # ========== LIGHTS =======================
-        # Create 5 light objects
-        self.i_light, self.o_light, self.g_light, self.h_light, self.a_light = map(StatusLight, [None]*5 )
+        # Create 3 light objects
+        self.i_light, self.o_light, self.g_light =  map(StatusLight, [None]*3 )
 
-        for i, status in enumerate( [self.i_light, self.o_light, self.g_light, self.h_light, self.a_light] ):
+        for i, status in enumerate( [self.i_light, self.o_light, self.g_light] ):
             status.go_red()
             self.layout.addWidget(status, i+3, 0)
         # ==========================================
@@ -383,16 +387,16 @@ them afterwards.""")
         self.layout.addWidget(QLabel("Identifier translation database"), 3, 1)
         self.layout.addWidget(QLabel("Osprey PPI Network"), 4, 1)
         self.layout.addWidget(QLabel("GO Tree Information"), 5, 1)
-        self.layout.addWidget(QLabel("Hitpredict PPI Network"), 6, 1)
-        self.layout.addWidget(QLabel("Association Data"), 7, 1)
+        #self.layout.addWidget(QLabel("Hitpredict PPI Network"), 6, 1)
+        #self.layout.addWidget(QLabel("Association Data"), 7, 1)
 
         # =========================================
         
         # ========== STATUS INFORMATION ===========
-        # Create 5 status label objects
-        self.i_status, self.o_status, self.g_status, self.h_status, self.a_status = map(QLabel, [None]*5 )
+        # Create 3 status label objects
+        self.i_status, self.o_status, self.g_status = map(QLabel, [None]*3 )
 
-        for i, status in enumerate( [self.i_status, self.o_status, self.g_status, self.h_status, self.a_status] ):
+        for i, status in enumerate( [self.i_status, self.o_status, self.g_status] ):
             status.setStyleSheet("QLabel { color : blue; }");
             status.setWordWrap(True)
             self.layout.addWidget(status, i+3, 2)
@@ -400,10 +404,10 @@ them afterwards.""")
         # =========================================
 
         # ======= Download Buttons ===============
-        # Create 5 download button objects
-        self.i_download, self.o_download, self.g_download, self.h_download, self.a_download = map(QToolButton, [None]*5 )
+        # Create 3 download button objects
+        self.i_download, self.o_download, self.g_download = map(QToolButton, [None]*3 )
         
-        for i, letter in enumerate( ["i","o","g","h","a"] ):
+        for i, letter in enumerate( ["i","o","g"] ):
             download = self.__dict__["%s_download" % letter]
             slot = partial(self.download_one, letter=letter)
             download.clicked.connect(slot)
@@ -416,9 +420,9 @@ them afterwards.""")
 
         # ======= Delete Buttons ===============
         # Create 5 delete button objects
-        self.i_delete, self.o_delete, self.g_delete, self.h_delete, self.a_delete = map(QToolButton, [None]*5 )
+        self.i_delete, self.o_delete, self.g_delete = map(QToolButton, [None]*3 )
 
-        for i, letter in enumerate( ["i","o","g","h","a"] ):
+        for i, letter in enumerate( ["i","o","g"] ):
             delete = self.__dict__["%s_delete" % letter]
             slot = partial(self.delete_one, letter=letter)
             delete.clicked.connect(slot)
@@ -479,14 +483,16 @@ them afterwards.""")
         for letter, files in self.data_dict.iteritems():
             light = self.__dict__.get("%s_light" % letter)
             if not light:
-                return
+                continue
             status = self.__dict__["%s_status" % letter]
 
             if letter in ("i", "o", "g"):
                 if os.path.exists(files[0]):
                     light.go_green()
+                    status.setText("Exists.")
                 else:
                     light.go_red()
+                    status.setText("Does not exist.")
             elif letter == "h":
                 pass
             elif letter == "a":
@@ -494,26 +500,36 @@ them afterwards.""")
 
     def delete_all(self):
         response= QMessageBox.warning(self, 'Update Local Data',
-     "This operation will remove the local data. You will have to perform a re-download.\n\n"+
+     "This operation will remove the local data. You will have to perform a re-download. "+ \
+     "Hitpredict PPI and Gene Expression data will also be removed. \n\n" + \
      "Are you sure you want to do this?", buttons=QMessageBox.Yes|QMessageBox.No)
 
         if response == QMessageBox.Yes:
             # do the operation
-            data = [ latest_osprey_dir(),
+            data = [ self.i.IDENTIFIER_PATH,
                      ap('godata/goinfo.sqlite3')
             ]
-            data += map( lambda x: ap('assocdata')+"/"+ x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('assocdata') )  ) )
-            data += map( lambda x: ap('ppidata/hitpredict')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('ppidata/hitpredict') )  ) )
-            data += map( lambda x: ap('geodata')+"/"+x, filter ( lambda x: not x.startswith("."),  os.listdir( ap('geodata') )  ) )
+            osprey_dir = latest_osprey_dir()
+            if osprey_dir:
+                data.append( ap(  "ppidata/%s" % osprey_dir ) )
+            data += map( lambda x: ap('assocdata')+"/"+ x, filter ( lambda x: not x.startswith(".") and not os.path.isdir(x),  os.listdir( ap('assocdata') )  ) )
+            data += map( lambda x: ap('ppidata/hitpredict')+"/"+x, filter ( lambda x: not x.startswith(".") and not os.path.isdir(x),  os.listdir( ap('ppidata/hitpredict') )  ) )
+            data += map( lambda x: ap('geodata')+"/"+x, filter ( lambda x: not x.startswith(".") and not os.path.isdir(x),  os.listdir( ap('geodata') )  ) )
 
+            data = set(data) - set(["/home/emre/robinviz/trunk/src/python/robinviz/databases/inputtrees/assocdata/index.txt",
+                                    "/home/emre/robinviz/trunk/src/python/robinviz/databases/inputtrees/geodata/geoTreeView.txt"])
+            
             for i in data:
                 print "Removing",i
                 try:
-                    os.remove(i)
+                    if os.path.isdir(i):
+                        shutil.rmtree(i)
+                    else:
+                        os.remove(i)
                 except:
                     print "Could not remove",i
 
-
+            self.refresh_all()
     def download_all(self):
         self.button_download_all.setEnabled(False)
         self.button_delete_all.setEnabled(False)
@@ -529,15 +545,15 @@ them afterwards.""")
         
 
         # After Identifiers are downloaded, download osprey
-        self.i.downloadFinished.connect(self.o.run)
-        # After osprey is downloaded, download goinfo.sqlite3
         self.o.downloadFinished.connect(self.g.run)
+        # After osprey is downloaded, download goinfo.sqlite3
+        self.g.downloadFinished.connect(self.i.run)
         # After goinfo is downloaded, download hitpredict
         pass # replace goinfo&hitpredict
         # After hitpredict is downloaded,
 
-        self.g.finished.connect(self.operation_finished)
-        self.i.run()
+        self.i.finished.connect(self.operation_finished)
+        self.o.run()
 
 
 def main():
