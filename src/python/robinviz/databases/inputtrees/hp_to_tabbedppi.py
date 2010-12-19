@@ -20,11 +20,11 @@ def normalize(data):
     return data, match
     
 def tabify(files, organism_name):
+    print "Combining Biogrid Osprey and Hitpredict PPI Networks..."
     hitpredict_combined_ppi = ap("ppidata/hitpredict/%s.txt" % organism_name)
     lines = []
     for filename in files:
         l = open(filename).readlines()
-        print l
 	lines.extend( l )
     
     output = open(hitpredict_combined_ppi, "w")
@@ -62,7 +62,6 @@ def tabify(files, organism_name):
 		pass
 	    else:
 		fields = line.split("|")
-                print fields
                 # ======PROTEIN1===============
 		protein1 = fields[2]
                 #value = db.value2biogrids(protein1, types=["SWISSPROT", "GENBANK_PROTEIN_ACCESSION"], only_ids=True)

@@ -183,6 +183,7 @@ class AssociationSelector(QWidget):
         return newbie
 
     def filterSelected(self):
+        print "Filtering selected GO Terms on the association file"
         flag = open(rp("outputs/resultparams.txt")).read().strip().split("-")[-1]
 
         top_level_file = ap("godata/toplevel_%s.txt" % flag)
@@ -204,7 +205,7 @@ class AssociationSelector(QWidget):
             if name:
                 return name[0]
             else:
-                print "Name for term %s could not be found." % i
+                #print "Name for term %s could not be found." % i
                 return "NULL"
 
         name_dict = {}
@@ -221,7 +222,8 @@ class AssociationSelector(QWidget):
                     genes = ["NULL"]
                 output.write("%s\t%s\t%s\n" % ( term, name_dict[term], "\t".join( genes ) ) )
             else:
-                print term, "was not found in go dict"
+                #print term, "was not found in go dict"
+                pass
         output.close()
         catnames.close()
 
@@ -272,7 +274,7 @@ class AssociationSelector(QWidget):
             cursor.execute("SELECT name FROM terms WHERE id=?", (str(i),))
             name = cursor.fetchone()
             if not name:
-                print "Name for term %s could not be found." % i
+                #print "Name for term %s could not be found." % i
                 return "NULL"
             else:
                 return name[0]
