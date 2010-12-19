@@ -546,6 +546,7 @@ class MultiViewWindow(QMainWindow):
 	self.inputWizard = InputWizard()
         self.inputWizard.finished.connect(self.act)
 	self.inputWizard.show()
+        self.inputWizard.showDataManager()
 
 
     def updateData(self):

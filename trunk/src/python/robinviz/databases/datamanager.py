@@ -322,6 +322,14 @@ class DataManager(QWidget):
         self.setupGUI()
         self.refresh_all()
 
+    def isDownloadNeeded(self):
+        for path in self.data_dict.values():
+            if not os.path.exists(path[0]):
+                return True
+        return False
+
+
+                
     def createManagers(self):
         self.i = IdentifierManager(datamanager=self)
         self.o = OspreyManager(datamanager=self)
