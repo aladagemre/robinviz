@@ -131,27 +131,23 @@ class Extractor(QThread):
 
 
     def __del__(self):
-        print "deleting extractor thread"
         self.wait()
 
     def setup(self, path, target="."):
         """Target parameter is optional. It won't be used if the file is gz."""
         self.archive_path = path
         self.target_path = target
-
-        print self.archive_path
-        print self.target_path
         
         if self.archive_path.endswith(".tar.gz"):
             try:
                 self.tar = tarfile.open(self.archive_path, "r:gz")
             except tarfile.ReadError,e:
-                print "r:gz mode did not work, opening in r mode."
+                #print "r:gz mode did not work, opening in r mode."
                 self.tar = tarfile.open(self.archive_path, "r")
             
         elif self.archive_path.endswith(".gz"):
             self.ungz_name = new_filename = ".".join(self.archive_path.split('.')[:-1])
-            print "Extracting",self.archive_path, "as", new_filename
+            #print "Extracting",self.archive_path, "as", new_filename
 
             self.gz_in = gzip.open(self.archive_path, 'rb')
             self.gz_out = open(new_filename, 'wb')
@@ -196,7 +192,7 @@ class MultiExtractor(QObject):
 
     def extract(self, index):
         del self.d
-        print index
+        
         try:
             pair = self.pairs[index]
         except:
@@ -204,13 +200,9 @@ class MultiExtractor(QObject):
             return
 
         self.d = Extractor()
-        print "setupping:", (pair[0], pair[1])
         self.d.setup(pair[0], pair[1])
-        print "creating func"
         func = partial(self.extract, index=index+1)
-        print "connecting"
         self.d.finished.connect(func)
-        print "connected"
         self.d.extract()
 
     def start(self):

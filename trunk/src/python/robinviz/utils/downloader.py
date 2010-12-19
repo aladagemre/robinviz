@@ -64,7 +64,6 @@ class Downloader(QProgressDialog):
         self.setLabelText(self.text + "%s KB / %s KB (%s KB/s)" % (d, t, self.speed))
 
     def downloadFinished(self, reply):
-        print "downloadFinished"
         redirect = reply.attribute(QNetworkRequest.RedirectionTargetAttribute).toUrl()
         error = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute).toInt()
         #print "ERROR: " + str(error)
@@ -95,7 +94,7 @@ class Downloader(QProgressDialog):
             reply.deleteLater()
             downloaded_size = os.path.getsize(self.downloadPath)
             if downloaded_size and self.total != -1 and downloaded_size == self.total:
-                print "Finished."
+                print "Download Finished."
                 self.accept()
             else:
                 self.reject()
@@ -115,7 +114,6 @@ class DownloadAndExtract(QThread):
         self.e = Extractor()
 
     def __del__(self):
-        print "deleting d&e"
         self.e.wait()
         #self.wait()
 
@@ -147,7 +145,6 @@ class MultiDownloader(QObject):
 
     def download(self, index):
         del self.d
-        print index
         try:
             file = self.files[index]
         except:
@@ -155,11 +152,9 @@ class MultiDownloader(QObject):
             return
         self.d = Downloader(file)
         self.d.show()
-        print "creating func"
+
         func = partial(self.download, index=index+1)
-        print "connecting"
         self.d.finished.connect(func)
-        print "connected"
         
     def start(self):
         self.download(0)
@@ -185,10 +180,9 @@ class MultiDownloadAndExtract(QThread):
         for thread in self.threads:
             thread.wait()
 
-
-
 def test(sonuc):
     print sonuc
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     #window = Downloader("http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD", "/home/emre/Desktop/gene_association.jcvi_Aphagocytophilum.gz")

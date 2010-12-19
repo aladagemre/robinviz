@@ -5,7 +5,7 @@ sys.path.append("..")
 from translator import BiogridOspreyTranslator
 import os
 from utils.info import ap, latest_osprey_dir
-from multiprocessing import Pool
+#from multiprocessing import Pool
 #import time
 from PyQt4.QtCore import QThread, pyqtSignal, QString
 
@@ -33,9 +33,10 @@ def convert_organism(organism):
 
 def convert_all_organisms():
     #start_time = time.time()
-    pool = Pool(processes = 4)
-    pool.map(convert_organism, OSPREY_ORGANISMS)
-    
+    #pool = Pool(processes = 4)
+    #pool.map(convert_organism, OSPREY_ORGANISMS)
+    for organism in OSPREY_ORGANISMS:
+        convert_organism(organism)
     #print "Time elapsed: ", time.time() - start_time, "s"
 
 
