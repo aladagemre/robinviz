@@ -131,14 +131,14 @@ class GOSelector(QMainWindow):
 	    traverse(topLevelItem)
 
         if not checkedItems:
-            print "No GO term selected, using the most recent preferences."
             return checkedItems
 
         
 	checkedItems = sorted(checkedItems)
 	f = open(ap("godata/selected_terms.txt"), "w")
 	f.write("\n".join( checkedItems ) )
-	f.close()        
+	f.close()
+        return checkedItems
         
     def getRecord(self, record_id):
 	self.curs.execute("SELECT * FROM terms WHERE id=%d;" % record_id)

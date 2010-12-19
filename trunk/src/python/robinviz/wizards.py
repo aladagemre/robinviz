@@ -259,6 +259,18 @@ class AssociationSelectionPage(QWizardPage):
             return -1
 
     def validatePage(self):
+        checkedItems = self.selector.getCheckedItems()
+        if not checkedItems:
+            f = open(ap("assocdata/selected_assoc.txt"))
+
+            if f.read().strip():
+                print "No association source selected, using the most recent preferences."
+                return True
+            else:
+                response= QMessageBox.warning(self, 'Empty selection',
+     "You have to select at least one association source to continue.")
+                return False
+        
 	self.selector.mergeSelectedAssociations()
 	return True
 	
@@ -278,10 +290,20 @@ class GOSelectionPage(QWizardPage):
 	self.layout.addWidget(self.selector)
 	
     def validatePage(self):
-	self.selector.getCheckedItems()
-	# TODO: Do this after last page
-	#os.chdir("../../../../..")
+	checkedItems = self.selector.getCheckedItems()
+        
+        if not checkedItems:
+            f = open(ap("godata/selected_terms.txt"))
+            if f.read().strip():
+                print "No GO term selected, using the most recent preferences."
+                return True
+            else:
+                response= QMessageBox.warning(self, 'Empty selection',
+     "You have to select at least one category to continue.")
+                return False
+
 	return True
+
 	
 class PPISelectionPage(QWizardPage):
     def __init__(self, parent=None):
@@ -299,7 +321,17 @@ class PPISelectionPage(QWizardPage):
 	
     
     def validatePage(self):
-	self.selector.getCheckedItems()
+	checkedItems = self.selector.getCheckedItems()
+        if not checkedItems:
+            f = open(ap("ppidata/selected_ppis.txt"))
+            if f.read().strip():
+                print "No PPI data source selected, using the most recent preferences."
+                return True
+            else:
+                response= QMessageBox.warning(self, 'Empty selection',
+     "You have to select at least one source to continue.")
+                return False
+            
 	return True
 	
 class GEOSelectionPage(QWizardPage):
@@ -318,8 +350,8 @@ class GEOSelectionPage(QWizardPage):
 
     def validatePage(self):
 	#self.selector.downloadCheckedGEOs()
-        self.selector.saveSettings()
-	return True
+        result = self.selector.saveSettings()
+	return result
 
 class BiclusteringSelectionPage(QWizardPage):
     def __init__(self, parent=None):
