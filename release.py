@@ -33,21 +33,8 @@ os.chdir(TRUNK_DIR)
 
 # 5) Copy the following files:
 os.rmdir( os.path.join(BINARY_DIR, "bin"))
-os.rmdir(os.path.join(BINARY_DIR, "src/python/robinviz/databases/inputtrees/ppidata/hitpredict"))
-copy_paths = """bin
-src/python/robinviz/databases/inputtrees/ppidata/hitpredict
-src/python/robinviz/databases/inputtrees/ppidata/BIOGRID-OSPREY_DATASETS-3.1.71.osprey
-src/python/robinviz/databases/inputtrees/godata/goinfo.sqlite3
-src/python/robinviz/databases/inputtrees/assocdata/gene_association.goa_human
-src/python/robinviz/databases/inputtrees/assocdata/gene_association.goa_human-BIOGRID
-src/python/robinviz/databases/inputtrees/assocdata/gene_association.sgd
-src/python/robinviz/databases/inputtrees/assocdata/gene_association.sgd-BIOGRID
-src/python/robinviz/databases/inputtrees/assocdata/gene_association.tair
-src/python/robinviz/databases/inputtrees/assocdata/gene_association.tair-BIOGRID
-src/python/robinviz/databases/inputtrees/assocdata/gene_association.mgi
-src/python/robinviz/databases/inputtrees/assocdata/gene_association.mgi-BIOGRID"""
-#src/python/robinviz/databases/identifier.db
-
+#os.rmdir(os.path.join(BINARY_DIR, "src/python/robinviz/databases/inputtrees/ppidata/hitpredict"))
+copy_paths = """bin"""
 
 for path in copy_paths.split("\n"):
     command = "cp -rf %s %s" % ( path, os.path.join(BINARY_DIR, path) ) 
@@ -61,15 +48,12 @@ for path in copy_paths.split("\n"):
     
 # 6) Delete the following files:
 
-delete_paths = """Makefile
-compile.sh
-src/python/robinviz/nbproject
+delete_paths = """src/python/robinviz/nbproject
 src/python/robinviz/old
 src/python/robinviz/utils/analyse
 src/python/robinviz/utils/playground
 src/python/robinviz/utils/scripts
-bin/.svn
-src/python/robinviz/databases/inputtrees/ppidata/hitpredict/.svn"""
+bin/.svn"""
 
 for path in delete_paths.split("\n"):
     command ="rm -rf %s" % os.path.join(BINARY_DIR, path)

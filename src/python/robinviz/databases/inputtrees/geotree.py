@@ -130,6 +130,10 @@ class GEOSelector(QWidget):
     def saveSettings(self):
         # ==GET CHECKED INFORMATION===
         checked = self.getCheckedItems()
+        if not checked:
+            response= QMessageBox.warning(self, 'Empty selection',
+     "You have to select at least one source to continue.")
+            return False
         
         """dataName_bic: src/python/robinviz/databases/inputtrees/geodata/GSE23741_series_matrix.txt
             dataName2_bic: src/python/robinviz/databases/inputtrees/geodata/GSE23741_series_matrix.txt"""
@@ -144,7 +148,8 @@ class GEOSelector(QWidget):
         f = open(rp('settings.yaml'), "w")
         f.write(write_values(self.complete_params))
         f.close()
-        
+        return True
+    
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     mainWindow = GEOSelector()

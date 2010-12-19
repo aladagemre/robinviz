@@ -70,7 +70,7 @@ class AssociationSelector(QWidget):
 		traverse(child)
 
         if not checkedItems:
-            checkedItems = open(ap("assocdata/selected_assoc.txt")).read().split("\n")
+            #checkedItems = open(ap("assocdata/selected_assoc.txt")).read().strip().split("\n")
             return checkedItems
 
 	checkedItems = sorted(checkedItems)
@@ -236,12 +236,13 @@ class AssociationSelector(QWidget):
     def mergeSelectedAssociations(self):
 	"""Merges selected association data files into one single assocdata/input_go.txt"""
 	files = self.downloadCheckedAssociation()
+        # below is not required indeed but left for just backup :)
         if not files:
             print "No association source selected, using the most recent preferences."
             return
+        
+        print "Merging association sources..."
 	o = open(ap("assocdata/go.txt"),"w")
-	"""converted = 0
-	not_converted = 0"""
 	self.go_dict = go_dict = {}
 	TARGET_ANNOTATION= "BIOGRID"
 	self.db = GeneDB()

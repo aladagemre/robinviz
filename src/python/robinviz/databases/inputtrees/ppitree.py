@@ -166,7 +166,6 @@ class PPISelector(QWidget):
 		traverse(child)
 
         if not checkedItems:
-            print "No PPI data source selected, using the most recent preferences."
             return checkedItems
         
 	f = open(ap("ppidata/selected_ppis.txt"), "w")
@@ -174,6 +173,7 @@ class PPISelector(QWidget):
 	f.close()
 
 	self.mergePPIFiles(checkedItems)
+        return checkedItems
 
     def useDictionary(self, dictionary):
 	topLevelItems = sorted(dictionary.keys())
