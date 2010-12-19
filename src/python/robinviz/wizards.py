@@ -7,6 +7,7 @@ from databases.inputtrees.gotree import GOSelector
 from databases.inputtrees.geotree import GEOSelector
 from databases.inputtrees.assoctree import AssociationSelector
 from databases.inputtrees.selectors import *
+from databases.datamanager import DataManager
 from utils.info import ap, rp
 from utils.compression import untar
 import shutil
@@ -50,10 +51,15 @@ class InputWizard(QWizard):
         #print self.ConfirmationSelectionPage.wizard()
 	
 	#self.setWindowModality(QWidget.modal)
-	self.setModal(True)
+	#self.setModal(True)
     def showHelp(self):
 	pass
 
+    def showDataManager(self):
+        self.datamanager = DataManager()
+        if self.datamanager.isDownloadNeeded():
+            self.datamanager.show()
+            
 class PreSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
