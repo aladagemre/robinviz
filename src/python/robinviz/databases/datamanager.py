@@ -1,8 +1,8 @@
 import os
 import sys
 import shutil
-#import urllib
-# TODO: uncomment above, fix urls
+import urllib
+
 from functools import partial
 
 sys.path.append("..")
@@ -86,9 +86,8 @@ class IdentifierManager(Manager):
         
     def download(self):
         self.status.emit("Downloading...")
-        #url = "http://garr.dl.sourceforge.net/project/robinviz/identifier/identifier.db.tar.gz"
-        #url = "http://www.emrealadag.com/dosyalar/identifier.db.tar.gz"
-        url = "http://localhost/~emre/identifier.db.tar.gz"
+        url = "http://garr.dl.sourceforge.net/project/robinviz/identifier/identifier.db.tar.gz"
+        #url = "http://localhost/~emre/identifier.db.tar.gz"
         self.d = Downloader(url)
         self.d.finished.connect(self.downloaded)
         self.d.exec_()
@@ -108,8 +107,8 @@ class GOManager(Manager):
 
     def download(self):
         self.status.emit("Downloading...")
-        #url = "http://robinviz.googlecode.com/svn/data2/go/goinfo.sqlite3"
-        url = "http://localhost/~emre/goinfo.sqlite3"
+        url = "http://robinviz.googlecode.com/svn/data2/go/goinfo.sqlite3"
+        #url = "http://localhost/~emre/goinfo.sqlite3"
         self.d = Downloader(url, self.filename)
         self.d.finished.connect(self.downloaded)
         self.d.exec_()
@@ -195,8 +194,8 @@ class OspreyManager(Manager):
         self.status.emit("Determining the latest version...")
         self.version = version = self.detectLatestVersionOnline()
         self.directory = "BIOGRID-OSPREY_DATASETS-%s.osprey" % version
-        #url = "http://thebiogrid.org/downloads/archives/Release%20Archive/" + \
-        url = "http://localhost/~emre/" + \
+        #url = "http://localhost/~emre/" + \
+        url = "http://thebiogrid.org/downloads/archives/Release%20Archive/" + \
         "BIOGRID-%s/BIOGRID-OSPREY_DATASETS-%s.osprey.zip" % (version, version)
         print "Downloading osprey dataset..."
         self.status.emit("Downloading...")
@@ -568,8 +567,6 @@ def main():
     app = QApplication(sys.argv)
     mainWindow = DataManager()
     mainWindow.show()
-    """hp = HitpredictManager()
-    hp.run()"""
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
