@@ -37,7 +37,7 @@ class SingleMainViewWindow(QMainWindow):
     def setupGUI(self):
         #self.view.setViewport(QGLWidget());
         self.view.setRenderHints(QPainter.Antialiasing)
-        self.view.setSceneRect(self.scene.sceneRect())
+        #self.view.setSceneRect(self.scene.sceneRect())
         #self.view.fitInView(self.scene.itemsBoundingRect(),Qt.KeepAspectRatio)
         self.view.refresh()
 
@@ -103,7 +103,7 @@ class SingleMainViewWindow(QMainWindow):
         self.AboutDialog.show()
     def resizeEvent(self, event):
         #self.view.setSceneRect(self.scene.sceneRect())
-        self.view.fitInView(self.scene.itemsBoundingRect(),Qt.KeepAspectRatio)
+        self.view.fitInView(self.scene.sceneRect(),Qt.KeepAspectRatio)
         #self.view.refresh()
 
 
@@ -274,7 +274,7 @@ class MultiViewWindow(QMainWindow):
         self.mainScene = self.mainSceneType()
         self.mainScene.loadGraph(rp("outputs/graphs/maingraph.gml"))
         self.mainView.setScene(self.mainScene)
-        self.mainView.setSceneRect(self.mainScene.sceneRect().adjusted(-10, -10, 10, 10))
+        self.mainView.setSceneRect(self.mainScene.sceneRect().adjusted(-50, -50, 50, 50))
         #self.mainView.fitInView(self.mainScene.sceneRect(),Qt.KeepAspectRatio)
         self.mainView.refresh()
 
@@ -733,9 +733,9 @@ class MultiViewWindow(QMainWindow):
 
     def resizeEvent(self, event):
         if self.mainView.scene():
-            self.mainView.fitInView(self.mainView.scene().itemsBoundingRect(),Qt.KeepAspectRatio)
+            self.mainView.fitInView(self.mainView.scene().sceneRect(),Qt.KeepAspectRatio)
         for view in self.pViews:
             if view.scene():
-                view.fitInView(view.scene().itemsBoundingRect(),Qt.KeepAspectRatio)
+                view.fitInView(view.scene().sceneRect(),Qt.KeepAspectRatio)
 from confirmation import * # to avoid circular import. Need to fix it.
 # windows requires confirmation->extensions. extensions requires windows (to open a new window)
