@@ -152,7 +152,11 @@ class OspreyManager(Manager):
             pass
 
     def convert2biogrid(self):
-        if latest_osprey_dir() and os.path.exists(IdentifierManager.IDENTIFIER_PATH):
+        if not os.path.exists(IdentifierManager.IDENTIFIER_PATH):
+            self.status.emit("Identifier DB is required for conversion, waiting for it...")
+            return
+        
+        if latest_osprey_dir():
             self.status.emit("Converting PPI data to Biogrid annotation...")
             self.converter_thread = ConverterThread()
             self.converter_thread.status.connect(self.status.emit)
@@ -162,7 +166,7 @@ class OspreyManager(Manager):
             self.succeed()
         else:
             self.fail()
-            self.status.emit("Could not convert PPI data to Biogrid annotation. Check Identifier and Osprey data.")
+            self.status.emit("Could not find Osprey PPI data.")
             
         
     def downloaded(self, successful):
