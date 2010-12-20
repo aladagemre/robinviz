@@ -1,3 +1,4 @@
+import os.path
 # -*- coding: utf-8 -*-
 
 from PyQt4.QtGui import *
@@ -37,12 +38,14 @@ class PPISelector(QWidget):
             os.remove(ziplocation)      
 
         # ======IDENTIFIERS========
-        if not os.path.exists(self.IDENTIFIER_PATH) and os.path.exists("identifier.db.tar.gz"):
+        TARGZ = "identifier.db.tar.gz"
+        if not os.path.exists(self.IDENTIFIER_PATH) and os.path.exists(TARGZ) and os.path.getsize(TARGZ):
             print "Uncompressing identifier.db.tar.gz"
             untar("identifier.db.tar.gz")
             shutil.move("identifier.db", self.IDENTIFIER_PATH)
             os.remove("identifier.db.tar.gz")
-
+        else:
+            QMessageBox.information(self,"Download not completed", "Download has to be completed before moving any further. Please go back and forth.")
         # =========================
 
         self.readPPIData()

@@ -60,7 +60,7 @@ class IdentifierManager(Manager):
     def run(self):
         self.download()
 
-    def downloaded(self, successful):
+    def downloaded(self, successful):        
         if successful and os.path.exists(self.TARNAME):
             self.status.emit("Downloaded...")
             self.downloadFinished.emit(1)
@@ -74,11 +74,17 @@ class IdentifierManager(Manager):
 
     def succeed(self):
         Manager.succeed(self)
-        os.remove(self.TARNAME)
+        try:
+            os.remove(self.TARNAME)
+        except:
+            print "Could not remove", self.TARNAME
 
     def fail(self):
         Manager.fail(self)
-        #os.remove(self.TARNAME)
+        try:
+            os.remove(self.TARNAME)
+        except:
+            print "Could not remove", self.TARNAME
         
     def download(self):
         self.status.emit("Downloading...")
