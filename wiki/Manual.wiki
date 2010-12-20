@@ -165,6 +165,10 @@ http://robinviz.googlecode.com/svn/manual/images/0_starting_options4.png
 
 Hence our methodology works on the desired input requests, at this section, we provide how to create an input and make it meaningful for Robinviz. Since Robinviz has Wizard style Input menu, it is easy to follow step by step requests. In the paper, we mention two concepts of methodology to follow; *"Co-Expression"* and *"Co-Ontology"*. 
 
+When you start the Execution Wizard from File->Execute, Data Manager might show up. Make sure that all of the sources are downloaded if you want to perform a manual-configuration run (this is not required for pre-configuration runs). Just click on the Download All button at the top right of the screen.
+
+|| Data Manager ||http://robinviz.googlecode.com/svn/manual/images/data_manager.png ||
+
 -------------------------
 == Co-Ontology ==
 
@@ -178,7 +182,7 @@ For easy understanding step by step input submission for Co-Ontology is as follo
 
 || 1 ||http://robinviz.googlecode.com/svn/manual/images/1_ppi_selection.png ||
 
-|| First Select PPI data from Biogrid data from tree view. You are available to select multiple organisms. The tree view organized organism name and experimental methodology(see http://wiki.thebiogrid.org/doku.php/experimental_systems). For this setup, we select Homo Sapiens and all its experiments. Note also that this screen is *must select* screen for both Co-Ontology and Co-Expression. Please press Next button to continue. ||
+|| First Select PPI data from Biogrid data from tree view. You are available to select multiple organisms. The tree view organized organism name and experimental methodology(see http://wiki.thebiogrid.org/doku.php/experimental_systems). For this setup, we select Homo Sapiens and all its experiments. Note also that this screen is *must select* screen for both Co-Ontology and Co-Expression. Please press Next button to continue and wait while PPI sources you selected are merged. ||
 
 || 2 || http://robinviz.googlecode.com/svn/manual/images/2_select_concept.png ||
 
@@ -194,7 +198,7 @@ For easy understanding step by step input submission for Co-Ontology is as follo
 
 || 5 || http://robinviz.googlecode.com/svn/manual/images/5_go_selection.png ||
 
-|| Since we require genes/proteins from GO categorization, we download GO associations, we extract genes from these associations and convert to Biogrid id. For this case we select Filtered>Homo Sapiens. Finally, please press FinisH button ||
+|| Since we require genes/proteins from GO categorization, we download GO associations, we extract genes from these associations and convert to Biogrid id. For this case we select Filtered>Homo Sapiens. Finally, please press Finish button. This may take a long time (~10-15 min) as association sources will be downloaded, converted to Biogrid format. This is a first-run operation and following runs will be much more quicker. After the conversion, association files will be merged. You can track the process from the console window. ||
 
 Then, for your patience Robinviz works for a while. During the execution the top of Robinviz window should be;
 
