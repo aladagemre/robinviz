@@ -32,20 +32,25 @@ class PPISelector(QWidget):
     def setup(self, result):
         self.osprey_dir = ap("ppidata/%s" % self.directory )
         ziplocation = "%s.zip" % self.directory
-        
-        if not os.path.exists(self.osprey_dir) and os.path.exists(ziplocation):
+            
+        if not os.path.exists(self.osprey_dir) and os.path.exists(ziplocation) and os.path.getsize(ziplocation):
             unzip_file_into_dir(ziplocation, self.osprey_dir)
             os.remove(ziplocation)      
 
         # ======IDENTIFIERS========
         TARGZ = "identifier.db.tar.gz"
-        if not os.path.exists(self.IDENTIFIER_PATH) and os.path.exists(TARGZ) and os.path.getsize(TARGZ):
-            print "Uncompressing identifier.db.tar.gz"
-            untar("identifier.db.tar.gz")
-            shutil.move("identifier.db", self.IDENTIFIER_PATH)
-            os.remove("identifier.db.tar.gz")
-        else:
-            QMessageBox.information(self,"Download not completed", "Download has to be completed before moving any further. Please go back and forth.")
+        if not os.path.exists(self.IDENTIFIER_PATH) or not os.path.getsize(self.IDENTIFIER_PATH):
+            # If identifier.db does not exist, check if targz is downloaded
+            if not os.path.exists(TARGZ) or not os.path.getsize(TARGZ):
+                # if targz is not downloaded, warn
+                QMessageBox.information(self,"Download not completed", "Download has to be completed before moving any further. Please go back and forth.")
+                return
+            else:
+                # if targz is downloaded and has some size
+                print "Uncompressing identifier.db.tar.gz"
+                untar("identifier.db.tar.gz")
+                shutil.move("identifier.db", self.IDENTIFIER_PATH)
+                os.remove("identifier.db.tar.gz")
         # =========================
 
         self.readPPIData()
@@ -99,7 +104,7 @@ class PPISelector(QWidget):
             self.assureIdentifiersExists()
 
     def assureIdentifiersExists(self):
-	if not os.path.exists(self.IDENTIFIER_PATH):
+	if not os.path.exists(self.IDENTIFIER_PATH) or not os.path.getsize(self.IDENTIFIER_PATH):
             url = "http://garr.dl.sourceforge.net/project/robinviz/identifier/identifier.db.tar.gz"            
             print "Identifiers DB does not exist. Downloading it..."
             self.iden = Downloader(url)
