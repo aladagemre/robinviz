@@ -179,9 +179,6 @@ class MultiDownloadAndExtract(QThread):
         for thread in self.threads:
             thread.wait()"""
 
-def test(sonuc):
-    print sonuc
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     #window = Downloader("http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD", "/home/emre/Desktop/gene_association.jcvi_Aphagocytophilum.gz")

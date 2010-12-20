@@ -8,9 +8,8 @@ import os
 import tarfile
 import shutil
 import zipfile
-from PyQt4.QtCore import QString, QThread, QObject, pyqtSignal
+from PyQt4.QtCore import QString, QThread
 from urllib2 import Request, urlopen, URLError, HTTPError
-from functools import partial
 
 def download_file2(url):
     filename = url.split('/')[-1]
