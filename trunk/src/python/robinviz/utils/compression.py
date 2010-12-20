@@ -177,7 +177,7 @@ class Extractor(QThread):
         elif self.archive_path.endswith(".zip"):
             self.zip.extractall(path=self.target_path)
 
-class MultiExtractor(QObject):
+"""class MultiExtractor(QObject):
     finished = pyqtSignal('QList<QString>')
 
     def __init__(self):
@@ -204,7 +204,7 @@ class MultiExtractor(QObject):
         self.d.extract()
 
     def start(self):
-        self.extract(0)
+        self.extract(0)"""
 
         
 def handle_param(param):
