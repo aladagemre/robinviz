@@ -103,7 +103,7 @@ class Downloader(QProgressDialog):
         self.reply.abort()
         try:
             os.remove(self.downloadPath)
-        except IOError,e :
+        except OSError,e :
             print "%s was not saved, won't delete it." % self.downloadPath
 
 class DownloadAndExtract(QThread):
