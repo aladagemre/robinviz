@@ -9,7 +9,9 @@ from utils.info import ap, latest_osprey_dir
 #import time
 from PyQt4.QtCore import QThread, pyqtSignal, QString
 
+# TODO: this static value might cause bugs!
 OSPREY_BASE = ap("ppidata/%s" % latest_osprey_dir()) + "/"
+
 OSPREY_ORGANISMS = ["Arabidopsis_thaliana",
         "Caenorhabditis_elegans",
         "Drosophila_melanogaster",
@@ -21,14 +23,17 @@ OSPREY_ORGANISMS = ["Arabidopsis_thaliana",
         "Schizosaccharomyces_pombe"]
 
 def convert_organism(organism):
+    OSPREY_BASE = ap("ppidata/%s" % latest_osprey_dir()) + "/"
     try:
         t = BiogridOspreyTranslator()
     except:
         return
     print "Translating", organism
-    for filename in os.listdir(OSPREY_BASE+organism):
-        if not filename[0]=="." and not filename.endswith("-BIOGRID") and not os.path.exists(OSPREY_BASE+organism+"/"+filename + "-BIOGRID"):
-            t.set_filename( OSPREY_BASE+organism+"/"+filename )
+    for filename in os.listdir(os.path.join(OSPREY_BASE,organism)):
+        osprey_file = os.path.join(OSPREY_BASE, organism, filename)
+        biogrid_file = osprey_file + "-BIOGRID"
+        if not filename[0]=="." and not filename.endswith("-BIOGRID") and not os.path.exists(biogrid_file):
+            t.set_filename( osprey_file )
             t.translate()
 
 def convert_all_organisms():

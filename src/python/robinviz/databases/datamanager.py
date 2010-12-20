@@ -179,7 +179,7 @@ class OspreyManager(Manager):
             self.extractor_thread.setup(self.ziplocation, self.osprey_dir)
             self.extractor_thread.finished.connect(self.extracted)
             self.extractor_thread.extract()
-            self.status.emit("Extracting...")
+            self.status.emit("Extracting & Processing...")
         else:
             self.status.emit("Could not download")
             self.fail()
@@ -448,7 +448,6 @@ them afterwards.""")
         light = self.__dict__["%s_light" % letter]
         status = self.__dict__["%s_status" % letter]
         
-        manager.downloadFinished.connect(self.null)
         manager.finished.connect(light.reflect_result)
         manager.status.connect(status.setText)
         manager.run()
@@ -474,7 +473,7 @@ them afterwards.""")
         status.setText("Deleted.")
 
     def operation_finished(self):
-        print "operation finished, connecting signals to none"        
+        print "Downloading all the sources has finished."
         self.o.downloadFinished.disconnect(self.g.run)
         self.g.downloadFinished.disconnect(self.i.run)
         self.i.finished.disconnect(self.operation_finished)
