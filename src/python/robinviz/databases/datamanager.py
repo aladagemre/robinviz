@@ -12,13 +12,9 @@ from PyQt4.QtCore import *
 from utils.info import rp, ap, pp, latest_osprey_dir
 from utils.compression import Extractor
 from utils.BeautifulSoup import BeautifulSoup
-from utils.downloader import Downloader, MultiDownloader
+from utils.downloader import Downloader
 
-from inputtrees.assoctree import *
-from inputtrees.ppi_downloader import get_hc_url, get_lc_url, get_ss_url
-from inputtrees.hp_to_tabbedppi import tabify
-
-from databases.osprey2biogrid import ConverterThread, OSPREY_ORGANISMS
+from databases.osprey2biogrid import ConverterThread #, OSPREY_ORGANISMS
 
 class Manager(QWidget):
     finished = pyqtSignal(int)
@@ -227,7 +223,7 @@ class OspreyManager(Manager):
         print "Will use 3.1.71 as the default version"
         return "3.1.71"
 
-class HitpredictManager(Manager):
+"""class HitpredictManager(Manager):
     HITPREDICT_DIR = ap("ppidata/hitpredict")
     
     def __init__(self, parent=None):
@@ -235,8 +231,8 @@ class HitpredictManager(Manager):
         self.extractor_thread = Extractor()
 
     def run(self):
-        """pool = Pool(processes = 4)
-        pool.map(download_organism, OSPREY_ORGANISMS)"""
+        #pool = Pool(processes = 4)
+        #pool.map(download_organism, OSPREY_ORGANISMS)
         self.download_organism(OSPREY_ORGANISMS[0])
         
     def download_organism(self, organism_name):
@@ -283,7 +279,7 @@ class HitpredictManager(Manager):
             files = os.listdir(self.HITPREDICT_DIR)
             map(os.remove, files)
         except:
-            pass
+            pass"""
 
 
 class StatusLight(QLabel):
@@ -430,7 +426,7 @@ them afterwards.""")
         # =========================================
 
         # ======= Delete Buttons ===============
-        # Create 5 delete button objects
+        # Create 3 delete button objects
         self.i_delete, self.o_delete, self.g_delete = map(QToolButton, [None]*3 )
 
         for i, letter in enumerate( ["i","o","g"] ):
@@ -451,7 +447,8 @@ them afterwards.""")
         manager = self.__dict__[letter]
         light = self.__dict__["%s_light" % letter]
         status = self.__dict__["%s_status" % letter]
-
+        
+        manager.downloadFinished.connect(self.null)
         manager.finished.connect(light.reflect_result)
         manager.status.connect(status.setText)
         manager.run()
@@ -476,14 +473,11 @@ them afterwards.""")
         light.go_red()
         status.setText("Deleted.")
 
-        
     def operation_finished(self):
-        self.i.finished.connect(lambda: None)
-        self.o.finished.connect(lambda: None)
-        self.g.finished.connect(lambda: None)
-        self.i.downloadFinished.connect(lambda: None)
-        self.o.downloadFinished.connect(lambda: None)
-        self.g.finished.connect(lambda: None)
+        print "operation finished, connecting signals to none"        
+        self.o.downloadFinished.disconnect(self.g.run)
+        self.g.downloadFinished.disconnect(self.i.run)
+        self.i.finished.disconnect(self.operation_finished)
 
         self.button_download_all.setEnabled(True)
         self.button_delete_all.setEnabled(True)
@@ -546,9 +540,9 @@ them afterwards.""")
         self.button_delete_all.setEnabled(False)
         self.button_refresh_all.setEnabled(False)
 
-        self.i.finished.connect(self.i_light.go_green)
-        self.o.finished.connect(self.o_light.go_green)
-        self.g.finished.connect(self.g_light.go_green)
+        self.i.finished.connect(self.i_light.reflect_result)
+        self.o.finished.connect(self.o_light.reflect_result)
+        self.g.finished.connect(self.g_light.reflect_result)
 
         self.i.status.connect(self.i_status.setText)
         self.o.status.connect(self.o_status.setText)
@@ -559,9 +553,6 @@ them afterwards.""")
         self.o.downloadFinished.connect(self.g.run)
         # After osprey is downloaded, download goinfo.sqlite3
         self.g.downloadFinished.connect(self.i.run)
-        # After goinfo is downloaded, download hitpredict
-        pass # replace goinfo&hitpredict
-        # After hitpredict is downloaded,
 
         self.i.finished.connect(self.operation_finished)
         self.o.run()

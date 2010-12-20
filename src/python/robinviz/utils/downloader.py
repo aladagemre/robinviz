@@ -3,9 +3,8 @@
 http://sourceforge.net/projects/python-jake
 """
 
-import sys, os, urllib
-from threading import Thread
-from functools import partial
+import sys
+import os
 from compression import Extractor
 
 from PyQt4.QtCore import *
@@ -132,7 +131,7 @@ class DownloadAndExtract(QThread):
         self.url = url
         self.run()
 
-class MultiDownloader(QObject):
+"""class MultiDownloader(QObject):
     finished = pyqtSignal('QList<QString>')
     
     def __init__(self):
@@ -178,7 +177,7 @@ class MultiDownloadAndExtract(QThread):
 
     def __del__(self):
         for thread in self.threads:
-            thread.wait()
+            thread.wait()"""
 
 def test(sonuc):
     print sonuc
@@ -192,9 +191,9 @@ if __name__ == "__main__":
     #window.download("http://localhost/~emre/identifier.db.tar.gz", "/home/emre/Desktop/identifier.db.tar.gz")
     #window.finished.connect(test)
 
-    m = MultiDownloadAndExtract()
-    m.set_files(["http://localhost/~emre/identifier.db.tar.gz", "http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD"])
-    m.run()
+    #m = MultiDownloadAndExtract()
+    #m.set_files(["http://localhost/~emre/identifier.db.tar.gz", "http://cvsweb.geneontology.org/cgi-bin/cvsweb.cgi/go/gene-associations/gene_association.jcvi_Aphagocytophilum.gz?rev=HEAD"])
+    #m.run()
 
     #d = DownloadAndExtract()
     #d.start("http://localhost/~emre/identifier.db.tar.gz")
