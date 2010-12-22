@@ -12,10 +12,25 @@ TRUNK_DIR = "/home/%s/robinviz/trunk" % USER
 if not os.path.exists(RELEASE_DIR):
     os.mkdir(RELEASE_DIR)
     
-# 1) Export svn dir as source dir.
+# 1) Export svn dir as source dir and clean it
 if not os.path.exists(SOURCE_DIR):
     print "Source dir does not exist, checking it out from svn repo"
     os.system("svn export https://robinviz.googlecode.com/svn/trunk %s" % SOURCE_DIR)
+
+unnecessary_dirs = """src/python/robinviz/old
+src/python/robinviz/utils/analyse
+src/python/robinviz/utils/playground
+src/python/robinviz/utils/scripts
+release.py"""
+
+for path in unnecessary_dirs.split("\n"):
+    command ="rm -rf %s" % os.path.join(SOURCE_DIR, path)
+    #print command
+    try:
+	os.system(command)
+    except Exception,e:
+	print "Did not work:", e
+	print command
 
 # 2) Targz source dir
 os.chdir(RELEASE_DIR)
@@ -46,13 +61,9 @@ for path in copy_paths.split("\n"):
 	print "Did not work:", e
 	print command
     
-# 6) Delete the following files:
-
+# 6) Delete the following files for binary release
 delete_paths = """src/python/robinviz/nbproject
-src/python/robinviz/old
-src/python/robinviz/utils/analyse
-src/python/robinviz/utils/playground
-src/python/robinviz/utils/scripts
+src/cpp
 bin/.svn"""
 
 for path in delete_paths.split("\n"):
