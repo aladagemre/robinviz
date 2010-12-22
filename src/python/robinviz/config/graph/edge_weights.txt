@@ -1,4 +1,0 @@
-Edge Weights in Bicluster Graph
-Based on
-edgesBetween 1 radio Interactions from PPI Network(directed)
-sharedGenes 0 radio Common Genes in Biclusters(undirected)

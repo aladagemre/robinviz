@@ -1,4 +1,0 @@
-latex poster.tex
-dvips -P a0 poster -o
-ps2pdf poster.ps
- 
