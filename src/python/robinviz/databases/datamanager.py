@@ -129,7 +129,7 @@ class OspreyManager(Manager):
     def __init__(self, parent=None, datamanager=None):
         Manager.__init__(self, parent=None)
         self.filename = latest_osprey_dir()
-        self.name = "Osprey PPI"
+        self.name = "Biogrid PPI Network"
         self.datamanager = datamanager
 
         self.extractor_thread = Extractor()
@@ -398,7 +398,7 @@ them afterwards.""")
         # ========= DATA SOURCE NAMES ==============
 
         self.layout.addWidget(QLabel("Identifier translation database"), 3, 1)
-        self.layout.addWidget(QLabel("Osprey PPI Network"), 4, 1)
+        self.layout.addWidget(QLabel("Biogrid PPI Network"), 4, 1)
         self.layout.addWidget(QLabel("GO Tree Information"), 5, 1)
         #self.layout.addWidget(QLabel("Hitpredict PPI Network"), 6, 1)
         #self.layout.addWidget(QLabel("Association Data"), 7, 1)

@@ -222,7 +222,7 @@ class EdgeItem(QGraphicsItem):
         self.onlyUpMiddle = True        # won't show arrow head if target is downwards.
         self.highlighted = False        # if edge is highlighted
         self.rect = self.findBoundingRect()
-        self.setZValue(-10)
+        self.setZValue(-9)
 
         # Setup operations
         # TODO: test if the order poses a problem.
