@@ -60,7 +60,7 @@ sh compile.sh
 
 ==Requirements==
  * Visual Studio 2005 C++ or over
- * Python 2.7 and PyQt 4.7
+ * [http://www.python.org/download/ Python 2.7] and [http://www.riverbankcomputing.co.uk/software/pyqt/download PyQt 4.7+]
 
 ==Binary==
  # Start the installation wizard to install the program under C:\Robinviz
