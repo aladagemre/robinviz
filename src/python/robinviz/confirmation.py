@@ -16,7 +16,7 @@ for line in colorFile:
     name, r, g, b = line.strip().split()
     CATEGORY_COLORS[str(lineNum)] = name.replace("_", " ")
     lineNum+=1
-
+colorFile.close()
 #print CATEGORY_COLORS
 
 
