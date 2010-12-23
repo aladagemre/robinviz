@@ -3,6 +3,13 @@
 
 = Known Bugs in Version 1.0.0 =
 
+== Common ==
+* Bug id W002: Flying nodes
+
+_Definition_: If user moves the protein nodes fast, nodes might fly to a distant position and the scene might get distorted by expanding.
+
+_Solution_: Please move proteins slowly.
+
 == Windows ==
 
 * Bug id W001: Gene search indexing bug
