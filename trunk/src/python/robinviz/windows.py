@@ -505,6 +505,12 @@ class MultiViewWindow(QMainWindow):
         # Copy two files
         # =======================
         shutil.copy(ap("assocdata/input_go.txt"), rp("outputs/input_go.txt"))
+        for file in filter( lambda x: x.startswith("gene_index.shelve"), os.listdir(rp("outputs")) ):
+            try:
+                os.remove(file)
+            except:
+                print "Could not remove", file
+                
         # =======================
         if fileName:
             # saving window doesnt put extension automatically on Gnome. So ensure the extension:
