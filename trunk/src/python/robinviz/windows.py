@@ -14,6 +14,7 @@ import shutil
 
 from wizards import InputWizard
 from utils.info import id2cat, runcommand, rp, latest_osprey_dir
+from utils.decorators import onerror
 from utils.compression import compressdir, untar
 
 class SingleMainViewWindow(QMainWindow):
@@ -484,7 +485,7 @@ class MultiViewWindow(QMainWindow):
         if fileName:
             # Init part
             self.clearViews()
-            shutil.rmtree(rp("outputs"))
+            shutil.rmtree(rp("outputs"), onerror=onerror)
             shutil.copy(fileName, rp("outputs.tar.gz"))
             untar("outputs.tar.gz")
 
