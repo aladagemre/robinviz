@@ -10,7 +10,7 @@ import os
 from PyQt4 import QtWebKit
 from bicluster import BiclusterWindow
 import math
-from utils.info import root, ap, runcommand
+from utils.info import rp, ap, runcommand
 
 CATEGORY_COLORS = []
 CATEGORY_NAMES = []
@@ -22,7 +22,7 @@ def read_category_information():
     
     CHARS = map(chr, range(65, 88)) + map(chr, range(89, 91)) + map(chr, range(48, 56))
     #CATEGORY_NAMES = dict(zip ( CHARS, open(ap("godata/highlevel_categories.txt")).read().split("\n")))
-    CATEGORY_NAMES = dict(zip ( CHARS, [ line.strip().split()[0].replace("_"," ") for line in open("%s/outputs/colors_func.txt" % root).readlines()[:-1] ] ))
+    CATEGORY_NAMES = dict(zip ( CHARS, [ line.strip().split()[0].replace("_"," ") for line in open(rp("outputs/colors_func.txt")).readlines()[:-1] ] )) 
 
     CATEGORY_COLORS = open(ap("godata/highlevel_colors.txt")).read().split("\n")
     CHAR_COLOR_DICT = dict( zip(CHARS, CATEGORY_COLORS) )
@@ -30,7 +30,7 @@ def read_category_information():
 read_category_information()
 
 GRAPH_LAYOUTS = {}
-layoutFile = open("%s/layouts.ini" % root)
+layoutFile = open(rp("layouts.ini"))
 for line in layoutFile:
     if line.startswith("//"):
         continue # this is a comment
@@ -707,7 +707,7 @@ class CircleNode(NodeItem):
 
 
         # =============== COLORS ===================
-        f = open("outputs/enrich/pie%d.txt" % node.id)
+        f = open(rp("outputs/enrich/pie%d.txt" % node.id))
         colors = []
         categories = []
         for line in f:

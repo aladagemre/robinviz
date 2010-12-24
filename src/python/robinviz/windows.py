@@ -521,7 +521,7 @@ class MultiViewWindow(QMainWindow):
 
     def detectLastConfirmationType(self):
         
-        with open("outputs/resultparams.txt") as resultparams:
+        with open(rp("outputs/resultparams.txt")) as resultparams:
             confirmationType = resultparams.read().strip()
             self.setConfirmationType(confirmationType)
         """except:
