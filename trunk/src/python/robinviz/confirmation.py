@@ -16,9 +16,9 @@ for line in colorFile:
     name, r, g, b = line.strip().split()
     CATEGORY_COLORS[str(lineNum)] = name.replace("_", " ")
     lineNum+=1
-colorFile.close()
-#print CATEGORY_COLORS
 
+#print CATEGORY_COLORS
+colorFile.close()
 
 class CoExpressionMainScene(MainScene):
     def __init__(self, parent=None):
@@ -80,7 +80,7 @@ class CoExpressionMainScene(MainScene):
             #tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
             tip = "%s: %s" % (self.scoringName, value )
             item.setToolTip(tip)
-
+        f.close()
 class CoExpressionMainView(MainView):
     def __init__(self, parent=None):
         MainView.__init__(self, parent)
@@ -226,7 +226,7 @@ class CoFunctionalityMainScene(MainScene):
             #tip = "%s: %s\nCategory: %s" % (self.scoringName, value, CATEGORY_COLORS[item.node.parameter])
             tip = "%s: %s" % (self.scoringName, value )
             item.setToolTip(tip)
-
+        f.close()
 # TODO: Rewrite this!
 
 class CoFunctionalityMainView(MainView):
