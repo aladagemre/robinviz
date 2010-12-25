@@ -326,7 +326,7 @@ class ComprehensiveSearchWidget(QWidget):
         self.graphFiles = filter(pattern.match, fileList)
 
         # Create index file.
-        if not exists(normcase("outputs/gene_index.shelve")):
+        if not filter( lambda fn: fn.startswith("gene_index.shelve"), listdir("outputs")):
             self.index = shelve.open(normcase("outputs/gene_index.shelve"))
         
             # Now fetch the labels in each file.
