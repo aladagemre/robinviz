@@ -8,6 +8,7 @@ def injectArguments(inFunction):
 
 def onerror(func, path, exc_info):
     """
+    Taken from pythonutils
     Error handler for ``shutil.rmtree``.
 
     If the error is due to an access error (read only file)
