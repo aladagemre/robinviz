@@ -6,6 +6,15 @@
 
 char fname[256];
 
+char * filenameCharExchange( char *file, char del ){
+    int i = 0;
+    for( ; file[ i ] != '\0'; i++ ){
+        if( file[ i ] == del )
+            file[ i ] = '_';
+    }
+    return file;
+}
+
 void process2LevelFromGml( char queryGeneName[256] ){
 
 #ifdef LINUX
@@ -71,6 +80,7 @@ void process2LevelFromGml( char queryGeneName[256] ){
                         gw.del_node( n );
         }
 
+        queryGeneName = filenameCharExchange( queryGeneName, ':' );
 #ifdef LINUX
         sprintf( fname, "outputs/graphs/%s.gml", queryGeneName );
 #else
@@ -337,6 +347,7 @@ void process2LevelFromTxt( char queryGeneName[256] ){
 //                        cout << endl << xpos[ n ] << " - " << ypos[ n ] << endl;
             }
 
+            queryGeneName = filenameCharExchange( queryGeneName, ':' );
 #ifdef LINUX
             sprintf( fname, "outputs/graphs/%s.gml", queryGeneName );
 #else
@@ -472,6 +483,8 @@ void process1LevelFromTxt( char queryGeneName[256] ){
                 ypos[ circle1[ it ] ] = p.ycoord();
                 tmp -= min;
             }
+
+            queryGeneName = filenameCharExchange( queryGeneName, ':' );
 #ifdef LINUX
             sprintf( fname, "outputs/graphs/%s.gml", queryGeneName );
 #else
