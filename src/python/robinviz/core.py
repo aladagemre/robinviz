@@ -159,8 +159,8 @@ class View(QGraphicsView):
         if self.scene():
             self.scene().update()
             # Leave some margin
-            #rect = self.scene().itemsBoundingRect().adjusted(-10, -10, 10, 10)
-            self.fitInView(self.scene().sceneRect(), Qt.KeepAspectRatio)
+            rect = self.scene().itemsBoundingRect().adjusted(-10, -10, 10, 10)
+            self.fitInView(rect, Qt.KeepAspectRatio)
             
     def legend(self):
         """Displays meanings of the colors"""
