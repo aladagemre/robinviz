@@ -941,9 +941,9 @@ class PiechartNode(NodeItem):
         def displayWindow(numHop=1):
             from windows import SinglePeripheralViewWindow
             self.specialWindow = SinglePeripheralViewWindow(self.scene().views()[0].__class__ , scene=None)
-            neihgboringFilename = "outputs/graphs/%s.gml" % self.node.label
+            neighboringFilename = "outputs/graphs/%s.gml" % self.node.label.replace(":", "_")
             runcommand("proteinScreen.exe %s TXT%d" % (self.node.label,numHop))
-            self.specialWindow.loadGraph(neihgboringFilename)
+            self.specialWindow.loadGraph(neighboringFilename)
             self.specialWindow.setWindowTitle("%s-hop Neighborhood" % ("One" if numHop==1 else "Two") )
             self.specialWindow.showMaximized()
             del self.specialWindow
@@ -994,9 +994,7 @@ class PiechartNode(NodeItem):
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
 
         if node.label:
-            cols = node.label.split("_")
-            label = cols[0]
-            colors = cols[1:]
+            label, colors = node.label.split("_")
             self.labelText = QGraphicsTextItem(self)
             self.labelText.root = self
             labelFont = QFont()
@@ -1005,7 +1003,7 @@ class PiechartNode(NodeItem):
             self.labelText.setFont(labelFont)
             self.labelText.setPlainText(label)
              # find hex codes for colors
-            letters = filter(lambda letter: letter, colors)
+            letters = filter(lambda letter: letter, colors.split(":"))
             codes = filter(lambda color: color is not None, map(CHAR_COLOR_DICT.get, letters) )
             qcolors = map(QColor, codes)
             self.setColors(qcolors)
