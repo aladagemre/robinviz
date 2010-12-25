@@ -497,7 +497,7 @@ class MultiViewWindow(QMainWindow):
             # Load part
             self.detectLastConfirmationType()
             print "Detected:", self.confirmationType
-            QMessageBox.information(self, "Session loaded", "The session you provided has been loaded. You may now start working.")
+            QMessageBox.information(self, "Session loaded", "The session you provided has been loaded. You may now start working. Please wait for a few seconds while preparing the central view.")
             self.displayLast()
             
     def saveSession(self):
@@ -520,6 +520,8 @@ class MultiViewWindow(QMainWindow):
                 fileName = str(filename) + ".ses"
             compressdir("outputs", fileName)
 
+            QMessageBox.information(self, "Session saved", "The session you provided has been saved as %s." % fileName)
+            
     def detectLastConfirmationType(self):
         
         with open(rp("outputs/resultparams.txt")) as resultparams:
