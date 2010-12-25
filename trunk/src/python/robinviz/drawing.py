@@ -994,7 +994,9 @@ class PiechartNode(NodeItem):
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
 
         if node.label:
-            label, colors = node.label.split("_")
+            cols = node.label.split("_")
+            label = cols[0]
+            colors = cols[1:]
             self.labelText = QGraphicsTextItem(self)
             self.labelText.root = self
             labelFont = QFont()
@@ -1003,7 +1005,7 @@ class PiechartNode(NodeItem):
             self.labelText.setFont(labelFont)
             self.labelText.setPlainText(label)
              # find hex codes for colors
-            letters = filter(lambda letter: letter, colors.split(":"))
+            letters = filter(lambda letter: letter, colors)
             codes = filter(lambda color: color is not None, map(CHAR_COLOR_DICT.get, letters) )
             qcolors = map(QColor, codes)
             self.setColors(qcolors)
