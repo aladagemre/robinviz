@@ -38,7 +38,7 @@ class SingleMainViewWindow(QMainWindow):
     def setupGUI(self):
         #self.view.setViewport(QGLWidget());
         self.view.setRenderHints(QPainter.Antialiasing)
-        #self.view.setSceneRect(self.scene.sceneRect())
+        self.view.setSceneRect(self.scene.sceneRect())
         #self.view.fitInView(self.scene.itemsBoundingRect(),Qt.KeepAspectRatio)
         self.view.refresh()
 
@@ -104,7 +104,8 @@ class SingleMainViewWindow(QMainWindow):
         self.AboutDialog.show()
     def resizeEvent(self, event):
         #self.view.setSceneRect(self.scene.sceneRect())
-        self.view.fitInView(self.scene.sceneRect(),Qt.KeepAspectRatio)
+        self.view.fitInView(self.scene.itemsBoundingRect(),Qt.KeepAspectRatio)
+
         #self.view.refresh()
 
 
