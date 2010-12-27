@@ -167,7 +167,7 @@ class MainScene(Scene):
         if isinstance(clickedItem, QGraphicsTextItem):
             clickedItem = clickedItem.root
 
-        if not isinstance(clickedItem, CircleNode):
+        if not isinstance(clickedItem, CentralNode):
             return
         nodeId = clickedItem.node.id
         self.emit(SIGNAL("nodeDoubleClicked"), nodeId)
@@ -181,7 +181,7 @@ class MainScene(Scene):
             if isinstance(clickedItem, QGraphicsTextItem):
                 clickedItem = clickedItem.root
 
-            if not isinstance(clickedItem, CircleNode):
+            if not isinstance(clickedItem, CentralNode):
                 return
 
             clickedNode = clickedItem.node
@@ -197,7 +197,7 @@ class PeripheralScene(Scene):
         self.id = id
 
     def addNode(self, node):
-        item = PiechartNode(node, parent=None, scene=self)
+        item = ProteinNode(node, parent=None, scene=self)
         #self.addItem(item)
         self.nodeDict[node] = item
         self.nodeDict[node.id] = item
@@ -472,7 +472,7 @@ class NodeItem(QGraphicsItem):
         painter.setBrush(Qt.NoBrush)
         painter.drawRect(item.boundingRect().adjusted(pad, pad, -pad, -pad))
         
-class CircleNode(NodeItem):
+class CentralNode(NodeItem):
     """
     NodeItem with circle shape
     """
@@ -830,7 +830,7 @@ class CircleNode(NodeItem):
             self.timeline.stop()
 
 
-class PiechartNode(NodeItem):
+class ProteinNode(NodeItem):
     def __init__(self, node, parent=None, scene=None, label=None):
         NodeItem.__init__(self, parent, scene)
 
@@ -923,7 +923,7 @@ class PiechartNode(NodeItem):
         try:
             return QRectF(0, 0, self.w, self.w)
         except:
-            print "self.w for PiechartNode does not exist, using 20 as default width"
+            print "self.w for ProteinNode does not exist, using 20 as default width"
             return QRectF(0, 0, 20, 20)
 
     def contextMenuEvent(self, event):

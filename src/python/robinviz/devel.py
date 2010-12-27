@@ -53,7 +53,7 @@ class View(QGraphicsView):
         factor = 1.02 ** (event.delta() / 240.0)
         self.scale(factor, factor)
         
-class PiechartNode(QGraphicsItem):
+class ProteinNode(QGraphicsItem):
     def __init__(self,parent=None):
         QGraphicsItem.__init__(self, parent)
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -78,7 +78,7 @@ class PiechartNode(QGraphicsItem):
             painter.drawPie(rectangle, startAngle, self.angle_per_color)
             startAngle += self.angle_per_color
 
-class PiechartNode3(QGraphicsItem):
+class ProteinNode3(QGraphicsItem):
     def __init__(self,parent=None):
         QGraphicsItem.__init__(self, parent)
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -108,7 +108,7 @@ class PiechartNode3(QGraphicsItem):
 
 
 
-class PiechartNode2(QGraphicsItem):
+class ProteinNode2(QGraphicsItem):
     def __init__(self,parent=None):
         QGraphicsItem.__init__(self, parent)
         self.setFlag(QGraphicsItem.ItemIsMovable, True)
@@ -189,7 +189,7 @@ class ItemDisplayer(QWidget):
 def main():
     app = QApplication(sys.argv)
     """    displayer= ItemDisplayer()
-    displayer.addItem(PiechartNode2())
+    displayer.addItem(ProteinNode2())
 
     elips = QGraphicsEllipseItem(10,10,20,20)
     elips.setBrush(QBrush(QColor(Qt.black)))
