@@ -145,10 +145,10 @@ class View(QGraphicsView):
             self.scene().addEdge(edge)
 
         for item in self.scene().items():
-            if isinstance(item, PiechartNode):
+            if isinstance(item, ProteinNode):
                 # TODO: do we need this?
                 item.updateLabel()
-            elif isinstance(item, CircleNode):
+            elif isinstance(item, CentralNode):
                 item.setupAnimation()
                 
         

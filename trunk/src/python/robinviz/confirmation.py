@@ -2,7 +2,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from extensions import MainView, PeripheralView
-from drawing import MainScene, PeripheralScene, CircleNode
+from drawing import MainScene, PeripheralScene, CentralNode
 from PyQt4 import QtWebKit
 from os.path import normcase
 import os
@@ -39,7 +39,7 @@ class CoExpressionMainScene(MainScene):
         self.determineScoring()
 
     def addNode(self, node):
-        item = CircleNode(node, parent=None, scene=self)
+        item = CentralNode(node, parent=None, scene=self)
         #self.addItem(item)
         self.nodeDict[node] = item
         self.nodeDict[node.id] = item
@@ -179,7 +179,7 @@ class CoFunctionalityMainScene(MainScene):
 
     def addNode(self, node):        
 	try:
-	    item = CircleNode(node, parent=None, scene=self, label=self.category_names[node.id])
+	    item = CentralNode(node, parent=None, scene=self, label=self.category_names[node.id])
 	    item.setNoProperties()
 	    #self.addItem(item)
 	    self.nodeDict[node] = item
