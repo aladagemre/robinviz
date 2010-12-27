@@ -228,7 +228,7 @@ class PPISelector(QWidget):
 	    """For each organism, create a dictionary holding (p1,p2)=>confidence
 	    and store them in confidence_dicts"""
 	    d = {} # to store 
-            interactions = {}
+            #interactions = {} # dunno why I put it here. it causes a logical bug!
             
 	    for line in open(ap("ppidata/hitpredict/%s.txt" % organism )):
 		cols = line.strip().split("\t")
