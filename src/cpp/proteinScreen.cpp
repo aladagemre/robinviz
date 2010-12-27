@@ -1,3 +1,4 @@
+#include <LEDA/system/msc/autolink_dll.h>
 #include "incl/handlers.h"
 //#include "incl/handlers/_dataread.h"
 //#include "incl/handlers/_bicread.h"
@@ -17,7 +18,7 @@ char * filenameCharExchange( char *file, char del ){
 
 void process2LevelFromGml( char queryGeneName[256] ){
 
-#ifdef LINUX
+#ifdef __linux__
         sprintf( fname, "outputs/graphs/ppigraph.gml" );
 #else
         sprintf( fname, "outputs//graphs/ppigraph.gml" );
@@ -81,7 +82,7 @@ void process2LevelFromGml( char queryGeneName[256] ){
         }
 
         queryGeneName = filenameCharExchange( queryGeneName, ':' );
-#ifdef LINUX
+#ifdef __linux__
         sprintf( fname, "outputs/graphs/%s.gml", queryGeneName );
 #else
         sprintf( fname, "outputs//graphs/%s.gml", queryGeneName );
@@ -91,7 +92,7 @@ void process2LevelFromGml( char queryGeneName[256] ){
 
 void process2LevelFromTxt( char queryGeneName[256] ){
 
-#ifdef LINUX
+#ifdef __linux__
         sprintf( fname, "outputs/graphs/ppigraph.txt" );
 #else
         sprintf( fname, "outputs//graphs/ppigraph.txt" );
@@ -348,7 +349,7 @@ void process2LevelFromTxt( char queryGeneName[256] ){
             }
 
             queryGeneName = filenameCharExchange( queryGeneName, ':' );
-#ifdef LINUX
+#ifdef __linux__
             sprintf( fname, "outputs/graphs/%s.gml", queryGeneName );
 #else
             sprintf( fname, "outputs//graphs/%s.gml", queryGeneName );
@@ -368,7 +369,7 @@ void process2LevelFromTxt( char queryGeneName[256] ){
         }
         else{
             FILE *erptr;
-#ifdef LINUX
+#ifdef __linux__
             erptr = fopen( "outputs/error.txt", "w" );
 #else
             erptr = fopen( "outputs//error.txt", "w" );
@@ -382,7 +383,7 @@ void process2LevelFromTxt( char queryGeneName[256] ){
 
 void process1LevelFromTxt( char queryGeneName[256] ){
 
-#ifdef LINUX
+#ifdef __linux__
         sprintf( fname, "outputs/graphs/ppigraph.txt" );
 #else
         sprintf( fname, "outputs//graphs/ppigraph.txt" );
@@ -485,7 +486,7 @@ void process1LevelFromTxt( char queryGeneName[256] ){
             }
 
             queryGeneName = filenameCharExchange( queryGeneName, ':' );
-#ifdef LINUX
+#ifdef __linux__
             sprintf( fname, "outputs/graphs/%s.gml", queryGeneName );
 #else
             sprintf( fname, "outputs//graphs/%s.gml", queryGeneName );
@@ -505,7 +506,7 @@ void process1LevelFromTxt( char queryGeneName[256] ){
         }
         else{
             FILE *erptr;
-#ifdef LINUX
+#ifdef __linux__
             erptr = fopen( "outputs/error.txt", "w" );
 #else
             erptr = fopen( "outputs//error.txt", "w" );

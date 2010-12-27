@@ -33,7 +33,7 @@
 *  Ahmet Emre Aladağ, aladagemre{at}gmail{dot}com, emre.aladag{at}stu{dot}khas{dot}edu{dot}tr      	*
 *                                                                               			*
 ********************************************************************************************************/
-
+#include <LEDA/system/msc/autolink_dll.h>
 #include "incl/handlers.h"
 #include "incl/ehandlers.h"
 #include "incl/handlers/_dataread.h"
@@ -104,7 +104,7 @@
 	/**
 	* destination of input when readOption is false
 	**/
-#ifdef LINUX
+#ifdef __linux__
 		char dataName[128] = "sources/usr_sources/microarray_data/input.txt";
 #else
 		char dataName[128] = "sources//usr_sources//microarray_data//input.txt";
@@ -112,7 +112,7 @@
 	/**
 	* destination of input when readOption is true
 	**/
-#ifdef LINUX
+#ifdef __linux__
 		char dataName2[128] = "sources/usr_sources/microarray_data/inputLabel.txt";
 #else
 		char dataName2[128] = "sources//usr_sources//microarray_data//inputLabel.txt";
@@ -168,7 +168,7 @@
 	*	GO file read or not, please specify if it is true at sources/usr_sources/vis...
 	**/
 		bool go_info = false;
-#ifdef LINUX
+#ifdef __linux__
                 char gofile[256] = "sources/usr_sources/visualization_data/funcassociate_go_associations.txt";
 #else
                 char gofile[256] = "sources//usr_sources//visualization_data//funcassociate_go_associations.txt";
@@ -176,7 +176,7 @@
         /**
         *	Category File
         **/
-#ifdef LINUX
+#ifdef __linux__
                 char catfile[256] = "sources/usr_sources/visualization_data/category.txt";
 #else
                 char catfile[256] = "sources//usr_sources//visualization_data//category.txt";
@@ -212,7 +212,7 @@
 	/**
 	* PPI Graph source file, it should be in sources/usr_sources/visualization_data/ppi
 	**/
-#ifdef LINUX
+#ifdef __linux__
         char ppifilename[256] = "sources/usr_sources/visualization_data/ppi/NewPPIs2.txt";
 #else
         char ppifilename[256] = "sources//usr_sources//visualization_data//ppi//NewPPIs2.txt";
@@ -515,7 +515,7 @@ int main( int argc, char **argv ){
                         if( rlebFlag == true )
                             minHvalueErrorChecker( INPUT, hvaluemin );
 //                         cout << "\nDONE";
-#ifdef LINUX
+#ifdef __linux__
                          defaultRunTo = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
 #else
                          defaultRunTo = fopen( "sources//usr_sources//visualization_data//genenames.txt", "w" );
@@ -525,7 +525,7 @@ int main( int argc, char **argv ){
                              fprintf( defaultRunTo, "%s\n", geneArray[ i ].GENE );
                          }
                          fclose( defaultRunTo );
-#ifdef LINUX
+#ifdef __linux__
                          defaultRunTo = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "w" );
 #else
                          defaultRunTo = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "w" );
@@ -536,14 +536,14 @@ int main( int argc, char **argv ){
                          fclose( defaultRunTo );
                          leda::string FILENAME( "%s", dataName2 );
                          if( FILENAME.contains( "Yeast" ) ){
-#ifdef LINUX
+#ifdef __linux__
                              sprintf( defaultBicFile, "%s%s%s", "sources/bicluster_sources/biclusteringresult", "Yeast" ,".txt" );
 #else
                              sprintf( defaultBicFile, "%s%s%s", "sources//bicluster_sources//biclusteringresult", "Yeast" ,".txt" );
 #endif
                          }
                          if( FILENAME.contains( "Thaliana" ) ){
-#ifdef LINUX
+#ifdef __linux__
                              sprintf( defaultBicFile, "%s%s%s", "sources/bicluster_sources/biclusteringresult", "Thaliana" ,".txt" );
 #else
                              sprintf( defaultBicFile, "%s%s%s", "sources//bicluster_sources//biclusteringresult", "Thaliana" ,".txt" );
@@ -564,7 +564,7 @@ int main( int argc, char **argv ){
                         if( bimax_low_dim1 > INPUT.dim1() ){
                             dimensionChecker( algName );
                         }
-			#ifdef LINUX
+			#ifdef __linux__
                                 bimaxMain( "src/cpp/incl/bicalg/bimax/matrix_robin.txt", bic_num_bimax );
 			#else
                                 bimaxMain( "src//cpp//incl//bicalg//bimax//matrix_robin.txt", bic_num_bimax );
@@ -579,7 +579,7 @@ int main( int argc, char **argv ){
                                     dimensionChecker( algName );
                                 }
 				biclustering = 3;
-				#ifdef LINUX
+				#ifdef __linux__
                                         ccMain( "src/cpp/incl/bicalg/cc/matrix_robin.txt", INPUT.dim2(), INPUT.dim1(), bic_num_cc, maxScore_, minHeight_, minWidth_ );
 				#else
                                         ccMain( "src//cpp//incl//bicalg//cc//matrix_robin.txt", INPUT.dim2(), INPUT.dim1(), bic_num_cc, maxScore_, minHeight_, minWidth_ );
@@ -615,7 +615,7 @@ int main( int argc, char **argv ){
                                          FILE *defaultRunFrom,*defaultRunTo;                                         
                                          char chr;
                                          if( readOption == false ){
-#ifdef LINUX
+#ifdef __linux__
                                              defaultRunFrom = fopen( "sources/ppi_sources/genenames.txt", "r" );
                                              defaultRunTo = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
 #else
@@ -631,7 +631,7 @@ int main( int argc, char **argv ){
                                          }
                                          //cout << "\nDONE2\n";
                                          if( readOption == false ){
-#ifdef LINUX
+#ifdef __linux__
                                              defaultRunFrom = fopen( "sources/ppi_sources/geneNameConversion.txt", "r" );
                                              defaultRunTo = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "w" );
 #else
@@ -646,7 +646,7 @@ int main( int argc, char **argv ){
                                              fclose( defaultRunTo );
                                          }
                                          //cout << "\nDONE2\n";
-//#ifdef LINUX
+//#ifdef __linux__
 //                                         defaultRunFrom = fopen( "sources/ppi_sources/genefunctions.txt", "r" );
 //                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "w" );
 //#else
@@ -659,7 +659,7 @@ int main( int argc, char **argv ){
 //                                         }
 //                                         fclose( defaultRunFrom );
 //                                         fclose( defaultRunTo );
-//#ifdef LINUX
+//#ifdef __linux__
 //                                         defaultRunFrom = fopen( "sources/ppi_sources/functions.txt", "r" );
 //                                         defaultRunTo = fopen( "sources/usr_sources/visualization_data/functions.txt", "w" );
 //#else

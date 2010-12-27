@@ -251,7 +251,7 @@ int functionalCategoryFinder( list<CAT> &categ, array<char> &abbreviation ){
 	FILE *fptr;
 	int cat_num,i=0;
 	CAT tmp;
-#ifdef LINUX
+#ifdef __linux__
 	fptr = fopen( "sources/usr_sources/visualization_data/functions.txt", "r" );
 #else
 	fptr = fopen( "sources//usr_sources//visualization_data//functions.txt", "r" );
@@ -289,7 +289,7 @@ void analyseGenes( char fileName[], list<int> &categoriesBicluster, int biNumber
 	  inCategory[ i ] = 0;
     }  
     int fileCount = 0;
-#ifdef LINUX
+#ifdef __linux__
     FILE *gptr = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "r");
 #else
 	FILE *gptr = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "r");
@@ -300,7 +300,7 @@ void analyseGenes( char fileName[], list<int> &categoriesBicluster, int biNumber
     }
     fclose( gptr );
 // cout << "gecti1";
-#ifdef LINUX
+#ifdef __linux__
     FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "r" );
 #else
     FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "r" );
@@ -318,7 +318,7 @@ void analyseGenes( char fileName[], list<int> &categoriesBicluster, int biNumber
     }
     fclose( yFptr );
 //     cout << "gecti2";
-#ifdef LINUX
+#ifdef __linux__
     resultPtr = fopen( "outputs/enrich/result.txt", "w" );
 #else
 	resultPtr = fopen( "outputs//enrich//result.txt", "w" );
@@ -345,7 +345,7 @@ void analyseGenes( char fileName[], list<int> &categoriesBicluster, int biNumber
 	    }
     }
     for( int i = 0; i < biNumber - 1; i++ ){
-#ifdef LINUX
+#ifdef __linux__
         sprintf( fileName2, "outputs/bicgenes/%s%d%s", fileName, i+1, ".txt" );
 #else
 		sprintf( fileName2, "outputs//bicgenes//%s%d%s", fileName, i+1, ".txt" );
@@ -387,7 +387,7 @@ void analyseGenes( char fileName[], list<int> &categoriesBicluster, int biNumber
     FILE *efptr;
     if( ( efptr = fopen( "outputs/enrich/result.txt", "r" )) == NULL && ( efptr = fopen( "outputs//enrich//result.txt", "r" )) == NULL ){
 	    FILE *erptr;
-#ifdef LINUX
+#ifdef __linux__
 	    erptr = fopen( "outputs/error.txt", "w" );
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
@@ -450,7 +450,7 @@ void analyseGenes( char fileName[], list<int> &categoriesBicluster, int biNumber
 	    char c;
 // 	    cout << " Beginning to html file\n" << endl;
 
-#ifdef LINUX
+#ifdef __linux__
 	    efptr = fopen( "outputs/enrich/result.html", "w" );
 	    resultPtr = fopen( "outputs/enrich/src/header.txt", "r" );
 #else
@@ -471,7 +471,7 @@ void analyseGenes( char fileName[], list<int> &categoriesBicluster, int biNumber
 			}
 	    }
 		FILE *oneResultPtr;
-#ifdef LINUX
+#ifdef __linux__
 		resultPtr = fopen( "outputs/enrich/src/header.txt", "r" );
 		for( int i = 0; i < numberOfBiclusters; i++ ){
 			char outputFile[256];
@@ -600,7 +600,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
     int fileCount = 0;
 
 // 	cout << " Gecti1 " << endl;
-#ifdef LINUX
+#ifdef __linux__
     FILE *gptr = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "r");
 #else
 	FILE *gptr = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "r");
@@ -611,7 +611,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
     }
     fclose( gptr );
 // 	cout << " Gecti2 " << endl;
-#ifdef LINUX
+#ifdef __linux__
     FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "r" );
 #else
 	FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "r" );
@@ -631,7 +631,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
     fclose( yFptr );
     
 //     	cout << " Gecti3 " << endl;
-#ifdef LINUX
+#ifdef __linux__
         resultPtr = fopen( "outputs/enrich/result.txt", "w" );
 #else
 	resultPtr = fopen( "outputs//enrich//result.txt", "w" );
@@ -658,7 +658,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 	    }
     }
     for( int i = 0; i < biNumber - 1; i++ ){
-#ifdef LINUX
+#ifdef __linux__
         sprintf( fileName2, "outputs/bicgenes/%s%s%d%s", fileName, algName, i+1, ".txt" );
 #else
 	sprintf( fileName2, "outputs//bicgenes//%s%s%d%s", fileName, algName, i+1, ".txt" );
@@ -701,7 +701,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
     FILE *efptr;
     if( ( efptr = fopen( "outputs/enrich/result.txt", "r" )) == NULL && ( efptr = fopen( "outputs/enrich//result.txt", "r" )) == NULL ){
 	    FILE *erptr;
-#ifdef LINUX
+#ifdef __linux__
 	    erptr = fopen( "outputs/error.txt", "w" );
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
@@ -764,7 +764,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 	    fclose( efptr );
 	    char c;
 // 	    cout << " Beginning to html file\n" << endl;
-#ifdef LINUX
+#ifdef __linux__
 	    efptr = fopen( "outputs/enrich/result.html", "w" );
 	    resultPtr = fopen( "outputs/enrich/src/header.txt", "r" );
 #else
@@ -786,7 +786,7 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 			}
 	    }
 		FILE *oneResultPtr;
-#ifdef LINUX
+#ifdef __linux__
 		resultPtr = fopen( "outputs/enrich/src/header.txt", "r" );
 		for( int i = 0; i < numberOfBiclusters; i++ ){
 			char outputFile[256];
@@ -915,7 +915,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
     int fileCount = 0;
 
 //        cout << " Gecti1 " << endl;
-#ifdef LINUX
+#ifdef __linux__
         FILE *gptr = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "r");
 #else
 	FILE *gptr = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "r");
@@ -926,7 +926,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
     }
     fclose( gptr );
 //        cout << " Gecti2 " << endl;
-#ifdef LINUX
+#ifdef __linux__
     FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "r" );
 #else
     FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "r" );
@@ -952,7 +952,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
     fclose( yFptr );
     
 //        cout << " Gecti3 " << endl;
-#ifdef LINUX
+#ifdef __linux__
         resultPtr = fopen( "outputs/enrich/result.txt", "w" );
 #else
 	resultPtr = fopen( "outputs//enrich//result.txt", "w" );
@@ -979,7 +979,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
 	    }
     }
     for( int i = 0; i < biNumber; i++ ){
-#ifdef LINUX
+#ifdef __linux__
         sprintf( fileName2, "outputs/bicgenes/%s%s%d%s", fileName, algName, i, ".txt" );
 #else
         sprintf( fileName2, "outputs//bicgenes//%s%s%d%s", fileName, algName, i, ".txt" );
@@ -1026,7 +1026,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
     FILE *efptr;
     if( ( efptr = fopen( "outputs/enrich/result.txt", "r" )) == NULL && ( efptr = fopen( "outputs/enrich//result.txt", "r" )) == NULL ){
 	    FILE *erptr;
-#ifdef LINUX
+#ifdef __linux__
 	    erptr = fopen( "outputs/error.txt", "w" );
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
@@ -1089,7 +1089,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
 	    fclose( efptr );
 	    char c;
 // 	    cout << " Beginning to html file\n" << endl;
-#ifdef LINUX
+#ifdef __linux__
 	    efptr = fopen( "outputs/enrich/result.html", "w" );
 	    resultPtr = fopen( "outputs/enrich/src/header.txt", "r" );
 #else
@@ -1111,7 +1111,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
 			}
 	    }
                 FILE *oneResultPtr, *pieNode;
-#ifdef LINUX
+#ifdef __linux__
 		resultPtr = fopen( "outputs/enrich/src/header.txt", "r" );
 		for( int i = 0; i < numberOfBiclusters; i++ ){
 			char outputFile[256];
@@ -1184,7 +1184,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
 				fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum );
 				fprintf( oneResultPtr, "\t</tr>\n" );
                                 if( categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] > 0 )
-                                    fprintf( pieNode, "%c %lf\n", abbv[ j ], (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum  );
+                                    fprintf( pieNode, "%c %lf\n", abbv[ j ], (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum  ));
 			}
 			fprintf( oneResultPtr, "\t</tbody>\n</table>\n</body>\n</html>" );
 			fclose( oneResultPtr );                        
@@ -1262,7 +1262,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
 
 	if( ( fptr = fopen( defaultBicFile, "r") ) == NULL ){
 	    FILE *erptr;
-#ifdef LINUX
+#ifdef __linux__
 	    erptr = fopen( "outputs/error.txt", "w" );
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
@@ -1300,7 +1300,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
 			    listOfFile.append( getGenes );
 			}
 			forall_items( it, listOfFile ){
-#ifdef LINUX
+#ifdef __linux__
 			    FILE *xptr = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "r" );
 #else
 			    FILE *xptr = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "r" );
@@ -1392,7 +1392,7 @@ void analyseGenes2( char fileName[64], list<int> &categoriesBicluster, int biNum
 			FILE *yFptr, *saveGene;
 			if( indexGenes.size() >= fraction && indexGenes.size() <= high ){
 				char geneFile[ 1024 ];
-#ifdef LINUX
+#ifdef __linux__
 				sprintf( geneFile, "%s%d%s", "outputs/bicgenes/geneResult", geneCount, ".txt" ); 
 // 				cout << " created\n";
 #else
@@ -1468,7 +1468,7 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
 	list<int> indexCond;
 	list<int> indexGenes;
 	char nameFile[1024];
-#ifdef LINUX
+#ifdef __linux__
 	sprintf( nameFile, "%s%s%s", "outputs/biclusters/", algName, "Result.txt" );
 #else	
 	sprintf( nameFile, "%s%s%s", "outputs//biclusters//", algName, "Result.txt" );
@@ -1480,7 +1480,7 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
         int geneCount = 0;
 
 	array<GENES> allGenes( dimension1 + 1 );
-#ifdef LINUX
+#ifdef __linux__
 	FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "r" );
 #else
 	FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "r" );
@@ -1504,7 +1504,7 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
                 listOfFile.append( getGenes );
             }
 //            forall_items( it, listOfFile ){
-//#ifdef LINUX
+//#ifdef __linux__
 //                FILE *xptr = fopen( "sources/usr_sources/visualization_data/geneNameConversion.txt", "r" );
 //#else
 //                FILE *xptr = fopen( "sources//usr_sources//visualization_data//geneNameConversion.txt", "r" );
@@ -1598,7 +1598,7 @@ void getBiclustersFromFile2( leda::matrix &M , int inp, int fraction, int high, 
 		FILE *yFptr, *saveGene;
 		if( indexGenes.size() >= fraction && indexGenes.size() <= high ){
 			char geneFile[ 1024 ];
-#ifdef LINUX
+#ifdef __linux__
 			sprintf( geneFile, "%s%s%d%s", "outputs/bicgenes/geneResult", algName, geneCount, ".txt" ); 
 #else
 			sprintf( geneFile, "%s%s%d%s", "outputs//bicgenes//geneResult", algName, geneCount, ".txt" ); 

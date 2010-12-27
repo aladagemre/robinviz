@@ -298,7 +298,7 @@ void rlebmain( matrix &INPUT, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatrix_
 
 	matrixToGraph( G, A, B, INPUT.trans(), realValues, true );
 	forall_edges( e, G ){
-#ifdef LINUX
+#ifdef __linux__
 		if( G[ e ] < 0 )
 			G[ e ] = log(abs( G[ e ] * 10000 ));
 #else
@@ -360,7 +360,7 @@ void rlebmain( matrix &INPUT, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatrix_
 		}
 		G.rev_all_edges();
 	}	
-#ifdef LINUX
+#ifdef __linux__
 	saveToFile( M, G, A, B, genesConds, realValues ,"outputs/localization/localized_input.txt" );
 #else
 	saveToFile( M, G, A, B, genesConds, realValues ,"outputs//localization//localized_input.txt" );
@@ -376,7 +376,7 @@ void rlebmain_m( matrix &INPUT, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatri
 	matrix M = INPUT;
 	for( int i = 0; i < M.dim1(); i++ ){
 		for( int j = 0; j < M.dim2(); j++ ){
-#ifdef LINUX
+#ifdef __linux__
 			if( M(i,j) < 0 )
 				M(i,j) = log(abs( M(i,j) * 10000 ));
 #else
@@ -428,7 +428,7 @@ void rlebmain_m( matrix &INPUT, int maxSizeSubMatrix_exp1_g, int maxSizeSubMatri
 		}
 		M = M.trans();
 	}	
-#ifdef LINUX
+#ifdef __linux__
 	saveToFile( INPUT, genes_i, conditions_i, "outputs/localization/localized_input.txt" );
 #else
 	saveToFile( INPUT, genes_i, conditions_i, "outputs//localization//localized_input.txt" );

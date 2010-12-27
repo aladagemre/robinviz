@@ -66,7 +66,7 @@ Created
 #include <iostream>
 #include <string.h>
 
-#define LINUX
+// #define LINUX
 //  #define WINDOWS
 
 // #define DEBUG_ROBINVIZ

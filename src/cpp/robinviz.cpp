@@ -1,6 +1,10 @@
 #include <stdlib.h>
 
 int main(){
-        system( "python src/python/robinviz/RobinViz.py" );
-	return 0;
+#ifdef __linux__
+    system( "python src/python/robinviz/RobinViz.py" );
+#else
+    system( "src\\python\\robinviz\\RobinViz.py" );
+#endif
+    return 0;
 }
