@@ -2570,7 +2570,7 @@ GRAPH<int,int> RUN_FFD_SELF( GRAPH<int,int> &G,
 	gw.set_layout( pos );
 	char filename4[128];
 	
-#ifdef LINUX
+#ifdef __linux__
 	sprintf( filename4, "outputs/graphs/maingraph.gml" );
 #else
 	sprintf( filename4, "outputs//graphs//maingraph.gml" );
@@ -3496,7 +3496,7 @@ void RUN_AGAIN2_COLOR(  GRAPH<int,int> G,
                 node_array<list<char> > catid( G );
                 char pie[256];
                 FILE *pieNode;
-#ifdef LINUX
+#ifdef __linux__
                 sprintf( pie, "%s%d.txt", "outputs/enrich/pie", graphNo );
                 pieNode = fopen( pie, "w" );
 #else
@@ -3793,7 +3793,7 @@ void RUN_FFD_AGAIN2_COLOR(  GRAPH<int,int> G,
 
                 char pie[256];
                 FILE *pieNode;
-#ifdef LINUX
+#ifdef __linux__
                 sprintf( pie, "%s%d.txt", "outputs/enrich/pie", graphNo );
                 pieNode = fopen( pie, "w" );
 #else

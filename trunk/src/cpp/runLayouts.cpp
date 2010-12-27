@@ -1,3 +1,4 @@
+#include <LEDA/system/msc/autolink_dll.h>
 #include "incl/handlers.h"
 
 class layoutHandler{

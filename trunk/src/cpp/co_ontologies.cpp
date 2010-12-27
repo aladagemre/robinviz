@@ -33,7 +33,7 @@
 *  Ahmet Emre Aladağ, aladagemre{at}gmail{dot}com, emre.aladag{at}stu{dot}khas{dot}edu{dot}tr      	*
 *                                                                               			*
 ********************************************************************************************************/
-
+#include <LEDA/system/msc/autolink_dll.h>
 #include <LEDA/graphics/graphwin.h>
 #include "incl/handlers.h"
 #include "incl/ehandlers.h"
@@ -84,7 +84,7 @@
 	**/
 		bool brandFlag = true, brandFlag2= false, ourMethodFlag = false, ledaPostFlag=false;
 	/**
-#ifdef LINUX
+#ifdef __linux__
 		char dataName[128] = "sources/usr_sources/microarray_data/input.txt";
 #else
 		char dataName[128] = "sources//usr_sources//microarray_data//input.txt";
@@ -93,7 +93,7 @@
 	*	GO file read or not, please specify if it is true at sources/usr_sources/vis...
 	**/
 		bool go_info = false;
-#ifdef LINUX
+#ifdef __linux__
                 char gofile[256] = "sources/usr_sources/visualization_data/funcassociate_go_associations.txt";
 #else
                 char gofile[256] = "sources//usr_sources//visualization_data//funcassociate_go_associations.txt";
@@ -101,7 +101,7 @@
 	/**
 	*	GO input file read or not, please specify if it is true at sources/usr_sources/vis...
 	**/
-#ifdef LINUX
+#ifdef __linux__
                 char inputGoFile[256] = "sources/usr_sources/visualization_data/cat_input.txt";
 #else
                 char inputGoFile[256] = "sources//usr_sources//visualization_data//cat_input.txt";
@@ -113,7 +113,7 @@
         /**
         *	Category File
         **/
-#ifdef LINUX
+#ifdef __linux__
                 char catfile[256] = "sources/usr_sources/visualization_data/category.txt";
 #else
                 char catfile[256] = "sources//usr_sources//visualization_data//category.txt";
@@ -152,12 +152,12 @@
 	/**
 	* PPI Graph source file, it should be in sources/usr_sources/visualization_data/ppi
 	**/
-#ifdef LINUX
+#ifdef __linux__
         char ppifilename[256] = "sources/usr_sources/visualization_data/ppi.txt";
 #else
         char ppifilename[256] = "sources//usr_sources//visualization_data//ppi.txt";
 #endif
-#ifdef LINUX
+#ifdef __linux__
         char defaultGoFile[256] = "sources/usr_sources/visualization_data/go.txt";
 #else
         char defaultGoFile[256] = "sources//usr_sources//visualization_data//go.txt";
@@ -473,7 +473,7 @@ int main(int argc, char **argv){
                 }
 
                 for( int i=0; i < categories.size(); i++ ){
-        #ifdef LINUX
+        #ifdef __linux__
                         char out3[ 64 ] = "outputs/heatmap/out";
         #else
                         char out3[ 64 ] = "outputs//heatmap//out";
@@ -500,7 +500,7 @@ int main(int argc, char **argv){
                                 }
                         }
                         if( count_i > 10 )
-                            bagMean = sqrt(newI2.dim1()) * count_i / (double)( newI2.dim1() * newI2.dim2() );
+                            bagMean = sqrtf(newI2.dim1()) * count_i / (double)( newI2.dim1() * newI2.dim2() );
                         else
                             if( count_i != 0 )
                                 bagMean = 0.01;

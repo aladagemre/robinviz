@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "runLayouts", "run-layouts.vcproj", "{0070D8B8-E9AE-4DBC-9B74-32612876AB76}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "co_expression", "co-expression.vcproj", "{B76F8134-9252-43AA-A73E-1C97D58A6677}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "co_ontologies", "co-ontologies.vcproj", "{23A6C98B-E3F0-4B9A-8901-6DC65CC9D9C1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "proteinScreen", "protein-screen.vcproj", "{6E858AE0-B442-4027-BABB-D1B0555C5719}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "robinviz", "robinviz.vcproj", "{40715C5A-158A-412F-B0CD-582F0F66BE42}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Robinviz-Windows-Installer", "..\Robinviz-Windows-Installer\Robinviz-Windows-Installer.vdproj", "{74CAE69D-C137-4661-8D0B-7A5833DC4EA3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0070D8B8-E9AE-4DBC-9B74-32612876AB76}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0070D8B8-E9AE-4DBC-9B74-32612876AB76}.Debug|Win32.Build.0 = Debug|Win32
+		{0070D8B8-E9AE-4DBC-9B74-32612876AB76}.Release|Win32.ActiveCfg = Release|Win32
+		{0070D8B8-E9AE-4DBC-9B74-32612876AB76}.Release|Win32.Build.0 = Release|Win32
+		{B76F8134-9252-43AA-A73E-1C97D58A6677}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B76F8134-9252-43AA-A73E-1C97D58A6677}.Debug|Win32.Build.0 = Debug|Win32
+		{B76F8134-9252-43AA-A73E-1C97D58A6677}.Release|Win32.ActiveCfg = Release|Win32
+		{B76F8134-9252-43AA-A73E-1C97D58A6677}.Release|Win32.Build.0 = Release|Win32
+		{23A6C98B-E3F0-4B9A-8901-6DC65CC9D9C1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{23A6C98B-E3F0-4B9A-8901-6DC65CC9D9C1}.Debug|Win32.Build.0 = Debug|Win32
+		{23A6C98B-E3F0-4B9A-8901-6DC65CC9D9C1}.Release|Win32.ActiveCfg = Release|Win32
+		{23A6C98B-E3F0-4B9A-8901-6DC65CC9D9C1}.Release|Win32.Build.0 = Release|Win32
+		{6E858AE0-B442-4027-BABB-D1B0555C5719}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6E858AE0-B442-4027-BABB-D1B0555C5719}.Debug|Win32.Build.0 = Debug|Win32
+		{6E858AE0-B442-4027-BABB-D1B0555C5719}.Release|Win32.ActiveCfg = Release|Win32
+		{6E858AE0-B442-4027-BABB-D1B0555C5719}.Release|Win32.Build.0 = Release|Win32
+		{40715C5A-158A-412F-B0CD-582F0F66BE42}.Debug|Win32.ActiveCfg = Debug|Win32
+		{40715C5A-158A-412F-B0CD-582F0F66BE42}.Debug|Win32.Build.0 = Debug|Win32
+		{40715C5A-158A-412F-B0CD-582F0F66BE42}.Release|Win32.ActiveCfg = Release|Win32
+		{40715C5A-158A-412F-B0CD-582F0F66BE42}.Release|Win32.Build.0 = Release|Win32
+		{74CAE69D-C137-4661-8D0B-7A5833DC4EA3}.Debug|Win32.ActiveCfg = Debug
+		{74CAE69D-C137-4661-8D0B-7A5833DC4EA3}.Release|Win32.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
