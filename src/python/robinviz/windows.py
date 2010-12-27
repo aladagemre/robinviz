@@ -443,6 +443,8 @@ class MultiViewWindow(QMainWindow):
         self.setCursor(Qt.WaitCursor)
 
         # ======= CLEANUP ==========
+        if hasattr(self, "searchPane"):
+            self.searchPane.index.close()
         errorFile = rp("outputs/error.txt")
         if os.path.exists(errorFile):
             os.remove(errorFile)
