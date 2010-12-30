@@ -61,7 +61,7 @@ sh compile.sh
 ==Requirements==
  * Windows XP SP3 / Vista (recommended)
  * Visual Studio 2005 C++ or over
- * [http://www.python.org/download/ Python 2.7] and [http://www.riverbankcomputing.co.uk/software/pyqt/download PyQt 4.7+]. If you are using Windows XP, you may need to add python to your [http://showmedo.com/videotutorials/video?name=960000&fromSeriesID=96 system path]. 
+ * [http://www.python.org/download/ Python 2.7] and [http://www.riverbankcomputing.co.uk/software/pyqt/download PyQt 4.7+].
 
 ==Binary==
  # Start the installation wizard to install the program under C:\Robinviz
