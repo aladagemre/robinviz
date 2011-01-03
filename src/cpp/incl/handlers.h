@@ -493,11 +493,11 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		cout << "/**************************************************/" << endl;
 		FILE *f;
 		list<GENES> dataGenes;
-		char line[ 100000 ];
+		char line[ 1000000 ];
 		char *pc,*pend,*go,*cat;
 		const char *strDelim = " \t";
                 const char *strDelim2 = " \t";
-#ifdef __linux__
+#ifdef LINUX
 		char filePath[256] = "sources/usr_sources/visualization_data/funcassociate_go_associations.txt";
 		char filePath2[256] = "sources/usr_sources/visualization_data/genenames.txt";
 #else
@@ -507,7 +507,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		sprintf( filePath, "%s", gofile );
 		if( (f = fopen( filePath2, "r" )) == NULL){
 			FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
 			erptr = fopen( "outputs/error.txt", "w" );
 #else
 			erptr = fopen( "outputs//error.txt", "w" );
@@ -538,7 +538,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
                 }
 		if( (f = fopen( filePath, "r" )) == NULL){
 			FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
 			erptr = fopen( "outputs/error.txt", "w" );
 #else
 			erptr = fopen( "outputs//error.txt", "w" );
@@ -551,7 +551,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 
 		int line_i = 0;
 		while( !feof( f ) ){
-			fgets( line, 100000, f );
+			fgets( line, 1000000, f );
 //cout << line_i << endl;
 			line_i++;
 		}
@@ -560,7 +560,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256] ){
 		line_i = 0;
 		while( !feof( f ) ){
 			// count rows
-			fgets( line, 100000, f );
+			fgets( line, 1000000, f );
 //                        cout << "-" << line << endl;
 			pc = strtok( line, strDelim );
 
@@ -617,7 +617,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes,
                 cout << "\t" << " Parsing GO File" << endl;
 		cout << "/**************************************************/" << endl;
 		FILE *f;
-		char line[ 100000 ];
+		char line[ 1000000 ];
 		char *pc,*pend,*go,*cat;
                 const char *strDelim = " \t";
 		const char *strDelim2 = " ";
@@ -636,7 +636,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes,
 
 		if( (f = fopen( filePath, "r" )) == NULL){
 			FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
 			erptr = fopen( "outputs/error.txt", "w" );
 #else
 			erptr = fopen( "outputs//error.txt", "w" );
@@ -659,7 +659,7 @@ array<GENEONTO> geneOntologyHandling( char gofile[256], array<GENES> &dataGenes,
 			// count rows
 			two_tuple<CATNAMES,int> tup;
 			tup.second() = 0;
-			fgets( line, 100000, f );
+			fgets( line, 1000000, f );
                         cout << line << endl;
 			pc = strtok( line, strDelim );
 			go = pc;
@@ -709,7 +709,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 		cout << "/**************************************************/" << endl;
 		FILE *f;
 		list<GENES> tempGenes;
-		char line[ 100000 ];
+		char line[ 1000000 ];
 		char *pc,*pend,*go,*cat;
                 const char *strDelim = "\t";
                 const char *strDelim2 = " \t";
@@ -732,7 +732,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 
 		if( (f = fopen( gofile, "r" )) == NULL){
 			FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
 			erptr = fopen( "outputs/error.txt", "w" );
 #else
 			erptr = fopen( "outputs//error.txt", "w" );
@@ -745,7 +745,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 
 		int line_i = 0;
 		while( !feof( f ) ){
-			fgets( line, 100000, f );
+			fgets( line, 1000000, f );
 //                        cout << line << endl;
 			line_i++;
 		}
@@ -756,7 +756,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 			// count rows
 			two_tuple<CATNAMES,int> tup;
 			tup.second() = 0;
-                        fgets( line, 100000, f );
+                        fgets( line, 1000000, f );
 			pc = strtok( line, strDelim );
 			go = pc;
 			if( feof( f ) )
@@ -788,7 +788,7 @@ array<GENEONTO> geneOntologyHandling2( char gofile[256], list<CATNAMES> &inputCa
 					pc = strtok( NULL, strDelim2 );
 					tup.second()++;
 					for( int i = 0; i < inputGenes.size(); i++ ){
-						if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 100 ){
+						if( strcmp( pc, inputGenes[ i ].genename ) == 0 && inputGenes[ i ].index < 25 ){
 							sprintf( inputGenes[ i ].categories[ inputGenes[ i ].index ].catName, "%s", cat );
 							sprintf( inputGenes[ i ].gos[ inputGenes[ i ].index++ ].goName, "%s", go );
 							break;
@@ -830,14 +830,14 @@ void geneOntologyToBiclusterHandling( list<list<GENES> > &biclusters, array<GENE
 	forall_items( it, biclusters ){
 		//cout << " Bic\n";
 		temp = biclusters[ it ];
-#ifdef __linux__
+#ifdef LINUX
                 sprintf( filename, "outputs/go/gobicluster%d.html", count - 1 );
 #else
                 sprintf( filename, "outputs//go//gobicluster%d.html", count - 1);
 #endif		
 		fptr = fopen( filename, "w" );
 
-#ifdef __linux__
+#ifdef LINUX
 	    fptr2 = fopen( "outputs/go/src/header.txt", "r" );
 #else
 	    fptr2 = fopen( "outputs//go//src//header.txt", "r" );
@@ -901,7 +901,7 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
 
 	if( (fptr = fopen( inputGoFile, "r") ) == NULL ){
 		FILE *erptr;
-		#ifdef __linux__
+		#ifdef LINUX
 					erptr = fopen( "outputs/error.txt", "w" );
 		#else
 					erptr = fopen( "outputs//error.txt", "w" );
@@ -934,7 +934,7 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
             if( gocategories[it].size() >= 0 ){
 //                    cout << catCount << " - \t";
                     char geneFile[ 1024 ];
-#ifdef __linux__
+#ifdef LINUX
                     sprintf( geneFile, "%s%d%s", "outputs/bicgenes/geneResult", catCount, ".txt" );
 // 				cout << " created\n";
 #else
@@ -952,7 +952,7 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
             }
             catCount++;
         }
-#ifdef __linux__
+#ifdef LINUX
         FILE *yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "w" );
 #else
         FILE *yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "w" );
@@ -998,7 +998,7 @@ array<GENEONTO> cogFileHandling( char cogfile[256], char orgAbv[12], list<CATNAM
 
 	if( (f = fopen( cogfile, "r" )) == NULL){
 		FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
 		erptr = fopen( "outputs/error.txt", "w" );
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
@@ -1100,7 +1100,7 @@ void cogHandling( char inputCogFile[256], char defaultCogFile[256], list<list<GE
 
 	if( (fptr = fopen( inputCogFile, "r") ) == NULL ){
 		FILE *erptr;
-		#ifdef __linux__
+		#ifdef LINUX
                     erptr = fopen( "outputs/error.txt", "w" );
 		#else
                     erptr = fopen( "outputs//error.txt", "w" );
@@ -1184,21 +1184,21 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
 // 	cout << " MATRIX LIST size : " << matrixBiclusters.size() << endl;
 
 	for( int i=0; i < biclusters.size(); i++ ){
-#ifdef __linux__
+#ifdef LINUX
 		char out[ 64 ] = "outputs/heatmap/out";
 #else
 		char out[ 64 ] = "outputs//heatmap//out";
 #endif
 		sprintf( out, "%s%d.html", out, i );
 		drawHeatmap( matrixBiclusters[ matrixBiclusters.get_item( i )], biclusters[ biclusters.get_item( i ) ], conditions[ conditions.get_item( i ) ], out );
-#ifdef __linux__
+#ifdef LINUX
 		char out2[ 64 ] = "outputs/parallel/out";
 #else
 		char out2[ 64 ] = "outputs//parallel//out";
 #endif
 		sprintf( out2, "%s%d.html", out2, i );
 		drawParallelCoordinate( matrixBiclusters[ matrixBiclusters.get_item( i )], biclusters[ biclusters.get_item( i ) ], conditions[ conditions.get_item( i ) ], out2 );
-#ifdef __linux__
+#ifdef LINUX
 		char out3[ 64 ] = "outputs/heatmap/out";
 #else
 		char out3[ 64 ] = "outputs//heatmap//out";
@@ -1482,7 +1482,7 @@ void handleZeroDegreeNodes( array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERAC
 void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGraphs, array<char> &abbv,  array<char> &Categories, node_array<GENENAMES> &temp, array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, GRAPH<int,int> &TEMPINT, list<list<GENES> > &biclusters, int cat_num ){
 	FILE *categoryOfGenes;
 	node n,m1,m2;
-#ifdef __linux__
+#ifdef LINUX
 	categoryOfGenes = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "r" );
 #else
 	categoryOfGenes = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "r" );
@@ -1490,7 +1490,7 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
 	if( categoryOfGenes == NULL ){
                 cout << "\n Error 303: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n";
 		FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
 		erptr = fopen( "outputs/error.txt", "w" );
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
@@ -1645,7 +1645,7 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 	int fileIndex = 0;
 	char filename[ 1024 ];
 //         FILE *wptr2,*wptr3;
-// #ifdef __linux__
+// #ifdef LINUX
 // 	wptr3 = fopen( "sources/graph_sources/graph_infos.txt", "w" );
 // #else
 // 	wptr3 = fopen( "sources//graph_sources//graph_infos.txt", "w" );
@@ -1733,7 +1733,7 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 		    }  
 
 			GraphList.append( listOfGraphs[ i ] );
-// #ifdef __linux__
+// #ifdef LINUX
 // 			sprintf( filename , "sources/graph_sources/Graph%d.txt" , i+1 );
 // #else
 // 			sprintf( filename , "sources//graph_sources//Graph%d.txt" , i+1 );
@@ -1763,7 +1763,7 @@ void mainAlgHandlingForEachSubgraph( node_array<point> &pos,
 			/*forall_items( it, nameGraph )
 				printf( "%s\n", (char*)nameGraph[ it ].name );*/
 			namesForEachGraph.append(nameGraph);
-// #ifdef __linux__
+// #ifdef LINUX
 // 			sprintf( filename , "sources/graph_sources/Relation%d.txt" , i+1 );
 // #else
 // 			sprintf( filename , "sources//graph_sources//Relation%d.txt" , i+1 );
@@ -1940,7 +1940,7 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 	int fileIndex = 0;
 	char filename[ 1024 ];
         FILE *wptr2,*wptr3;
-// #ifdef __linux__
+// #ifdef LINUX
 // 	wptr3 = fopen( "sources/graph_sources/graph_infos.txt", "w" );
 // #else
 // 	wptr3 = fopen( "sources//graph_sources//graph_infos.txt", "w" );
@@ -1983,7 +1983,7 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
 //                    }
 
                     GraphList.append( listOfGraphs[ i ] );
-// #ifdef __linux__
+// #ifdef LINUX
 // 			sprintf( filename , "sources/graph_sources/Graph%d.txt" , i+1 );
 // #else
 // 			sprintf( filename , "sources//graph_sources//Graph%d.txt" , i+1 );
@@ -2012,7 +2012,7 @@ void mainAlgHandlingForEachSubgraph2( node_array<point> &pos,
                     /*forall_items( it, nameGraph )
                             printf( "%s\n", (char*)nameGraph[ it ].name );*/
                     namesForEachGraph.append(nameGraph);
-// #ifdef __linux__
+// #ifdef LINUX
 // 			sprintf( filename , "sources/graph_sources/Relation%d.txt" , i+1 );
 // #else
 // 			sprintf( filename , "sources//graph_sources//Relation%d.txt" , i+1 );
@@ -2216,7 +2216,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 // 		counter++;
 // 	}
 	FILE *reportScoring;
-#ifdef __linux__
+#ifdef LINUX
 	char scoringFile[256] = "outputs/biclusters/scoring.txt";
 #else
 	char scoringFile[256] = "outputs//biclusters//scoring.txt";
@@ -2263,7 +2263,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
 				FILE *efptr;
 				if( ( efptr = fopen( "outputs/enrich/result.txt", "r" )) == NULL && ( efptr = fopen( "outputs//enrich//result.txt", "r" )) == NULL ){
 					FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
 					erptr = fopen( "outputs/error.txt", "w" );
 #else
 					erptr = fopen( "outputs//error.txt", "w" );
@@ -2682,7 +2682,7 @@ GRAPH<int,int> mainGraphHandling( GRAPH<leda::string,int> &PROJECT,
             RUN_SELF2( PROJECT2, PARS, max_weight, width, Xpos, Ypos, i + 1, pos, bends, HValues2, hided, algorithmFlag, brandFlag, brandFlag2, ourMethodFlag, space, increment,ledaPostFlag,nodeSize,edgeBendImp,colorScale,edgThicknessTher, categ );
         else{
                     FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
                     erptr = fopen( "outputs/error.txt", "w" );
 #else
                     erptr = fopen( "outputs//error.txt", "w" );
@@ -2782,7 +2782,7 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 // 		counter++;
 // 	}
 	FILE *reportScoring;
-#ifdef __linux__
+#ifdef LINUX
 	char scoringFile[256] = "outputs/biclusters/scoring.txt";
 #else
 	char scoringFile[256] = "outputs//biclusters//scoring.txt";
@@ -2855,7 +2855,7 @@ GRAPH<int,int> mainGraphHandling2( GRAPH<leda::string,int> &PROJECT,
 				FILE *efptr;
 				if( ( efptr = fopen( "outputs/enrich/result.txt", "r" )) == NULL && ( efptr = fopen( "outputs//enrich//result.txt", "r" )) == NULL ){
 					FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
 					erptr = fopen( "outputs/error.txt", "w" );
 #else
 					erptr = fopen( "outputs//error.txt", "w" );
@@ -3358,14 +3358,14 @@ void colorHandling( char catfile[256], char gofile[256] ){
 
 	FILE *f;
 	list_item it,it2;
-	char line[ 100000 ];
+	char line[ 1000000 ];
 	char *pc,*pend,*go,*cat;
 	const char *strDelim = "\t\n";
         const char *strDelim2 = " \t";
 
 	if( (f = fopen( gofile, "r" )) == NULL){
 		FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
 		erptr = fopen( "outputs/error.txt", "w" );
 #else
 		erptr = fopen( "outputs//error.txt", "w" );
@@ -3379,12 +3379,12 @@ void colorHandling( char catfile[256], char gofile[256] ){
 	/* First we parse gofile to see how many lines of categories */
 	int line_i = 0;
 	while( !feof( f ) ){
-		fgets( line, 100000, f );
+		fgets( line, 1000000, f );
 		line_i++;
 	}
         if( line_i == 0 ){
             FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
             erptr = fopen( "outputs/error.txt", "w" );
 #else
             erptr = fopen( "outputs//error.txt", "w" );
@@ -3404,7 +3404,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 		// count rows
 // 		two_tuple<CATNAMES,int> tup;
 // 		tup.second() = 0;
-		fgets( line, 100000, f );
+		fgets( line, 1000000, f );
 		pc = strtok( line, strDelim );
 		go = pc;
 		if( feof( f ) )
@@ -3587,7 +3587,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
 
         if( (f = fopen( gofile, "r" )) == NULL){
                 FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
                 erptr = fopen( "outputs/error.txt", "w" );
 #else
                 erptr = fopen( "outputs//error.txt", "w" );
@@ -3606,7 +3606,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
         }
         if( line_i == 0 ){
             FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
             erptr = fopen( "outputs/error.txt", "w" );
 #else
             erptr = fopen( "outputs//error.txt", "w" );
@@ -3841,21 +3841,21 @@ void biclusterHandling( matrix &INPUT, char defaultBicFile[256], list<list<GENES
 	   so we form heatmap and pc outputs. The visualization of these outputs are done within the
 	   python side with PyQT. Make sure the format you save is correct */
 	for( int i=0; i < biclusters.size(); i++ ){
-#ifdef __linux__
+#ifdef LINUX
 		char out[ 64 ] = "outputs/heatmap/out";
 #else
 		char out[ 64 ] = "outputs//heatmap//out";
 #endif
 		sprintf( out, "%s%d.html", out, i );
 		drawHeatmap( matrixBiclusters[ matrixBiclusters.get_item( i )], biclusters[ biclusters.get_item( i ) ], conditions[ conditions.get_item( i ) ], out );
-#ifdef __linux__
+#ifdef LINUX
 		char out2[ 64 ] = "outputs/parallel/out";
 #else
 		char out2[ 64 ] = "outputs//parallel//out";
 #endif
 		sprintf( out2, "%s%d.html", out2, i );
 		drawParallelCoordinate( matrixBiclusters[ matrixBiclusters.get_item( i )], biclusters[ biclusters.get_item( i ) ], conditions[ conditions.get_item( i ) ], out2 );
-#ifdef __linux__
+#ifdef LINUX
 		char out3[ 64 ] = "outputs/heatmap/out";
 #else
 		char out3[ 64 ] = "outputs//heatmap//out";
@@ -3952,7 +3952,7 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
         FILE *categoryOfGenes;
         node n,m1,m2;
         list_item it;
-#ifdef __linux__
+#ifdef LINUX
         categoryOfGenes = fopen( "sources/usr_sources/visualization_data/genefunctions.txt", "r" );
 #else
         categoryOfGenes = fopen( "sources//usr_sources//visualization_data//genefunctions.txt", "r" );
@@ -3960,7 +3960,7 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
         if( categoryOfGenes == NULL ){
                 cout << "\n Error 303: You did not specify gene to function file in the path sources/usr_sources/visualization_data/\n";
                 FILE *erptr;
-#ifdef __linux__
+#ifdef LINUX
                 erptr = fopen( "outputs/error.txt", "w" );
 #else
                 erptr = fopen( "outputs//error.txt", "w" );
