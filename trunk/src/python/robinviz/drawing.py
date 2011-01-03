@@ -226,7 +226,10 @@ class EdgeItem(QGraphicsItem):
 
         # Setup operations
         # TODO: test if the order poses a problem.
-        self.__avoidCrossingNodeBorder()  # update path to avoid crossing node borders
+        try:
+            self.__avoidCrossingNodeBorder()  # update path to avoid crossing node borders
+        except:
+            pass
 
 
     def startPoint(self):
