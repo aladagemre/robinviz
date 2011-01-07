@@ -15,42 +15,48 @@
 -------------------------
 RobinViz (Reliability Oriented Bioinformatic Networks Visualization) is a protein-protein interaction (PPI) network visualization system designed to visually aid the prediction and verification processes of such networks. Embedding both the reliability (confirmation) values associated with the interactions and the verification data pertaining to them within a visualization model is a novel feature of the system. RobinViz is a free, open-source software protected under GPL. It is written in C++ and Python, and consists of almost 30,000 lines of code, excluding the employed libraries. 
 
-We provide executable binaries of the system at the main page. These binaries can be downloaded and executed directly without any problems on most of the systems. Additionaly we provide the source code implementations of the system. If the user wants to compile these sources and prepare her own executables we provide the necessary instructions in the following section. We next introduce the main GUI features. Finally, we provide snapshots of a sample run. 
+Executable binaries of the system can be accessed via the Downloads link. These binaries can be downloaded and executed directly without any problems on most of the systems. Additionally we provide the source code implementations of the system. If the user wants to compile the source code and prepare her own executables we provide the necessary instructions under the Installation link of this Wiki. We next introduce the main GUI features and provide snapshots of a sample run. 
 
 -------------------------
 = Precautions =
 -------------------------
-In the wizard, the program might look like frozen when you click on Next button. This means the program is downloading some data, extracting an archive or processing some data. Please be patient until this process ends. You can follow the debug logs on the console if this case happens.
-
+During the wizard execution, the program may seem to be frozen when you click on the Next button. This means the program is downloading data, extracting an archive, or processing data. Please be patient until this process ends. You may follow the debug logs on the console.
 -------------------------
 = Graphical User Interface(GUI) =
 -------------------------
 
 == Menu ==
 
-Robinviz menu is simple. We have three menu tabs; File, View and Help.
+The Robinviz menu is simple. We have three menu tabs; File, View and Help.
 
-From *File* menu, you can execute(Ctrl+X), save(Ctrl+S) and load(Ctrl+O) sessions, display last execution(Ctrl+D) if you run before and update(Ctrl+U) Robinviz.
+From the *File* menu, you can execute(Ctrl+X), save(Ctrl+S) and load(Ctrl+O) sessions, display last execution(Ctrl+D) and update(Ctrl+U) Robinviz.
 
-From *View* menu, you can view color legend, clear view, pass to full screen, go to desired peripheral view and refresh views.
+From the *View* menu, you can view color legend, clear view, pass to full screen, go to a desired peripheral view and refresh views.
 
-From *Help* menu, you can in Robinviz access to these manual pages and see the developer information.
+From the *Help* menu, you can, while in Robinviz, access these manual pages and see the developer information.
 
 == Visualizations and Tabs ==
 
 === Central Visualizations ===
 
-We now introduce the GUI of Robinviz. We take all screenshots using the *svn version 320*.
+We now introduce the GUI of Robinviz. All screenshots were taken with the *svn version 320*.
 
 If you double click on "robinviz.exe" in windows or run the command "./robinviz.exe", you shall see the following empty screen.
 
 ||http://robinviz.googlecode.com/svn/manual/images/1_first_time_opening.png||
 || When you open robinviz first time, you see this blank view ||
 
-Next, in order to view the visualizations, you are required to follow input operations where is at the File menu and then you are required to click *"File>Execute(Ctrl+X)"*. On the other hand, if you desire to see the last session or previous sessions, you can load your last session by pressing *"Ctrl+D"* or *"File>Display Last Session"*, also, loading older sessions can be done via clicking on *"File>Load Session"* option. After, you are done with one of these three options, you simply see the following snapshot.
+To start the visualizations, click *"File>Execute(Ctrl+X)"* from the File menu. 
+Upon execution first-time users will be given the option to download
+necessary raw data from online databases. Once the downloads are finished 
+user will be provided with a series of dialogue boxes where all the parameters
+of the visualization are determined by the user. For the following runs of RobinViz there will be more options 
+to start a visualization. User may choose to view the last session or previously
+saved sessions by clicking omn the appropriate options at the File menu. 
+In either case you shall see snapshot similar to the one below. 
 
 ||http://robinviz.googlecode.com/svn/manual/images/2_after_execution.png||
-|| Snapshot after run or any load operation with Central View||
+|| Snapshot after Execute or Load session operation with Central View||
 
 
 ====Central View====
