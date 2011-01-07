@@ -3,7 +3,7 @@
 
 = Introduction =
 
-Here you can find how to install Robinviz.
+Here you can find instructions on how to install Robinviz.
 
 = Runtime Requirements =
  * Python 2.6
@@ -49,7 +49,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LEDAROOT
 {{{
 source ~/.bashrc
 }}}
- # Move to the robinviz directory on console and give the following command:
+ # Move to the robinviz directory on console and run the following command:
 {{{
 cd ~/robinviz
 sh compile.sh
