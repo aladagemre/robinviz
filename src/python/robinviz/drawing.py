@@ -151,11 +151,6 @@ class Scene(QGraphicsScene):
 class MainScene(Scene):
     def __init__(self, parent=None):
         Scene.__init__(self, parent)
-        
-    def stopSelectedAnimation(self):
-        for item in self.selectedItems():
-            #item.setSelected(False)
-            item.stopAnimation()
 
     def mouseDoubleClickEvent(self, event):
         """When double clicked on a node, signals the node id so that
@@ -502,7 +497,6 @@ class CentralNode(NodeItem):
         self.edges = []
         self.setOpacity(0.5)
         self.noProperties = False
-        self.useAnimation = True
         
         # Setup Operations
         # ---------------------
@@ -596,7 +590,6 @@ class CentralNode(NodeItem):
     def mousePressEvent(self, event):
         QGraphicsItem.mousePressEvent(self, event)
         self.updateEdges()            
-        self.stopAnimation()
         
     def mouseReleaseEvent(self, event):
         QGraphicsItem.mouseReleaseEvent(self, event)
@@ -608,26 +601,12 @@ class CentralNode(NodeItem):
 
         self.updateEdges()
         self._scene.update()
-        self.setupAnimation()
-        self.toggleAnimation()
-        
-    def toggleAnimation(self):
-        if not self.useAnimation:
-            return
-        
-        action = {
-                    QTimeLine.Running : self.stopAnimation,
-                    QTimeLine.NotRunning: self.startAnimation
-                }
-
-        action[self.timeline.State()]()
             
     def itemChange(self, change, value):        
         if change == QGraphicsItem.ItemPositionChange or change == QGraphicsItem.ItemTransformHasChanged:
             self.updateEdges()
         elif change == QGraphicsItem.ItemSelectedChange:
             if self.isSelected():
-                self.stopAnimation()
                 self.toggleHighlight()
                 for edge in self.edges:
                     edge.toggleHighlight()
@@ -637,7 +616,6 @@ class CentralNode(NodeItem):
                 for edge in self.edges:
                     edge.toggleHighlight()
                     edge.end.toggleHighlight()
-                self.startAnimation()
 
         return QVariant(value)
 
@@ -735,27 +713,6 @@ class CentralNode(NodeItem):
         self.setPos(QPointF(node.graphics.x - self.w/2, node.graphics.y - self.w/2))
         
 
-        """# ============== ID INSIDE NODE ==================
-        # Construct the text.
-        self.text = QGraphicsTextItem(self)
-        self.text.root = self
-        textFont = QFont()
-        textFont.setBold(True)
-        #textFont.setPointSize(20)
-	textFont.setPixelSize(self.w/4)
-        self.text.setFont(textFont)
-        if self.defaultColor < 250 or self.defaultColor in (Qt.red, Qt.green, Qt.blue, Qt.black, QColor("#0000CD")):
-            self.text.setDefaultTextColor(QColor(Qt.white))
-
-        # Set node id as text.
-        self.text.setPlainText(str(node.id))
-        self.text.contextMenuEvent = self.contextMenuEvent
-        # Define bounding rect
-        boundRect = self.text.boundingRect()
-
-        # Align text to the center.
-        self.text.setPos((self.w - boundRect.width()) / 2, (self.w - boundRect.height()) / 2)"""
-
         # =============== LABEL ==================
         # Set label
         if not self.label:
@@ -774,64 +731,10 @@ class CentralNode(NodeItem):
         self.labelText.setPlainText(self.label)
         # Position the label test
         self.labelText.setPos(  (self.w + 3), -1    )
-    
 
-        
-
-        self.setupAnimation()
-
-    def setupAnimation(self):
-        """Sets up how the animation shall be. Calculates positions."""
-        numElements = self._scene.numElements
-        if numElements > 200:
-            self.useAnimation = False
-            return
-
-        self.originalPos = self.scenePos()
-        animationPeriod = 1500 + (numElements - 50) * 3
-        self.timeline = QTimeLine(animationPeriod)
-        self.timeline.setCurveShape(QTimeLine.SineCurve)
-        self.timeline.setFrameRange(0, 24)
-        self.timeline.setLoopCount(0)
-
-        self.animation = QGraphicsItemAnimation()
-        self.animation.setItem(self)
-        self.animation.setTimeLine(self.timeline)
-        self.timeline.stateChanged.connect(self.updateEdges)
-        #self.timeline.frameChanged.connect(self.frameChanged) # consuming so much cycles!
-
-        #rect = self.boundingRect()
-        #self.refreshFrame = QRectF(rect.x()-30, rect.y()+30, rect.width()+60, rect.height()+60)
-        
-        for i in range(100):
-            newxPos = self.originalPos.x() - (0.01 * i) * (self.w /2)
-            newyPos = self.originalPos.y() - (0.01 * i) * (self.w /2)
-
-            self.animation.setPosAt(i/100.0, QPointF(newxPos, newyPos))
-            self.animation.setScaleAt(i/100.0, 1 + 0.01 * i, 1 + 0.01 * i)
-        
     def frameChanged(self):
         if self.timeline.currentFrame() == self.timeline.endFrame()-1:
             self._scene.update() # self.refreshFrame)
-
-    def startAnimation(self):
-        """Starts the selected node animation."""
-        if not self.useAnimation:
-            return
-        for edge in self.edges:
-            edge.prepareGeometryChange()
-        self.timeline.start()
-
-    def stopAnimation(self):
-        """Stops the selected node animation."""
-        if not self.useAnimation:
-            return
-        
-        if hasattr(self, 'animation'):
-            # to avoid fake nodes (TODO: should remove these lines later)
-            self.animation.setStep(0)
-            self.timeline.stop()
-
 
 class ProteinNode(NodeItem):
     def __init__(self, node, parent=None, scene=None, label=None):
@@ -910,7 +813,7 @@ class ProteinNode(NodeItem):
             self.updateEdges()
         elif change == QGraphicsItem.ItemSelectedChange:
             if self.isSelected():
-                self.toggleHighlight()
+                #self.toggleHighlight()
                 for edge in self.edges:
                     edge.toggleHighlight()
                     edge.end.toggleHighlight()
