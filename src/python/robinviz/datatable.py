@@ -79,24 +79,26 @@ class DataTableWidget(QWidget):
     def __findMinMax(self):
         self.maxs = [] # Maximum value for each column.
         self.mins = [] # Minimum value for each column.
-        
+        self.avgs = [] # Average value for each column.
+
         for col in range(len(self.columns)):
             # Go col by col
             maxval = float("-inf")
             minval = float("inf")
-            for row in range(len(self.rows)):
+            sum = 0
+            n = len(self.rows)
+            for row in range(n):
                 value = self.matrix[row][col]
-
+                sum += value
+                
                 if value > maxval:
                     maxval = value
                 if value < minval:
                     minval = value
-                
+            
             self.maxs.append(maxval)
             self.mins.append(minval)
-
-
-            
+            self.avgs.append(sum/n)
                 
     def __findVerticalLines(self):
         """Creates the vertical QLineFs."""
@@ -123,19 +125,33 @@ class DataTableWidget(QWidget):
             # Go col by col
             maxval = self.maxs[col]
             minval = self.mins[col]
+            avgval = self.avgs[col]
+
+            avgval = (self.height * (maxval - avgval) ) / (maxval - minval)
+            self.avgs[col] = avgval
+            
             for row in range(len(self.rows)):
                 value = self.matrix[row][col]
                 self.matrix[row][col] = (self.height * (maxval - value)) / (maxval - minval)
                 
 
     def __findPlotLines(self):
-        self.plotLines = []
+        self.plotLines = []        
         for row in range(len(self.rows)):
             for col in range(len(self.columns) - 1):
                 y1 = self.matrix[row][col]
                 y2 = self.matrix[row][col + 1]
                 line = QLineF(self.leftMargin + col * self.colspace, self.topMargin + y1, self.leftMargin + (col + 1 ) * self.colspace, self.topMargin + y2 )
                 self.plotLines.append( line )
+
+    def __findAverageLines(self):
+        self.avgLines = []
+        # Average line
+        for col in range(len(self.columns) - 1):
+            a1 = self.avgs[col]
+            a2 = self.avgs[col + 1]
+            line = QLineF(self.leftMargin + col * self.colspace, self.topMargin + a1, self.leftMargin + (col + 1 ) * self.colspace, self.topMargin + a2 )
+            self.avgLines.append( line )
 
                 
 
@@ -145,7 +161,7 @@ class DataTableWidget(QWidget):
         self.__findVerticalLines()
         self.__scaleMatrix()
         self.__findPlotLines()
-
+        self.__findAverageLines()
         
         self.ready = True
     def __drawVerticalLines(self, painter):
@@ -153,9 +169,16 @@ class DataTableWidget(QWidget):
         for line in self.verticalLines:
             painter.drawLine(line)
     def __drawPlotLines(self, painter):
-        pen = QPen(QColor(Qt.red))
+        pen = QPen(QColor(Qt.blue))
         painter.setPen(pen)
         for line in self.plotLines:
+            painter.drawLine(line)
+
+    def __drawAverageLines(self, painter):
+        pen = QPen(QColor(Qt.red))
+        pen.setWidth(3)
+        painter.setPen(pen)
+        for line in self.avgLines:
             painter.drawLine(line)
 
     def __printLabels(self, painter):
@@ -189,6 +212,7 @@ class DataTableWidget(QWidget):
         imagePainter.setRenderHint(QPainter.Antialiasing, True)
         imagePainter.setRenderHint(QPainter.Antialiasing)
         imagePainter.setRenderHint(QPainter.TextAntialiasing)
+        imagePainter.setOpacity(0.5)
         #imagePainter.setPen(self.palette().color(QPalette.Mid))
         #imagePainter.setBrush(self.palette().brush(QPalette.AlternateBase))
         imagePainter.setBackground(QBrush(QColor(Qt.white)))
@@ -196,6 +220,7 @@ class DataTableWidget(QWidget):
         if self.ready:
             self.__drawVerticalLines(imagePainter)
             self.__drawPlotLines(imagePainter)
+            self.__drawAverageLines(imagePainter)
             self.__printLabels(imagePainter)
             self.__printMaxMinLabels(imagePainter)
         imagePainter.end()
