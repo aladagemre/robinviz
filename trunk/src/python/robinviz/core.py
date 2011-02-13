@@ -143,16 +143,7 @@ class View(QGraphicsView):
         for i, edge in enumerate(newGraph.edges):
             edge.weight = oldGraph.edges[i].weight
             self.scene().addEdge(edge)
-
-        for item in self.scene().items():
-            if isinstance(item, ProteinNode):
-                # TODO: do we need this?
-                item.updateLabel()
-            elif isinstance(item, CentralNode):
-                item.setupAnimation()
                 
-        
-        self.reselectItemsAfterLayoutChange()
         self.refresh()
     
     def refresh(self):
@@ -166,15 +157,6 @@ class View(QGraphicsView):
         """Displays meanings of the colors"""
         self.legendWindow = LegendWidget()
         self.legendWindow.show()
-        
-    def reselectItemsAfterLayoutChange(self):
-        """Re-selects previously selected items after layout changed."""
-        for item in self.scene().items():
-            if isinstance(item, QGraphicsEllipseItem):
-                item.setupAnimation() # Setup individual "selected" animation for new position.
-                if getattr(item, 'lastSelected', False):
-                    item.setSelected(True)
-                    item.lastSelected = False
 
     def startLayoutAnimation(self):
         """Starts the layout animation"""
@@ -186,13 +168,6 @@ class View(QGraphicsView):
 
     def switchToLayout(self, layoutName):
         """Switches to the given layout with/without animation."""
-        if self.main:
-            selectedItems = self.scene().selectedItems()
-            for selectedItem in selectedItems:
-                selectedItem.stopAnimation()
-                selectedItem.setSelected(False)
-                selectedItem.lastSelected = True
-
         if self.setupLayoutSwitch(layoutName):
             self.startLayoutAnimation()          
     
