@@ -13,10 +13,29 @@ import os
 import shutil
 
 from wizards import InputWizard
-from utils.info import id2cat, runcommand, rp, latest_osprey_dir
+from utils.info import id2cat, rp
 from utils.decorators import onerror
 from utils.compression import compressdir, untar
 
+class LogWindow(QWidget):
+    def __init__(self, parent=None):
+        QWidget.__init__(self, parent)
+        self.setMinimumWidth(500)
+        self.setMinimumHeight(500)
+        self.setWindowTitle("Log Window")
+        layout = QVBoxLayout()
+        self.setLayout(layout)
+        self.textEdit = QTextEdit()
+        self.closeButton = QPushButton("&Close")
+        self.closeButton.clicked.connect(self.slotClose)
+        layout.addWidget(self.textEdit)
+        layout.addWidget(self.closeButton)
+    def addMessage(self, msg):
+        self.textEdit.append(msg)
+
+    def slotClose(self):
+        self.close()
+        
 class SingleMainViewWindow(QMainWindow):
     def __init__(self, mainViewType, mainSceneType, scene=None):
         QMainWindow.__init__(self)
@@ -453,8 +472,42 @@ class MultiViewWindow(QMainWindow):
 	# ======= INPUT SELECTION ===
 
         # ======== RUN ==============
-        failed = runcommand(self.confirmationType) #returns 0 for success
+        self.process = QProcess(self.parent())
+        self.process.readyReadStandardOutput.connect(self.readOutput)
+        self.process.readyReadStandardError.connect(self.readError)
+        self.process.finished.connect(self.displayResults)
 
+        self.logWindow = LogWindow()
+        self.logWindow.show()
+
+        program, argument = self.confirmationType.split(" ")
+        arguments = [argument]
+        if os.name == "posix":
+            program = "./" + program
+        self.process.start(program, arguments)
+
+
+
+    def readOutput(self):
+        """Prints outputs from LEDA exe binaries."""
+        msg = QString(self.process.readAllStandardOutput())
+        self.reportMessage(msg)
+
+    def readError(self):
+        """Prints errors from LEDA exe binaries."""
+        msg = QString(self.process.readAllStandardError())
+        self.reportMessage(msg)
+
+    def reportMessage(self, msg):
+        print msg
+        self.logWindow.addMessage(msg)
+
+    def displayResults(self, exitCode, exitStatus):
+        """When LEDA process is finished, this method displays the results."""
+        self.reportMessage("Status: %s %s" % ( exitCode, exitStatus) )
+        self.reportMessage("Displaying results")
+        failed = (exitCode!=0)
+        
         # ======== DISPLAY ==========
         if not failed:
             read_category_information()
@@ -471,7 +524,7 @@ class MultiViewWindow(QMainWindow):
             if os.path.exists(errorFile):
                 message = open(errorFile).read()
             else:
-                message = "Unknown error occured. Please report the debug messages on the console."
+                message = "Unknown error occured. Please report the debug messages on the log window or console."
 
             QMessageBox.information(self, 'Failed', message)
 
