@@ -31,7 +31,7 @@ class LogWindow(QWidget):
         layout.addWidget(self.textEdit)
         layout.addWidget(self.closeButton)
     def addMessage(self, msg):
-        self.textEdit.append(msg)
+        self.textEdit.append(msg.strip())
 
     def slotClose(self):
         self.close()
@@ -434,11 +434,6 @@ class MultiViewWindow(QMainWindow):
 
 
     def stopAllAnimations(self):
-        # First of all, we have to stop all the animation on selected nodes.
-        if hasattr(self, 'mainScene'):
-            for item in self.mainScene.selectedItems():
-                item.stopAnimation()
-
         # Then we stop layout animations.
         self.mainView.stopLayoutAnimation()
         for pView in self.pViews:
@@ -457,7 +452,7 @@ class MultiViewWindow(QMainWindow):
         self.clearViews()
         
         print "Starting operation"
-        self.setWindowTitle("RobinViz - Please wait, window might not respond for a while...")
+        self.setWindowTitle("RobinViz - Please wait, calculating...")
         self.setCursor(Qt.WaitCursor)
 
         # ======= CLEANUP ==========
