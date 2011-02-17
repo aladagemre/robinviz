@@ -99,7 +99,10 @@ class DataTableWidget(QWidget):
             self.maxs.append(maxval)
             self.mins.append(minval)
             self.avgs.append(sum/n)
-                
+
+        self.max = max( self.maxs )
+        self.min = max( self.mins )
+        
     def __findVerticalLines(self):
         """Creates the vertical QLineFs."""
         self.verticalLines = []
@@ -121,10 +124,13 @@ class DataTableWidget(QWidget):
 
 
     def __scaleMatrix(self):
+        maxval = self.max
+        minval = self.min
+        
         for col in range(len(self.columns)):
             # Go col by col
-            maxval = self.maxs[col]
-            minval = self.mins[col]
+            #maxval = self.maxs[col]
+            #minval = self.mins[col]
             avgval = self.avgs[col]
 
             avgval = (self.height * (maxval - avgval) ) / (maxval - minval)
@@ -192,10 +198,9 @@ class DataTableWidget(QWidget):
         for i in range(len(self.columns)):
             x1 = self.leftMargin + i * self.colspace
             y1 = self.topMargin - 10
-            x2 = x1
             y2 = self.topMargin + self.height + 10
-            painter.drawText(QPoint(x1 + self.notchMargin + 1, y1 + 10), str(self.maxs[i]))
-            painter.drawText(QPoint(x1 + self.notchMargin + 2, y2 - 10), str(self.mins[i]))
+            painter.drawText(QPoint(x1 + self.notchMargin + 1, y1 + 10), str(self.max)) #self.maxs[i]))
+            painter.drawText(QPoint(x1 + self.notchMargin + 2, y2 - 10), str(self.min)) #self.mins[i]))
             """# start notch
             line = QLineF(x1 - self.notchMargin, y1+10, x1 + self.notchMargin, y1+10)
             self.verticalLines.append(line)
@@ -212,14 +217,15 @@ class DataTableWidget(QWidget):
         imagePainter.setRenderHint(QPainter.Antialiasing, True)
         imagePainter.setRenderHint(QPainter.Antialiasing)
         imagePainter.setRenderHint(QPainter.TextAntialiasing)
-        imagePainter.setOpacity(0.5)
         #imagePainter.setPen(self.palette().color(QPalette.Mid))
         #imagePainter.setBrush(self.palette().brush(QPalette.AlternateBase))
         imagePainter.setBackground(QBrush(QColor(Qt.white)))
         imagePainter.eraseRect(self.rect())
         if self.ready:
             self.__drawVerticalLines(imagePainter)
+            imagePainter.setOpacity(0.2)
             self.__drawPlotLines(imagePainter)
+            imagePainter.setOpacity(0.5)
             self.__drawAverageLines(imagePainter)
             self.__printLabels(imagePainter)
             self.__printMaxMinLabels(imagePainter)
