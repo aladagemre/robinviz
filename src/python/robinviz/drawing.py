@@ -396,6 +396,7 @@ class NodeItem(QGraphicsItem):
             return
         #if not self.isSelected():
         self.toggleHighlight()
+        self.setOpacity(1.0)
         
     def hoverLeaveEvent(self, event):
         """When hovering is off the node, we make the scene able to be moved by dragging."""
@@ -405,7 +406,8 @@ class NodeItem(QGraphicsItem):
             return
         if not self.isSelected():
             self.toggleHighlight()
-        
+
+        self.setOpacity(0.5)
     #----------- Data Structural Methods ------------------
     def addEdge(self, e):
         """Adds the EdgeItem e to edges list."""
