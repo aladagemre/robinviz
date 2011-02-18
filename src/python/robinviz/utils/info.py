@@ -44,5 +44,47 @@ def latest_osprey_dir():
 
     return latest
 
+def get_current_version():
+    with open(rp("version.txt")) as f:
+        return f.readline().strip()
+
+def calculate_next_version(current=None):
+    """doctests
+    >>> calculate_next_version("1.0.0")
+    '1.0.1'
+    >>> calculate_next_version("1.0.9")
+    '1.1.0'
+    >>> calculate_next_version("1.9.9")
+    '2.0.0'
+    >>> calculate_next_version()
+    '1.0.1'
+    """
+    if not current:
+        current = get_current_version()
+    
+    major, mid, minor = map(int, current.split("."))
+    if minor < 9:
+        minor += 1
+    elif mid < 9:
+        mid += 1
+        minor = 0
+    else:
+        major += 1
+        mid = 0
+        minor = 0
+        
+    return ".".join(map(str, (major, mid, minor)))
+
+def increment_version():
+    new_version = calculate_next_version()
+    with open(rp("version.txt"), "w") as f:
+        f.write(new_version)
+    return new_version
+
 if __name__ == "__main__":
     print rp("layouts.ini")
+    runthread("ls")
+    import doctest
+    doctest.testmod()
+
+

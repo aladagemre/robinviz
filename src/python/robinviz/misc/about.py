@@ -8,6 +8,10 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+import sys
+
+sys.path.append("..")
+from utils.info import get_current_version
 
 class Ui_AboutDialog(object):
     def setupUi(self, AboutDialog):
@@ -129,7 +133,7 @@ class Ui_AboutDialog(object):
 "<table style=\"-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;\">\n"
 "<tr>\n"
 "<td style=\"border: none;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">v 1.0-Beta</span></p></td></tr></table></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">v %s</span></p></td></tr></table></body></html>" % get_current_version(), None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc
 
