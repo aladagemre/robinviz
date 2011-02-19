@@ -31,7 +31,7 @@ class LogWindow(QWidget):
         layout.addWidget(self.textEdit)
         layout.addWidget(self.closeButton)
     def addMessage(self, msg):
-        self.textEdit.append(msg.strip())
+        self.textEdit.append(msg)
 
     def slotClose(self):
         self.close()
@@ -494,6 +494,7 @@ class MultiViewWindow(QMainWindow):
         self.reportMessage(msg)
 
     def reportMessage(self, msg):
+        msg = str(msg).strip()
         print msg
         self.logWindow.addMessage(msg)
 
