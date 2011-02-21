@@ -231,7 +231,8 @@ class AssociationSelector(QWidget):
         translator = AssociationTranslator()
         for filename in files:
             translator.set_filename(filename)
-            translator.translate_biogrids()
+            #translator.translate_biogrids()
+            translator.translate(from_type=None, to_type="OFFICIAL_SYMBOL")
         
     def mergeSelectedAssociations(self):
 	"""Merges selected association data files into one single assocdata/input_go.txt"""
@@ -244,7 +245,7 @@ class AssociationSelector(QWidget):
         print "Merging association sources..."
 	o = open(ap("assocdata/go.txt"),"w")
 	self.go_dict = go_dict = {}
-	TARGET_ANNOTATION= "BIOGRID"
+	TARGET_ANNOTATION= "OFFICIAL_SYMBOL"
 	self.db = GeneDB()
 	translator = AssociationTranslator()
 
@@ -259,7 +260,7 @@ class AssociationSelector(QWidget):
                 translator.set_filename(filename)
                 """if translator.translate(None, TARGET_ANNOTATION):
                     self._extend_dictionary( go_dict, translator.go_dict )"""
-                if translator.translate_biogrids():
+                if translator.translate(from_type=None, to_type="OFFICIAL_SYMBOL"):
                     self._extend_dictionary( go_dict, translator.go_dict )
      	# ===============================================
 

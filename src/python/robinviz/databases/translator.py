@@ -35,8 +35,54 @@ class BiogridOspreyTranslator:
                 for t2x in t2:
                     output.write("%s\t%s\n" % (t1x, t2x) )
         output.close()
-                    
-            
+
+
+class BiogridOspreyFormatterOfficial:
+    def __init__(self, filename=None):
+        if filename:
+            self.set_filename(filename)
+
+    def set_filename(self, filename):
+        self.filename = filename
+
+    def translate(self):
+        #print "Translating %s to biogrid ids" % self.filename
+        lines = open(self.filename).readlines()
+        output = open("%s-OFFICIAL_SYMBOL" % self.filename, "w")
+        for line in lines[1:]:
+            cols = line.split("\t")
+            p1 = cols[2]
+            p2 = cols[3]
+            output.write("%s\t%s\n" % (p1, p2) )
+        output.close()
+
+class HitpredictToOfficialTranslator:
+    def __init__(self, filename=None):
+        if filename:
+            self.set_filename(filename)
+
+        self.db = GeneDB()
+        if not self.db.db_exists():
+            raise Exception("Identifier database file not available")
+        
+    def set_filename(self, filename):
+        self.filename = filename
+
+    def translate(self):
+        #print "Translating %s to biogrid ids" % self.filename
+        lines = open(self.filename).readlines()
+        output = open("%s-BIOGRID" % self.filename, "w")
+        for line in lines[1:]:
+            cols = line.split("\t")
+            p1 = cols[0]
+            p2 = cols[1]
+            t1 = self.db.value2biogrids(p1, only_ids=True)
+            t2 = self.db.value2biogrids(p2, only_ids=True)
+
+            for t1x in t1:
+                for t2x in t2:
+                    output.write("%s\t%s\n" % (t1x, t2x) )
+        output.close()
 class AssociationTranslator:
     def __init__(self, filename=None):
         if filename:
@@ -123,12 +169,12 @@ class AssociationTranslator:
             go_term = cols[4]
             db_object_id = cols[1].strip()
             db_object_symbol = cols[2].strip()
-            db_object_name = cols[9].strip()
+            #db_object_name = cols[9].strip()
             db_object_synonym = cols[10].strip().split("|")
 
             # Gather the genes
             genes = []
-            for object in [db_object_id, db_object_symbol, db_object_name]:
+            for object in [db_object_id, db_object_symbol]: #, db_object_name]:
                 if object:
                     genes.append(object)
             if db_object_synonym:
@@ -182,51 +228,79 @@ class AssociationTranslator:
             return False
 
         print "Annotation type:", from_type
-        
+
+        if from_type == to_type:
+            print "Source and target types are the same, not converting but just reformatting"
+            WILL_CONVERT = False
+        else:
+            print "Translating ", self.filename.split("/")[-1]
+            WILL_CONVERT = True
+            
     	o = open("%s-%s" % (self.filename, to_type) ,"w")
 	converted = 0
 	not_converted = 0
 	self.go_dict = go_dict = {}
+        self.translation_dict = {} # holds GENE: Translation pairs.
 
 	# ===============================================
-	filename = self.filename
-        print filename.split("/")[-1]
-        f = open(filename)
+	
+        f = open(self.filename)
+        linenum = 0
         for line in f:
+            if linenum % 100 == 0:
+                print linenum
+            linenum+=1
             if line[0] == "!":
                 continue
             cols = line.split("\t")
-            protein_name1 = cols[1]
-            protein_name2 = cols[2]
-            go_term = cols[4]
 
+            # Get the information from the line
+            go_term = cols[4]
+            db_object_id = cols[1].strip()
+            db_object_symbol = cols[2].strip()
+            #db_object_name = cols[9].strip()
+            db_object_synonym = cols[10].strip().split("|")
+            # I don't convert all the synonyms to OFFICIAL SYMBOL because
+            # official symbols will be provided if any exists.
+
+            # Gather the genes
+            genes = []
+            for object in [db_object_id, db_object_symbol]: #, db_object_name]:
+                if object:
+                    genes.append(object)
+            if db_object_synonym:
+                genes.extend(db_object_synonym)
+
+            # Get the Association list
             l = go_dict.get(go_term)
             if not l:
                 l = []
 
-            if protein_name2:
-                candidate_name = protein_name2
-            else:
-                candidate_name = protein_name1
-                
-            if candidate_name:
-                if to_type == "BIOGRID":
-                    candidate_name = self.db.value2biogrid(candidate_name, from_type)
-                else:
-                    candidate_name = self.db.svalue2svalue(candidate_name, from_type, to_type)
-                    
-                if candidate_name:
+            # Translate and extend association list.
+
+            for gene in genes:
+                #print gene
+                if WILL_CONVERT:
+                    # if we are going to perform conversion,
+                    # try cached translation first. have we translated it before?
+                    result = self.translation_dict.get(gene)
+                    if result:
+                        # if we had translated before, use it.
+                        gene = result
+                    else:
+                        # if we have not, then translate and save it for future use.
+                        result = self.db.svalue2svalue(gene, from_type, to_type)
+                        self.translation_dict[gene] = result
+                        gene = result
+                        
+                if gene:
                     converted+=1
-                    l.append(candidate_name)
+                    l.append(gene)
                 else:
                     not_converted+=1
-
-            else:
-                not_converted += 1
-
                 
 
-            go_dict[go_term] = l
+            go_dict[go_term] = list(set(l))
         # ===============================================
 
         for key in sorted(go_dict.keys()):
@@ -251,5 +325,5 @@ class AssociationTranslator:
 
 if __name__ == "__main__":
     t = AssociationTranslator()
-    t.set_filename("assocdata/gene_association.tair")
-    t.translate_biogrids()
+    t.set_filename("assocdata/gene_association.goa_human")
+    t.translate(from_type=None, to_type="OFFICIAL_SYMBOL")

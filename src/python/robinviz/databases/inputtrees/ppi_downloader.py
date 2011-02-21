@@ -20,6 +20,9 @@ organism_codes = {
     "S. pombe": 4896,
     }
 
+def get_organism_code(organism_name):
+    return organism_codes[ shorten_organism(organism_name) ]
+    
 def shorten_organism(long_name):
     """Converts Arabidopsis_thaliana to A. thaliana"""
     if "_" in long_name:
