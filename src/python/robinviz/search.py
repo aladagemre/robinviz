@@ -190,7 +190,8 @@ class ComprehensiveSearchWidget(QWidget):
         self.listCategories()
 
     def setupVariables(self):
-        self.proteinNamePattern = compile('^\d+$')
+        self.proteinNamePattern = compile('^\d+$') # not used anymore (for biogrid id)
+        self.groupNamePattern = compile('^[_]{2}[\w\s-]*$') #__binding
 
     def setupGUI(self):
         # ========= Buttons ===========
@@ -224,20 +225,23 @@ class ComprehensiveSearchWidget(QWidget):
         self.setMaximumWidth(200)
 
     def isProtein(self, text):
-        return self.proteinNamePattern.match(text)
+        #return self.proteinNamePattern.match(text)
+        return not self.isCategory(text.strip())        
 
+    def isCategory(self, text):
+        result = self.groupNamePattern.match(text)
+        return result
+    
     def splitProteinsCategories(self):
         # get the proteins
         keys = self.index.keys()
-        # filter the proteins
-        proteins = set(filter(lambda text: text[0].isdigit(), keys))
-        # filter the category names
-        categories = set(keys) - proteins
-
-        # sort proteins by int
-        proteins_int = map(int, proteins )
-        proteins_int.sort()
-        proteins = map(str, proteins_int)
+        # filter the categories
+        categories = set (filter ( self.isCategory, keys) )
+        # get the proteins
+        proteins = list(set(keys) - categories)
+        
+        # sort proteins
+        proteins.sort()
 
         if not hasattr(self, 'category_dict'):
             # now index categories        
@@ -267,7 +271,7 @@ class ComprehensiveSearchWidget(QWidget):
             keyList = sorted(self.multiView.keyList)
             
         for category in keyList:
-            category_id = self.index[category][0]
+            category_id = self.index["__%s" % category][0]
 
             item = QListWidgetItem(category)
 
@@ -284,28 +288,35 @@ class ComprehensiveSearchWidget(QWidget):
 
     # ========== LIST WIDGET EVENTS ===============
     def itemClicked(self, item):
-        try:
-            # if clicked on a protein,
-            id = int(item.text())
-            # do nothing
-        except:
-            # if it's not a protein but a category/bicluster
-            # get its id and emit a signal
-            id = self.index.get(str(item.text()))[0]
+        text = str(item.text())
+        if text[0].isupper() and not text.startswith("Bicluster"):
+            # Protein
+            #id = self.index.get(text)[0]
+            pass
+        else:
+            # Bicluster or Category name
+            id = self.index.get(self.ec(text))[0]
             self.emit(SIGNAL("graphClicked"), int(id))
 
+    def ec(self, name):
+        """Adds preceding __ to the given name."""
+        return "__%s" % name
+    def dc(self, name):
+        """Removes preceding __"""
+        return name[2:]
+    
     def itemDoubleClicked(self, item):
-        itemText = item.text()
-        try:
-            # If double clicked on a protein, just search it.
-            id = int(itemText)
-            self.lineEdit.setText(itemText)
+        text = str(item.text())
+        if text[0].isupper() and not text.startswith("Bicluster"):
+            # Protein
+            self.lineEdit.setText(text)
             self.search()
             
-        except:
-            # If it's not a number, it means it's category/bicluster                
-            id = self.index.get(str(itemText))[0]
-            self.emit(SIGNAL("graphDoubleClicked"), id)
+        else:
+            # Bicluster or Category name
+            id = self.index.get(self.ec(text))[0]
+            self.emit(SIGNAL("graphDoubleClicked"), int(id))
+
                 
     # ========= LINE EDIT EVENTS ==================
     def setAutoCompletion(self):
@@ -330,15 +341,17 @@ class ComprehensiveSearchWidget(QWidget):
             self.index = shelve.open(normcase("outputs/gene_index.shelve"))
         
             # Now fetch the labels in each file.
-            pattern = compile('label "\d+_?[A-Z:]*"')
-            for graphFile in self.graphFiles:
-                content = open('outputs/graphs/'+graphFile).read()
-                labels = pattern.findall(content)
+            pattern = compile('label "[\w-]+_?[A-Z:]*"')
+            for graphFile in self.graphFiles: # scan all gml files.
+                content = open('outputs/graphs/'+graphFile).read() # read the gml file
+                labels = pattern.findall(content) # find all label lines.
                 # Clear label " and " characters and get the gene name
                 labels = map(lambda line: line[7:-1].split("_")[0], labels)
-                graphNum = int(graphFile[5:-4]) # get the number
+                graphNum = int(graphFile[5:-4]) # get the graph number parsing "graphxx.gml" > xx
 
+                # for each label, add this graph file's number to its record in dictionary.
                 for label in labels:
+                    # try to get existing record label->graph1,graph2,graph3...
                     x = self.index.get(label)
                     if not x:
                         # if no list entry (graph) yet
@@ -349,7 +362,6 @@ class ComprehensiveSearchWidget(QWidget):
                         temp.append(graphNum)
                         self.index[label] = temp
 
-
             # index     groupName
             #   0       mitochondrion inheritance
             #   1       reproduction
@@ -357,8 +369,10 @@ class ComprehensiveSearchWidget(QWidget):
             #   0       Bicluster 0
             #   1       Bicluster 1
             # ...
+
+            # encode category/bicluster name with preceding $ sign.
             for index, groupName in enumerate(self.multiView.keyList):
-                self.index[groupName] = [ index ]
+                self.index["__%s" % groupName] = [ index ]
 
             self.index.close()
             self.index = shelve.open(normcase("outputs/gene_index.shelve"))
@@ -383,7 +397,7 @@ class ComprehensiveSearchWidget(QWidget):
         if graphs:
             for graph in sorted(graphs):
                 category_name = self.category_dict[graph]
-                self.listWidget.addItem(category_name)
+                self.listWidget.addItem(self.dc(category_name))
         else:
             QMessageBox.information(self, "No results", "The protein you look for does not exist in any of the sub-graphs.")
         
