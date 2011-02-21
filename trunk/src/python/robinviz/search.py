@@ -112,7 +112,7 @@ class ProteinSearchWidget(QWidget):
     def listProteins(self):
         self.clearAll()
         keys = self.index.keys()
-        proteins = set(filter(lambda text: text[0].isdigit(), keys))
+        proteins = keys #set(filter(lambda text: text[0].isdigit(), keys))
         for protein in sorted(proteins):
             self.listWidget.addItem(protein)
 
