@@ -2,7 +2,9 @@
 
 import sys
 sys.path.append("..")
-from translator import BiogridOspreyTranslator
+from translator import BiogridOspreyFormatterOfficial
+from inputtrees.ppi_downloader import get_organism_code
+from inputtrees.hp_to_tabbedppi import tabify
 import os
 from utils.info import ap, latest_osprey_dir
 #from multiprocessing import Pool
@@ -11,6 +13,7 @@ from PyQt4.QtCore import QThread, pyqtSignal, QString
 
 # TODO: this static value might cause bugs!
 OSPREY_BASE = ap("ppidata/%s" % latest_osprey_dir()) + "/"
+hitpredict_original_datadir = ap("ppidata/hitpredict/original/")
 
 OSPREY_ORGANISMS = ["Arabidopsis_thaliana",
         "Caenorhabditis_elegans",
@@ -22,17 +25,26 @@ OSPREY_ORGANISMS = ["Arabidopsis_thaliana",
         "Saccharomyces_cerevisiae",
         "Schizosaccharomyces_pombe"]
 
+
+
+def get_hitpredict_files(organism_name):
+    """Returns experiment files for given organism"""
+    code = get_organism_code(organism_name)
+    return [ "%s/%d_hc_interactions" % (hitpredict_original_datadir, code),
+            "%s/%d_spurious_interactions" % (hitpredict_original_datadir, code),
+            "%s/%d_ss_interactions" % (hitpredict_original_datadir, code) ]
+
 def convert_organism(organism):
-    OSPREY_BASE = ap("ppidata/%s" % latest_osprey_dir()) + "/"
-    try:
-        t = BiogridOspreyTranslator()
-    except:
-        return
-    print "Translating", organism
+    print "Converting", organism
+
+    t = BiogridOspreyFormatterOfficial()
+    tabify(get_hitpredict_files(organism), organism)
+    
+    print "Formatting Biogrid data for", organism, "in OFFICIAL_SYMBOL format."
     for filename in os.listdir(os.path.join(OSPREY_BASE,organism)):
         osprey_file = os.path.join(OSPREY_BASE, organism, filename)
-        biogrid_file = osprey_file + "-BIOGRID"
-        if not filename[0]=="." and not filename.endswith("-BIOGRID") and not os.path.exists(biogrid_file):
+        biogrid_file = osprey_file + "-OFFICIAL_SYMBOL"
+        if not filename[0]=="." and not filename.endswith("-OFFICIAL_SYMBOL") and not os.path.exists(biogrid_file):
             t.set_filename( osprey_file )
             t.translate()
 

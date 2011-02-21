@@ -2,6 +2,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtCore import qFuzzyCompare
 import sys
+import itertools
 
 class Wizard(QWizard):
     def __init__(self, parent=None):
@@ -186,6 +187,31 @@ class ItemDisplayer(QWidget):
         self.setWindowTitle("Item Displayer")
         self.setMinimumSize(600,600)
 
+
+
+def simplify_interactions(interactions):
+    result = []
+
+    for k,g in itertools.groupby(interactions, lambda x: x[0]+x[1]):
+
+        l = list(g)
+        print k,g,len(l)
+        filtered_list = filter( lambda i: i[2]!="0.1" , l) # remove interactions with no confidence
+        length_l = len(filtered_list)
+        if length_l == 0:
+            result.append(l[0]) # use it.
+            continue
+        elif length_l == 1: # if only one element
+            result.append(filtered_list[0]) # use it.
+            continue
+        # if more than one confidence value, take average.
+        average = sum(map(lambda i: float(i[2]), filtered_list)) / length_l
+        print average
+        result.append( ( filtered_list[0][0], filtered_list[0][1], average) )
+    return result
+
+            
+
 def main():
     app = QApplication(sys.argv)
     """    displayer= ItemDisplayer()
@@ -196,10 +222,24 @@ def main():
     elips.setFlag(QGraphicsItem.ItemIsMovable, True)
     elips.setFlag(QGraphicsItem.ItemIsSelectable, True)
     #displayer.addItem(elips)
-    displayer.show()"""
+    displayer.show()
 
     ps = Wizard()
-    ps.show()
+    ps.show()"""
+
+    interactions = [ ['TOB1', 'SKP2', '0.1'], ['TOB1', 'SKP2', '0.25'], ['TOB1', 'SKP2', '0.3'] ]
+    print simplify_interactions(interactions)
+
+
+    
+
+
+
+
+
+
+
+
     sys.exit(app.exec_())
 
 if __name__ == "__main__":

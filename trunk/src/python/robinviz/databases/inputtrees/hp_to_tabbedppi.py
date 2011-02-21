@@ -20,7 +20,7 @@ def normalize(data):
     return data, match
     
 def tabify(files, organism_name):
-    print "Combining Biogrid Osprey and Hitpredict PPI Networks..."
+    print "Combining Hitpredict PPI experiments for %s..." % organism_name
     hitpredict_combined_ppi = ap("ppidata/hitpredict/%s.txt" % organism_name)
     lines = []
     for filename in files:
@@ -65,7 +65,9 @@ def tabify(files, organism_name):
                 # ======PROTEIN1===============
 		protein1 = fields[2]
                 #value = db.value2biogrids(protein1, types=["SWISSPROT", "GENBANK_PROTEIN_ACCESSION"], only_ids=True)
-                value = db.value2biogrids(protein1, only_ids=True)
+                #value = db.value2biogrids(protein1, only_ids=True)
+                value = db.svalue2svalue(protein1, "GENBANK_PROTEIN_ACCESSION", "OFFICIAL_SYMBOL")
+
 		
 		if isinstance(value, list):
 		    #if len(value)>1:
@@ -77,13 +79,14 @@ def tabify(files, organism_name):
 		else:
                     #print "could not convert:", protein1
 		    no_correspondance.add(protein1)
-                    #continue
+                    continue
 
                 # ======PROTEIN2===============
 		protein2 = fields[3]
 		#value = db.value2biogrid(protein2, ["SWISSPROT", "GENBANK_PROTEIN_ACCESSION"])
                 #value = db.value2biogrids(protein2, types=["SWISSPROT", "GENBANK_PROTEIN_ACCESSION"], only_ids=True)
-                value = db.value2biogrids(protein2, only_ids=True)
+                #value = db.value2biogrids(protein2, only_ids=True)
+                value = db.svalue2svalue(protein2, "GENBANK_PROTEIN_ACCESSION", "OFFICIAL_SYMBOL")
 		if isinstance(value, list):
 		    value = "/".join(value)
 		if value:
@@ -91,7 +94,7 @@ def tabify(files, organism_name):
 		else:
                     #print "could not convert:", protein2
 		    no_correspondance.add(protein2)
-                    #continue
+                    continue
                     
 		try:
 		    confidence = float(fields[-4])
