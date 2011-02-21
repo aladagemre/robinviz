@@ -21,12 +21,17 @@ def read_cat_info():
     CATEGORY_COLORS = open(ap("godata/highlevel_colors.txt")).read().split("\n")
     CATEGORY_NAMES = [ line.strip().split()[0].replace("_"," ") for line in open(rp("outputs/colors_func.txt")).readlines()[:-1] ]
 
-    CHAR_COLOR_ZIP = zip(CHARS, CATEGORY_COLORS)
-    COLOR_DICT = dict ( zip ( CATEGORY_NAMES, CHAR_COLOR_ZIP ) )
+    #CHAR_COLOR_ZIP = zip(CHARS, CATEGORY_COLORS)
+    #COLOR_DICT = dict ( zip ( CATEGORY_NAMES, CHAR_COLOR_ZIP ) )
     # metabolic : (A, "#FFAABB")
 
-
-
+    TOP10_CHARS = open(ap("godata/top_highlevel_letters.txt")).read().split(",")
+    CHAR_NAME_DICT = dict ( zip ( CHARS, CATEGORY_NAMES ) )
+    TOP10_NAMES = [CHAR_NAME_DICT.get(letter) for letter in TOP10_CHARS ]
+    print TOP10_NAMES
+    CHAR_COLOR_ZIP = zip(TOP10_CHARS, CATEGORY_COLORS[:10])
+    COLOR_DICT = dict ( zip ( TOP10_NAMES, CHAR_COLOR_ZIP ) )
+    
 class ColorPair(QWidget):
     def __init__(self, name_n_color, parent=None):
         QWidget.__init__(self, parent)

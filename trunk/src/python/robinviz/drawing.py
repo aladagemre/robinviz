@@ -25,8 +25,11 @@ def read_category_information():
     CATEGORY_NAMES = dict(zip ( CHARS, [ line.strip().split()[0].replace("_"," ") for line in open(rp("outputs/colors_func.txt")).readlines()[:-1] ] )) 
 
     CATEGORY_COLORS = open(ap("godata/highlevel_colors.txt")).read().split("\n")
-    CHAR_COLOR_DICT = dict( zip(CHARS, CATEGORY_COLORS) )
+    #CHAR_COLOR_DICT = dict( zip(CHARS, CATEGORY_COLORS) )
 
+    TOP10_CHARS = open(ap("godata/top_highlevel_letters.txt")).read().split(",")
+    CHAR_COLOR_DICT = dict( zip(TOP10_CHARS, CATEGORY_COLORS[:10]) )
+    print CHAR_COLOR_DICT
 read_category_information()
 
 GRAPH_LAYOUTS = {}

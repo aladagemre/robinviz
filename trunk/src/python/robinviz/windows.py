@@ -9,6 +9,7 @@ from search import ComprehensiveSearchWidget, ProteinSearchWidget
 from misc.legend import LegendWidget
 from databases.datamanager import DataManager
 from drawing import read_category_information
+from find_top10_highlevel import find_top_highlevel_categories
 import os
 import shutil
 
@@ -506,6 +507,7 @@ class MultiViewWindow(QMainWindow):
         
         # ======== DISPLAY ==========
         if not failed:
+            find_top_highlevel_categories()
             read_category_information()
             self.loadMainScene()
             self.connectSlots()
