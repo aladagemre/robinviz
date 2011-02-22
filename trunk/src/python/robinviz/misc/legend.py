@@ -28,7 +28,6 @@ def read_cat_info():
     TOP10_CHARS = open(ap("godata/top_highlevel_letters.txt")).read().split(",")
     CHAR_NAME_DICT = dict ( zip ( CHARS, CATEGORY_NAMES ) )
     TOP10_NAMES = [CHAR_NAME_DICT.get(letter) for letter in TOP10_CHARS ]
-    print TOP10_NAMES
     CHAR_COLOR_ZIP = zip(TOP10_CHARS, CATEGORY_COLORS[:10])
     COLOR_DICT = dict ( zip ( TOP10_NAMES, CHAR_COLOR_ZIP ) )
     

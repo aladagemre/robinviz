@@ -29,7 +29,7 @@ def read_category_information():
 
     TOP10_CHARS = open(ap("godata/top_highlevel_letters.txt")).read().split(",")
     CHAR_COLOR_DICT = dict( zip(TOP10_CHARS, CATEGORY_COLORS[:10]) )
-    print CHAR_COLOR_DICT
+    
 read_category_information()
 
 GRAPH_LAYOUTS = {}
