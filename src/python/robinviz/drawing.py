@@ -523,12 +523,12 @@ class CentralNode(NodeItem):
             detailedInformation = menu.addAction("Detailed Information (Online)")
         
         # ======== GO TABLE ===================
-        goTable = menu.addAction("GO Table")
+        goTable = menu.addAction("Enrichment Analysis")
 
         # ======== PROPERTIES =================
         propertiesAction = None
         if not self.noProperties:
-            propertiesAction = menu.addAction("Properties")
+            propertiesAction = menu.addAction("Visualization")
 
         # ======== EXECUTE ====================
         action = menu.exec_(event.screenPos())

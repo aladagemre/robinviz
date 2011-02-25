@@ -2,6 +2,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 import sys
+import math
 
 class HeatMapWidget(QWidget):
     def __init__(self, filename, parent=None, flags=Qt.Widget):
@@ -81,16 +82,13 @@ class HeatMapWidget(QWidget):
         colorValue = 0
         for value in valueList[:self.medianIndex]:
             colorValue += self.ratioGreen
-            colorValue = int(round(colorValue))
-            self.colorDict[value] = QColor(0, 255 - colorValue, 0)
-
+            self.colorDict[value] = QColor(0, abs( math.floor(255 - colorValue) ) , 0)
         self.colorDict[self.medianElement] = QColor(0, 0, 0)
 
         colorValue = 0
         for value in valueList[self.medianIndex+1:]:
             colorValue += self.ratioRed
-            colorValue = int(round(colorValue))
-            self.colorDict[value] = QColor(colorValue, 0, 0)
+            self.colorDict[value] = QColor(math.floor(colorValue), 0, 0)
         """
         print valueList[:self.medianIndex+1]
         print "value:", self.matrix[self.rows.index("YFL054C")][0]
