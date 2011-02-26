@@ -288,16 +288,12 @@ class ComprehensiveSearchWidget(QWidget):
 
     # ========== LIST WIDGET EVENTS ===============
     def itemClicked(self, item):
-        text = str(item.text())
-        if text[0].isupper() and not text.startswith("Bicluster"):
-            # Protein
-            #id = self.index.get(text)[0]
-            pass
-        else:
+        text = self.ec( str(item.text()) )
+        if text in self.index:
             # Bicluster or Category name
-            id = self.index.get(self.ec(text))[0]
+            id = self.index.get(text)[0]
             self.emit(SIGNAL("graphClicked"), int(id))
-
+            
     def ec(self, name):
         """Adds preceding __ to the given name."""
         return "__%s" % name
@@ -306,17 +302,11 @@ class ComprehensiveSearchWidget(QWidget):
         return name[2:]
     
     def itemDoubleClicked(self, item):
-        text = str(item.text())
-        if text[0].isupper() and not text.startswith("Bicluster"):
-            # Protein
-            self.lineEdit.setText(text)
-            self.search()
-            
-        else:
+        text = self.ec( str(item.text()) )
+        if text in self.index:
             # Bicluster or Category name
-            id = self.index.get(self.ec(text))[0]
+            id = self.index.get(text)[0]
             self.emit(SIGNAL("graphDoubleClicked"), int(id))
-
                 
     # ========= LINE EDIT EVENTS ==================
     def setAutoCompletion(self):
@@ -341,7 +331,7 @@ class ComprehensiveSearchWidget(QWidget):
             self.index = shelve.open(normcase("outputs/gene_index.shelve"))
         
             # Now fetch the labels in each file.
-            pattern = compile('label "[\w-]+_?[A-Z:]*"')
+            pattern = compile('label "[\w-]+_?[A-Z0-9:]*"')
             for graphFile in self.graphFiles: # scan all gml files.
                 content = open('outputs/graphs/'+graphFile).read() # read the gml file
                 labels = pattern.findall(content) # find all label lines.

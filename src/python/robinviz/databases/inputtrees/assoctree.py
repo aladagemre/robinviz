@@ -156,6 +156,7 @@ class AssociationSelector(QWidget):
             return s.pop()
         else:
             print "No consensus. # of Candidates: %d" % len(s)
+            print "Candidates:", s
             return None
 	#assert len(s)==1, "Length of annotation set is not 1 but %d" %len(s)
 

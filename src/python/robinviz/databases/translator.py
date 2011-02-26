@@ -145,8 +145,12 @@ class AssociationTranslator:
 	# Intersection should be one item!
         if len(s) == 1:
             return s.pop()
+        elif len(s)==2 and "SYNONYM" in s:
+            s.remove("SYNONYM")
+            return s.pop()
         else:
             print "No consensus. # of Candidates: %d" % len(s)
+            print "Candidates:" , s
             return None
 	#assert len(s)==1, "Length of annotation set is not 1 but %d" %len(s)
 
@@ -247,7 +251,7 @@ class AssociationTranslator:
         f = open(self.filename)
         linenum = 0
         for line in f:
-            if linenum % 100 == 0:
+            if linenum % 1000 == 0:
                 print linenum
             linenum+=1
             if line[0] == "!":

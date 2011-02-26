@@ -450,7 +450,6 @@ class MultiViewWindow(QMainWindow):
         if not self.confirmationType:
             print "No confirmation type specified, won't run."
             return
-        self.clearViews()
         
         print "Starting operation"
         self.setWindowTitle("RobinViz - Please wait, calculating...")
@@ -509,6 +508,7 @@ class MultiViewWindow(QMainWindow):
         if not failed:
             find_top_highlevel_categories()
             read_category_information()
+            self.clearViews()
             self.loadMainScene()
             self.connectSlots()
 

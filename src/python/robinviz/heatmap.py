@@ -193,41 +193,19 @@ class HeatMapWidget(QWidget):
         imagePainter.end()
         painter = QPainter(self)
         painter.drawImage(0, 0, image)
-        """
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setRenderHint(QPainter.TextAntialiasing)
-        painter.setPen(self.palette().color(QPalette.Mid))
-        painter.setBrush(self.palette().brush(QPalette.AlternateBase))
-        painter.setClipping(True)
+    def drawScale(self, painter):
+        #TODO: Implement this
+        pass
+        """painter.setBrush()
+        painter.setPen(value)
+        painter.drawRect(20 + self.leftMargin + colNum*20, self.topMargin + rowNum*20, 20, 20)"""
 
-        if self.ready:
-            painter.setPen(QColor(Qt.black))
-            painter.rotate(-90.0)
-            
-            painter.drawText(QPointF(self.leftMargin+5, 0), "Hede")
-            painter.rotate(90.0)
-            
-
-            rowCount = len(self.matrix)
-            for rowNum in range(rowCount):
-                # Print row labels
-                painter.setPen(QColor(Qt.black))
-                painter.drawText(QRectF(0, self.topMargin + rowNum*20, self.leftMargin-10, 20), (Qt.AlignRight|Qt.AlignVCenter), self.rows[rowNum])
-
-                # Display colors
-                
-                colCount = len(self.matrix[rowNum])
-                for colNum in range(colCount):
-                    value = self.matrix[rowNum][colNum]
-                    painter.setBrush(value)
-                    painter.setPen(value)
-                    painter.drawRect(self.leftMargin + colNum*20, self.topMargin + rowNum*20, 20, 20)"""
 
 
 
 if __name__ =="__main__":
     app = QApplication(sys.argv)
-    h = HeatMapWidget("out0.txt")
+    h = HeatMapWidget("out5.txt")
     h.resize(250, 150)
     h.setWindowTitle('Heatmap')
     
