@@ -8,9 +8,9 @@ class DataTableWidget(QWidget):
         QWidget.__init__(self, parent, flags)
         self.ready = False
         self.fontSize = 12
-        self.width = 800 # Only drawing area
+        self.width = 900 # Only drawing area
         self.height = 400
-        self.leftMargin = 30
+        self.leftMargin = 80
         self.topMargin = 30
         self.notchMargin = 3
         self.filename = filename
@@ -189,18 +189,41 @@ class DataTableWidget(QWidget):
 
     def __printLabels(self, painter):
         painter.setPen(QColor(Qt.black))
-        painter.rotate(90)
-        painter.drawText(QPoint(-15,15), "Heyo")
+        #painter.rotate(90)
+        
         for col in range(len(self.columns)):
-            painter.drawText(QPoint(self.topMargin + self.height + 12, -1 * (self.leftMargin - 2 + col * self.colspace )), self.columns[col])
+            # coord = QPoint(self.topMargin + self.height + 12, -1 * (self.leftMargin - 2 + col * self.colspace ))
+            x_coord =  (self.leftMargin - 4 + col * self.colspace )
+            y_coord = self.topMargin + self.height + 25
+            text = self.columns[col][4:]
+            painter.drawText(QPoint(x_coord, y_coord), text)
+
+        #painter.rotate(-90)
+
+    def __printDescription(self, painter):
+        painter.setPen(QColor(Qt.magenta))
+        
+        x_coord =  0
+        y_coord = self.topMargin + self.height + 25
+
+        text = "Conditions"
+        painter.drawText(QPoint(x_coord, y_coord), text)
+        # ====================
+        painter.rotate(-90)
+        x_coord =  -300
+        y_coord = 50
+
+        text = "Gene Expression Levels"
+        painter.drawText(QPoint(x_coord, y_coord), text)
         painter.rotate(-90)
     def __printMaxMinLabels(self, painter):
-        for i in range(len(self.columns)):
-            x1 = self.leftMargin + i * self.colspace
+        #for i in range(len(self.columns)):
+        for i in [0]:
+            x1 = 0
             y1 = self.topMargin - 10
             y2 = self.topMargin + self.height + 10
-            painter.drawText(QPoint(x1 + self.notchMargin + 1, y1 + 10), str(self.max)) #self.maxs[i]))
-            painter.drawText(QPoint(x1 + self.notchMargin + 2, y2 - 10), str(self.min)) #self.mins[i]))
+            painter.drawText(QPoint(x1 + self.notchMargin + 1, y1 + 10), "%-.2f" % self.max) #self.maxs[i]))
+            painter.drawText(QPoint(x1 + self.notchMargin + 2, y2 - 10), "%-.2f" % self.min) #self.mins[i]))
             """# start notch
             line = QLineF(x1 - self.notchMargin, y1+10, x1 + self.notchMargin, y1+10)
             self.verticalLines.append(line)
@@ -229,6 +252,7 @@ class DataTableWidget(QWidget):
             self.__drawAverageLines(imagePainter)
             self.__printLabels(imagePainter)
             self.__printMaxMinLabels(imagePainter)
+            self.__printDescription(imagePainter)
         imagePainter.end()
         painter = QPainter(self)
         painter.drawImage(0, 0, image)
@@ -236,7 +260,7 @@ class DataTableWidget(QWidget):
 if __name__ =="__main__":
     app = QApplication(sys.argv)
     h = DataTableWidget("out5.txt")
-    h.resize(900, 500)
+    h.resize(1000, 500)
     h.setWindowTitle('Data Table')
 
     h.show()

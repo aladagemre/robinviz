@@ -4,7 +4,7 @@ from PyQt4 import QtWebKit
 import sys
 
 from heatmap import HeatMapWidget
-from datatable import DataTableWidget
+from parallelplot import DataTableWidget
 
 from os.path import normcase
 
