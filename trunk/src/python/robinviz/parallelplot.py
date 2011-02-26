@@ -203,15 +203,15 @@ class DataTableWidget(QWidget):
     def __printDescription(self, painter):
         painter.setPen(QColor(Qt.magenta))
         
-        x_coord =  0
-        y_coord = self.topMargin + self.height + 25
+        x_coord = self.width/2
+        y_coord = self.topMargin + self.height + 35
 
         text = "Conditions"
         painter.drawText(QPoint(x_coord, y_coord), text)
         # ====================
         painter.rotate(-90)
         x_coord =  -300
-        y_coord = 50
+        y_coord = 70
 
         text = "Gene Expression Levels"
         painter.drawText(QPoint(x_coord, y_coord), text)
@@ -222,8 +222,25 @@ class DataTableWidget(QWidget):
             x1 = 0
             y1 = self.topMargin - 10
             y2 = self.topMargin + self.height + 10
+            
             painter.drawText(QPoint(x1 + self.notchMargin + 1, y1 + 10), "%-.2f" % self.max) #self.maxs[i]))
             painter.drawText(QPoint(x1 + self.notchMargin + 2, y2 - 10), "%-.2f" % self.min) #self.mins[i]))
+
+            """steps = range(y1+50, y2-50, 50)
+            steps.reverse()
+            num_steps = len(steps)
+            step_amount = (self.max - self.min) / num_steps
+            print steps
+            print step_amount
+            for si, yvalue in enumerate(steps):
+                painter.drawText(QPoint(x1 + self.notchMargin + 2, yvalue), "%-.2f" % (self.min + step_amount * (si+1)) ) #self.mins[i]))"""
+            separator_height = (y2 - y1) / 5
+            amount_diff = (self.max - self.min)/5
+
+            for si in range(1,5):
+                painter.drawText(QPoint(x1 + self.notchMargin + 2, y2 - separator_height * si), "%-.2f" % (self.min + amount_diff * si) ) #self.mins[i]))"""
+            
+            
             """# start notch
             line = QLineF(x1 - self.notchMargin, y1+10, x1 + self.notchMargin, y1+10)
             self.verticalLines.append(line)

@@ -8,7 +8,7 @@ def find_top_highlevel_categories():
     graphFiles = filter(pattern.match, fileList)
     
     # fetch the labels in each file.
-    pattern = compile('label "[\w-]+_?[A-Z:]*"')
+    pattern = compile('label "[\w-]+_?[A-Z0-9:]*"')
     result = []
     for graphFile in graphFiles: # scan all gml files.
         content = open(rp ('outputs/graphs/'+graphFile)).read() # read the gml file

@@ -547,12 +547,12 @@ class CentralNode(NodeItem):
             self.showDetailedInformation()
 
     def showGOTable(self):
-        path = normcase("outputs/go/gobicluster%d.html" % self.node.id)
+        path = normcase("outputs/robin_info_table%d.html" % self.node.id)
         if os.path.exists(path):
             self.GOTable= QtWebKit.QWebView()
             self.GOTable.setUrl(QUrl(path))
             self.GOTable.setWindowTitle("GO Table for %s" % (self.label if self.noProperties else ("Bicluster %d" % self.node.id)))
-            self.GOTable.show()
+            self.GOTable.showMaximized()
         else:
             QMessageBox.information(None, 'GO Table not found.',
      "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
