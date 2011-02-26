@@ -787,6 +787,7 @@ int main( int argc, char **argv ){
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " End Building High Level Graph " << endl;
 		cout << "/**************************************************/" << endl;
+                mergeTables( biclusters.size() );
 	}
 	return 0;
 }

@@ -946,6 +946,7 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
 //                            cout << gocategories[ it ][ it2 ].GENE << " ";
                             fprintf( saveGene, "%s\n", gocategories[ it ][ it2 ].GENE );
                         }
+                        fclose( saveGene );
 //                        cout << endl;
                     }
 //                    cout << "\n**********************************\n";
@@ -970,7 +971,6 @@ void goHandling( char inputGoFile[256], char defaultGoFile[256], list<list<GENES
             analyseGenes2( headerFileName, categ, gocategories.size(), algName, GenesNode.size(), 0  );
         cout << "||||||||||||||||||||||||||||||||\n";
 }
-
 
 array<GENEONTO> cogFileHandling( char cogfile[256], char orgAbv[12], list<CATNAMES> &inputCats, array<GENENAMES> &GenesNode,  list<two_tuple<CATNAMES,int> > &categories, list<list<GENES> > &categoryGenes ){
 	cout << "/**************************************************/" << endl;
@@ -4064,4 +4064,51 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
                 cout << " GRAPH IS CLEANED " << endl;
 #endif
         }
+}
+
+/*
+  26 Feb 2011 // Merge Two Table Function is added.
+  This function takes go-table and enrichment table and outputs merged(two framed table as a result)
+*/
+
+void mergeTables( int numberOfFiles ){
+        FILE *writePtr;
+        char outputFile[512] = "";
+#ifdef __linux__
+        for( int i = 0; i < numberOfFiles; i++ ){
+            sprintf( outputFile, "%s%d%s", "outputs/robin_info_table", i, ".html" );
+            writePtr = fopen( outputFile, "w" );
+            fprintf( writePtr,
+                     "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN"
+                     "\"http://www.w3.org/TR/html4/frameset.dtd\">"
+                     "<HTML>"
+                     "<HEAD>"
+                     "<TITLE>Information Page</TITLE>"
+                     "</HEAD>"
+                     "<FRAMESET cols=\"50\%, 50\%\">"
+                     "<FRAME src=\"enrich/resultbic%d.html\" scrolling=auto frameborder=\"0\" border=\"0\">"
+                     "<FRAME src=\"go/gobicluster%d.html\" scrolling=auto frameborder=\"0\" border=\"0\">"
+                     "</FRAMESET>"
+                     "</HTML>", i, i );
+            fclose( writePtr );
+        }
+#else
+        for( int i = 0; i < numberOfBiclusters; i++ ){
+            sprintf( outputFile, "%s%d%s", "outputs//robin_info_table", i, ".html" );
+            writePtr = fopen( outputFile, "w" );
+            fprintf( writePtr,
+                     "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN"
+                     "\"http://www.w3.org/TR/html4/frameset.dtd\">"
+                     "<HTML>"
+                     "<HEAD>"
+                     "<TITLE>Robinviz CatgoryInformation Page</TITLE>"
+                     "</HEAD>"
+                     "<FRAMESET cols=\"50\%, 50\%\">"
+                     "<FRAME src=\"enrich/resultbic%d.html\" scrolling=auto frameborder=\"0\" border=\"0\">"
+                     "<FRAME src=\"go/gobicluster%d.html\" scrolling=auto frameborder=\"0\" border=\"0\">"
+                     "</FRAMESET>"
+                     "</HTML>", i, i );
+            fclose( writePtr );
+        }
+#endif
 }
