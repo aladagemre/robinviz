@@ -550,6 +550,7 @@ int main(int argc, char **argv){
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " End Building High Level Graph " << endl;
                 cout << "/**************************************************/" << endl;
+                mergeTables( categories.size() );
         }
 	return 0;
 }
