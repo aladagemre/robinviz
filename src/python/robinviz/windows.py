@@ -458,9 +458,9 @@ class MultiViewWindow(QMainWindow):
         # ======= CLEANUP ==========
         if hasattr(self, "searchPane"):
             self.searchPane.index.close()
-        self.errorFile = rp("outputs/error.txt")
-        if os.path.exists(self.errorFile):
-            os.remove(self.errorFile)
+        errorFile = rp("outputs/error.txt")
+        if os.path.exists(errorFile):
+            os.remove(errorFile)
         import clean
         clean.clean()
 
@@ -519,8 +519,9 @@ class MultiViewWindow(QMainWindow):
                 resultparams.write(self.confirmationType)
             
         else:
-            if os.path.exists(self.errorFile):
-                message = open(self.errorFile).read()
+            errorFile = rp("outputs/error.txt")
+            if os.path.exists(errorFile):
+                message = open(errorFile).read()
             else:
                 message = "Unknown error occured. Please report the debug messages on the log window or console."
 
