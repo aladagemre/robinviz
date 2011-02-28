@@ -118,10 +118,10 @@ class CoExpressionPeripheralView(PeripheralView):
 
         menu.addSeparator()
 
-        goTable = menu.addAction("GO Table")
+        goTable = menu.addAction("Enrichment Analysis")
         actionToFunction[goTable] = self.showGOTable
 
-        propertiesAction = menu.addAction("Properties")
+        propertiesAction = menu.addAction("Visualization")
         actionToFunction[propertiesAction] = self.peripheralProperties
         
 
@@ -131,15 +131,16 @@ class CoExpressionPeripheralView(PeripheralView):
         self.specialWindow = None
 
     def showGOTable(self):
-        path = normcase("outputs/go/gobicluster%d.html" % self.scene().id)
+        path = normcase("outputs/robin_info_table%d.html" % self.scene().id)
         if os.path.exists(path):
             self.GOTable= QtWebKit.QWebView()
             self.GOTable.setUrl(QUrl(path))
-            self.GOTable.setWindowTitle("GO Table for Bicluster %d" % self.scene().id)
-            self.GOTable.show()
+            self.GOTable.setWindowTitle("Enrichment Analysis for %s" % self.scene().id)
+            self.GOTable.showMaximized()
         else:
-            QMessageBox.information(self, 'GO Table not found.',
-     "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
+            QMessageBox.information(None, 'Enrichment Analysis not found.', "Enrichment Analysis could not be produced.")
+
+
 
     def peripheralProperties(self):
         if not hasattr(self, 'biclusterWindow'):
@@ -267,7 +268,7 @@ class CoFunctionalityPeripheralView(PeripheralView):
 
         menu.addSeparator()
 
-        goTable = menu.addAction("GO Table")
+        goTable = menu.addAction("Enrichment Analysis")
         actionToFunction[goTable] = self.showGOTable
 
         #propertiesAction = menu.addAction("Properties")
@@ -281,17 +282,16 @@ class CoFunctionalityPeripheralView(PeripheralView):
 
     def showGOTable(self):
         scene_id = self.scene().id
-        path = rp("outputs/go/gobicluster%d.html" % scene_id)
+        path = rp("outputs/robin_info_table%d.html" % scene_id)
         category_name = open(ap("assocdata/input_go.txt")).readlines()[scene_id].strip()
         
         if os.path.exists(path):
             self.GOTable= QtWebKit.QWebView()
             self.GOTable.setUrl(QUrl(path))
-            self.GOTable.setWindowTitle("GO Table for %s" % category_name)
+            self.GOTable.setWindowTitle("Enrichment Analysis for %s" % category_name)
             self.GOTable.show()
         else:
-            QMessageBox.information(self, 'GO Table not found.',
-     "An error encountered and GO table file could not be located: %s" % path)
+            QMessageBox.information(None, 'Enrichment Analysis not found.', "Enrichment Analysis could not be produced.")
 
     """def peripheralProperties(self):
         if not hasattr(self, 'biclusterWindow'):

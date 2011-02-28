@@ -551,11 +551,10 @@ class CentralNode(NodeItem):
         if os.path.exists(path):
             self.GOTable= QtWebKit.QWebView()
             self.GOTable.setUrl(QUrl(path))
-            self.GOTable.setWindowTitle("GO Table for %s" % (self.label if self.noProperties else ("Bicluster %d" % self.node.id)))
+            self.GOTable.setWindowTitle("Enrichment Analysis for %s" % (self.label if self.noProperties else ("Bicluster %d" % self.node.id)))
             self.GOTable.showMaximized()
         else:
-            QMessageBox.information(None, 'GO Table not found.',
-     "You need to run the program with the Gene Ontology File option in Biological Settings Tab checked and provide the GO file.")
+            QMessageBox.information(None, 'Enrichment Analysis not found.', "Enrichment Analysis could not be produced.")
 
     def showDetailedInformation(self):
         code = open(ap("assocdata/category_codes.txt")).readlines()[self.node.id].strip()
