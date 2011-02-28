@@ -17,7 +17,7 @@ class BiclusterWindow(QMainWindow):
         self.layout = QVBoxLayout()
         self.tabWidget = QTabWidget()
 
-        self.setupInformationTab()
+        #self.setupInformationTab()
         self.setupVisualTab()
 
         self.layout.addWidget(self.tabWidget)
