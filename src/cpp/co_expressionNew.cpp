@@ -64,7 +64,7 @@
         * drawings of graphs
 	**/
                 int minBicSize = 0; // minimum number of genes that bicluster can have
-                int maxBicSize = 2500; // maximum number of genes that bicluster can have
+                int maxBicSize = 10000; // maximum number of genes that bicluster can have
 		int width = 10;       // Layering max width
 		int space = 150;      // yspace between layers
 		int increment = 125;  // xspace between nodes
@@ -719,7 +719,7 @@ int main( int argc, char **argv ){
 //                    for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ )
 //                        CategoriesXL[ i ].append('X');
                 }
-		listOfGraphs.resize( 0, biclusters.size() );
+                listOfGraphs.resize( 0, biclusters.size() - 1 );
 
 //                uncomment to see genes
 //                list_item it1,it2;
@@ -735,7 +735,7 @@ int main( int argc, char **argv ){
                 }
                 else{
                     inpGraphProdHandling( G, listOfGraphs, abbv, CategoriesXL, temp, GenesNode, INTERACTIONS, TEMPINT, biclusters, cat_num );
-                    list_item it;
+//                    list_item it;
 //                    for( int i = 0; i < INTERACTIONS.number_of_nodes(); i++ ){
 //                        forall_items( it, CategoriesXL[ i ] ){
 //                            cout << CategoriesXL[ i ][ it ] << "-";
@@ -743,6 +743,13 @@ int main( int argc, char **argv ){
 //                        cout << endl;
 //                    }
                 }
+
+                cout << "/**************************************************/" << endl;
+                analyseGenesInPPI( "geneResult", categ, listOfGraphs.size(), "Reduced", GenesNode.size(), 0, hasColor );
+                cout << "/**************************************************/" << endl;
+                mergeTables( listOfGraphs.size() );
+                cout << "/**************************************************/" << endl;
+
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " End Producing Bicluster Graphs" << endl;
 		cout << "/**************************************************/" << endl;
@@ -787,7 +794,6 @@ int main( int argc, char **argv ){
 		cout << "/**************************************************/" << endl;
 		cout << "\t" << " End Building High Level Graph " << endl;
 		cout << "/**************************************************/" << endl;
-                mergeTables( biclusters.size() );
 	}
 	return 0;
 }

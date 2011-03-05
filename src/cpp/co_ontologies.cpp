@@ -412,6 +412,7 @@ int main(int argc, char **argv){
                 goCatRead( inputGoFile, defaultGoFile, categories, categ, matrixCategories, H_values, Hmax, GenesNode, hasColor );
                 cat_num = functionalCategoryFinder( categoriesOfGenes, abbv );
 
+
                 FILE *cfptr;
                 if( (cfptr =fopen("outputs/colors_func.txt", "w"))==NULL && (cfptr=fopen("outputs//colors_func.txt", "w")) ==NULL ){
                     cout << " Error: Cannot write into outputs folder";
@@ -465,6 +466,8 @@ int main(int argc, char **argv){
                 }
 //                inpGraphProdHandling( G, listOfGraphs, abbv, Categories, temp, GenesNode, INTERACTIONS, TEMPINT, categories, cat_num );
 
+                analyseGenesInPPI( "geneResult", categ, listOfGraphs.size(), "Reduced", GenesNode.size(), 0, hasColor );
+                mergeTables( categories.size() );
 
                 for( int i = 0; i < categories.size(); i++ ){
                         list<node> A = listOfGraphs[ i ].all_nodes();
@@ -550,7 +553,6 @@ int main(int argc, char **argv){
                 cout << "/**************************************************/" << endl;
                 cout << "\t" << " End Building High Level Graph " << endl;
                 cout << "/**************************************************/" << endl;
-                mergeTables( categories.size() );
         }
 	return 0;
 }
