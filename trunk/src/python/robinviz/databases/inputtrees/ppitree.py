@@ -180,35 +180,20 @@ class PPISelector(QWidget):
 	f.write("\n".join( sorted(checkedItems) ) )
 	f.close()
 
+        self.process = QProcess(self.parent())
+
         self.progress = QProgressDialog("Merging PPI Files. Please wait...", "Abort", 0, 0, self.parent())
         self.progress.setWindowModality(Qt.WindowModal)
         self.progress.canceled.connect(self.process.kill)
         self.progress.forceShow()
 
-        self.process = QProcess(self.parent())
         self.process.setWorkingDirectory(ap(""))
         self.process.readyReadStandardOutput.connect(self.readOutput)
         self.process.readyReadStandardError.connect(self.readError)
         self.process.finished.connect(self.progress.close)
         arguments = [ "ppimerger.py" ] + list ( checkedItems )
 
-        self.process.start("python", arguments )
-
-        
-
-	#self.mergePPIFiles(checkedItems)
-        #self.progress = QProgressDialog("Loading photos...", "Abort", 0, len(checkedItems), self.parent())
-        #self.progress.setWindowModality(Qt.WindowModal)
-        #self.progress.setValue(1)
-        #self.progress.forceShow()
-        #self.progress.showEvent = merger_thread.start
-        
-        #self.finish_dialog = lambda: self.progress.setValue(len(checkedItems))
-        
-        
-        
-        
-        
+        self.process.start("python", arguments )     
         return checkedItems
 
     def readOutput(self):
@@ -234,149 +219,6 @@ class PPISelector(QWidget):
 	    parentItem.setCheckState(0, Qt.Unchecked)
 
 
-class WaitWidget(QWidget):
-    def __init__(self, parent=None):
-        QWidget.__init__(self, parent)
-        self.setupGUI()
-        
-    def setupGUI(self):
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
-        
-        self.label = QLabel("Please wait...")
-        self.layout.addWidget(self.label)
-
-
-
-class PPIMergerThread(QThread):
-    def __init__(self, parent = None):
-        QThread.__init__(self, parent)
-        self.files = []
-        self.merger = None
-        
-    def __del__(self):
-        pass
-        #self.wait()
-
-    def setup(self, files):
-        self.files = files
-        self.merger = PPIMerger(self.files)
-
-    def run(self):
-        self.merger.merge()
-
-
-
-
-
-
-class PPIMerger:
-    def __init__(self, files):
-        self.files = files
-
-    def merge(self):
-        self.mergePPIFiles(self.files)
-        
-    def convert_path_to_organism_name(self, path):
-	if os.name == "posix":
-	    seperator = "/"
-	else:
-	    seperator = "\\"
-	# TODO: could be better
-	return path.split(seperator)[-2]
-
-    def findSelectedOrganisms(self, checkedPaths):
-	organisms = set()
-	for path in checkedPaths:
-	    organismName = self.convert_path_to_organism_name(path)
-	    organisms.add(organismName)
-
-	return list(organisms)
-		
-    def mergePPIFiles(self, files):
-	"""Merges given PPI files."""
-        print "PPI Merging starts..."
-	confidence_dicts = {}
-
-	organisms = self.findSelectedOrganisms(files)
-	map(download_organism, organisms) # Download HitPredict data and generate (p1 p2 confidence) file.
-
-        # TODO: find the max and min values of the files.
-        interactions = {}
-
-	for organism in organisms:
-	    """For each organism, create a dictionary holding (p1,p2)=>confidence
-	    and store them in confidence_dicts"""
-	    d = {} # to store
-            #interactions = {} # dunno why I put it here. it causes a logical bug!
-
-	    for line in open(ap("ppidata/hitpredict/%s.txt" % organism )):
-		cols = line.strip().split("\t")
-                #print cols
-                # TODO: make a normalization here. remove old normalization
-                interaction = cols[0], cols[1]
-                confidence = cols[2]
-		d[interaction] = confidence
-                # get the confidence list for the interaction
-		i = interactions.get( interaction )
-		if not i:
-                    # if no confidence recorded yet, create an empty list
-		    i = []
-                i.append( float(confidence) )
-                interactions[interaction] = i
-
-	    confidence_dicts[organism] = d
-
-
-	for filename in files:
-            bfilename = "%s-BIOGRID" % filename
-            if not os.path.exists(bfilename):
-                b = BiogridOspreyTranslator(filename)
-                b.translate()
-            filename = bfilename
-
-	    organism = self.convert_path_to_organism_name(filename)
-	    for line in open(filename):
-		cols = line.strip().split("\t")
-		if cols[0] == cols[1]:
-                    # ignore self-interactions
-		    continue
-
-                # Find the interaction and its confidence if exists.
-		interaction = cols[0], cols[1]
-		confidence = confidence_dicts[organism].get(interaction)
-		if not confidence:
-                    # if no confidence, assign 0.1 (biogrid interaction without confidence)
-                    # and add this confidence to the list as it hasn't been added
-                    # in the hitpredict part above.
-		    confidence = 0.1
-
-                    # get the confidence list for the interaction
-                    i = interactions.get( interaction )
-                    if i:
-                        # if some confidence value has been assigned,
-                        # no need to add confidence 0.1 to the list
-                        # as there are already more reliable confidence
-                        # scores.
-                        continue
-
-                    # ELSE: (if no confidence values recorded in the hitpredict part,
-                    # if no confidence recorded yet, create an empty list
-                    # put the new confidence and save the new list.
-                    i = [ float(confidence) ]
-                    interactions[ interaction ] = i
-
-	# Now we have an interactions dict, containing (p1,p2) => [conf1, conf2, ...]
-	# I'll take average of them. But I don't know if this is a good idea.
-	single_ppi_file = open(ap("ppidata/ppi.txt"), "w")
-
-	for key in interactions.keys():
-	    p1, p2 = key
-	    confidence_values = interactions[key]
-	    confidence = sum(confidence_values) / len(confidence_values)
-	    single_ppi_file.write("\t\t".join( (p1, p2, str(confidence)) ) + "\n")
-	single_ppi_file.close()
-        print "PPI Merging finished."
 def main():
     app = QApplication(sys.argv)
     mainWindow = PPISelector()

@@ -29,7 +29,9 @@ class PPIMerger:
 	else:
 	    seperator = "\\"
 	# TODO: could be better
-	return path.split(seperator)[-2]
+
+	cols =  path.split(seperator)
+        return cols[-2]
 
     def findSelectedOrganisms(self, checkedPaths):
 	organisms = set()
@@ -41,20 +43,18 @@ class PPIMerger:
 
     def mergePPIFiles(self, files):
 	"""Merges given PPI files."""
-        f = open("/home/emre/Desktop/log.txt","w")
-        f.write("Merging starts..")
         print "PPI Merging starts..."
 	confidence_dicts = {}
-
 	organisms = self.findSelectedOrganisms(files)
-	map(download_organism, organisms) # Download HitPredict data and generate (p1 p2 confidence) file.
-
+	# map(download_organism, organisms) # Download HitPredict data and generate (p1 p2 confidence) file.
+        #TODO: Check if hitpredict data in OS Format exists.
         # TODO: find the max and min values of the files.
         interactions = {}
 
 	for organism in organisms:
 	    """For each organism, create a dictionary holding (p1,p2)=>confidence
 	    and store them in confidence_dicts"""
+            print "Organism: %s" % organism
 	    d = {} # to store
             #interactions = {} # dunno why I put it here. it causes a logical bug!
 
@@ -125,8 +125,6 @@ class PPIMerger:
 	    single_ppi_file.write("\t\t".join( (p1, p2, str(confidence)) ) + "\n")
 	single_ppi_file.close()
         print "PPI Merging finished."
-        f.write("ends..")
-        f.close()
 
 if __name__ == "__main__":
     files = sys.argv[1:]
