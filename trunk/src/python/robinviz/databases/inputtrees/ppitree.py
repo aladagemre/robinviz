@@ -203,6 +203,7 @@ class PPISelector(QWidget):
     def readError(self):
         msg = QString(self.process.readAllStandardOutput())
         print msg,
+
     def useDictionary(self, dictionary):
 	topLevelItems = sorted(dictionary.keys())
 	for topLevelItem in topLevelItems:
