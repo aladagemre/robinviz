@@ -100,32 +100,32 @@ class AssociationSelector(QWidget):
         # Run the process here
         self.process = QProcess(self.parent())
 
-        """self.progress = QProgressDialog("Downloading &| Merging Association Files. Please wait...", "Abort", 0, 0, self.parent())
+        self.progress = QProgressDialog("Downloading &| Merging Association Files. Please wait...", "Abort", 0, 0, self.parent())
         self.progress.setWindowModality(Qt.WindowModal)
         self.progress.canceled.connect(self.process.kill)
-        self.progress.forceShow()"""
+        self.progress.forceShow()
 
-        self.log_window = windows.LogWindow()
-        self.log_window.show()
+        """self.log_window = windows.LogWindow()
+        self.log_window.show()"""
 
         self.process.setWorkingDirectory(ap(""))
         self.process.readyReadStandardOutput.connect(self.readOutput)
         self.process.readyReadStandardError.connect(self.readError)
-        self.process.finished.connect(self.log_window.close)
+        self.process.finished.connect(self.progress.close)
         arguments = [ "assocmerger.py" ]
 
         self.process.start("python", arguments)
-        self.process.waitForFinished()
+        #self.process.waitForFinished()
         
     def readOutput(self):
         msg = QString(self.process.readAllStandardOutput())
         print msg,
-        self.log_window.addMessage(msg)
+        #self.log_window.addMessage(msg)
 
     def readError(self):
         msg = QString(self.process.readAllStandardOutput())
         print msg,
-        self.log_window.addMessage(msg)
+        #self.log_window.addMessage(msg)
 
     def parseFile(self):
 	"""Parses the index file and generates TreeWidget."""

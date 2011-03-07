@@ -250,9 +250,12 @@ class AssociationTranslator:
 	
         f = open(self.filename)
         linenum = 0
-        for line in f:
-            if linenum % 1000 == 0:
-                print linenum
+        lines = f.readlines()
+        total_lines = len(lines)
+        percent = total_lines/100
+        for line in lines:
+            if percent and linenum % percent == 0:
+                print "%02.0f%%\r" % (100*linenum/float(total_lines))
             linenum+=1
             if line[0] == "!":
                 continue

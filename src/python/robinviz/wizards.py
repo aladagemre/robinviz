@@ -30,6 +30,7 @@ class InputWizard(QWizard):
 	self.GOSelectionPage = GOSelectionPage()
 	self.GEOSelectionPage = GEOSelectionPage()
         self.BiclusteringSelectionPage = BiclusteringSelectionPage()
+        self.FinishSelectionPage = FinishSelectionPage()
 
         self.addPage(self.PreSelectionPage)
         self.addPage(self.PPISelectionPage )
@@ -47,6 +48,10 @@ class InputWizard(QWizard):
 	self.addPage(self.GEOSelectionPage )
         self.addPage(self.BiclusteringSelectionPage )
         self.addPage(self.NodeWeightSelectionPage)
+
+        # Finish
+        self.addPage(self.FinishSelectionPage)
+        
         #self.setStartId(0)
         #print self.ConfirmationSelectionPage.wizard()
 	
@@ -60,6 +65,18 @@ class InputWizard(QWizard):
         if self.datamanager.isDownloadNeeded():
             self.datamanager.show()
             
+class FinishSelectionPage(QWizardPage):
+    def __init__(self, parent=None):
+	QWizardPage.__init__(self, parent)
+	self.setTitle("Ready to Perform Calculations")
+	layout = QVBoxLayout()
+	self.selector = FinishSelector()
+	layout.addWidget(self.selector)
+	self.setLayout(layout)
+        
+    def nextId(self):
+        return -1
+
 class PreSelectionPage(QWizardPage):
     def __init__(self, parent=None):
 	QWizardPage.__init__(self, parent)
@@ -256,7 +273,7 @@ class AssociationSelectionPage(QWizardPage):
         if self.wizard().ConfirmationSelectionPage.confirmation == "Co-Expression":
             return n
         else:
-            return -1
+            return 9
 
     def validatePage(self):
         checkedItems = self.selector.getCheckedItems()
