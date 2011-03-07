@@ -698,9 +698,12 @@ class CentralNode(NodeItem):
         for line in f:
             letter, percentage = line.split(" ")
             percentage = float(percentage)
-            code = CHAR_COLOR_DICT.get(letter)
-            if not code:
+            if letter == "X":
                 code = "#000000"
+            else:
+                code = CHAR_COLOR_DICT.get(letter)
+                if not code:
+                    code = "#7FFFD0"
             category = CATEGORY_NAMES.get(letter)
             if category:
                 categories.append(category)
