@@ -4088,16 +4088,309 @@ void inpGraphProdHandling( GRAPH<int,int> &G, array<GRAPH<int,int> > &listOfGrap
   This function takes go-table and enrichment table and outputs merged(two framed table as a result)
 */
 
+//void mergeTables( int numberOfFiles ){
+//        FILE *writePtr;
+//        FILE *enrich,*enrichReduced,*goTable;
+//        char outputFile[512] = "";
+//        char buffer[512];
+//#ifdef __linux__
+//        for( int i = 0; i < numberOfFiles; i++ ){
+//            cout << "\n DONE for " << i << endl;
+//            sprintf( outputFile, "%s%d%s", "outputs/enrich/resultbic", i, ".html" );
+//            enrich = fopen( outputFile, "r" );
+//            sprintf( outputFile, "%s%d%s", "outputs/enrich/resultbicReduced", i, ".html" );
+//            enrichReduced = fopen( outputFile, "r" );
+//            sprintf( outputFile, "%s%d%s", "outputs/go/gobicluster", i, ".html" );
+//            goTable = fopen( outputFile, "r" );
+//            sprintf( outputFile, "%s%d%s", "outputs/robin_info_table", i, ".html" );
+//            writePtr = fopen( outputFile, "w" );
+//
+//            fprintf( writePtr, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
+//                               "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+//                               "<head>\n"
+//                               "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
+//                               "<title>RobinViz Information Tables</title>\n"
+//                               "<style type=\"text/css\">\n"
+//                               "<!--\n"
+//                               "@import url(\"style.css\");\n"
+//                               "-->\n"
+//                               "</style>\n"
+//                               "</head>\n"
+//                               "<body>\n"
+//                               "<center>\n"
+//                               "<table id=\"box-table-b\" border=2 summary=\"Robinviz Information Tables\">\n"
+//                               "<thead>\n"
+//                               "\t<tr>\n"
+//                               "\t\t<th scope=\"col\"> Enrichment Information respect to\n genes/proteins inside Category(GO or Bicluster)</th>\n"
+//                               "\t\t<th scope=\"col\"> Enrichment Information respect to\n genes/proteins of Category(GO or Bicluster)\n inside <b>PPI network</b></th>\n"
+//                               "\t\t<th scope=\"col\"> Gene Ontology Information of genes/proteins\n of Category(GO or Bicluster)\n inside <b>PPI network</b></th>\n"
+//                               "\t</tr>\n"
+//                               "</thead>\n"
+//                               );
+//            // Merging resultbic.htmls
+//            fprintf( writePtr, "<tbody>\n" );
+//            fprintf( writePtr, "\t<tr>\n"
+//                               "\t\t<td valign =\"top\">\n" );
+//            bool flag = false;
+//            int count = 0;
+//            if( enrich != NULL ){
+//                while( !feof( enrich ))
+//                {
+//
+//                    fgets( buffer, 512, enrich );
+//                    if( flag == false && count == 12 )
+//                    {
+//                        fprintf( writePtr, "%s", buffer );
+//                        flag = true;
+//                    }
+//                    else{
+//                        if( flag == true )
+//                        {
+//                            if( strncmp( "</table>" , buffer, 7 ) != 0 ){
+//                                fprintf( writePtr, "%s", buffer );
+//                            }
+//                            else{
+//                                fprintf( writePtr, "%s", buffer );
+//                                flag = false;
+//                            }
+//                        }
+//                    }
+//                    count++;
+//                }
+//            }
+//            fprintf( writePtr, "\t\t</td>\n");
+//
+//            // Merging resultbicReduced.htmls
+//            fprintf( writePtr, "\t\t<td valign =\"top\">\n" );
+//            flag = false;
+//            count = 0;
+//            if( enrichReduced != NULL ){
+//                while( !feof( enrichReduced ))
+//                {
+//
+//                    fgets( buffer, 512, enrichReduced );
+//                    if( flag == false && count == 12 )
+//                    {
+//                        fprintf( writePtr, "%s", buffer );
+//                        flag = true;
+//                    }
+//                    else{
+//                        if( flag == true )
+//                        {
+//                            if( strncmp( "</table>" , buffer, 7 ) != 0 ){
+//                                fprintf( writePtr, "%s", buffer );
+//                            }
+//                            else{
+//                                fprintf( writePtr, "%s", buffer );
+//                                flag = false;
+//                            }
+//                        }
+//                    }
+//                    count++;
+//                }
+//            }
+//
+//            fprintf( writePtr, "\t\t</td>\n");
+//
+//            // Merging gobicluster.htmls
+//            fprintf( writePtr, "\t\t<td valign =\"top\">\n" );
+//
+//            flag = false;
+//            count = 0;
+//            if( goTable != NULL ){
+//                while( !feof( goTable ))
+//                {
+//
+//                    fgets( buffer, 512, goTable );
+//                    if( flag == false && count == 13 )
+//                    {
+//                        fprintf( writePtr, "%s", buffer );
+//                        flag = true;
+//                    }
+//                    else{
+//                        if( flag == true )
+//                        {
+//                            if( strncmp( "</table>" , buffer, 7 ) != 0 ){
+//                                fprintf( writePtr, "%s", buffer );
+//                            }
+//                            else{
+//                                fprintf( writePtr, "%s", buffer );
+//                                flag = false;
+//                            }
+//                        }
+//                    }
+//                    count++;
+//                }
+//            }
+//
+//            fprintf( writePtr, "\t\t</td>\n"
+//                               "\t</tr>\n" );
+//
+//            fprintf( writePtr, "</tbody>\n"
+//                               "</table>\n"
+//                               "</center>\n"
+//                               "</body>\n"
+//                               "</html>"
+//                               );
+//            fclose( writePtr );
+//            fclose( enrich );
+//            fclose( enrichReduced );
+//            fclose( goTable );
+//        }
+//#else
+//        for( int i = 0; i < numberOfFiles; i++ ){
+//            sprintf( outputFile, "%s%d%s", "outputs//enrich//resultbic", i, ".html" );
+//            enrich = fopen( outputFile, "r" );
+//            sprintf( outputFile, "%s%d%s", "outputs//enrich//resultbicReduced", i, ".html" );
+//            enrichReduced = fopen( outputFile, "r" );
+//            sprintf( outputFile, "%s%d%s", "outputs//go//gobicluster", i, ".html" );
+//            goTable = fopen( outputFile, "r" );
+//            sprintf( outputFile, "%s%d%s", "outputs//robin_info_table", i, ".html" );
+//            writePtr = fopen( outputFile, "w" );
+//
+//            fprintf( writePtr, "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
+//                               "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+//                               "<head>\n"
+//                               "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
+//                               "<title>RobinViz Information Tables</title>\n"
+//                               "<style type=\"text/css\">\n"
+//                               "<!--\n"
+//                               "@import url(\"style.css\");\n"
+//                               "-->\n"
+//                               "</style>\n"
+//                               "</head>\n"
+//                               "<body>\n"
+//                               "<center>\n"
+//                               "<table id=\"box-table-b\" border=2 summary=\"Robinviz Information Tables\">\n"
+//                               "<thead>\n"
+//                               "\t<tr>\n"
+//                               "\t\t<th scope=\"col\"> Enrichment Information respect to\n genes/proteins inside Category(GO or Bicluster)</th>\n"
+//                               "\t\t<th scope=\"col\"> Enrichment Information respect to\n genes/proteins of Category(GO or Bicluster)\n inside <b>PPI network</b></th>\n"
+//                               "\t\t<th scope=\"col\"> Gene Ontology Information of genes/proteins\n of Category(GO or Bicluster)\n inside <b>PPI network</b></th>\n"
+//                               "\t</tr>\n"
+//                               "</thead>\n"
+//                               );
+//            // Merging resultbic.htmls
+//            fprintf( writePtr, "<tbody>\n" );
+//            fprintf( writePtr, "\t<tr>\n"
+//                               "\t\t<td valign =\"top\">\n" );
+//            bool flag = false;
+//            int count = 0;
+//            if( enrich != NULL ){
+//                while( !feof( enrich ))
+//                {
+//
+//                    fgets( buffer, 512, enrich );
+//                    if( flag == false && count == 12 )
+//                    {
+//                        fprintf( writePtr, "%s", buffer );
+//                        flag = true;
+//                    }
+//                    else{
+//                        if( flag == true )
+//                        {
+//                            if( strncmp( "</table>" , buffer, 7 ) != 0 ){
+//                                fprintf( writePtr, "%s", buffer );
+//                            }
+//                            else{
+//                                fprintf( writePtr, "%s", buffer );
+//                                flag = false;
+//                            }
+//                        }
+//                    }
+//                    count++;
+//                }
+//            }
+//            fprintf( writePtr, "\t\t</td>\n");
+//
+//            // Merging resultbicReduced.htmls
+//            fprintf( writePtr, "\t\t<td valign =\"top\">\n" );
+//            flag = false;
+//            count = 0;
+//            if( enrichReduced != NULL ){
+//                while( !feof( enrichReduced ))
+//                {
+//
+//                    fgets( buffer, 512, enrichReduced );
+//                    if( flag == false && count == 12 )
+//                    {
+//                        fprintf( writePtr, "%s", buffer );
+//                        flag = true;
+//                    }
+//                    else{
+//                        if( flag == true )
+//                        {
+//                            if( strncmp( "</table>" , buffer, 7 ) != 0 ){
+//                                fprintf( writePtr, "%s", buffer );
+//                            }
+//                            else{
+//                                fprintf( writePtr, "%s", buffer );
+//                                flag = false;
+//                            }
+//                        }
+//                    }
+//                    count++;
+//                }
+//            }
+//
+//            fprintf( writePtr, "\t\t</td>\n");
+//
+//            // Merging gobicluster.htmls
+//            fprintf( writePtr, "\t\t<td valign =\"top\">\n" );
+//
+//            flag = false;
+//            count = 0;
+//            if( goTable != NULL ){
+//                while( !feof( goTable ))
+//                {
+//
+//                    fgets( buffer, 512, goTable );
+//                    if( flag == false && count == 13 )
+//                    {
+//                        fprintf( writePtr, "%s", buffer );
+//                        flag = true;
+//                    }
+//                    else{
+//                        if( flag == true )
+//                        {
+//                            if( strncmp( "</table>" , buffer, 7 ) != 0 ){
+//                                fprintf( writePtr, "%s", buffer );
+//                            }
+//                            else{
+//                                fprintf( writePtr, "%s", buffer );
+//                                flag = false;
+//                            }
+//                        }
+//                    }
+//                    count++;
+//                }
+//            }
+//
+//            fprintf( writePtr, "\t\t</td>\n"
+//                               "\t</tr>\n" );
+//
+//            fprintf( writePtr, "</tbody>\n"
+//                               "</table>\n"
+//                               "</center>\n"
+//                               "</body>\n"
+//                               "</html>"
+//                               );
+//
+//            fclose( writePtr );
+//            fclose( enrich );
+//            fclose( enrichReduced );
+//            fclose( goTable );
+//        }
+//#endif
+//}
+
 void mergeTables( int numberOfFiles ){
         FILE *writePtr;
-        FILE *enrich,*enrichReduced,*goTable;
+        FILE *enrichReduced,*goTable;
         char outputFile[512] = "";
         char buffer[512];
 #ifdef __linux__
         for( int i = 0; i < numberOfFiles; i++ ){
-            cout << "\n DONE for " << i << endl;
-            sprintf( outputFile, "%s%d%s", "outputs/enrich/resultbic", i, ".html" );
-            enrich = fopen( outputFile, "r" );
             sprintf( outputFile, "%s%d%s", "outputs/enrich/resultbicReduced", i, ".html" );
             enrichReduced = fopen( outputFile, "r" );
             sprintf( outputFile, "%s%d%s", "outputs/go/gobicluster", i, ".html" );
@@ -4121,7 +4414,6 @@ void mergeTables( int numberOfFiles ){
                                "<table id=\"box-table-b\" border=2 summary=\"Robinviz Information Tables\">\n"
                                "<thead>\n"
                                "\t<tr>\n"
-                               "\t\t<th scope=\"col\"> Enrichment Information respect to\n genes/proteins inside Category(GO or Bicluster)</th>\n"
                                "\t\t<th scope=\"col\"> Enrichment Information respect to\n genes/proteins of Category(GO or Bicluster)\n inside <b>PPI network</b></th>\n"
                                "\t\t<th scope=\"col\"> Gene Ontology Information of genes/proteins\n of Category(GO or Bicluster)\n inside <b>PPI network</b></th>\n"
                                "\t</tr>\n"
@@ -4133,37 +4425,6 @@ void mergeTables( int numberOfFiles ){
                                "\t\t<td valign =\"top\">\n" );
             bool flag = false;
             int count = 0;
-            if( enrich != NULL ){
-                while( !feof( enrich ))
-                {
-
-                    fgets( buffer, 512, enrich );
-                    if( flag == false && count == 12 )
-                    {
-                        fprintf( writePtr, "%s", buffer );
-                        flag = true;
-                    }
-                    else{
-                        if( flag == true )
-                        {
-                            if( strncmp( "</table>" , buffer, 7 ) != 0 ){
-                                fprintf( writePtr, "%s", buffer );
-                            }
-                            else{
-                                fprintf( writePtr, "%s", buffer );
-                                flag = false;
-                            }
-                        }
-                    }
-                    count++;
-                }
-            }
-            fprintf( writePtr, "\t\t</td>\n");
-
-            // Merging resultbicReduced.htmls
-            fprintf( writePtr, "\t\t<td valign =\"top\">\n" );
-            flag = false;
-            count = 0;
             if( enrichReduced != NULL ){
                 while( !feof( enrichReduced ))
                 {
@@ -4233,14 +4494,11 @@ void mergeTables( int numberOfFiles ){
                                "</html>"
                                );
             fclose( writePtr );
-            fclose( enrich );
             fclose( enrichReduced );
             fclose( goTable );
         }
 #else
         for( int i = 0; i < numberOfFiles; i++ ){
-            sprintf( outputFile, "%s%d%s", "outputs//enrich//resultbic", i, ".html" );
-            enrich = fopen( outputFile, "r" );
             sprintf( outputFile, "%s%d%s", "outputs//enrich//resultbicReduced", i, ".html" );
             enrichReduced = fopen( outputFile, "r" );
             sprintf( outputFile, "%s%d%s", "outputs//go//gobicluster", i, ".html" );
@@ -4264,7 +4522,6 @@ void mergeTables( int numberOfFiles ){
                                "<table id=\"box-table-b\" border=2 summary=\"Robinviz Information Tables\">\n"
                                "<thead>\n"
                                "\t<tr>\n"
-                               "\t\t<th scope=\"col\"> Enrichment Information respect to\n genes/proteins inside Category(GO or Bicluster)</th>\n"
                                "\t\t<th scope=\"col\"> Enrichment Information respect to\n genes/proteins of Category(GO or Bicluster)\n inside <b>PPI network</b></th>\n"
                                "\t\t<th scope=\"col\"> Gene Ontology Information of genes/proteins\n of Category(GO or Bicluster)\n inside <b>PPI network</b></th>\n"
                                "\t</tr>\n"
@@ -4276,37 +4533,6 @@ void mergeTables( int numberOfFiles ){
                                "\t\t<td valign =\"top\">\n" );
             bool flag = false;
             int count = 0;
-            if( enrich != NULL ){
-                while( !feof( enrich ))
-                {
-
-                    fgets( buffer, 512, enrich );
-                    if( flag == false && count == 12 )
-                    {
-                        fprintf( writePtr, "%s", buffer );
-                        flag = true;
-                    }
-                    else{
-                        if( flag == true )
-                        {
-                            if( strncmp( "</table>" , buffer, 7 ) != 0 ){
-                                fprintf( writePtr, "%s", buffer );
-                            }
-                            else{
-                                fprintf( writePtr, "%s", buffer );
-                                flag = false;
-                            }
-                        }
-                    }
-                    count++;
-                }
-            }
-            fprintf( writePtr, "\t\t</td>\n");
-
-            // Merging resultbicReduced.htmls
-            fprintf( writePtr, "\t\t<td valign =\"top\">\n" );
-            flag = false;
-            count = 0;
             if( enrichReduced != NULL ){
                 while( !feof( enrichReduced ))
                 {
@@ -4377,7 +4603,7 @@ void mergeTables( int numberOfFiles ){
                                );
 
             fclose( writePtr );
-            fclose( enrich );
+            //fclose( enrich );
             fclose( enrichReduced );
             fclose( goTable );
         }
