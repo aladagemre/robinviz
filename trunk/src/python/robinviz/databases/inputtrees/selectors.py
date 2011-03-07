@@ -14,6 +14,20 @@ from utils.compression import ungz
 from utils.downloader import Downloader
 import yaml
 
+class FinishSelector(QWidget):
+    def __init__(self, parent=None):
+        QWidget.__init__(self, parent)
+        self.setupGUI()
+
+    def setupGUI(self):
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+
+        self.label = QLabel("Data preparation has finished. Now Robinviz can start calculations.")
+
+        self.layout.addWidget(self.label)
+
+
 class ConfirmationSelector(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
