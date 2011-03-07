@@ -100,8 +100,9 @@ class DataTableWidget(QWidget):
             self.mins.append(minval)
             self.avgs.append(sum/n)
 
+
         self.max = max( self.maxs )
-        self.min = max( self.mins )
+        self.min = min( self.mins )
         
     def __findVerticalLines(self):
         """Creates the vertical QLineFs."""
