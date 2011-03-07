@@ -62,6 +62,7 @@ class LegendWidget(QWidget):
         # metabolic : (A, "#FFAABB")
 
         self.layout.addWidget(ColorPair ( ( QColor(None), "Unknown",)  ))
+        self.layout.addWidget(ColorPair ( ( QColor("#7FFFD0"), "Not Popular",)  ))
         for name in sorted(COLOR_DICT.keys()):
             letter_n_color = COLOR_DICT[name]
             self.layout.addWidget(ColorPair( ( letter_n_color[1], name, ) ))
