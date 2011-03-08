@@ -66,12 +66,21 @@ void gwSave( array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, array<li
                 edge e;
                 list_item it;
                 FILE *fptr;
+                FILE *yFptr;
 #ifdef LINUX
                 fptr = fopen( "outputs/graphs/ppigraph.txt", "w" );
 #else
                 fptr = fopen( "outputs//graphs/ppigraph.txt", "w" );
 #endif
+
+#ifdef __linux__
+                yFptr = fopen( "sources/usr_sources/visualization_data/genenames.txt", "r" );
+#else
+                yFptr = fopen( "sources//usr_sources//visualization_data//genenames.txt", "r" );
+#endif
+
                 forall_nodes( n, INTERACTIONS ){
+                        fprintf( yFptr, "%s\n", GenesNode[ INTERACTIONS[ n ] ].GENE  );
                         if( INTERACTIONS.degree( n ) > 0 ){
                                 char temp_str2[256] = "";
                                 strcat( temp_str2, GenesNode[ INTERACTIONS[ n ] ].GENE  );
@@ -131,4 +140,5 @@ void gwSave( array<GENENAMES> &GenesNode, GRAPH<int,int> &INTERACTIONS, array<li
                         }
                 }
                 fclose( fptr );
+                fclose( yFptr );
  }

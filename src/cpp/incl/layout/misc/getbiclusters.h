@@ -705,6 +705,7 @@ void analyseGenesInPPI( char fileName[64], list<int> &categoriesBicluster, int b
                 }
             }
         }
+        fileCount++;
     }
     fclose( yFptr );
 
@@ -797,7 +798,11 @@ void analyseGenesInPPI( char fileName[64], list<int> &categoriesBicluster, int b
                                                 fprintf( resultPtr, "%20d\t", countAbbv[ j ] );
                                         else
                                                 fprintf( resultPtr, "%20d\n", countAbbv[ j ] );
+                                        cout << "\n*******************\n";
+                                        cout << "\tI:" << inCategory[ j ] << "\n\ty:" << countAbbv[ j ] << "\n\tm:" << genesAnnotated << "\n\tn:" << total << endl;
+                                        cout << "\tPValue:";
                                         PValues[ i ][ PValues[ i ].get_item( j ) ] = pvalueFinder( countAbbv[ j ], inCategory[ j ], total, genesAnnotated, cat_num );
+                                        cout << PValues[ i ][ PValues[ i ].get_item( j ) ] << endl;
                                         //cout << PValues[ i ][ PValues[ i ].get_item( j ) ] << " ";
                                 }
                         }
