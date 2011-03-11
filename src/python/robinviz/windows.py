@@ -548,10 +548,13 @@ class MultiViewWindow(QMainWindow):
             # Afterwards
             os.remove("outputs.tar.gz")
             shutil.move(rp("outputs/input_go.txt"), ap("assocdata/input_go.txt"))
+            shutil.move(rp("outputs/category_codes.txt"), ap("assocdata/category_codes.txt"))
+            shutil.move(rp("outputs/top_highlevel_letters.txt"), ap("godata/top_highlevel_letters.txt"))
 
             # Load part
             self.detectLastConfirmationType()
             print "Detected:", self.confirmationType
+            read_category_information()
             QMessageBox.information(self, "Session loaded", "The session you provided has been loaded. You may now start working. Please wait for a few seconds while preparing the central view.")
             self.displayLast()
             
@@ -562,6 +565,9 @@ class MultiViewWindow(QMainWindow):
         # Copy two files
         # =======================
         shutil.copy(ap("assocdata/input_go.txt"), rp("outputs/input_go.txt"))
+        shutil.copy(ap("assocdata/category_codes.txt"), rp("outputs/category_codes.txt"))
+        shutil.copy(ap("godata/top_highlevel_letters.txt"), rp("outputs/top_highlevel_letters.txt"))
+        
         for file in filter( lambda x: x.startswith("gene_index.shelve"), os.listdir(rp("outputs")) ):
             try:
                 os.remove(file)
