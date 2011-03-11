@@ -46,7 +46,7 @@ class PPIMerger:
         print "PPI Merging starts..."
 	confidence_dicts = {}
 	organisms = self.findSelectedOrganisms(files)
-	# map(download_organism, organisms) # Download HitPredict data and generate (p1 p2 confidence) file.
+	map(download_organism, organisms) # Download HitPredict data and generate (p1 p2 confidence) file.
         #TODO: Check if hitpredict data in OS Format exists.
         # TODO: find the max and min values of the files.
         interactions = {}
