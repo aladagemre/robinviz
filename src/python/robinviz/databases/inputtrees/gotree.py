@@ -19,10 +19,22 @@ def grep(string,list):
     expr = re.compile(string)
     return [elem for elem in list if expr.match(elem)]
 
+"""class FilterWidget(QWidget):
+    def __init__(self, parent=None):
+        pass
+
+    def setupGUI(self):
+        layout = QVBoxLayout()
+        self.setLayout(layout)
+        self.lineEdit = QLineEdit()
+        layout.addWidget(self.lineEdit)"""
+
 class GOSelector(QMainWindow):
     def __init__(self, filename=ap("godata/goinfo.sqlite3")):
         QMainWindow.__init__(self)
         self.filename = filename
+        #self.item_dict = {}
+        
         if not os.path.exists(self.filename):
 	    print self.filename, "does not exist. Downloading it..."
 	    #generateTermDict()
@@ -47,10 +59,10 @@ class GOSelector(QMainWindow):
     def connectDB(self):
 	self.conn = sqlite3.connect(self.filename)
 	self.curs = self.conn.cursor()
-	
+
     def setupGUI(self):
 	layout = QVBoxLayout()
-	
+        
 	self.treeWidget = treeWidget = QTreeWidget()
 	treeWidget.setColumnCount(2)
 	treeWidget.setHeaderLabels(("Accession", "Name"))
@@ -102,7 +114,9 @@ class GOSelector(QMainWindow):
 	    citem = QTreeWidgetItem(item, ("GO:%07d"% cid, cname))
 	    citem.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled)
 	    citem.setCheckState(0, Qt.Unchecked)
-	    
+
+            #self.item_dict[cid] = citem
+            
 	    if cchild: 
 		# If we have children, make it bold so that user can understand it.
 		font = QFont()
@@ -158,7 +172,8 @@ class GOSelector(QMainWindow):
 	    item = QTreeWidgetItem(parent, ("GO:%07d"% cid, cname))
 	    item.setFlags( Qt.ItemIsUserCheckable | Qt.ItemIsSelectable | Qt.ItemIsEnabled)
 	    item.setCheckState(0, Qt.Unchecked)
-	    
+	    #self.item_dict[cid] = item
+            
 	    if cchild: 
 		# If we have children, make it bold so that user can understand it.
 		font = QFont()

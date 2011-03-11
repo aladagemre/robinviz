@@ -135,6 +135,7 @@ class AssociationMerger:
         output = open(ap("assocdata/go_slim.txt"),"w")
         catnames = open(ap("assocdata/input_go.txt"),"w")
         catcodes = open(ap("assocdata/category_codes.txt"), "w")
+        # TODO: category_codes already exists as selected_terms.txt. Why using this?!
         conn = sqlite3.connect(ap("godata/goinfo.sqlite3"))
         cursor = conn.cursor()
 

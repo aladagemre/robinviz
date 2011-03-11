@@ -23,7 +23,7 @@ class InputWizard(QWizard):
         self.PreSelectionPage = PreSelectionPage()
         self.ConfirmationSelectionPage = ConfirmationSelectionPage()        
         self.ColorSelectionPage = ColorSelectionPage()
-        self.EdgeWeightSelectionPage = EdgeWeightSelectionPage()
+        #self.EdgeWeightSelectionPage = EdgeWeightSelectionPage()
         self.NodeWeightSelectionPage = NodeWeightSelectionPage()
 	self.PPISelectionPage = PPISelectionPage()
 	self.AssociationSelectionPage = AssociationSelectionPage()

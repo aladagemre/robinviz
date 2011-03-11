@@ -93,9 +93,10 @@ class AssociationSelector(QWidget):
     def mergeSelectedAssociations(self):
 	"""Merges selected association data files into one single assocdata/input_go.txt"""
         items = self.getCheckedItems()
-        if not items:
+        """if not items:
             print "No association source selected, using the most recent preferences."
-            return
+            return"""
+        # commented above because changing go categories or verification causes problems.
         
         # Run the process here
         self.process = QProcess(self.parent())

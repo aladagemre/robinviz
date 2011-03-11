@@ -287,13 +287,15 @@ class MultiViewWindow(QMainWindow):
 
     def loadMainScene(self):
         """Loads the main scene after the results are found."""
+        self.mainScene = self.mainSceneType()
+
         path = rp("outputs/graphs/maingraph.gml")
         if not os.path.exists(path):
             QMessageBox.information(self, 'No recent results',
      "Results not found. Please report this issue.")
             return
         self.pScenes = {} # Peripheral scenes
-        self.mainScene = self.mainSceneType()
+        #self.mainScene = self.mainSceneType()
         self.mainScene.loadGraph(rp("outputs/graphs/maingraph.gml"))
         self.mainView.setScene(self.mainScene)
         self.mainView.setSceneRect(self.mainScene.sceneRect().adjusted(-50, -50, 50, 50))
@@ -501,11 +503,11 @@ class MultiViewWindow(QMainWindow):
     def displayResults(self, exitCode, exitStatus):
         """When LEDA process is finished, this method displays the results."""
         self.reportMessage("Status: %s %s" % ( exitCode, exitStatus) )
-        self.reportMessage("Displaying results")
-        failed = (exitCode!=0)
+        failed = (exitCode!=0 or exitStatus!=0)
         
         # ======== DISPLAY ==========
         if not failed:
+            self.reportMessage("Displaying results")
             find_top_highlevel_categories()
             read_category_information()
             self.clearViews()
