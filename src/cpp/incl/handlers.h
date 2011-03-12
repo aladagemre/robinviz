@@ -3358,7 +3358,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 
 	FILE *f;
 	list_item it,it2;
-	char line[ 1000000 ];
+        char line[ 1000000 ];
 	char *pc,*pend,*go,*cat;
 	const char *strDelim = "\t\n";
         const char *strDelim2 = " \t";
@@ -3379,7 +3379,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 	/* First we parse gofile to see how many lines of categories */
 	int line_i = 0;
 	while( !feof( f ) ){
-		fgets( line, 1000000, f );
+                fgets( line, 1000000, f );
 		line_i++;
 	}
         if( line_i == 0 ){
@@ -3404,7 +3404,7 @@ void colorHandling( char catfile[256], char gofile[256] ){
 		// count rows
 // 		two_tuple<CATNAMES,int> tup;
 // 		tup.second() = 0;
-		fgets( line, 1000000, f );
+                fgets( line, 1000000, f );
 		pc = strtok( line, strDelim );
 		go = pc;
 		if( feof( f ) )
@@ -3580,11 +3580,12 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
 
         FILE *f;
         list_item it,it2;
-        char line[ 100000 ];
+        char line[ 1000000 ];
         char *pc,*pend,*go,*cat;
         const char *strDelim = "\t\n";
         const char *strDelim2 = " \t";
 
+//        cout << " We are done  -2\n";
         if( (f = fopen( gofile, "r" )) == NULL){
                 FILE *erptr;
 #ifdef __linux__
@@ -3601,7 +3602,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
         /* First we parse gofile to see how many lines of categories */
         int line_i = 0;
         while( !feof( f ) ){
-                fgets( line, 100000, f );
+                fgets( line, 1000000, f );
                 line_i++;
         }
         if( line_i == 0 ){
@@ -3619,6 +3620,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
 // 		cout << "\t Will Parse " << line_i << " lines, Parsing begins...\n";
         rewind( f );
         line_i = 0;
+//        cout << " We are done  -1\n";
         /* We rewind and based on line by line parsing we check that is gofile contains
            the predefined categories in molecularF double char array
         */
@@ -3626,7 +3628,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
                 // count rows
 // 		two_tuple<CATNAMES,int> tup;
 // 		tup.second() = 0;
-                fgets( line, 100000, f );
+                fgets( line, 1000000, f );
                 pc = strtok( line, strDelim );
                 go = pc;
                 if( feof( f ) )
@@ -3641,7 +3643,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
                                 for( int i = 0; i < GOSIZE; i++ ){
                                         if( strcmp( molecularF[ i ], cat ) == 0 ){
                                                 categIndex = i;
-// 						cout <<  molecularF[ i ] << " is found\n";
+//                                                cout <<  molecularF[ i ] << " is found\n";
                                         }
                                 }
                         }
@@ -3670,10 +3672,10 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
                 }
 //                cout << endl << "************************\n";
                 line_i++;
-// 		if( line_i % 10 == 0 )
-// 			cout << "\t Parsed " << line_i << " ...\n";
+//                if( line_i % 10 == 0 )
+//                        cout << "\t Parsed " << line_i << " ...\n";
         }
-//        cout << " We are done \n";
+        //cout << " We are done  1\n";
         fclose( f );
         /* With the next double loop we obtain pure gene list obtained with 18 categories */
         array<bool> marked( allGenes.size() + 1 );
@@ -3727,7 +3729,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
             allGenes.del_item(deleted[ it ]);
         }
 
-//        cout << " We are done \n";
+//        cout << " We are done  2\n";
         /* we now begin saving catfile. We collect the genes for each categories. */
         f = fopen( catfile, "w" );
         fprintf( f, "%d\n", GOSIZE );
@@ -3740,7 +3742,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
                 }
                 fprintf( f, "\"%c\"\t%s\n", abbrv[ i ], molecularF[ i ] );
         }
-//        cout << " We are done \n";
+//        cout << " We are done  3\n";
         /* Saving gene to abbrvs */
         forall_items( it, allGenes ){
                 bool one = false;
@@ -3769,7 +3771,7 @@ void colorHandling( char catfile[256], char gofile[256], char molecularF[][128],
                         fprintf( f, "%s\t%s\n", allGenes[ it ].GENE, funcCateg );
                 }
         }
-//        cout << " We are done \n";
+//        cout << " We are done  4\n";
         fclose( f );
 }
 
