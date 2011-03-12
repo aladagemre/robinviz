@@ -21,7 +21,12 @@ def normalize(data):
     
 def tabify(files, organism_name):
     print "Combining Hitpredict PPI experiments for %s..." % organism_name
+
     hitpredict_combined_ppi = ap("ppidata/hitpredict/%s.txt" % organism_name)
+    if os.path.exists(hitpredict_combined_ppi):
+        print hitpredict_combined_ppi, "already exists, no need to process."
+        return
+        
     lines = []
     for filename in files:
         l = open(filename).readlines()
