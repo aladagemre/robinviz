@@ -159,7 +159,7 @@ class OspreyManager(Manager):
             return
         
         if latest_osprey_dir():
-            self.status.emit("Converting PPI data to Biogrid annotation...")
+            self.status.emit("Converting PPI data to Official Symbol annotation...")
             self.converter_thread = ConverterThread()
             self.converter_thread.status.connect(self.status.emit)
             self.converter_thread.done.connect(self.succeed)
@@ -168,7 +168,7 @@ class OspreyManager(Manager):
             self.succeed()
         else:
             self.fail()
-            self.status.emit("Could not find Osprey PPI data.")
+            self.status.emit("Could not find Biogrid PPI data.")
             
         
     def downloaded(self, successful):
