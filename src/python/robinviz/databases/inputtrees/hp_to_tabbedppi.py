@@ -3,6 +3,7 @@
 Given Hitpredict filenames, extracts the confidence values, normalizes and combines them into a single tab-seperated PPI file.
 """
 import sys
+import os
 from databases.genequery import GeneDB
 from utils.info import ap
 
