@@ -557,7 +557,10 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 				for( int k = 0; k < cat_num; k++ ){
 					gene_sum += categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( k )];
 				}
-                                fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum ) );
+                                if( gene_sum > 0 )
+                                    fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum ) );
+                                else
+                                    fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", 0.0 );
                                 fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", PValues[ i ][ PValues[ i ].get_item( j )]);
 				fprintf( oneResultPtr, "\t</tr>\n" );
 			}
@@ -590,8 +593,11 @@ void analyseGenes2( char fileName[], list<int> &categoriesBicluster, int biNumbe
 				double gene_sum = 0;
 				for( int k = 0; k < cat_num; k++ ){
 					gene_sum += categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( k )];
-				}
-                                fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum ) );
+				}                                
+                                if( gene_sum > 0 )
+                                    fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum ) );
+                                else
+                                    fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", 0.0 );
                                 fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", PValues[ i ][ PValues[ i ].get_item( j )]);
 				fprintf( oneResultPtr, "\t</tr>\n" );
 			}
@@ -798,11 +804,11 @@ void analyseGenesInPPI( char fileName[64], list<int> &categoriesBicluster, int b
                                                 fprintf( resultPtr, "%20d\t", countAbbv[ j ] );
                                         else
                                                 fprintf( resultPtr, "%20d\n", countAbbv[ j ] );
-                                        cout << "\n*******************\n";
-                                        cout << "\tI:" << inCategory[ j ] << "\n\ty:" << countAbbv[ j ] << "\n\tm:" << genesAnnotated << "\n\tn:" << total << endl;
-                                        cout << "\tPValue:";
+//                                        cout << "\n*******************\n";
+//                                        cout << "\tI:" << inCategory[ j ] << "\n\ty:" << countAbbv[ j ] << "\n\tm:" << genesAnnotated << "\n\tn:" << total << endl;
+//                                        cout << "\tPValue:";
                                         PValues[ i ][ PValues[ i ].get_item( j ) ] = pvalueFinder( countAbbv[ j ], inCategory[ j ], total, genesAnnotated, cat_num );
-                                        cout << PValues[ i ][ PValues[ i ].get_item( j ) ] << endl;
+//                                        cout << PValues[ i ][ PValues[ i ].get_item( j ) ] << endl;
                                         //cout << PValues[ i ][ PValues[ i ].get_item( j ) ] << " ";
                                 }
                         }
@@ -933,7 +939,10 @@ void analyseGenesInPPI( char fileName[64], list<int> &categoriesBicluster, int b
                                 for( int k = 0; k < cat_num; k++ ){
                                         gene_sum += categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( k )];
                                 }
-                                fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum ) );
+                                if( gene_sum > 0 )
+                                    fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum ) );
+                                else
+                                    fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", 0.0 );
                                 fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", PValues[ i ][ PValues[ i ].get_item( j )]);
                                 fprintf( oneResultPtr, "\t</tr>\n" );
 //                                if( categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] > 0 )
@@ -975,7 +984,11 @@ void analyseGenesInPPI( char fileName[64], list<int> &categoriesBicluster, int b
                                 for( int k = 0; k < cat_num; k++ ){
                                         gene_sum += categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( k )];
                                 }
-                                fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum ) );
+                                if( gene_sum > 0 )
+                                    fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum ) );
+                                else
+                                    fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", 0.0 );
+                                //fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", (double)(categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] / gene_sum ) );
                                 fprintf( oneResultPtr, "\t\t<td>%lf</td>\n", PValues[ i ][ PValues[ i ].get_item( j )]);
                                 fprintf( oneResultPtr, "\t</tr>\n" );
 //                                if( categoryPerGenes[ i ][ categoryPerGenes[ i ].get_item( j )] > 0 )
