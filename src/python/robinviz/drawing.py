@@ -917,7 +917,12 @@ class ProteinNode(NodeItem):
             self.labelText.setPlainText(label)
              # find hex codes for colors
             letters = filter(lambda letter: letter, colors.split(":"))
-            codes = filter(lambda color: color is not None, map(CHAR_COLOR_DICT.get, letters) )
+            if letters[0] == "X":
+                codes = ["#000000"]
+            else:
+                codes = filter(lambda color: color is not None, map(CHAR_COLOR_DICT.get, letters) )
+                if not codes:
+                    codes = ["#7FFFD0"]
             qcolors = map(QColor, codes)
             self.setColors(qcolors)
 
@@ -925,7 +930,7 @@ class ProteinNode(NodeItem):
             categories = map ( lambda key: CATEGORY_NAMES[key], letters)
             self.setCategoryInformation(categories)
         else:
-            print "no label"
+            print "No label for the node"
         
         # Position the label text
         self.updateLabel()
