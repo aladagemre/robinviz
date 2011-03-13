@@ -1,8 +1,8 @@
-#summary Robinviz 1.0 Tool Manual
+#summary Robinviz 1.0 Manual
 #labels Featured,Manual
+You can download manual [http://robinviz.googlecode.com/files/manual.pdf here]
 
-
-||http://robinviz.googlecode.com/svn/manual/images/Robinviz2.jpg||
+Following manual is deprecated.
 
 -------------------------
 = Table of Contents=
