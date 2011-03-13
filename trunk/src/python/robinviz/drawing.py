@@ -917,7 +917,7 @@ class ProteinNode(NodeItem):
             self.labelText.setPlainText(label)
              # find hex codes for colors
             letters = filter(lambda letter: letter, colors.split(":"))
-            if letters[0] == "X":
+            if not letters or letters[0] == "X":
                 codes = ["#000000"]
             else:
                 codes = filter(lambda color: color is not None, map(CHAR_COLOR_DICT.get, letters) )
