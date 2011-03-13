@@ -1,5 +1,5 @@
 #summary How to install Robinviz.
-#labels Installation,Featured
+#labels Installation
 
 = Introduction =
 
