@@ -12,7 +12,7 @@ from utils.info import ap, latest_osprey_dir
 from PyQt4.QtCore import QThread, pyqtSignal, QString
 
 # TODO: this static value might cause bugs!
-OSPREY_BASE = ap("ppidata/%s" % latest_osprey_dir()) + "/"
+OSPREY_BASE = lambda: ap("ppidata/%s" % latest_osprey_dir()) + "/"
 hitpredict_original_datadir = ap("ppidata/hitpredict/original/")
 
 OSPREY_ORGANISMS = ["Arabidopsis_thaliana",
@@ -41,8 +41,8 @@ def convert_organism(organism):
     tabify(get_hitpredict_files(organism), organism)
     
     print "Formatting Biogrid data for", organism, "in OFFICIAL_SYMBOL format."
-    for filename in os.listdir(os.path.join(OSPREY_BASE,organism)):
-        osprey_file = os.path.join(OSPREY_BASE, organism, filename)
+    for filename in os.listdir(os.path.join(OSPREY_BASE(),organism)):
+        osprey_file = os.path.join(OSPREY_BASE(), organism, filename)
         biogrid_file = osprey_file + "-OFFICIAL_SYMBOL"
         if not filename[0]=="." and not filename.endswith("-OFFICIAL_SYMBOL") and not os.path.exists(biogrid_file):
             t.set_filename( osprey_file )
