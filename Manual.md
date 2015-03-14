@@ -1,0 +1,1 @@
+You can download manual [here](http://robinviz.googlecode.com/files/manual.pdf)
