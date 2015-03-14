@@ -32,8 +32,12 @@ Compilation from source code requires LEDA Professional Library 5.1. Codes are l
 
 -------------------------
 
+Screenshots
+=============
+See [Screenshots page][screenshots] for screenshots.
+
 Screencasts
-===========
+============
 Running with Preconfigured Settings (quick run)
 ----------------------------------------------
 Watch "Preconfigured Settings" on Youtube: http://www.youtube.com/watch?v=tAan64nal8o
@@ -44,3 +48,5 @@ Watch "A sample Co-Ontology run" on Youtube: http://www.youtube.com/watch?v=lvV0
 [emre-aladag]: http://www.emrealadag.com
 [cesim-erten]: http://hacivat.khas.edu.tr/~cesim
 [melih-sozdinler]: http://melihsozdinler.blogspot.com
+[screenshots]: SCREENSHOTS.md
+
