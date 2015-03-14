@@ -38,9 +38,8 @@ See [Screenshots page][screenshots] for screenshots.
 
 Screencasts
 ============
-Running with Preconfigured Settings (quick run)
-----------------------------------------------
-Watch "Preconfigured Settings" on Youtube: http://www.youtube.com/watch?v=tAan64nal8o
+
+Watch "Preconfigured Settings (quick run)" on Youtube: http://www.youtube.com/watch?v=tAan64nal8o
 
 Watch "A sample Co-Ontology run" on Youtube: http://www.youtube.com/watch?v=lvV0UDdVwMA
 
